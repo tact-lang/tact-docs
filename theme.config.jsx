@@ -10,5 +10,10 @@ export default {
         text: <span>
           MIT {new Date().getFullYear()} © <a href="https://github.com/ton-community" target="_blank">TON Community</a>.
         </span>,
-      }
+      },
+      useNextSeoProps() {
+          return {
+            titleTemplate: '%s – TACT'
+          }
+      },
 }

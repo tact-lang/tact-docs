@@ -1,0 +1,14 @@
+# Working with random numbers
+
+TON have random number generator, it is not entirely secure right now, but it would improve in the future. We recommend to use it for most projects on TACT and advise against rolling out your own solution.
+
+## Secure random initialization
+
+In TON you need to initialize you random number generator, but TACT is doing it for you. You can use random number generator functions and they would init random number generator for you on first call. In next versions we would allow to call randomizer manually.
+
+## Generating random numbers
+
+There are two ways to generate random numbers:
+
+  * `randomInt` - generates random 256-bit unsigned integer
+  * `random(min, max)` - generates random value from `min` to `max` (both inclusive) (NOTE: CHECK)
