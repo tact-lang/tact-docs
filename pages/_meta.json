@@ -1,4 +1,5 @@
 {
   "index": "Getting started",
-  "first": "Writing your first contract"
+  "first": "Writing your first contract",
+  "deploy": "Deploying your contract"
 }
