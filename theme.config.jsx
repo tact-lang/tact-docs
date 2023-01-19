@@ -25,7 +25,7 @@ export default {
         name="description"
         content="TACT Language Documentation"
       />
-      
+
       <meta
         name="og:title"
         content="TACT Language Documentation"
@@ -38,7 +38,19 @@ export default {
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@ex3ndr"></meta>
 
-      <meta name="apple-mobile-web-app-title" content="TACT"/>
+      <meta name="apple-mobile-web-app-title" content="TACT" />
+
+      <script
+        lang="javascript"
+        dangerouslySetInnerHTML={{
+          __html: `if (!window.localStorage.getItem("theme_default")) {
+            window.localStorage.setItem("theme", "dark");
+            window.localStorage.setItem("theme_default", "dark");
+            document.documentElement.classList.add("dark");
+            document.documentElement.classList.remove("light");
+          }`,
+        }}
+      />;
     </>
   )
 }

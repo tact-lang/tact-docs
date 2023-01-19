@@ -70,6 +70,18 @@ extends fun bits(self: Builder): Int;
 ```
 Returns the number of data bits already stored in builder `self`.
 
+## Builder.asSlice
+```
+extends fun asSlice(self: Builder): Slice;
+```
+Converts Builder to a slice. Alias to `self.endCell().beginParse()`.
+
+## Builder.asCell
+```
+extends fun asCell(self: Builder): Cell;
+```
+Converts builder to a slice. Alias to `Builder.endCell()`.
+
 ## Cell.beginParse
 ```
 extends fun beginParse(self: Cell): Slice;
@@ -81,6 +93,12 @@ Opens cell to parsing.
 extends fun hash(self: Cell): Int;
 ```
 Calculates hash of a cell.
+
+## Cell.asSlice
+```
+extends fun asSlice(self: Cell): Slice;
+```
+Converts Cell to a Slice. Alias to `Cell.beginParse`.
 
 ## Slice.loadInt
 ```
@@ -165,3 +183,15 @@ Checks whether slice `slice` has no references.
 extends fun hash(self: Slice): Int;
 ```
 Calculates hash of a slice.
+
+## Slice.asCell
+```
+extends fun asCell(self: Slice): Slice;
+```
+Converst Slice to a Cell. Alias to `beginCell().storeSlice(self).endCell()`.
+
+## emptyCell
+```
+fun emptyCell(): Cell;
+```
+Creates and returns empty(without data and references) Cell. Alias to `beginCell().endCell()`.
