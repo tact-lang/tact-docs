@@ -1,0 +1,74 @@
+# Strings
+
+Strings are a sequence of a characters. Strings are immutable, which means that once a string is created, it cannot be changed. TACT have a limitied support for strings, but you can use them to store text. Strings are also useful as comment messages body.
+
+## beginString
+```
+fun beginString(): StringBuilder;
+```
+Creates new empty StringBuilder.
+
+## beginComment
+```
+fun beginComment(): StringBuilder;
+```
+Creates new empty StringBuilder for comment.
+
+## StringBuilder.append
+```
+extends mutates fun append(self: StringBuilder, s: String);
+```
+Append to StringBuilder `self` String `s` and updates it.
+
+## StringBuilder.toString
+```
+extends fun toString(self: StringBuilder): String;
+```
+Assembles a string from a builder's content.
+
+## StringBuilder.toCell
+```
+extends fun toCell(self: StringBuilder): Cell
+```
+Assembles a cell from a builder's content.
+
+## StringBuilder.toSlice
+```
+extends fun toSlice(self: StringBuilder): Slice;
+```
+Assembles a cell from builder's content into a slice. Alias to `self.toCell().asSlice()`.
+
+## Int.toString
+```
+extends fun toString(self: Int): String;
+```
+Converts Int value to String
+
+## Int.toFloatString
+```
+extends fun toFloatString(self: Int, digits: Int): String
+```
+
+Converts Fixed Float value that represented as Int to String
+
+Where,
+* `self` significant part of float number as Int number;
+* `digits` is a exponentiation parameter of expression `10^(-digits)` that will be used for computing float number. `digits` required to be `0 <= digits < 77`.
+
+## Int.toCoinsString
+```
+extends fun toCoinsString(self: Int): String
+```
+Converts nanoToncoin Int value `self` to String float number of Toncoins and returns it as a result.
+
+## String.asComment
+```
+extends fun asComment(self: String): Cell
+```
+Converts String `self` to comment message body Cell.
+
+## String.asSlice
+```
+extends fun asSlice(self: String): Slice;
+```
+**Dangerously** casts string as slice for future parsing. Use it only if you know what you are doing.
