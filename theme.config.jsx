@@ -1,5 +1,6 @@
 export default {
     logo: <span>TACT Documentation</span>,
+    defaultTheme: 'dark',
     project: {
         link: 'https://github.com/ton-community/tact',
     },
