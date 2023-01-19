@@ -2,6 +2,7 @@
   "types": "Type system",
   "functions": "Functions",
   "statements": "Statements",
+  "lifecycle": "Message lifecycle",
   "send": "Send messages",
   "upgrades": "Contract upgrades",
   "func": "Compatibility with Func"
