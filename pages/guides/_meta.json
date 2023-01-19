@@ -2,5 +2,6 @@
   "types": "Type system",
   "functions": "Functions",
   "statements": "Statements",
-  "send": "Send messages"
+  "send": "Send messages",
+  "func": "Compatibility with Func"
 }

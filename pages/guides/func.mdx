@@ -1,0 +1,38 @@
+# Compatibility with func
+
+TACT itself compiles to `func` and allows to map TACT entities directly to various `func` and `tl-b` types.
+
+## Get-methods
+
+You can express everything except `list-style-lists` in TACT that would be compatible with `func`'s `get`-methods.
+
+### Primitives
+
+if `get-method` returns a primitive in `func`, you can implement it the same way in the `tact`.
+
+### Tensors
+
+If you need a `get-method` that returns a tensor, you need to define a `struct` that matches required return type.
+
+```rust
+// TACT
+
+struct JettonWalletData {
+    balance: Int;
+    owner: Address;
+    master: Address;
+    walletCode: Cell;
+}
+
+contract JetttonWallet {
+    get fun get_wallet_data(): JettonWalletData {
+        return ...;
+    }
+}
+
+// Func
+
+(int, slice, slice, cell) get_wallet_data() method_id {
+    return ...;
+}
+```
