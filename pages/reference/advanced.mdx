@@ -1,0 +1,71 @@
+# Advanced
+
+Dangerous or unstable features meant to be used by advanced users only.
+
+## readForwardFee
+```
+extends fun readForwardFee(self: Context): Int 
+```
+Read and computes forward fee from Context and return it as Int value in nanoToncoins.
+
+## throw
+```
+fun throw(code: Int);
+```
+Throw exception with error code equal `code`.
+
+## nativeThrowWhen
+```
+fun nativeThrowWhen(code: Int, condition: Bool);
+```
+Throw exception with error code equal `code` when `condition` equal True.
+
+## nativeThrowUnless
+```
+fun nativeThrowUnless(code: Int, condition: Bool);
+```
+Throw exception with error code equal `code` when `condition` equal False.
+
+## getConfigParam
+```
+fun getConfigParam(id: Int): Cell?;
+```
+Loads network configuration parameter from the blockchain.
+
+## nativeRandomize
+```
+fun nativeRandomize(x: Int);
+```
+Randomizes the random number generator with the specified seed.
+
+## nativeRandomizeLt
+```
+fun nativeRandomizeLt();
+```
+Randomizes the random number generator with the current logical time.
+
+## nativePrepareRandom
+```
+fun nativePrepareRandom();
+```
+This function prepares random number generator by calling `nativeRandomizeLt` once and called internally by `random` and `randomInt` functions.
+
+## nativeRandom
+```
+fun nativeRandom(): Int;
+```
+You shouldn't use this function directly, use `random` and `randomInt` functions instead.
+This function generates 256-bit random number just like `randomInt` function, but random generator is not initialized by `nativePrepareRandom` function.
+
+## nativeRandomInterval
+```
+fun nativeRandomInterval(max: Int): Int;
+```
+You shouldn't use this function directly, use `random` and `randomInt` functions instead.
+This function generates random number in the range from 0 to `max`. This call doesn't prepare initialization by `nativePrepareRandom` function.
+
+## nativeReserve
+```
+fun nativeReserve(amount: Int, mode: Int);
+```
+Calls native `raw_reserve` function with specified amount and mode.

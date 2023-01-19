@@ -1,0 +1,16 @@
+# Random number generation
+
+Random number generation in TON smart contracts.
+
+## randomInt
+```
+fun randomInt(): Int;
+```
+Generates a new pseudo-random unsigned 256-bit integer `x`. The algorithm is as follows: if `r` is the old value of the random seed considered a 32-byte array (by constructing the big-endian representation of an unsigned 256-bit integer), then its `sha512(r)` is computed; the first 32 bytes of this hash are stored as the new value `r'` of the random seed, and the remaining 32 bytes are returned as the next random value `x`.
+
+## random
+```
+fun random(from: Int, to: Int): Int;
+```
+
+Generates a new pseudo-random unsigned integer in provided interval: `from <= x <= to` or `from >= x >= to` (for negative values).
