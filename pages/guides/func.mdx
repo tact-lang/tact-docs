@@ -2,6 +2,98 @@
 
 TACT itself compiles to `func` and allows to map TACT entities directly to various `func` and `tl-b` types.
 
+## Convert types
+
+Primitive types in `tact` are directly mapped to `func` one. All rules about copying variables are the same. One of the big differences is that there are no visible mutation operator in `tact` and most `Slice` operations mutate variables in place.
+
+## Convert serialization
+
+TACT structs and messages serialization is automatic unlike `func` where you need to define serialization logic manually. To build a `tact` types that serializes to specific `tl-b`.
+
+TACT auto-layout algorithm is greedy. Means that it takse next variable, calculates it's size and tries to fit into a current cell. If it doesn't fit, it creates a new cell and continues. All inner structs for auto-layout are flattened before allocation. 
+
+All, except `Address`, optional types are serialized as `Maybe` in `tl-b`. There are no support for `Either` since it does not define what to pick during serialization in some cases.
+
+### Examples
+
+```
+// _ value1:int257 = SomeValue;
+struct SomeValue {
+    value1: Int; // Default is 257 bits
+}
+```
+
+```
+// _ value1:int256 value2:uint32 = SomeValue;
+struct SomeValue {
+    value1: Int as int256;
+    value2: Int as uint32;
+}
+```
+
+```
+// _ value1:bool value2:Maybe bool = SomeValue;
+struct SomeValue {
+    value1: Bool;
+    value2: Bool?;
+}
+```
+
+```
+// _ cell:^cell = SomeValue;
+struct SomeValue {
+    cell: Cell; // Always stored as a reference
+}
+```
+
+```
+// _ cell:^slice = SomeValue;
+struct SomeValue {
+    cell: Slice; // Always stored as a reference
+}
+```
+
+```
+// _ value1:int256 value2:int256 value3:int256 ^[value4:int256] = SomeValue;
+struct SomeValue {
+    value1: Int as int256;
+    value2: Int as int256;
+    value3: Int as int256;
+    value4: Int as int256;
+}
+```
+
+```
+// _ value1:int256 value2:int256 value3:int256 ^[value4:int256] flag:bool = SomeValue;
+struct SomeValue {
+    value1: Int as int256;
+    value2: Int as int256;
+    value3: Int as int256;
+    flag: Bool; // Flag is written before value4 to avoid auto-layout to allocate it to the next cell
+    value4: Int as int256;
+}
+```
+
+```
+// _ value1:int256 value2:int256 value3:int256 ^[value4:int256 flag:bool] = SomeValue;
+struct SomeValue {
+    value1: Int as int256;
+    value2: Int as int256;
+    value3: Int as int256;
+    value4: Int as int256;
+    flag: Bool;
+}
+```
+
+```
+// _ value1:int256 value2:^TailString value3:int256 = SomeValue;
+struct SomeValue {
+    value1: Int as int256;
+    value2: String;
+    value3: Int as int256;
+}
+```
+
 ## Convert get-methods
 
 You can express everything except `list-style-lists` in TACT that would be compatible with `func`'s `get`-methods.
