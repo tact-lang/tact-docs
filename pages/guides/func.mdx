@@ -2,21 +2,45 @@
 
 TACT itself compiles to `func` and allows to map TACT entities directly to various `func` and `tl-b` types.
 
-## Get-methods
+## Convert get-methods
 
 You can express everything except `list-style-lists` in TACT that would be compatible with `func`'s `get`-methods.
 
-### Primitives
-
+### Primitive return type
 if `get-method` returns a primitive in `func`, you can implement it the same way in the `tact`.
 
-### Tensors
+Code in `func`:
+```
+int seqno() method_id {
+    return 0;
+}
+```
 
-If you need a `get-method` that returns a tensor, you need to define a `struct` that matches required return type.
+Will be in `tact`:
+```
+// Tact
+get fun seqno(): Int {
+    return 0;
+}
+```
 
-```rust
-// TACT
 
+### Tensor return types
+
+In `func` there are a difference between tensor type `(int, int)` and `(int, (int))`, but for TVM there are no difference, they all represent a stack of two ints.
+
+To convert tensor that returned from `func` get-method, you need to define a `struct` that has same amount of fields as tensor and in the same order.
+
+Code in `func`:
+```
+(int, slice, slice, cell) get_wallet_data() method_id {
+    return ...;
+}
+```
+
+Will be in `tact`:
+
+```
 struct JettonWalletData {
     balance: Int;
     owner: Address;
@@ -24,15 +48,96 @@ struct JettonWalletData {
     walletCode: Cell;
 }
 
-contract JetttonWallet {
-    get fun get_wallet_data(): JettonWalletData {
-        return ...;
-    }
+
+get fun get_wallet_data(): JettonWalletData {
+    return ...;
+}
+```
+
+### Tuple return type
+
+In `func` if you are returning a tuple, instead of a tensor you need to follow process as for tensor type, but define return type of a get method as optional.
+
+Code in `func`:
+```
+[int, int] get_contract_state() method_id {
+    return ...;
+}
+```
+
+Will be in `tact`:
+
+```
+struct ContractState {
+    valueA: Int;
+    valueB: Int;
 }
 
-// Func
 
-(int, slice, slice, cell) get_wallet_data() method_id {
+get fun get_contract_state(): ContractState? {
+    return ...;
+}
+```
+
+### Mixed tuple and tensor return types
+
+When some of the tensors are a tuple, you need to define a struct as in previous steps and the tuple one must be defined as a separate struct.
+
+Code in `func`:
+```
+(int, [int, int]) get_contract_state() method_id {
+    return ...;
+}
+```
+
+Will be in `tact`:
+
+```
+struct ContractStateInner {
+    valueA: Int;
+    valueB: Int;
+}
+struct ContractState {
+    valueA: Int;
+    valueB: ContractStateInner;
+}
+
+
+get fun get_contract_state(): ContractState {
+    return ...;
+}
+```
+
+### Arguments mapping
+
+Conversion of get-methods arguments are straight forward. Each argument is mapped as-is to `func` one, and each tuple is mapped to a struct.
+
+Code in `func`:
+```
+(int, [int, int]) get_contract_state(int arg1, [int,int] arg2) method_id {
+    return ...;
+}
+```
+
+Will be in `tact`:
+
+```
+struct ContractStateArg2 { 
+    valueA: Int;
+    valueB: Int;
+}
+
+struct ContractStateInner {
+    valueA: Int;
+    valueB: Int;
+}
+struct ContractState {
+    valueA: Int;
+    valueB: ContractStateInner;
+}
+
+
+get fun get_contract_state(arg1: Int, arg2: ContractStateArg2): ContractState {
     return ...;
 }
 ```
