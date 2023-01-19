@@ -3,5 +3,6 @@
   "first": "Writing your first contract",
   "deploy": "Deploying your contract",
   "guides": "Guides",
-  "reference": "Reference"
+  "reference": "Reference",
+  "libs": "Libraries"
 }

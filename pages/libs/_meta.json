@@ -1,0 +1,4 @@
+{
+  "deploy": "@stdlib/deploy",
+  "ownable": "@stdlib/ownable"
+}
