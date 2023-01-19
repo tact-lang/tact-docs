@@ -114,6 +114,54 @@ Loads the first `0 ≤ l ≤ 1023` bits from `slice` and returns it as a separat
 
 ## Slice.preloadBits
 ```
-extends mutates fun preloadBits(self: Slice, l: Int): Slice
+extends mutates fun preloadBits(self: Slice, l: Int): Slice;
 ```
 Preloads the first `0 ≤ l ≤ 1023` bits from `slice` and returns it as a separate Slice.
+
+## Slice.loadCoins
+```
+extends mutates fun loadCoins(self: Slice): Int;
+```
+Loads serialized amount of nanoToncoins (any unsigned integer up to `2^120 - 1`).
+
+## Slice.loadRef
+```
+extends mutates fun loadRef(self: Slice): Cell;
+```
+Loads the first reference from a `slice`.
+
+## Slice.refs
+```
+extends fun refs(self: Slice): Int;
+```
+Returns the number of references in slice `slice`.
+
+## Slice.bits
+```
+extends fun bits(self: Slice): Int;
+```
+Returns the number of data bits in slice `slice`.
+
+## Slice.empty
+```
+extends fun empty(self: Slice): Bool;
+```
+Checks whether slice `slice` is empty (i.e., contains no bits of data and no cell references).
+
+## Slice.dataEmpty
+```
+extends fun dataEmpty(slice: Slice): Bool;
+```
+Checks whether slice `slice` has no bits of data.
+
+## Slice.refsEmpty
+```
+extends fun refsEmpty(slice: Slice): Bool;
+```
+Checks whether slice `slice` has no references.
+
+## Slice.hash
+```
+extends fun hash(self: Slice): Int;
+```
+Calculates hash of a slice.
