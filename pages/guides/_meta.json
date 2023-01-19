@@ -3,5 +3,6 @@
   "functions": "Functions",
   "statements": "Statements",
   "send": "Send messages",
+  "upgrades": "Contract upgrades",
   "func": "Compatibility with Func"
 }
