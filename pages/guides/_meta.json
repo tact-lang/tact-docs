@@ -1,4 +1,6 @@
 {
-  "send": "Send messages",
-  "random": "Random Generation"
+  "types": "Type system",
+  "functions": "Functions",
+  "statements": "Statements",
+  "send": "Send messages"
 }

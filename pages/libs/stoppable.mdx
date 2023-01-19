@@ -1,0 +1,45 @@
+# @stdlib/stoppable
+
+Traits that allows to stop contract. Useful for emergency or maintenance mode. Requires `Ownable` trait. This trait just manages a single flag `stopped` in the contract and handling stopped state have to be done in the contract itself.
+
+## Stoppable
+
+`Stoppable` trait implements receiver for message "Stop" that can be sent by owner, implements `stopped` get-methud that returns `true` if contract is stopped and provides private functions `requireNotStopped` and `requireStopped`.
+
+### Usage
+
+```
+import "@stdlib/stoppable";
+
+contract MyContract is Stoppable {
+    
+    owner: Address;
+    stopped: Bool;
+
+    init(owner: Address) {
+        self.owner = owner;
+        self.stopped = false;
+    }
+}
+```
+
+## Resumable
+
+`Resumable` trait extends `Stoppable` and allows to resume contract execution.
+
+### Usage
+
+```
+import "@stdlib/stoppable";
+
+contract MyContract is Resumable {
+    
+    owner: Address;
+    stopped: Bool;
+
+    init(owner: Address) {
+        self.owner = owner;
+        self.stopped = false;
+    }
+}
+```

@@ -1,4 +1,5 @@
 {
   "deploy": "@stdlib/deploy",
-  "ownable": "@stdlib/ownable"
+  "ownable": "@stdlib/ownable",
+  "stoppable": "@stdlib/stoppable"
 }

@@ -14,6 +14,18 @@ fun beginComment(): StringBuilder;
 ```
 Creates new empty StringBuilder for comment.
 
+## beginTailString
+```
+fun beginTailString(): StringBuilder;
+```
+Creates new empty StringBuilder for a tailstring. This format is used in various standards like NFT or Jetton.
+
+## beginStringFromBuilder
+```
+fun beginStringFromBuilder(builder: Builder): StringBuilder;
+```
+Creates new StringBuilder from existing builder. Useful if you need to serialize string to a cell with some other data.
+
 ## StringBuilder.append
 ```
 extends mutates fun append(self: StringBuilder, s: String);
@@ -72,6 +84,12 @@ Converts String `self` to comment message body Cell.
 extends fun asSlice(self: String): Slice;
 ```
 **Dangerously** casts string as slice for future parsing. Use it only if you know what you are doing.
+
+## Slice.asString
+```
+extends fun asString(self: Slice): String;
+```
+**Dangerously** casts slice as string. Use it only if you know what you are doing.
 
 ## String.fromBase64
 ```
