@@ -27,7 +27,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.tact",
-				"match": "\\b(if|else|while|do|until|repeat|return|extends|mutates|native|contract|trait|with|let|fun|import|self|is|initOf)\\b"
+				"match": "\\b(if|else|while|do|until|repeat|return|extends|mutates|native|contract|trait|with|let|fun|import|self|is|initOf|struct|message|map|get|as)\\b"
 			}, {
 				"name": "keyword.operator",
 				"match": "(?<=\\s)(<=>|>=|<=|!=|==|\\^>>|\\~>>|>>|<<|\\/%|\\^%|\\~%|\\^\\/|\\~\\/|\\+=|-=|\\*=|\\/=|~\\/=|\\^\\/=|%=|\\^%=|<<=|>>=|~>>=|\\^>>=|&=|\\|=|\\^=|\\^|=|~|\\/|%|-|\\*|\\+|>|<|&|\\||:|\\?)(?=\\s)"
