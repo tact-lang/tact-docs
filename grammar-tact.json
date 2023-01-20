@@ -7,6 +7,9 @@
     "name": "tact",
     "scopeName": "source.tact",
     "patterns": [
+        {
+			"include": "#comments"
+		},
 		{
 			"include": "#keywords"
 		},
@@ -18,9 +21,6 @@
 		},
 		{
 			"include": "#numeric"
-		},
-		{
-			"include": "#comments"
 		}
 	],
     "repository": {
@@ -49,7 +49,7 @@
 			"patterns": [
 				{
 					"name": "comment.line",
-					"match": "//(.*)"
+					"match": "\\/\\/(.*)"
 				},
 				{
 					"name": "comment.block",
