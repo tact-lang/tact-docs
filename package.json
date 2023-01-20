@@ -7,7 +7,7 @@
     "react-dom": "^18.2.0"
   },
   "scripts": {
-    "dev": "next",
+    "dev": "rm -fr .next && next",
     "clean": "rm -fr .next",
     "build": "yarn clean && next build && next export"
   }
