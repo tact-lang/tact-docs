@@ -9,7 +9,7 @@ Ownable trait requires a field `owner: Address` to be declared and exposes get-m
 
 ### Usage
 
-```
+```tact
 import "@stdlib/ownable";
 
 contract ExampleContract with Ownable {
@@ -27,7 +27,7 @@ contract ExampleContract with Ownable {
 `OwnableTransferable` is an extension of an `Ownable` that allows to transfer ownership of a contract to another address. It provides a secure handle `ChangeOwner` that could be called by an owner to transfer ownership.
 
 ### Usage
-```
+```tact
 import "@stdlib/ownable";
 
 contract ExampleContract with OwnableTransferable {

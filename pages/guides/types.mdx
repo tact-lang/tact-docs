@@ -26,7 +26,7 @@ Structs and Messages are almost the same thing with an only difference that mess
 > Currently circular **types** are not possible. Meaning that struct/message **A** can't have field of a struct/message **B** that have field of a struct/message **A**.
 
 Example:
-```
+```tact
 struct Point {
     x: Int;
     y: Int;
@@ -57,7 +57,7 @@ Possible value types:
 
 Contracts are the main entry of a smart contract on TON blockchain. It holds all functions, getters and receivers of a contract.
 
-```
+```tact
 contract HelloWorld {
   counter: Int;
 
@@ -79,7 +79,7 @@ contract HelloWorld {
 
 TACT doesn't support classical class inheritance, but instead introduces concept of **traits**. Trait defines functions, receivers and required fields. Trait is like abstract classes, but it does not define how and where fields must be stored. **All** fields from all traits must be explicitly declared in the contract itself. Traits itself also don't have constructors and all initial field initialization also must be done in main contract.
 
-```
+```tact
 trait Ownable {
     owner: Address;
 
@@ -95,7 +95,7 @@ trait Ownable {
 
 And contract that uses trait:
 
-```
+```tact
 contract Treasure with Ownable {
   owner: Address; // Field from trait MUST be defined in contract itself
   

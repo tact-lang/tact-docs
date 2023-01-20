@@ -3,61 +3,61 @@
 Strings are a sequence of a characters. Strings are immutable, which means that once a string is created, it cannot be changed. TACT have a limitied support for strings, but you can use them to store text. Strings are also useful as comment messages body.
 
 ## beginString
-```
+```tact
 fun beginString(): StringBuilder;
 ```
 Creates new empty StringBuilder.
 
 ## beginComment
-```
+```tact
 fun beginComment(): StringBuilder;
 ```
 Creates new empty StringBuilder for comment.
 
 ## beginTailString
-```
+```tact
 fun beginTailString(): StringBuilder;
 ```
 Creates new empty StringBuilder for a tailstring. This format is used in various standards like NFT or Jetton.
 
 ## beginStringFromBuilder
-```
+```tact
 fun beginStringFromBuilder(builder: Builder): StringBuilder;
 ```
 Creates new StringBuilder from existing builder. Useful if you need to serialize string to a cell with some other data.
 
 ## StringBuilder.append
-```
+```tact
 extends mutates fun append(self: StringBuilder, s: String);
 ```
 Append to StringBuilder `self` String `s` and updates it.
 
 ## StringBuilder.toString
-```
+```tact
 extends fun toString(self: StringBuilder): String;
 ```
 Assembles a string from a builder's content.
 
 ## StringBuilder.toCell
-```
+```tact
 extends fun toCell(self: StringBuilder): Cell
 ```
 Assembles a cell from a builder's content.
 
 ## StringBuilder.toSlice
-```
+```tact
 extends fun toSlice(self: StringBuilder): Slice;
 ```
 Assembles a cell from builder's content into a slice. Alias to `self.toCell().asSlice()`.
 
 ## Int.toString
-```
+```tact
 extends fun toString(self: Int): String;
 ```
 Converts Int value to String
 
 ## Int.toFloatString
-```
+```tact
 extends fun toFloatString(self: Int, digits: Int): String
 ```
 
@@ -68,37 +68,37 @@ Where,
 * `digits` is a exponentiation parameter of expression `10^(-digits)` that will be used for computing float number. `digits` required to be `0 <= digits < 77`.
 
 ## Int.toCoinsString
-```
+```tact
 extends fun toCoinsString(self: Int): String
 ```
 Converts nanoToncoin Int value `self` to String float number of Toncoins and returns it as a result.
 
 ## String.asComment
-```
+```tact
 extends fun asComment(self: String): Cell
 ```
 Converts String `self` to comment message body Cell.
 
 ## String.asSlice
-```
+```tact
 extends fun asSlice(self: String): Slice;
 ```
 **Dangerously** casts string as slice for future parsing. Use it only if you know what you are doing.
 
 ## Slice.asString
-```
+```tact
 extends fun asString(self: Slice): String;
 ```
 **Dangerously** casts slice as string. Use it only if you know what you are doing.
 
 ## String.fromBase64
-```
+```tact
 extends fun fromBase64(self: String): Slice;
 ```
 Decodes base64 string to a slice. NOTE: This method is very limited and can be used only for small strings that fits a single cell.
 
 ## Slice.fromBase64
-```
+```tact
 extends fun fromBase64(self: Slice): Slice;
 ```
 Decodes base64 slice to a slice. Alias for `self.asString().fromBase64()`

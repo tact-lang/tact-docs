@@ -1,0 +1,10 @@
+{
+    "fileTypes": [
+        "tact"
+    ],
+    "foldingStartMarker": "(\\{\\s*(//.*)?$|^\\s*// \\{\\{\\{)",
+    "foldingStopMarker": "^\\s*(\\}|// \\}\\}\\}$)",
+    "name": "tact",
+    "scopeName": "source.tact",
+    "patterns": []
+}

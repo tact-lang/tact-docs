@@ -43,7 +43,7 @@ Repeat loop:
 > **Note**
 > Repeat number must be 32 bit int or out of range exception is thrown. Negative values are ignored.
 
-```
+```tact
 let a: Int = 1;
 repeat(10) {
   a = a * a;
@@ -52,7 +52,7 @@ repeat(10) {
 
 While loop:
 
-```
+```tact
 let x: Int = 10;
 while(x > 0) {
   x = x - 1;
@@ -61,7 +61,7 @@ while(x > 0) {
 
 Until loop:
 
-```
+```tact
 let x: Int = 10;
 do {
   x = x - 1;
@@ -73,13 +73,13 @@ do {
 > **Warn**
 > Curly brackets are required
 
-```
+```tact
 if (condition) {
   doSomething();
 }
 ```
 
-```
+```tact
 if (condition) {
   doSomething();
 } else {
@@ -87,7 +87,7 @@ if (condition) {
 }
 ```
 
-```
+```tact
 if (condition) {
   doSomething();
 } else if (condition2) {
@@ -101,6 +101,6 @@ if (condition) {
 
 Allows to compute init state for a contract:
 
-```
+```tact
 let state: StateInit = initOf Contract(123, 123);
 ```

@@ -3,7 +3,7 @@
 List of a basic functions that are available in all smart contracts.
 
 ## context
-```
+```tact
 fun context(): Context;
 ```
 Return Struct `Context`, that consists of
@@ -16,37 +16,37 @@ Return Struct `Context`, that consists of
 | raw     | Slice   | Slice reminder of message     
 
 ## require
-```
+```tact
 fun require(condition: Bool, error: String);
 ```
 Checks `condition` and throws an exception with `error` message if `condition` is false.
 
 ## now
-```
+```tact
 fun now(): Int
 ```
 Returns current unixtime
 
 ## myBalance
-```
+```tact
 myBalance(): Int;
 ```
 Returns the remaining balance of the smart contract as Int value in NanoToncoins, where NanoToncoin = Toncoin * 10^(−9). Note that `send` do not update this field.
 
 ## myAddress
-```
+```tact
 myAddress(): Address;
 ```
 Returns the internal address of the current smart contract as a Address.
 
 ## contractAddress
-```
+```tact
 fun contractAddress(s: StateInit): Address;
 ```
 Computes smart contract's Address in a workchain #0 based on its StateInit `s`, where `s` is a Struct consists of `code` and `data` Cells.
 
 ## contractAddressExt
-```
+```tact
 fun contractAddressExt(chain: Int, code: Cell, data: Cell): Address;
 ```
 Computes smart contract's Address based on its workchain id `chain`, `code`, `data`.
