@@ -1,70 +1,248 @@
 {
-    "fileTypes": [
-        "tact"
-    ],
-    "foldingStartMarker": "\\{\\s*$",
-	"foldingStopMarker": "^\\s*\\}",
-    "name": "tact",
-    "scopeName": "source.tact",
-    "patterns": [
-        {
-			"include": "#comments"
-		},
-		{
-			"include": "#keywords"
-		},
-        {
-            "include": "#variables"
-        },
-		{
-			"include": "#strings"
-		},
-		{
-			"include": "#numeric"
-		}
+	"name": "tact",
+	"scopeName": "source.tact",
+	"fileTypes": [
+	  "tact"
 	],
-    "repository": {
-		"keywords": {
-			"patterns": [{
-				"name": "keyword.control.tact",
-				"match": "\\b(if|else|while|do|until|repeat|return|extends|mutates|native|contract|trait|with|let|fun|import|self|is|initOf|struct|message|map|get|as)\\b"
-			}, {
-				"name": "keyword.operator",
-				"match": "(?<=\\s)(<=>|>=|<=|!=|==|\\^>>|\\~>>|>>|<<|\\/%|\\^%|\\~%|\\^\\/|\\~\\/|\\+=|-=|\\*=|\\/=|~\\/=|\\^\\/=|%=|\\^%=|<<=|>>=|~>>=|\\^>>=|&=|\\|=|\\^=|\\^|=|~|\\/|%|-|\\*|\\+|>|<|&|\\||:|\\?)(?=\\s)"
-			}, {
-				"name": "keyword.other",
-				"match": "\\b(false|true)\\b"
-			}]
+	"foldingStartMarker": "\\{s*$",
+	"foldingStopMarker": "^\\s*\\}",
+	"patterns": [
+	  {
+		"include": "#comments"
+	  },
+	  {
+		"include": "#import"
+	  },
+	  {
+		"include": "#struct"
+	  },
+	  {
+		"include": "#contract-or-trait"
+	  },
+	  {
+		"include": "#numeric"
+	  },
+	  {
+		"include": "#keywords"
+	  },
+	  {
+		"include": "#variables"
+	  },
+	  {
+		"include": "#strings"
+	  }
+	],
+	"repository": {
+	  "import": {
+		"name": "meta.import.tact",
+		"begin": "\\b(import)\\b\\s*",
+		"beginCaptures": {
+		  "1": {
+			"name": "keyword.other.import.tact"
+		  }
 		},
-        "strings": {
-			"name": "string.quoted.double.tact",
-			"begin": "\"",
-			"end": "\""
+		"end": "\\s*(;)",
+		"endCaptures": {
+		  "1": {
+			"name": "punctuation.terminator.tact"
+		  }
 		},
-		"numeric": {
-			"name": "constant.numeric",
-			"match": "(-?([\\d]+|0x[\\da-fA-F]+))\\b"
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#strings"
+		  }
+		]
+	  },
+	  "struct": {
+		"name": "meta.struct.tact",
+		"begin": "\\b(struct|message)\\b",
+		"beginCaptures": {
+		  "1": {
+			"name": "keyword.other.struct"
+		  }
 		},
-        "comments": {
-			"patterns": [
-				{
-					"name": "comment.line",
-					"match": "\\/\\/(.*)"
-				},
-				{
-					"name": "comment.block",
-					"begin": "/\\*",
-					"end": "\\*/"
-				}
-			]
+		"end": "(?<=\\})",
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#struct-header"
+		  },
+		  {
+			"include": "#struct-body"
+		  }
+		]
+	  },
+	  "struct-header": {
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"match": "\\b[\\w]+\\b",
+			"captures": {
+			  "0": {
+				"name": "entity.name.type.tact"
+			  }
+			}
+		  },
+		  {
+			"match": "\\(((?:\\b0(?:x|X)[0-9a-fA-F][0-9a-fA-F_]*\\b)|(?:\\b[0-9]+\\b))\\)",
+			"captures": {
+			  "1": {
+				"name": "constant.numeric"
+			  }
+			}
+		  }
+		]
+	  },
+	  "struct-body": {
+		"begin": "\\{",
+		"beginCaptures": {
+		  "0": {
+			"name": "punctuation.definition.block.tact"
+		  }
 		},
-        "variables": {
-			"patterns": [
-				{
-					"match": "(?!\")(`([^`]+)`|((?=_)_|(?={){|(?=})}|(?![_`{}]))([^;,\\[\\]\\(\\)\\s~.]+))",
-					"name": "variable.name"
-				}
-			]
-		}
-    }
-}
+		"end": "\\}",
+		"endCaptures": {
+		  "0": {
+			"name": "punctuation.definition.block.tact"
+		  }
+		},
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#field-declaration"
+		  }
+		]
+	  },
+	  "field-declaration": {
+		"name": "meta.struct.field.tact",
+		"begin": "(\\b[\\w]+\\b)",
+		"beginCaptures": {
+		  "1": {
+			"name": "variable.object.property.tact"
+		  }
+		},
+		"end": "(;)",
+		"endCaptures": {
+		  "1": {
+			"name": "punctuation.terminator.tact"
+		  }
+		},
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"name": "keyword.operator.type.annotation.tact",
+			"match": ":"
+		  },
+		  {
+			"name": "keyword.control.as.tact",
+			"match": "as"
+		  },
+		  {
+			"name": "keyword.operator.optional.tact",
+			"match": "\\?"
+		  },
+		  {
+			"name": "entity.name.type.tact",
+			"match": "\\b[\\w]+\\b"
+		  }
+		]
+	  },
+	  "contract-or-trait": {
+		"name": "meta.struct.tact",
+		"begin": "\\b(contract|trait)\\b",
+		"beginCaptures": {
+		  "1": {
+			"name": "keyword.other.struct"
+		  }
+		},
+		"end": "(?<=\\})",
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#contract-or-trait-body"
+		  }
+		]
+	  },
+	  "contract-or-trait-body": {
+		"begin": "\\{",
+		"beginCaptures": {
+		  "0": {
+			"name": "punctuation.definition.block.tact"
+		  }
+		},
+		"end": "\\}",
+		"endCaptures": {
+		  "0": {
+			"name": "punctuation.definition.block.tact"
+		  }
+		},
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#field-declaration"
+		  }
+		]
+	  },
+	  "keywords": {
+		"patterns": [
+		  {
+			"name": "keyword.control.tact",
+			"match": "\\b(if|else|while|do|until|repeat|return|extends|mutates|native|let|fun|self|is|initOf|map|get|as)\\b"
+		  },
+		  {
+			"name": "keyword.operator",
+			"match": "(?<=\\s)(<=>|>=|<=|!=|==|\\^>>|\\~>>|>>|<<|\\/%|\\^%|\\~%|\\^\\/|\\~\\/|\\+=|-=|\\*=|\\/=|~\\/=|\\^\\/=|%=|\\^%=|<<=|>>=|~>>=|\\^>>=|&=|\\|=|\\^=|\\^|=|~|\\/|%|-|\\*|\\+|>|<|&|\\||:|\\?)(?=\\s)"
+		  },
+		  {
+			"name": "keyword.other",
+			"match": "\\b(false|true)\\b"
+		  }
+		]
+	  },
+	  "strings": {
+		"name": "string.quoted.double.tact",
+		"begin": "\"",
+		"end": "\""
+	  },
+	  "numeric": {
+		"name": "constant.numeric",
+		"match": "(?:\\b0(?:x|X)[0-9a-fA-F][0-9a-fA-F_]*\\b)|(?:\\b[0-9]+\\b)"
+	  },
+	  "comments": {
+		"patterns": [
+		  {
+			"name": "comment.line",
+			"match": "\\/\\/(.*)"
+		  },
+		  {
+			"name": "comment.block",
+			"begin": "/\\*",
+			"end": "\\*/"
+		  }
+		]
+	  },
+	  "variables": {
+		"patterns": [
+		  {
+			"match": "(?!\")(`([^`]+)`|((?=_)_|(?={){|(?=})}|(?![_`{}]))([^;,\\[\\]\\(\\)\\s~.]+))",
+			"name": "variable.name"
+		  }
+		]
+	  }
+	}
+  }
