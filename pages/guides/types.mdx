@@ -1,6 +1,6 @@
-# TACT type system
+# Tact type system
 
-Every variable, item, and value in a TACT program has a type:
+Every variable, item, and value in a Tact program has a type:
 
 * Primitives: Int, Bool, Slice, Cell, Builder, String and StringBuilder;
 * Map
@@ -11,7 +11,7 @@ Also all types could be defined as nullable.
 
 ## Primitive types
 
-* Int - all integers in TACT are 257 bit signed integers.
+* Int - all integers in Tact are 257 bit signed integers.
 * Bool - classical boolean with true/false values.
 * Address - standart address.
 * Slice, Cell, Builder - low level primitive of TON VM.
@@ -77,7 +77,7 @@ contract HelloWorld {
 
 ## Traits
 
-TACT doesn't support classical class inheritance, but instead introduces concept of **traits**. Trait defines functions, receivers and required fields. Trait is like abstract classes, but it does not define how and where fields must be stored. **All** fields from all traits must be explicitly declared in the contract itself. Traits itself also don't have constructors and all initial field initialization also must be done in main contract.
+Tact doesn't support classical class inheritance, but instead introduces concept of **traits**. Trait defines functions, receivers and required fields. Trait is like abstract classes, but it does not define how and where fields must be stored. **All** fields from all traits must be explicitly declared in the contract itself. Traits itself also don't have constructors and all initial field initialization also must be done in main contract.
 
 ```tact
 trait Ownable {

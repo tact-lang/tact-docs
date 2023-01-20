@@ -1,5 +1,5 @@
 export default {
-  logo: <span>TACT Documentation</span>,
+  logo: <span>Tact Documentation</span>,
   defaultTheme: 'dark',
   project: {
     link: 'https://github.com/ton-community/tact',
@@ -14,7 +14,7 @@ export default {
   },
   useNextSeoProps() {
     return {
-      titleTemplate: '%s – TACT'
+      titleTemplate: '%s – Tact'
     }
   },
   head: () => (
@@ -23,22 +23,22 @@ export default {
 
       <meta
         name="description"
-        content="TACT Language Documentation"
+        content="Tact Language Documentation"
       />
 
       <meta
         name="og:title"
-        content="TACT Language Documentation"
+        content="Tact Language Documentation"
       />
       <meta
         name="og:description"
-        content="Language reference and guides for TACT"
+        content="Language reference and guides for Tact"
       />
 
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content="@ex3ndr"></meta>
+      <meta name="twitter:site" content="@tact_language"></meta>
 
-      <meta name="apple-mobile-web-app-title" content="TACT" />
+      <meta name="apple-mobile-web-app-title" content="Tact" />
 
       <script
         lang="javascript"
