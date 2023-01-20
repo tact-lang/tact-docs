@@ -1,6 +1,6 @@
 # Compatibility with func
 
-TACT itself compiles to `func` and allows to map TACT entities directly to various `func` and `tl-b` types.
+Tact itself compiles to `func` and allows to map Tact entities directly to various `func` and `tl-b` types.
 
 ## Convert types
 
@@ -8,9 +8,9 @@ Primitive types in `tact` are directly mapped to `func` one. All rules about cop
 
 ## Convert serialization
 
-TACT structs and messages serialization is automatic unlike `func` where you need to define serialization logic manually. To build a `tact` types that serializes to specific `tl-b`.
+Tact structs and messages serialization is automatic unlike `func` where you need to define serialization logic manually. To build a `tact` types that serializes to specific `tl-b`.
 
-TACT auto-layout algorithm is greedy. Means that it takse next variable, calculates it's size and tries to fit into a current cell. If it doesn't fit, it creates a new cell and continues. All inner structs for auto-layout are flattened before allocation. 
+Tact auto-layout algorithm is greedy. Means that it takse next variable, calculates it's size and tries to fit into a current cell. If it doesn't fit, it creates a new cell and continues. All inner structs for auto-layout are flattened before allocation. 
 
 All, except `Address`, optional types are serialized as `Maybe` in `tl-b`. There are no support for `Either` since it does not define what to pick during serialization in some cases.
 
@@ -96,7 +96,7 @@ struct SomeValue {
 
 ## Convert get-methods
 
-You can express everything except `list-style-lists` in TACT that would be compatible with `func`'s `get`-methods.
+You can express everything except `list-style-lists` in Tact that would be compatible with `func`'s `get`-methods.
 
 ### Primitive return type
 if `get-method` returns a primitive in `func`, you can implement it the same way in the `tact`.

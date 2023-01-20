@@ -1,6 +1,6 @@
-# TACT documentation
+# Tact documentation
 
-This repository contains a TACT compiler documentation.
+This repository contains a Tact compiler documentation.
 
 ## Contributing
 
