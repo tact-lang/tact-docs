@@ -20,22 +20,16 @@
 		"include": "#contract-or-trait"
 	  },
 	  {
-		"include": "#numeric"
+		"include": "#fun-declaration"
 	  },
 	  {
-		"include": "#keywords"
-	  },
-	  {
-		"include": "#variables"
-	  },
-	  {
-		"include": "#strings"
+		"include": "#statements"
 	  }
 	],
 	"repository": {
 	  "import": {
 		"name": "meta.import.tact",
-		"begin": "\\b(import)\\b\\s*",
+		"begin": "(?<![_$[:alnum:]])(?:(?<=\\.\\.\\.)|(?<!\\.))\\b(import)\\b\\s*",
 		"beginCaptures": {
 		  "1": {
 			"name": "keyword.other.import.tact"
@@ -58,7 +52,7 @@
 	  },
 	  "struct": {
 		"name": "meta.struct.tact",
-		"begin": "\\b(struct|message)\\b",
+		"begin": "(?<![_$[:alnum:]])(?:(?<=\\.\\.\\.)|(?<!\\.))\\b(struct|message)\\b",
 		"beginCaptures": {
 		  "1": {
 			"name": "keyword.other.struct"
@@ -122,45 +116,9 @@
 		  }
 		]
 	  },
-	  "field-declaration": {
-		"name": "meta.struct.field.tact",
-		"begin": "(\\b[\\w]+\\b)",
-		"beginCaptures": {
-		  "1": {
-			"name": "variable.object.property.tact"
-		  }
-		},
-		"end": "(;)",
-		"endCaptures": {
-		  "1": {
-			"name": "punctuation.terminator.tact"
-		  }
-		},
-		"patterns": [
-		  {
-			"include": "#comments"
-		  },
-		  {
-			"name": "keyword.operator.type.annotation.tact",
-			"match": ":"
-		  },
-		  {
-			"name": "keyword.control.as.tact",
-			"match": "as"
-		  },
-		  {
-			"name": "keyword.operator.optional.tact",
-			"match": "\\?"
-		  },
-		  {
-			"name": "entity.name.type.tact",
-			"match": "\\b[\\w]+\\b"
-		  }
-		]
-	  },
 	  "contract-or-trait": {
 		"name": "meta.struct.tact",
-		"begin": "\\b(contract|trait)\\b",
+		"begin": "(?<![_$[:alnum:]])(?:(?<=\\.\\.\\.)|(?<!\\.))\\b(contract|trait)\\b",
 		"beginCaptures": {
 		  "1": {
 			"name": "keyword.other.struct"
@@ -170,6 +128,14 @@
 		"patterns": [
 		  {
 			"include": "#comments"
+		  },
+		  {
+			"name": "keyword.control.with.tact",
+			"match": "with"
+		  },
+		  {
+			"name": "entity.name.type.tact",
+			"match": "\\b[\\w]+\\b"
 		  },
 		  {
 			"include": "#contract-or-trait-body"
@@ -194,7 +160,284 @@
 			"include": "#comments"
 		  },
 		  {
+			"include": "#init-declaration"
+		  },
+		  {
+			"include": "#receive-declaration"
+		  },
+		  {
+			"include": "#bounce-declaration"
+		  },
+		  {
+			"include": "#fun-declaration"
+		  },
+		  {
 			"include": "#field-declaration"
+		  }
+		]
+	  },
+	  "field-declaration": {
+		"name": "meta.struct.field.tact",
+		"begin": "(\\b[\\w]+\\b)",
+		"beginCaptures": {
+		  "1": {
+			"name": "variable.object.property.tact"
+		  }
+		},
+		"end": "(;)",
+		"endCaptures": {
+		  "1": {
+			"name": "punctuation.terminator.tact"
+		  }
+		},
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#type-annotation"
+		  }
+		]
+	  },
+	  "init-declaration": {
+		"name": "meta.struct.field.tact",
+		"begin": "(init)",
+		"beginCaptures": {
+		  "1": {
+			"name": "keyword.control.init.tact"
+		  }
+		},
+		"end": "(?<=\\})",
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#fun-arguments"
+		  },
+		  {
+			"include": "#block-declaration"
+		  }
+		]
+	  },
+	  "receive-declaration": {
+		"name": "meta.struct.field.tact",
+		"begin": "(receive)",
+		"beginCaptures": {
+		  "1": {
+			"name": "keyword.control.receive.tact"
+		  }
+		},
+		"end": "(?<=\\})",
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#fun-arguments"
+		  },
+		  {
+			"include": "#block-declaration"
+		  }
+		]
+	  },
+	  "bounce-declaration": {
+		"name": "meta.struct.field.tact",
+		"begin": "(bounce)",
+		"beginCaptures": {
+		  "1": {
+			"name": "keyword.control.bounce.tact"
+		  }
+		},
+		"end": "(?<=\\})",
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#fun-arguments"
+		  },
+		  {
+			"include": "#block-declaration"
+		  }
+		]
+	  },
+	  "fun-declaration": {
+		"name": "meta.function.tact",
+		"begin": "\\b(get|native|extends|mutates|fun)\\b",
+		"beginCaptures": {
+		  "1": {
+			"name": "storage.modifier.tact"
+		  }
+		},
+		"end": "(?<=\\}|;)",
+		"patterns": [
+		  {
+			"include": "#fun-declaration-body"
+		  }
+		]
+	  },
+	  "fun-declaration-body": {
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#fun-arguments"
+		  },
+		  {
+			"include": "#type-annotation"
+		  },
+		  {
+			"include": "#block-declaration"
+		  },
+		  {
+			"name": "storage.modifier.tact",
+			"match": "\\b(get|native|extends|mutates|fun)\\b"
+		  },
+		  {
+			"name": "meta.definition.function.tact entity.name.function.tact",
+			"match": "\\b[\\w]+\\b"
+		  }
+		]
+	  },
+	  "fun-arguments": {
+		"name": "meta.parameters.tact",
+		"begin": "\\(",
+		"beginCaptures": {
+		  "0": {
+			"name": "punctuation.definition.parameters.begin.tact"
+		  }
+		},
+		"end": "\\)",
+		"endCaptures": {
+		  "0": {
+			"name": "punctuation.definition.parameters.end.tact"
+		  }
+		},
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#strings"
+		  },
+		  {
+			"match": "(?:(self)|(\\b[\\w]+\\b))\\s*(:)\\s*(\\b[\\w]+\\b)",
+			"captures": {
+			  "1": {
+				"name": "variable.language.self.tact"
+			  },
+			  "2": {
+				"name": "variable.name.tact"
+			  },
+			  "4": {
+				"name": "entity.name.type.tact"
+			  }
+			}
+		  }
+		]
+	  },
+	  "block-declaration": {
+		"name": "meta.block.tact",
+		"begin": "\\{",
+		"beginCaptures": {
+		  "0": {
+			"name": "punctuation.definition.block.begin.tact"
+		  }
+		},
+		"end": "\\}",
+		"endCaptures": {
+		  "0": {
+			"name": "punctuation.definition.block.end.tact"
+		  }
+		},
+		"patterns": [
+		  {
+			"include": "#statements"
+		  }
+		]
+	  },
+	  "statements": {
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#block-declaration"
+		  },
+		  {
+			"include": "#expressions"
+		  }
+		]
+	  },
+	  "expressions": {
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#keywords"
+		  },
+		  {
+			"include": "#numeric"
+		  },
+		  {
+			"include": "#strings"
+		  },
+		  {
+			"include": "#type-annotation"
+		  },
+		  {
+			"include": "#variables"
+		  },
+		  {
+			"include": "#function-call"
+		  }
+		]
+	  },
+	  "type-annotation": {
+		"name": "meta.type.annotation.tact",
+		"begin": "(:)\\s+",
+		"beginCaptures": {
+		  "1": {
+			"name": "keyword.operator.type.annotation.tact"
+		  }
+		},
+		"end": "(?=\\{|\\;|\\=|\\,|\\))",
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#type-as"
+		  },
+		  {
+			"name": "keyword.operator.optional.tact",
+			"match": "\\?"
+		  },
+		  {
+			"match": "\\b[\\w]+\\b",
+			"name": "entity.name.type.tact"
+		  }
+		]
+	  },
+	  "type-as": {
+		"name": "meta.type.annotation.as.tact",
+		"begin": "(as)\\s+",
+		"end": "(?=\\{|\\;|\\=|\\,|\\))",
+		"beginCaptures": {
+		  "1": {
+			"name": "keyword.control.as.tact"
+		  }
+		},
+		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"match": "\\b[\\w]+\\b",
+			"name": "storage.modifier.tact"
 		  }
 		]
 	  },
@@ -239,8 +482,16 @@
 	  "variables": {
 		"patterns": [
 		  {
-			"match": "(?!\")(`([^`]+)`|((?=_)_|(?={){|(?=})}|(?![_`{}]))([^;,\\[\\]\\(\\)\\s~.]+))",
-			"name": "variable.name"
+			"match": "\\b[\\w]+\\b(?!\\s*\\()",
+			"name": "variable.name.tact"
+		  }
+		]
+	  },
+	  "function-call": {
+		"patterns": [
+		  {
+			"match": "\\b[\\w]+\\b(?=\\s*\\()",
+			"name": "entity.name.function.tact"
 		  }
 		]
 	  }
