@@ -4,5 +4,6 @@
   "deploy": "Deploying your contract",
   "guides": "Guides",
   "reference": "Reference",
-  "libs": "Libraries"
+  "libs": "Libraries",
+  "tools": "Tools"
 }
