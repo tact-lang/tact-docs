@@ -10,7 +10,7 @@ It starts by adding a **message value to the contract balance**. Value of incomi
 
 Then some (usually small amount) of nanotons is substracted from contract balance for storage. This means that you can't perfectly predict balance changes and have to adjust your code to this instability.
 
-Then it deploys a contract if it is not deployed yet and message contains init package. If init package is present, it would be ignored.
+Then it deploys a contract if it is not deployed yet and message contains init package. If init package isn't present, it would be ignored.
 
 ## Compute Phase
 
