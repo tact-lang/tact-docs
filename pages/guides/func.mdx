@@ -94,6 +94,53 @@ struct SomeValue {
 }
 ```
 
+## Convert recived messages to `op` operations 
+
+Tact generates a unique `op` for every received typed  message, but it can be overwritten.
+
+Code in `func`:
+```func
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure { 
+    ;; incoming message code...
+    
+    ;; Receive MessageWithGeneratedOp message
+    if (op == 1180414602) { 
+        ;; code...
+    }
+    
+    ;; Receive MessageWithOverwrittenOP message
+    if (op == 291) {
+        ;; code...
+    }
+    
+}
+```
+Will be in `tact`
+ `tact`:
+```tact
+message MessageWithGeneratedOp {
+    amount: Int as uint32;
+}
+
+message(0x123) MessageWithOverwrittenOP {
+    amount: Int as uint32;
+}
+
+contract Contract {
+    // Contract Body...
+    
+    receive(msg: MessageWithGeneratedOp) {
+        // code...
+    }
+    
+    receive(msg: MessageWithOverwrittenOP) {
+        // code...
+    }
+
+}
+
+```
+
 ## Convert get-methods
 
 You can express everything except `list-style-lists` in Tact that would be compatible with `func`'s `get`-methods.
