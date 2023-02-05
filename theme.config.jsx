@@ -9,7 +9,7 @@ export default {
   },
   footer: {
     text: <span>
-      MIT {new Date().getFullYear()} © <a href="https://github.com/ton-community" target="_blank">TON Community</a>.
+      MIT {new Date().getFullYear()} © <a href="https://github.com/ton-community" target="_blank">Steve Korshakov</a>.
     </span>,
   },
   useNextSeoProps() {
