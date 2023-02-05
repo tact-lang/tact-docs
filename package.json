@@ -10,6 +10,10 @@
   "scripts": {
     "dev": "rm -fr .next && next",
     "clean": "rm -fr .next",
-    "build": "yarn clean && next build && next export"
+    "build": "yarn clean && next build"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.19",
+    "typescript": "^4.9.5"
   }
 }
