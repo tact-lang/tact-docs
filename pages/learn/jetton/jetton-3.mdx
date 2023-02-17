@@ -1,0 +1,140 @@
+# Jetton contract
+## Jetton deployment
+
+### Jetton tact demo project
+
+Take example of project from GitHub:
+
+```bash
+git clone https://github.com/ton-community/tact-jetton
+cd tact-jetton
+```
+
+### Minter
+In `jetton.tact` defines minter contract, that will deploy initial contracts of jetton wallets with special "Mint" message.
+Minter, usually used before Token become using by users, to distribute to all owners. In current case, we will deliver all Tokens to one owner and instantly deactivate option of mint again.
+Look briefly to our contract:
+
+
+```tact
+import "@stdlib/jetton";
+
+message Mint {
+    amount: Int;
+}
+
+contract SampleJetton with Jetton {
+
+    totalSupply: Int as coins;
+    owner: Address;
+    content: Cell?;
+    mintable: Bool;
+
+    init(owner: Address, content: Cell?) {
+        self.totalSupply = 0;
+        self.owner = owner;
+        self.mintable = true;
+        self.content = content;
+    }
+
+    receive(msg: Mint) {
+        let ctx: Context = context();
+        self.mint(ctx.sender, msg.amount, ctx.sender);
+    }
+
+    receive("Mint!") {
+        let ctx: Context = context();
+        self.mint(ctx.sender, 1000000000, ctx.sender);
+    }
+}
+```
+This contract receive "Mint" message, and if it happens he invokes `mint()` function,
+that declared in `@stdlib/jetton`. Function `mint()` creates a message and sends it to the new jetton-wallet contract address.
+
+![jetton-8](public/tact-jetton/tact-jetton-9.png)
+1. _Wallet App A_ send request to _Wallet A_ send mint message to minter. Currently Minter does not exist in blockchain.
+2. _Wallet A_ send "Mint" message to Minter's contract address. When it delivered, Minter become deployed and invoke in its mint() function.
+3. _Minter_ send to _Jetton A_ address Transfer message with token's supply value. When it delivered, Jetton A contract become deployed.
+
+### Deployment of jetton wallets for new users
+Similar process happens when user of _Wallet App A_, want to send tokens to user of _Wallet App B_.
+The trick is, our contract Jetton always send information and the whole code to another address. When it comes to destination, code executes and from case was it deployed before or already deployed.
+In this case - the [transfer jetton message](https://github.com/ton-core/tact/blob/main/stdlib/libs/jetton/messages.tact#L1) invokes `init()` function and transfers tokens, as a result, deploys the _Jetton B_ smart contract with token balance sent from _Jetton A_.
+![jetton-8](public/tact-jetton/tact-jetton-10.png)
+
+From [jetton/wallet.tact](https://github.com/ton-core/tact/blob/main/stdlib/libs/jetton/wallet.tact#L38), we can see, that it will create initial data for new jetton wallet contract:
+
+```tact
+//previous code
+
+       let init: StateInit = initOf JettonDefaultWallet(self.master, msg.destination);
+        let walletAddress: Address = contractAddress(init);
+        send(SendParameters{
+            to: walletAddress, 
+            value: 0,
+            mode: SendRemainingValue, 
+            bounce: true,
+            body: TokenTransferInternal{
+                amount: msg.amount,
+                queryId: msg.queryId,
+                from: self.owner,
+                responseAddress: self.owner,
+                forwardTonAmount: msg.forwardTonAmount,
+                forwardPayload: msg.forwardPayload
+            }.toCell(),
+            code: init.code,
+            data: init.data
+        });
+        
+```
+
+Here, `initOf` allows to calculate new contract's init data.
+It calculates from address of regular `Wallet B`, here `msg.destination` and address of _Minter_ contract `self.master`. Because we always know both, we can be sure which address we will use as our destination.
+
+To display all data clear, application should read each element of process with get methods. It is job, that, for example, have to do blockchain explorers.
+![jetton-8](public/tact-jetton/tact-jetton-11.png)
+
+### Deployment of tact.jetton
+
+This project has ready-made example of script for deploying jetton in testnet. Specify following things: 
+
+* Input your deployment Testnet wallet seed in `tact-wallet/sources/jetton.deploy.ts`:
+```ts
+  // Insert your test wallet's 24 words, make sure you have some test Toncoins on its balance. Every deployment spent 0.5 test toncoin.
+  let mnemonics = "multiply voice predict admit hockey fringe flat bike napkin child quote piano";
+```
+
+* Input owner address at same `jetton.deploy.ts`:
+```ts
+  // Owner should usually be the deploying wallet's address.
+  let owner = Address.parse('kQDND6yHEzKB82ZGRn58aY9Tt_69Ie_uz73e2V...');
+```
+* Note, that in deployment script using walletV4. If you want use your V3R2, you need change wallet contract here.
+
+* Run deployment script
+```bash
+  yarn deploy
+```
+
+As a result of successfully deployment, you should deploy two contracts:
+* Minter, Token Master - [example](https://testnet.ton.cx/address/EQDupHQXvagCZ3RpkeMZ0dQMI2ACY-jowmCZQ_Y84aSqKw-Z).
+* Jetton Wallet of first owner, Wallet A - [example](https://testnet.ton.cx/address/EQA7EdSn6hMMwC7g01w2FwtiZuJE7GZCxss7n3MD26nD6S65).
+
+
+## What to read next?
+
+This article was inspired by the following materials about jetton standards:
+* [how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
+* [TON Keeper founders Oleg Andreev and Oleg Illarionov on TON jettons](https://www.youtube.com/watch?v=oEO29KmOpv4)
+* [Fungible tokens (Jettons) standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
+
+### Useful social
+* [Tact Telegram chat](https://t.me/tactlang)
+* [Ton Dev News](https://t.me/tondevnews)
+* [Ton Dev chat](https://t.me/tondev_eng)
+
+### Useful TON links
+* [Tact main repository](https://github.com/ton-core/tact)
+* [Ton official documentation](https://ton.org/docs/)
+* [FunC journey](https://blog.ton.org/func-journey)
+* [Ton Tutorials](https://ton-community.github.io/tutorials/01-wallet/)

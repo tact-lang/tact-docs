@@ -1,0 +1,100 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Tact Hello World
+
+## Receivers and Getters
+
+### Tact's facts #4
+Here we will learn more about existing tools in Tact for defining contract's behavior in general.
+ `init()` - is one of them, and below listed all of them:
+
+
+| Entity      | Description                                                                                                                                                                                                |
+|-------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `fun`       | Special Tact keyword for declaring function. Functions serve for the convenient abstraction of logic and optimization that helps code be more readable. |
+| `init()`    | Function that declares initial values will be stored in contract's data. It will be use in Deployment process, when contract creates in Blockchain. It is mandatory to be defined for the contract.                                                        |
+| `context()` | Tact stdlib helper that gets common properties about current incoming messages such as sender's Address, message's body and message value.                                                                           |
+| `recieve()` | Special function of contract serves to declare behaviours of contract with messages.                                                                                                                       |
+| `get fun`   | Special keywords of contract serves to declare get functions. According to name, this uses to get information from its data.                                                                               |
+ 
+
+
+### Tactical Practice #4
+#### Declare fun
+
+Ok, one more time, we need extend our contract's behaviour
+
+```tact
+//previous code
+
+fun add(v: Int) {
+
+    let ctx: Context = context();
+    require(ctx.sender == self.owner, "Invalid sender");
+    
+    self.counter = (self.counter + v);
+}
+```
+
+Declare function `add` that will do following things:
+1. Get incoming integer argument `v`.
+2. Check current incoming message `sender` is equal to `owner` we set for contract in deployment process.
+3. If this check passed add to current `counter` value `v` and update `counter` value in contract. If required is not pass, throw exception message "Invalid sender".
+
+#### Declare receivers
+```tact
+//previous code
+
+receive(msg: Add) {
+    self.add(msg.amount);
+  }
+}
+
+receive("increment") {
+    self.add(1);
+  }
+}
+```
+Here we are specified two receive functions. This means, that if we get message in contract that correspond of one the receiver contract execute one of them. In other case, contract will do nothing.
+`receive()` function expects an incoming argument of String type, Message struct or custom Tact Struct.
+Take a look our receivers:
+* `receive(msg: Add)` - specifies actions with messages defined in the beginning by Message add. It will content only one integer number of 32-bits length, that we called amount and nothing else. This receiver invokes function `add(amount)`.
+* `receive("increment")` - specifies actions with messages, that contents comment string "increment" in its body. Here we invoke function `add(v)` with `v = 1`, so we increment contract's counter by one.
+
+
+#### Declare getter
+
+Last function we need to specifier is get function counter, that will return value of current counter value from contract.
+Now our contract is ready, we need compile this, so run:
+
+```tact
+
+contract SampleTactContract with Deployable {
+    //previous code
+
+    get fun counter(): Int {
+      return self.counter;
+    }
+
+```
+
+<Callout type="info" emoji="📚️">
+**Getters** are not accessible from other contracts and exported only to off-chain world.
+</Callout>
+
+
+#### Build contract
+
+Command `yarn build` will compile `contract.tact` and place result in `tact-template/src/output`.
+
+![Tact compile scheme](public/tact-hello-world/tact-compiler-scheme.png)
+
+Run yarn command from terminal:
+
+```bash
+yarn build
+```
+
+<Callout type="info" emoji="💡">
+If you faced some compile issue and can't figure out what is wrong, just compare with target contract placed in `sources/example/increment.tact` or [here](https://github.com/ton-community/tact-guide-template/blob/main/sources/example/increment.tact).
+</Callout>

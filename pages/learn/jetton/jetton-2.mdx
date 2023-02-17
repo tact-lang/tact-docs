@@ -1,0 +1,38 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Jetton contract
+
+## Jetton standard explanation
+
+### Reveal the Jetton
+In TON digital tokens was named Jettons. Now, we will walk through the Jetton standard and see how problems we met previously were solved.
+
+Because of sharding, where payload on Blockchain will split to different nodes, we need keep our contracts as small blockchains.
+
+<Callout type="info" emoji="📚 ">
+Every time you noticed, that your contract keep growing to infinity map in your contract-like-big-monolith - something in designing of service went wrong.
+</Callout>
+
+To keep possibility make our smart contracts split shards we want keep all smart contracts as small blockchain.
+
+Let's take a look how regular transfer Jetton works according to standard.
+![jetton-6](public/tact-jetton/tact-jetton-6-b.png)
+
+Here scheme of transfer tokens from user of _Wallet App A_ to user _Wallet App B_:
+1. _Wallet App A_ requests _Wallet A_ to send Jetton transfer request message.
+2. _Wallet A_ sends to _Jetton_A_ wallet message with request of sending jettons.
+3. _Jetton A_ sends to _Jetton B_ value of jetton we want to transfer. Decrease his own balance of jettons.
+4. _Jetton B_ get incoming message, increase its jetton balance, send notification to wallet contract _Wallet B_.
+
+<Callout type="info" emoji="📚 ">
+**Notification** necessary to find out what is balance of Jetton contract, because you have no option to get(use get method) information from contract.
+</Callout>
+
+If we will scale our user base, we just get growing of little blockchains. THere will not appear big monolith entity now.
+![jetton-7](public/tact-jetton/tact-jetton-7.png)
+
+When quantity of actual contracts become to large, they will split to different shardchains.
+Each of these contracts has fixed size state and each contract may live in own shardchain. In this way contracts can live in one shardchain(i.e. Shard 1) and never touch other smart contracts.
+
+![jetton-8](public/tact-jetton/tact-jetton-8.png)
+
