@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "rm -fr .next && next",
     "clean": "rm -fr .next",
-    "build": "yarn clean && next build"
+    "build": "yarn clean && next build",
+    "build-pages": "yarn build && next export"
   },
   "devDependencies": {
     "@types/node": "^18.11.19",
