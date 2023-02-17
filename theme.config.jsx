@@ -2,14 +2,14 @@ export default {
   logo: <span>Tact Documentation</span>,
   defaultTheme: 'dark',
   project: {
-    link: 'https://github.com/ton-community/tact',
+    link: 'https://github.com/tact-lang/tact',
   },
   feedback: {
     content: null
   },
   footer: {
     text: <span>
-      MIT {new Date().getFullYear()} © <a href="https://github.com/ton-community" target="_blank">Steve Korshakov</a>.
+      MIT {new Date().getFullYear()} © <a href="https://github.com/tact-lang" target="_blank">Steve Korshakov</a>.
     </span>,
   },
   useNextSeoProps() {
