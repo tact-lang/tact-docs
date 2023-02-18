@@ -1,0 +1,76 @@
+# Tact wallet contract
+## Deployment with API
+
+
+### Wallet deployment
+
+For deployment wallet we have two demo options to run:
+
+```bash
+yarn deploy
+yarn deploy-api
+```
+
+#### Deployment with user wallet application
+
+As simple way offered to deploy smart contract with usual wallet application. The trick is that we just need specify our outgoing message with data we need(we've already done this) and input this data in message.
+Wallet applications supports transfer links and QR, so we can use it for our deployment message.
+The following scheme shows how deployment process via wallet applications works.
+
+![Tact wallet deploy](public/tact-wallet/tact-deployment-1.png)
+
+Step list here:
+1. Install wallet application on device from which we will do deployment.
+2. Get test Toncoins on our wallet application with bot.
+3. Run deployment script for deployment:
+```bash
+yarn deploy
+```
+4. Use deployment link or QR with wallet application and confirm the sending of outgoing message.
+5. Notice our new smart contract deployed on the address we sent the message.
+
+#### Deployment with TON public API 
+
+The way, some applications in production uses is public API. It is acceptable solution for services that not requires operative updating data and just need sometimes send messages.
+Demo script for this process needs to fill with your wallet 24 words of wallet in testnet, you also can use your wallet from previous step.
+So, this wallet will call _deployment wallet_ and will be use in similar to wallet application way.
+
+![Tact API deploy](public/tact-wallet/tact-deployment-2.png)
+
+Step list here:
+1. Install wallet application on device from which we will do deployment and get toncoins.(Using same wallet from previous step)
+2. Input your test wallet 24 words in deployment script `soucre/wallet.deploy-api.ts`.
+3. Run deployment with script:
+```bash
+yarn deploy-api
+```
+4. Notice in blockchain explorer our new smart contract deployed according address in console log where we sent the deployment message.
+
+### Wallet tests overview
+
+From the beginning example of unit tests distributed with contract in wallet.spec.contract.
+You can launch test via `yarn test` or specify your own with help of jest and ton-emulator library.
+
+
+### Summary about Tact wallet
+
+Currently TON explorers uses interfaces(getters) and(sometimes) code hash as identifier of contract type, and wallet contract will absolutely different hash for its, so it will not work from the box.
+This contract is generic FunC contract, so in production all application already set up for using original FunC contract, but still it is most used contract so it was used for learning and explanation purposes of how it works.
+You can learn more about launching and testing your own tact contract from Jetton Tact article.
+
+## What to read next?
+
+### Useful materials
+* [Jetton.tact contract overview and deployment](../jetton)
+* [TON Hello World part 1: Step by step guide for working with your first TON wallet](https://ton-community.github.io/tutorials/01-wallet/)
+
+### Useful social
+* [Tact Telegram chat](https://t.me/tactlang)
+* [Ton Dev News](https://t.me/tondevnews)
+* [Ton Dev chat](https://t.me/tondev_eng)
+
+### Useful TON links
+* [Tact main repository](https://github.com/ton-core/tact)
+* [Ton official documentation](https://ton.org/docs/)
+* [FunC journey](https://blog.ton.org/func-journey)
+* [Ton Tutorials](https://ton-community.github.io/tutorials/01-wallet/)

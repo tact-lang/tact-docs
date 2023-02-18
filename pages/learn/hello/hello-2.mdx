@@ -1,0 +1,52 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Tact Hello World
+
+## Tact contract structure
+
+### Tact's facts #2
+
+**tact-guide-template** is basic demo project for developing smart contract on Tact language. Let's learn general things about this:
+
+* By default, this project has a number of additional frameworks used in it, that specified in `yarn`.
+* Most important directory for us placed in `tact-guide-template/sources/` directory and contents following:
+```
++--tact-guide-template
+|   +--sources
+|   |  +-- contract.deploy.ts
+|   |  +-- contract.spec.ts
+|   |  +-- contract.tact
+
+```
+*  `contract.tact` - Tact language smart contract will be written here. 
+*  `contract.spec.ts` - contents tests for using `yarn tests` for launching local tests. Not necessary part for deployment.
+*  `contract.deploy.ts` - contents instructions to generate a deployment link. This link includes all necessary information to deploy our smart contract in blockchain.
+<Callout type="info" emoji="📚️">
+When a smart contract is delivered in TON Blockchain as bytecode he becomes **deployed**.
+</Callout>
+
+As a result we will use three yarn commands to work with Tact project:
+```bash
+yarn build # To build contract
+yarn test # To test contract
+yarn deploy # To deploy contract
+```
+
+### Tactical practice #2
+#### Get template from GitHub
+
+Update dependencies in project via yarn:
+```bash
+yarn install
+```
+
+Now check, that everything is ok, input command:
+
+```bash
+yarn build
+```
+This command will initiate the Tact compiler to build the current `tact.contract`.
+Currently, the contract has no content, but the compiler should work.
+The result of success executing this should be seen in your terminal window like the following:
+
+![1](public/tact-hello-world/tact-hello-world-1.png)

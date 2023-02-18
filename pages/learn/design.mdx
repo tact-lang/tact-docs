@@ -1,0 +1,19 @@
+# Contract's design
+
+### General approach for designing
+
+#### What is main stages in contract developing?
+The developer of a smart contract has a lot of responsibility.  Any vulnerability in the logic could attract a malicious attacker or leak its funds because of bad gas management.
+
+At the beginning of the journey, the developer needs to take care that it is well thought out:
+- coins management
+- safety of your contract
+- gas usage
+- storage architecture
+
+In terms of storage it’s good practice to have it fixed size and not to use growing (specially by users) dict’s, since const of operations with dict’s depend’s on the dict size you can easily got out of gas if your dict is too big.
+
+[source](https://t.me/hackatonx/3078/3699)
+
+#### We have an event in Ethereum, do we have such a tool in TON?
+

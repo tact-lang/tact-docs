@@ -1,0 +1,44 @@
+# Tact Hello World
+
+## Get data from contract
+
+### Last Tact and next steps
+
+We sent deployment message and deploy our Contract. We can check result with blockchain [testnet explorer](https://testnet.tonapi.io/). 
+Take your deployed contract address from terminal window or follow ready-made link and check result of sent message in explorer.
+In the case of tutorial, deployed contract address was `kQAd00TX4YPxBfyWjArkionTZJVMoRzFQUM2ntQBcFycWYr4`.
+If you saw in blockchain explorer same for your contract...
+
+![deployment-2](public/tact-hello-world/tact-deployment-process-3.png)
+
+Yes! You successfully created and deployed your own smart contract, congrats!
+
+Let's try to find out how it works now?
+Another blockchain explorer allows to use get function. Let's check current Total value in our contract:
+1. Find your deployed contract again in another blockchain explorer testnet - [ton.cx](https://testnet.ton.cx/). In the tutorial it is: `kQAd00TX4YPxBfyWjArkionTZJVMoRzFQUM2ntQBcFycWYr4`. 
+2. Open Get methods tab.
+3. Input get method name - `counter` in _Arbitrary method_ field. Run this and check result (it shows in hexadecimal format). 
+
+![deployment-4](public/tact-hello-world/tact-deployment-process-4-b.png)
+
+Now, lets try to send `Add(1)` message, according to our plan we should send common message with "increment" comment to our contract.
+
+All you need open Wallet app(Sandbox/Tonkeeper) you used before, input your deployed contract address in destination address and type "increment" text in comment(message) field and send it. 
+Check your `counter` value after this, make sure that counter value changed.
+
+#### What to read next?
+
+* [Wallet.tact contract deployment through public API](../wallet)
+* [Jetton.tact contract overview and deployment](../jetton)
+
+#### Useful social
+* [Tact Telegram chat](https://t.me/tactlang)
+* [Ton Dev News](https://t.me/tondevnews)
+* [Ton Dev chat](https://t.me/tondev_eng)
+
+
+#### Useful TON links
+* [Tact main repository](https://github.com/ton-core/tact)
+* [Ton official documentation](https://ton.org/docs/)
+* [FunC journey](https://blog.ton.org/func-journey)
+* [Ton Tutorials](https://ton-community.github.io/tutorials/01-wallet/)

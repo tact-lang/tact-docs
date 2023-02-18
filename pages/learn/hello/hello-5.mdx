@@ -1,0 +1,63 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Tact Hello World
+
+## Contract deployment
+
+### Tact's facts #5
+
+Now we on finale stage. We need to deploy our contract to Blockchain. To do this, we will use Ton wallet application.
+<Callout type="info" emoji="📚️">
+In this way, we avoid a lot of details about the deployment process, but you can find more details about this in followed low-level guides.
+</Callout>
+
+* To deploy our new contract we need send message with init information in its to address of our contract. 
+* We can know destination address of contract because of definition of Address depends on only from contract's data and code. We know both. 
+* To send message in blockchain it is necessary to communicate with TON blockchain nodes. Wallet application will do this with own API, so we will avoid this details in current lesson.
+* To send outgoing message in TON, sender should pay fees. In our case, we need some funds on Ton wallet to pay this action.
+
+
+![Tact deploy](public/tact-hello-world/tact-hello-world-6.png)
+
+<Callout type="warning" emoji="⚠️">
+Note, this design of deployment is used just for clarity. Deploying via Wallet App, Working with public API is convenient for learning purposes and does not best practice for projects in the production environment.
+</Callout>
+
+
+### Tactical Practice #5
+#### Deploy the contract
+
+Before deployment, according to said before we need to prepare Ton wallet contract with funds. We will use test environment, that maintained with test nodes and called testnet(production calls mainnet).
+
+1. To do this we need install one of ton wallet for testnet:
+
+* Sandbox - separate application for testnet - [Android](https://play.google.com/store/apps/details?id=com.tonhub.wallet.testnet)/[iOS](https://apps.apple.com/app/ton-development-wallet/id1607857373)/[MacOS](https://apps.apple.com/app/ton-development-wallet/id1607857373)
+* Tonkeeper(to switch on testnet, open dev menu tap several times in settings on diamond icon) - [Android](https://play.google.com/store/apps/details?id=com.ton_keeper)/[iOS](https://apps.apple.com/us/app/tonkeeper/id1587742107)/[MacOS](https://apps.apple.com/us/app/tonkeeper/id1587742107)
+
+2. Create wallet in application according native wallet apps instructions.
+
+3. Get test Toncoins for your wallet from Telegram [testgiver bot](https://t.me/testgiver_ton_bot).
+
+4. Get address from your wallet and input it in deployment script - `contract.deploy.ts`. 
+For me, it was `kQDND6yHEzKB82ZGRn58aY9Tt_69Ie_uz73e2VuuJ3fVVcxf`:
+
+```tact"
+//previous code
+// Parameters
+let owner = Address.parse('kQDND6yHEzKB82ZGRn58aY9Tt_69Ie_uz73e2VuuJ3fVVcxf'); // Replace owner with your address
+```
+
+5. Run `contract.deploy.ts` script to get deployment link in terminal with following command in terminal:
+
+```bash
+yarn deploy
+```
+It will ask from you wallet you want use, choose what you used before(Tonkeeper/Sandbox).
+
+6. Read deployment link through reading QR or open URL link via your testnet TON wallet, confirm outgoing message in wallet application.
+
+![deployment-1](public/tact-hello-world/tact-deployment-process-2.png)
+
+<Callout type="info" emoji="💡️">
+If you faced some compile issue and can't figure out what is wrong, just compare it with the target contract placed in `sources/example/increment.tact` or [here](https://github.com/ton-community/tact-guide-template/blob/main/sources/example/increment.tact).
+</Callout>

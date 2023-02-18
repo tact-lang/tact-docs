@@ -2,6 +2,8 @@
   "index": "Getting started",
   "first": "Writing your first contract",
   "deploy": "Deploying your contract",
+  "cookbook": "Cookbook",
+  "learn": "Learn",
   "guides": "Guides",
   "reference": "Reference",
   "libs": "Libraries",
