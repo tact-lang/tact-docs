@@ -1,0 +1,19 @@
+---
+title: "OTP-003: Self-ABI reporting"
+---
+
+# OTP-003: Self-ABI reporting
+
+This proposal defines how to report contract's ABI using IPFS link.
+
+## Motivation
+
+Usually ABI is supplied separately using a third party service or via some repository on GitHub. This proposal suggests to add a new self reporting of contract's ABI using link to a IPFS. This would allow avoid any third party dependency and allows anyone to build tools that rely on ABI such as explorers, wallets, etc.
+
+## Specification
+
+To support this proposal, contract should implemenent OTP-001 and report an interface `org.ton.abi.ipfs.v0`. Then implement a get method `get_abi_ipfs` that returns a string with IPFS link to the ABI file. The link should be in the format `ipfs://<hash>`.
+
+## Drawbacks
+
+- No way to upgrade ABI without updating a contract. This is a drawback exists only for hardcoded links.
