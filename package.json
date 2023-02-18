@@ -8,9 +8,9 @@
     "react-dom": "^18.2.0"
   },
   "scripts": {
-    "dev": "rm -fr .next && next",
+    "dev": "rm -fr .next && node ./proposals-generate.js && next",
     "clean": "rm -fr .next",
-    "build": "yarn clean && next build",
+    "build": "yarn clean && node ./proposals-generate.js && next build",
     "build-pages": "yarn build && next export"
   },
   "devDependencies": {
