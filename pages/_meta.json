@@ -1,10 +1,24 @@
 {
-  "index": "Getting started",
-  "first": "Writing your first contract",
-  "deploy": "Deploying your contract",
-  "learn": "Learn",
-  "guides": "Guides",
-  "reference": "Reference",
-  "libs": "Libraries",
-  "tools": "Tools"
+  "index": {
+    "title": "Getting started",
+    "display": "hidden",
+    "type": "page"
+  },
+  "start": {
+    "title": "Getting started",
+    "type": "page"
+  },
+  "learn": {
+    "title": "Learn",
+    "type": "page",
+    "display": "hidden"
+  },
+  "language": {
+    "title": "Language",
+    "type": "page"
+  },
+  "tools": {
+    "title": "Tools",
+    "type": "page"
+  }
 }

@@ -1,0 +1,85 @@
+# Welcome to Tact
+
+There are two ways to start with tact: using template and starting from scratch. We recommend using template as it contains a simple contract that can be deployed to the TON blockchain, example of implementing unit tests and helper functions for contract deployment.
+
+## Getting started from template
+
+To get started, you can use the template project. It contains a simple contract that can be deployed to the TON blockchain, example of implementing unit tests and helper functions for contract deployment.
+
+To create a project from template, just create a new repository from the template project: https://github.com/tact-lang/tact-template.
+
+## Getting started from scratch
+
+Tact is distributed via `npm` package manager and is meant to be installed to typescript/javascript projects:
+
+```bash
+yarn add @tact-lang/compiler
+```
+
+Then you need to create a `tact.config.json` file in the root of your project. It should contain the following:
+
+```json
+{
+    "projects": [{
+        "name": "sample",
+        "path": "./sources/contract.tact",
+        "output": "./sources/output"
+    }]
+}
+```
+
+Add an example contract to `./sources/contract.tact`:
+
+```tact
+import "@stdlib/deploy";
+
+message Add {
+    amount: Int as uint32;
+}
+
+contract SampleTactContract with Deployable {
+
+    owner: Address;
+    counter: Int as uint32;
+
+    init(owner: Address) {
+        self.owner = owner;
+        self.counter = 0;
+    }
+
+    fun add(v: Int) {
+        
+        // Check sender
+        let ctx: Context = context();
+        require(ctx.sender == self.owner, "Invalid sender");
+        
+        // Update counter
+        self.counter = (self.counter + v);
+    }
+
+    receive(msg: Add) {
+        self.add(msg.amount);
+    }
+
+    receive("increment") {
+        self.add(1);
+    }
+
+    get fun counter(): Int {
+        return self.counter;
+    }
+}
+```
+
+Add a build script to `package.json`:
+
+```json
+{
+    "scripts": {
+        "build": "tact --config ./tact.config.json",
+    }
+}
+```
+
+Now you can run `yarn build` and get the compiled contract in `./sources/output` folder.
+
