@@ -22,7 +22,7 @@ This specification defines a way to write arguments to a init data cell to be re
 
 ### Prefix
 
-The prefix is a `single zero bit`. This bit is used by the contract code to distinguish between deployed and not-deployed state.
+The prefix is defined by a smart contract itself, but by a default it is assumed as a `single zero bit`. Prefix is used by the contract code to distinguish between deployed and not-deployed state.
 
 ### Arguments
 
@@ -48,3 +48,4 @@ Structs and messages are written as is into a current cell if possible, if it is
 - Contracts could be in a semi-deployed state
 - There are multiple ways to write arguments that would end up in a different init data and a different address
 - You can deploy a pre-initialized contract and it would have a different address while being fully functional
+- Unpredictable gas usage on deployment. Deployments usually expensive, but this proposal makes it even more expensive.
