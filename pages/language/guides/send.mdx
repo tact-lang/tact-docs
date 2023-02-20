@@ -59,7 +59,7 @@ To deploy contract you need to calculate it's address and init package, then sen
 
 ```tact
 let init: StateInit = initOf SecondContract(arg1, arg2);
-let address: Address = cotnractAddress(init);
+let address: Address = contractAddress(init);
 let value: Int = ton("1");
 send(SendParameters{
     to: address,

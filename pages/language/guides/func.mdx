@@ -10,7 +10,7 @@ Primitive types in `tact` are directly mapped to `func` one. All rules about cop
 
 Tact structs and messages serialization is automatic unlike `func` where you need to define serialization logic manually. To build a `tact` types that serializes to specific `tl-b`.
 
-Tact auto-layout algorithm is greedy. Means that it takse next variable, calculates it's size and tries to fit into a current cell. If it doesn't fit, it creates a new cell and continues. All inner structs for auto-layout are flattened before allocation. 
+Tact auto-layout algorithm is greedy. Means that it takes next variable, calculates it's size and tries to fit into a current cell. If it doesn't fit, it creates a new cell and continues. All inner structs for auto-layout are flattened before allocation. 
 
 All, except `Address`, optional types are serialized as `Maybe` in `tl-b`. There are no support for `Either` since it does not define what to pick during serialization in some cases.
 
@@ -115,8 +115,7 @@ Code in `func`:
     
 }
 ```
-Will be in `tact`
- `tact`:
+Will be in `tact`:
 ```tact
 message MessageWithGeneratedOp {
     amount: Int as uint32;
