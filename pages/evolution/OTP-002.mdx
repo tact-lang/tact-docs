@@ -25,7 +25,17 @@ ABI is a JSON file:
     {
       "name": "MyRequest",
       "header": 12315123,
-      "fields": [{ "name": "queryId", "type": "uint64" }]
+      "fields": [
+        {
+          "name": "queryId",
+          "type": {
+            "kind": "simple",
+            "type": "int",
+            "optional": false,
+            "format": "uint256"
+          }
+        }
+      ]
     }
   ],
   "receivers": [
@@ -37,7 +47,20 @@ ABI is a JSON file:
   ],
   "getters": [
     { "name": "getOwner", "type": "address", "args": [] },
-    { "name": "getBalance", "type": "coins", "args": [{ "name": "invested", "type": "coins" }] }
+    {
+      "name": "getBalance",
+      "type": "coins",
+      "args": [
+        {
+          "name": "invesed",
+          "type": {
+            "kind": "simple",
+            "type": "uint",
+            "format": "coins"
+          }
+        }
+      ]
+    }
   ],
   "errors": {
     "123": "Error description",
