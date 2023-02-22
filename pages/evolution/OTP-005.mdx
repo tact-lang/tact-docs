@@ -1,36 +1,51 @@
 ---
-title: "OTP-005: Auto-layout"
+title: "OTP-005: Argument-addressable contracts"
 ---
 
-# OTP-005: Auto-layout
+import { Callout } from 'nextra-theme-docs'
 
-This proposal defines a way to automatically build a serialization layout for a given structure.
+# OTP-005: Argument-addressable contracts
+
+This proposal defines a way to address contracts by their arguments instead of their init data.
+
+<Callout type="warning" emoji="⚠️">
+This is a not a completed proposal.
+</Callout>
 
 ## Motivation
 
-Designing a serialization layout in TLB is a very risky task. Developer have to take care of the size limitations of cells and remember how much bits are used by each field. This is a very error-prone task and it is very easy to make a mistake. This proposal aims to solve this problem by providing a way to automatically build a serialization layout for a given structure.
+Init data could be very different from from the arguments. This allows to avoid executing untrusted code from another contract in the context of a current one or executing TVM code off-chain for deployment that could be risky in some cases.
 
 ## Specification
 
-We are defining auto-laout as an eager algorithm that builds a serialization layout for a given structure. The algorithm is defined as follows:
+This specification defines a way to write arguments to a init data cell to be read by the contract code during deployment.
 
-```text
-Define available reference and bits in a current cell 
-   as `available_references` and `available_bits` respectively.
-   NOTE: there must be at least one reference reserved for serialization tail and one 
-         bit for optional flag. Depending on context more references or bits may be reserved. 
+### Prefix
 
-For each field in A:
-    (size_bits, size_ref) = get_field_max_size(field);
-    if (available_bits >= size_bits && available_references >= size_ref) {
-        Push field to a current cell
-    } else {
-        available_references = (1023 - 1);
-        available_bits = (4 - 1);
-        Allocate a new tail and continue from current field
-    }
-```
+The prefix is defined by a smart contract itself, but by a default it is assumed as a `single zero bit`. Prefix is used by the contract code to distinguish between deployed and not-deployed state.
+
+### Arguments
+
+Arguments are written as a cell snake. Each argument is written to the current cell if there is enough space. Otherwise, a new cell is created and stored as a reference to in a current tail.
+
+### Primitives
+
+Table below defines the rules about how to write primitive arguments. The primitives that are not listed in the table are not supported.
+
+| Type              | Serialization               |
+| :---------------: | :-------------------------: |
+| Int               | `257 bit integer`           |
+| Bool              | `a single bit`              |
+| String            | `as reference`              |
+| Cell              | `as reference`              |
+
+### Structs and Messages
+
+Structs and messages are written as is into a current cell if possible, if it is not, it is written to the next one.
 
 ## Drawbacks
 
-- This is an implicit algorithm. It is not clear results of this allocator and have to be checked to make compatible serialization.
+- Contracts could be in a semi-deployed state
+- There are multiple ways to write arguments that would end up in a different init data and a different address
+- You can deploy a pre-initialized contract and it would have a different address while being fully functional
+- Unpredictable gas usage on deployment. Deployments usually expensive, but this proposal makes it even more expensive.
