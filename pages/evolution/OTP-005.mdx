@@ -2,15 +2,9 @@
 title: "OTP-005: Argument-addressable contracts"
 ---
 
-import { Callout } from 'nextra-theme-docs'
-
 # OTP-005: Argument-addressable contracts
 
 This proposal defines a way to address contracts by their arguments instead of their init data.
-
-<Callout type="warning" emoji="⚠️">
-This is a not a completed proposal.
-</Callout>
 
 ## Motivation
 
@@ -24,24 +18,14 @@ This specification defines a way to write arguments to a init data cell to be re
 
 The prefix is defined by a smart contract itself, but by a default it is assumed as a `single zero bit`. Prefix is used by the contract code to distinguish between deployed and not-deployed state.
 
-### Arguments
+### Arguments encoding
 
-Arguments are written as a cell snake. Each argument is written to the current cell if there is enough space. Otherwise, a new cell is created and stored as a reference to in a current tail.
+Arguments are encoded using [Auto Encoder](/evolution/OTP-004).
 
-### Primitives
+### Contract Requirements
 
-Table below defines the rules about how to write primitive arguments. The primitives that are not listed in the table are not supported.
-
-| Type              | Serialization               |
-| :---------------: | :-------------------------: |
-| Int               | `257 bit integer`           |
-| Bool              | `a single bit`              |
-| String            | `as reference`              |
-| Cell              | `as reference`              |
-
-### Structs and Messages
-
-Structs and messages are written as is into a current cell if possible, if it is not, it is written to the next one.
+- Contract MUST expose `lazy_deployment_completed` get method that returns `true` if the contract is deployed and `false` otherwise.
+- Contract MUST expose `org.ton.deploy.lazy.v0` interface.
 
 ## Drawbacks
 
