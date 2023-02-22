@@ -50,3 +50,10 @@ Computes smart contract's Address in a workchain #0 based on its StateInit `s`, 
 fun contractAddressExt(chain: Int, code: Cell, data: Cell): Address;
 ```
 Computes smart contract's Address based on its workchain id `chain`, `code`, `data`.
+
+## dump
+```tact
+fun dump(arg: Any);
+```
+
+Prints argument to the contract debug console. `debug` feature has to be enabled in `tact.config.json`.

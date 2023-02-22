@@ -3,5 +3,6 @@
     "OTP-001": "OTP-001: Supported Interfaces",
     "OTP-002": "OTP-002: Contract ABI",
     "OTP-003": "OTP-003: Self-ABI reporting",
-    "OTP-004": "OTP-004: Arguments-addressable contracts"
+    "OTP-004": "OTP-004: Argument-addressable contracts",
+    "OTP-005": "OTP-005: Auto-layout"
 }

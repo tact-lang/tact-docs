@@ -6,5 +6,6 @@
   "send": "Send messages",
   "upgrades": "Contract upgrades",
   "func": "Compatibility with Func",
+  "debug": "Debugging",
   "grammar": "Grammar"
 }
