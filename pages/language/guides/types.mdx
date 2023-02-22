@@ -40,7 +40,7 @@ message SetValue {
 
 ## Maps
 
-The type `map[k]v` is used as way to associate data with corresponding keys.
+The type `map<k, v>` is used as way to associate data with corresponding keys.
 
 Possible key types:
 * Int
@@ -52,6 +52,12 @@ Possible value types:
 * Cell
 * Address
 * Struct/Message
+
+```tact
+contract HelloWorld {
+  counters: map<Int, Int>;
+}
+```
 
 ## Contracts
 
