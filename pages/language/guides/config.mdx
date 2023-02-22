@@ -1,0 +1,43 @@
+# Configuration
+
+`tact.config.json` is an entry point to a Tact projects. It is a JSON file that contains the list of all projects and compiler parameters.
+
+## Project description
+
+Each project is described by the following fields:
+* `name` is the name of a project. All generated files are prefixed with this name.
+* `path` is the path to a root Tact file.
+* `output` is the path to a directory where all generated files will be placed.
+* `parameters` is a dictionary of parameters that will be passed to a compiler.
+* `experimental` is a dictionary of experimental features that will be enabled for this project.
+
+## Parameters
+
+Tact support next parameters:
+* `debug: true`. Enables debug output of a contracts. It is useful for debugging purposes. Enabling this contract would report that it was compiled in debug mode using `supported_interfaces` method.
+
+## Example
+
+```json
+{
+  "projects": [
+    {
+      "name": "sample",
+      "path": "./sources/sample.tact",
+      "output": "./sources/output",
+      "parameters": {
+        "debug": true
+      },
+      "experimental": {
+        "inlilne": false
+      }
+    }
+  ]
+}
+```
+
+## Experimental
+
+Tact support next experimental parameters:
+
+* `inline: true`. Enables inlining of all functions in contracts. Could reduce gas usage at the cost of bigger contract.

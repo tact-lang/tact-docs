@@ -7,5 +7,6 @@
   "upgrades": "Contract upgrades",
   "func": "Compatibility with Func",
   "debug": "Debugging",
+  "config": "Configuration",
   "grammar": "Grammar"
 }
