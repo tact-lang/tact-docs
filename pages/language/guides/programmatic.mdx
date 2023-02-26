@@ -18,7 +18,7 @@ import { run } from "@tact-lang/compiler/node";
 const configPath = path.resolve(__dirname, "tact.config.json");
 
 // Run compiler
-await run(configPath);
+await run({ configPath });
 ```
 
 ## Run compiler in browser
@@ -33,7 +33,8 @@ const fs = {
 };
 
 // Run compiler
-await run('/tact.config.json', fs);
-```
+await run({ configPath: '/tact.config.json', fs });
+
+// NOTE: Output from is written to the same fs object.
 
 ```
