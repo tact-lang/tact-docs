@@ -8,5 +8,6 @@
   "func": "Compatibility with Func",
   "debug": "Debugging",
   "config": "Configuration",
+  "programmatic": "Programmatic API",
   "grammar": "Grammar"
 }

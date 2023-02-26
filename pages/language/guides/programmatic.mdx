@@ -1,0 +1,39 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Programmatic API
+
+You can invoke Tact compiler from your own code in node and browser environments.
+
+<Callout type="warning" emoji="⚠️">
+  This API is not released yet. It will be released in the 1.0.0 version.
+</Callout>
+
+## Run compiler as is
+
+```ts
+import path from "path";
+import { run } from "@tact-lang/compiler/node";
+
+// Path must be absolute
+const configPath = path.resolve(__dirname, "tact.config.json");
+
+// Run compiler
+await run(configPath);
+```
+
+## Run compiler in browser
+
+```ts
+import { run } from "@tact-lang/compiler/browser";
+
+// Virtual FS
+const fs = {
+  ['tact.config.json']: Buffer.from('...').toString('base64')
+  // ...
+};
+
+// Run compiler
+await run('/tact.config.json', fs);
+```
+
+```
