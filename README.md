@@ -8,4 +8,4 @@ If you want to contribute to the documentation, you can do so by forking the rep
 
 ## License
 
-MIT
+CC BY 4.0

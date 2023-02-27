@@ -9,7 +9,7 @@ export default {
   },
   footer: {
     text: <span>
-      MIT {new Date().getFullYear()} © <a href="https://github.com/tact-lang" target="_blank">Steve Korshakov</a>.
+      CC BY 4.0, Tact Foundation
     </span>,
   },
   useNextSeoProps() {
