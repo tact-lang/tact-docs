@@ -5,6 +5,7 @@
   "lifecycle": "Message lifecycle",
   "send": "Send messages",
   "upgrades": "Contract upgrades",
+  "masterchain": "Masterchain",
   "func": "Compatibility with Func",
   "debug": "Debugging",
   "config": "Configuration",

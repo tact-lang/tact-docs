@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Common
 
 List of a basic functions that are available in all smart contracts.
@@ -39,17 +41,51 @@ myAddress(): Address;
 ```
 Returns the internal address of the current smart contract as a Address.
 
+## newAddress
+
+<Callout type="warning" emoji="⚠️">
+This method throws error if `chain` is invalid or if trying to create address in the masterchain without masterchain enabled.
+</Callout>
+
+```tact
+fun newAddresss(chain: Int, hash: Int): Address;
+```
+
+Creates a new address from `chain` and `hash` values.
+
 ## contractAddress
 ```tact
 fun contractAddress(s: StateInit): Address;
 ```
+
 Computes smart contract's Address in a workchain #0 based on its StateInit `s`, where `s` is a Struct consists of `code` and `data` Cells.
 
 ## contractAddressExt
+
+<Callout type="warning" emoji="⚠️">
+This method throws error if `chain` is invalid or if trying to create address in the masterchain without masterchain enabled.
+</Callout>
+
 ```tact
 fun contractAddressExt(chain: Int, code: Cell, data: Cell): Address;
 ```
 Computes smart contract's Address based on its workchain id `chain`, `code`, `data`.
+
+## cell
+
+```tact
+fun cell("base64 boc"): Cell;
+```
+
+Compile-time function that embeds a Cell into the contract. The Cell is encoded in base64 format.
+
+## ton
+
+```tact
+fun ton(value: String): Int;
+```
+
+Compile-time function that converts ton's from human-readable format to the integer.
 
 ## dump
 ```tact
