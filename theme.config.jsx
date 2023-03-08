@@ -30,7 +30,7 @@ export default {
   },
   footer: {
     text: <span>
-      CC BY 4.0, Tact Foundation
+      CC BY 4.0, Tact Software Foundation
     </span>,
   },
   useNextSeoProps() {
