@@ -2,20 +2,18 @@ import { Callout } from 'nextra-theme-docs'
 
 # Common
 
-List of a basic functions that are available in all smart contracts.
+List of a basic functions that are available in all smart contracts. 
 
-## context
+## sender
 ```tact
-fun context(): Context;
+fun sender(): Address;
 ```
-Return Struct `Context`, that consists of
 
-| Field   | Type    | Description                                                                                                               |
-|---------|---------|---------------------------------------------------------------------------------------------------------------------------|
-| bounced | Bool    | [Bounced](https://ton.org/docs/learn/overviews/addresses#bounceable-vs-non-bounceable-addresses) flag of incoming message |
-| sender  | Address | Address of sender                                                                                                         |
-| value   | Int     | Amount of nanoToncoins in message                                                                                         |
-| raw     | Slice   | Slice reminder of message     
+<Callout type="warning" emoji="⚠️">
+Behaviour is undefined for get methods.
+</Callout>
+
+Returns the address of the sender of the current message.
 
 ## require
 ```tact
@@ -93,3 +91,16 @@ fun dump(arg: Any);
 ```
 
 Prints argument to the contract debug console. `debug` feature has to be enabled in `tact.config.json`.
+
+## context
+```tact
+fun context(): Context;
+```
+Return Struct `Context`, that consists of
+
+| Field   | Type    | Description                                                                                                               |
+|---------|---------|---------------------------------------------------------------------------------------------------------------------------|
+| bounced | Bool    | [Bounced](https://ton.org/docs/learn/overviews/addresses#bounceable-vs-non-bounceable-addresses) flag of incoming message |
+| sender  | Address | Address of sender                                                                                                         |
+| value   | Int     | Amount of nanoToncoins in message                                                                                         |
+| raw     | Slice   | Slice reminder of message    
