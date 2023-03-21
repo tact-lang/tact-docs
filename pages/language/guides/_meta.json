@@ -4,10 +4,11 @@
   "statements": "Statements",
   "lifecycle": "Message lifecycle",
   "send": "Send messages",
+  "deploy": "Deploy contracts",
+  "debug": "Debugging",
   "upgrades": "Contract upgrades",
   "masterchain": "Masterchain",
   "func": "Compatibility with Func",
-  "debug": "Debugging",
   "config": "Configuration",
   "programmatic": "Programmatic API",
   "grammar": "Grammar"
