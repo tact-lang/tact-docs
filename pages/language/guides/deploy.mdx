@@ -2,6 +2,10 @@
 
 Tact Deployer is a small library that integrates with [TON Verifier](https://verifier.ton.org) that allows you to deploy your contracts safely using your favourite wallet without needing to manage keys or deploy contracts manually. Tact Deployer also automatically verifies your contract's source code and you can be sure that you compiler is not compromised.
 
+## Requirements
+
+Your contract MUST have `Deployer` trait from `@stdlib/deploy` package to be able to use Tact Deployer.
+
 ## Installation
 
 To add Tact Deployer to your project, just use `yarn`:
