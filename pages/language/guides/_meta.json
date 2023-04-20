@@ -6,6 +6,7 @@
   "send": "Send messages",
   "deploy": "Deploy contracts",
   "debug": "Debugging",
+  "external": "External Messages",
   "upgrades": "Contract upgrades",
   "masterchain": "Masterchain",
   "func": "Compatibility with Func",

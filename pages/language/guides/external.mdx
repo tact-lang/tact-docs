@@ -1,0 +1,62 @@
+import { Callout } from 'nextra-theme-docs'
+
+# External Messages
+
+<Callout type="warning" emoji="⚠️">
+External messages support must be enabled explicitly in project configuration. Without enabling it compilation would fail.
+</Callout>
+
+External messages are the one the don't have a sender and could be sent by anyone in the world. External messages are a good tool for integrating with off-chain systems or general maintennance of contracts. Handling external messages is different from handling internal messages. In this section we will cover how to handle external messages.
+
+## How External Messsages are different
+External messages are different from internal messages in the following ways:
+
+### Contract pay for gas usage by themselves
+
+When processing internal messages, the sender usually pays for gas usage. When processing external messages, the contract pays for gas usage. This means that you need to be careful with gas usage in external messages. You should always test gas usage of your contracts and verify that everything is working as intended.
+
+### Mesages have to be accepted manually
+
+External messages are not accepted automatically. You need to accept them manually. This is done by calling `acceptMessage` function. If you don't call `acceptMessage` function, the message will be rejected. This is done to prevent spamming of external messages.
+
+### 10k gas limit before message acceptance
+
+10k gas is a very small limit and Tact itself can eat sizable amount of gas before it even reaches your code. You should always test gas usage of your contracts and verify that everything is working as intended.
+
+### Unbounded gas usage after message acceptance
+
+After you accept gas, contract can use as much gas as it wants. This is done to allow contract to do any kind of processing. You should always test gas usage of your contracts and verify that everything is working as intended and avoid possible vulnerabilities that could drain contract balance.
+
+### No context available
+
+When processing external message `context` and `sender` functions are not available. This is because there is no context available for external messages. This means that you can't use `context` and `sender` functions in external messages. You need to carefuly test your contract to make sure that it doesn't use `context` and `sender` functions.
+
+## Enable external messages support
+
+To enable external messages support, please enable it in the project configuration file:
+```json
+{
+    "options": {
+        "external": true
+    }
+}
+```
+
+## External receivers
+
+External receivers are defined the same way as internal one, but using `external` keyword instead of `receiver`:
+```tact
+contract SampleContract {
+    external("Check Timeout") {
+
+        // Check for contract timeout
+        require(self.timeout > now(), "Not timeouted");
+
+        // Accept message
+        acceptMessage();
+
+        // Timeout processing
+        self.onTimeouted();
+    }
+}
+```
