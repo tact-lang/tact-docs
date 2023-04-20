@@ -12,5 +12,6 @@
   "func": "Compatibility with Func",
   "config": "Configuration",
   "programmatic": "Programmatic API",
-  "grammar": "Grammar"
+  "grammar": "Grammar",
+  "changelog": "Changelog"
 }

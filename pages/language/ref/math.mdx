@@ -15,6 +15,15 @@ fun checkDataSignature(data: Slice, signature: Slice, public_key: Slice): Bool;
 ```
 Checks whether `signature` is a valid Ed25519 signature of the data portion of `data` using `public_key`, similarly to `checkSignature`. If the bit length of `data` is not divisible by eight, it throws a cell underflow exception. The verification of Ed25519 signatures is a standard one, with sha256 used to reduce `data` to the 256-bit number that is actually signed. If the signature is valid, the result is true; otherwise, it is false.
 
+## sha256
+
+```tact
+fun sha256(data: Slice): Int;
+fun sha256(data: String): Int;
+```
+
+Computes sha256 of byte-string. The result is a 256-bit unsigned integer. Slice or string must have no refs and have number of bits divisible by 8. Passing constant string computes hash in compile time that could be useful for some optimizations.
+
 ## min
 ```tact
 fun min(x: Int, y: Int): Int;
