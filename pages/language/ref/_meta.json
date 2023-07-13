@@ -1,8 +1,9 @@
 {
-  "common": "Common",
-  "strings": "Strings",
-  "random": "Random",
-  "math": "Math",
-  "cells": "Cells, Builders and Slices",
-  "advanced": "Advanced"
+	"common": "Common",
+	"strings": "Strings",
+	"random": "Random",
+	"math": "Math",
+	"cells": "Cells, Builders and Slices",
+	"message-modes": "Message modes",
+	"advanced": "Advanced"
 }
