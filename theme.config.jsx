@@ -56,8 +56,17 @@ export default {
         content="Language reference and guides for Tact"
       />
 
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content="@tact_language"></meta>
+      <meta 
+        name="twitter:card" 
+        content="summary_large_image" 
+      />
+      
+      <meta 
+        name="twitter:site" 
+        content="@tact_language
+      ">
+        
+      </meta>
 
       <meta name="apple-mobile-web-app-title" content="Tact" />
 
