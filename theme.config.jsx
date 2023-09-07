@@ -23,7 +23,7 @@ export default {
   ),
   defaultTheme: 'dark',
   project: {
-    link: 'https://github.com/tact-lang/tact',
+    link: 'https://github.com/tact-lang/tact-docs',
   },
   feedback: {
     content: null
