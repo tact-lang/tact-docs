@@ -34,13 +34,13 @@ Contributing is not just encouraged; it's easy!
 If you've solved a challenging problem or found a better way to explain a complex topic, share it:
 
 — Got an idea? [Open an Issue](https://github.com/tact-community/tact-docs/issues/new/choose).  
-— Ready to contribute? [Set up your Development Environment](#set-up-your-development-environment-).
+— Ready to contribute? [Set up your Development Environment](#set-up-your-development-environment).
 
 For more details on contributing, check out: [docs/contribute](https://tact.org/docs/contribute)
 
 ---
 
-## Set Up Your Development Environment ☁️
+## Set Up Your Development Environment
 
 Before you submit your amazing contributions, ensure they work seamlessly.
 
