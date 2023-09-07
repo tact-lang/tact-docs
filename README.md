@@ -4,7 +4,7 @@
 
 # Welcome to Tact Documentation 🌈
 
-Hello there! This is the community-driven repository for Tact Compiler Documentation.
+Hello there! This is the community-driven repository for Tact Language Documentation.
 
 Latest documentation is always available at: [docs.tact.org](https://docs.tact.org)
 
