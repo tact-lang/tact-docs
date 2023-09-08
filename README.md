@@ -6,7 +6,7 @@
 
 Hello there! This is the community-driven repository for Tact Language Documentation.
 
-Latest documentation is always available at: [docs.tact.org](https://docs.tact.org)
+Latest documentation is always available at: [docs.tact-lang.org](https://docs.tact-lang.org)
 
 Our goal here is to create a welcoming and rich resource that benefits all Tact developers, from beginners to experts.
 
