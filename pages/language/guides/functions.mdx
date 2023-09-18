@@ -15,7 +15,7 @@ You can define global function anywhere in you program:
 
 ```tact
 fun pow(a: Int, c: Int): Int {
-  let res: Int = a;
+  let res: Int = 1;
   repeat(c) {
     res = res * a;
   }
@@ -32,9 +32,9 @@ Extension functions allows you to implement extension for any possible type.
 
 ```tact
 extends fun pow(self: Int, c: Int) {
-  let res: Int = a;
+  let res: Int = 1;
   repeat(c) {
-    res = res * a;
+    res = res * self;
   }
   return res;
 }
@@ -46,9 +46,9 @@ Mutable functions are performing mutation of a value replacing it with an execut
 
 ```tact
 extends mutates fun pow(self: Int, c: Int) {
-  let res: Int = a;
+  let res: Int = 1;
   repeat(c) {
-    res = res * a;
+    res = res * self;
   }
   self = res;
 }
