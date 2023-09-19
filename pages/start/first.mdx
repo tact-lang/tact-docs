@@ -24,7 +24,7 @@ contract Counter {
     }
 
     receive("increment") {
-        self.counter = (self.counter + v);
+        self.counter = (self.counter + 1);
     }
 
     get fun counter(): Int {
