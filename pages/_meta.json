@@ -1,11 +1,11 @@
 {
   "index": {
     "title": "Getting started",
-    "display": "hidden",
-    "type": "page"
+    "type": "page",
+    "display": "hidden"
   },
   "start": {
-    "title": "Getting started",
+    "title": "Getting Start",
     "type": "page"
   },
   "learn": {

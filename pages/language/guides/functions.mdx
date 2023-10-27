@@ -1,13 +1,16 @@
+import { Callout } from "nextra-theme-docs";
+import InfoBox from ".././../_moduleBlock";
+
 # Functions and their types
 
 Functions in Tact could be defined in different ways:
 
-* Global static function
-* Extension functions
-* Mutable functions
-* Native functions
-* Receiver functions
-* Getter functions
+- Global static function
+- Extension functions
+- Mutable functions
+- Native functions
+- Receiver functions
+- Getter functions
 
 ## Global static functions
 
@@ -27,8 +30,10 @@ fun pow(a: Int, c: Int): Int {
 
 Extension functions allows you to implement extension for any possible type.
 
-> **Warning**
-> Name of the first argument MUST be named `self` and type of this argument is the type you are extending.
+<Callout type="warning" emoji="⚠️">
+  Name of the first argument **MUST** be named `self` and type of this argument
+  is the type you are extending.
+</Callout>
 
 ```tact
 extends fun pow(self: Int, c: Int) {
@@ -58,8 +63,9 @@ extends mutates fun pow(self: Int, c: Int) {
 
 Native functions are direct binding to a func functions:
 
-> **Note**
-> Native functions could be also mutable and extension one
+<Callout type="success" emoji="ℹ️">
+  Native functions could be also mutable and extension one
+</Callout>
 
 ```tact
 @name(store_uint)
@@ -77,13 +83,18 @@ Receiver functions are special function that are responsible of receiving messag
 contract Treasure {
 
   // ...
-  
+
   // This means that this contract can receive comment "Increment" and this function would be called for such messages
   receive("Increment") {
     self.counter = self.counter + 1;
   }
 }
 ```
+
+<Callout type="info" emoji="📚️">
+  More examples of using the `receive` methods can be found
+  [here](https://tact-by-example.org/03-receivers).
+</Callout>
 
 ## Getter Functions
 
@@ -93,7 +104,7 @@ Getter functions that defines getters on smart contract and can be defined only 
 contract Treasure {
 
   // ...
-  
+
   get fun counter(): Int {
     return self.counter;
   }

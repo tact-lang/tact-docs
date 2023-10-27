@@ -10,6 +10,8 @@ To deploy a smart contract in TON you need to send a message with `init` data at
 import base64url from "base64url";
 import qs from "qs";
 import { Address, beginCell, storeStateInit } from "ton";
+
+// This is the Typescript file that we got after compiled the Tact code.
 import { Counter } from "./output/sample_Counter";
 
 // Forming an init package
