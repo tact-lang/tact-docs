@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - bitwise and and or operations
-- staticaly compile expressions with bitwise operations if possible
+- statically compile expressions with bitwise operations if possible
 
 ## [1.1.2] - 2023-04-28
 
@@ -77,7 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade `func` to `0.4.2`
 - Contracts now work only with basic workchain. To enable masterchain support set `masterchain: true` in `tact.conf.json`
 - Contracts now can be deployed only to the basic workchain unless `masterchain` set `true`
-- Checking field initialisation in init function
+- Checking field initialization in init function
 
 ### Fixed
 
@@ -104,7 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Tact contracts are now [Argument-addressable](https://docs.tact-lang.org/evolution/OTP-005) meaning that they depend on init arguments and code hash only. Init function is now called when first valid message is received.
 - Refactoring of allocator
-- Moving contract's load function to the begining of the execution
+- Moving contract's load function to the beginning of the execution
 - Moving contract's save function to the end of the execution
 - moving `debug` flag from `experimental` to `parameters` in `tact.config.json`
 - Unknown fields in config are now considered an error
@@ -188,7 +188,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Embedd `func` compiler to package
+- Embed `func` compiler to package
 - Better builder types
 - Moved docs to `ton-docs` repository
 
@@ -319,7 +319,7 @@ Fixing missing NPM release
 - `String` literals and variables
 - `Int.toString()` and `Int.toFloatString()`
 - `StringBuilder` for gas-efficient string building
-- Global compile-time `ton` function that conversts string to Int during compile time.
+- Global compile-time `ton` function that converts string to Int during compile time.
 - `checkDataSignature` similar to func `check_data_signature`
 - `String.asComment` for conversion text to a comment payload
 - `Resumable` trait, allows to resume contract operations once it was stopped

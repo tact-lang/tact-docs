@@ -2,7 +2,7 @@ import { Callout } from 'nextra-theme-docs'
 
 # Common
 
-List of a basic functions that are available in all smart contracts. 
+List of a basic functions that are available in all smart contracts.
 
 ## sender
 ```tact
@@ -25,7 +25,7 @@ Checks `condition` and throws an exception with `error` message if `condition` i
 ```tact
 fun now(): Int
 ```
-Returns current unixtime
+Returns current unix time
 
 ## myBalance
 ```tact
@@ -46,7 +46,7 @@ This method throws error if `chain` is invalid or if trying to create address in
 </Callout>
 
 ```tact
-fun newAddresss(chain: Int, hash: Int): Address;
+fun newAddress(chain: Int, hash: Int): Address;
 ```
 
 Creates a new address from `chain` and `hash` values.
@@ -103,4 +103,4 @@ Return Struct `Context`, that consists of
 | bounced | Bool    | [Bounced](https://ton.org/docs/learn/overviews/addresses#bounceable-vs-non-bounceable-addresses) flag of incoming message |
 | sender  | Address | Address of sender                                                                                                         |
 | value   | Int     | Amount of nanoToncoins in message                                                                                         |
-| raw     | Slice   | Slice reminder of message    
+| raw     | Slice   | Slice reminder of message
