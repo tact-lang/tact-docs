@@ -4,7 +4,7 @@ Traits that allows to stop contract. Useful for emergency or maintenance mode. R
 
 ## Stoppable
 
-`Stoppable` trait implements receiver for message "Stop" that can be sent by owner, implements `stopped` get-methud that returns `true` if contract is stopped and provides private functions `requireNotStopped` and `requireStopped`.
+`Stoppable` trait implements receiver for message "Stop" that can be sent by owner, implements `stopped` get-method that returns `true` if contract is stopped and provides private functions `requireNotStopped` and `requireStopped`.
 
 ### Usage
 
@@ -12,7 +12,7 @@ Traits that allows to stop contract. Useful for emergency or maintenance mode. R
 import "@stdlib/stoppable";
 
 contract MyContract with Stoppable {
-    
+
     owner: Address;
     stopped: Bool;
 
@@ -33,7 +33,7 @@ contract MyContract with Stoppable {
 import "@stdlib/stoppable";
 
 contract MyContract with Resumable {
-    
+
     owner: Address;
     stopped: Bool;
 

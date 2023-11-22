@@ -13,7 +13,7 @@ Also most primitive types, structs and messages could be nullable.
 
 * Int - all integers in Tact are 257 bit signed integers.
 * Bool - classical boolean with true/false values.
-* Address - standart address.
+* Address - standard address.
 * Slice, Cell, Builder - low level primitive of TON VM.
 * String - type that represents text strings in TON VM.
 * StringBuilder - helper type that allows you to concatenate strings in gas-efficient way
@@ -70,11 +70,11 @@ contract HelloWorld {
   init() {
     self.counter = 0;
   }
-  
+
   receive("increment") {
     self.counter = self.counter + 1;
   }
-  
+
   get fun counter(): Int {
     return self.counter;
   }
@@ -104,7 +104,7 @@ And contract that uses trait:
 ```tact
 contract Treasure with Ownable {
   owner: Address; // Field from trait MUST be defined in contract itself
-  
+
   // Here we init the way we need, trait can't specify how you must init owner field
   init(owner: Address) {
     self.owner = owner;
