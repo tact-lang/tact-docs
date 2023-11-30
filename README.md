@@ -36,8 +36,6 @@ If you've solved a challenging problem or found a better way to explain a comple
 — Got an idea? [Open an Issue](https://github.com/tact-lang/tact-docs/issues/new/choose).  
 — Ready to contribute? [Set up your Development Environment](#set-up-your-development-environment).
 
-For more details on contributing, check out: [docs/contribute](https://tact.org/docs/contribute)
-
 ---
 
 ## Set Up Your Development Environment
