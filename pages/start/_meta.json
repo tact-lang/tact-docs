@@ -1,5 +1,6 @@
 {
   "index": "Welcome to Tact",
   "first": "Writing your first contract",
-  "deploy": "Deploying your contract"
+  "deploy": "Deploying your contract",
+  "test": "Writing Tests"
 }

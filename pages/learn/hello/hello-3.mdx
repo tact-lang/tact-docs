@@ -6,7 +6,7 @@
 
 #### Contracts and Messages
 A lot of important details you should learn to understand how TON works, but here, we simplify our field of knowledge and goals.
-So, let's say, **contracts** and **messages** are our main characters in blockchain. 
+So, let's say, **contracts** and **messages** are our main characters in blockchain.
 
 1. **Contract** - is a computer program that lives on the blockchain. It can store information and carry out certain actions based on the instructions that are written inside it.
 
@@ -27,10 +27,10 @@ In summary, the main goal of smart contract developers is to declare and write t
 
 Let's talk about the design of our contract.
 Our smart contract is like a piggy bank with several common features:
-1. _Keep Total value_. We will keep `Total` integer value in blockchain. 
+1. _Keep Total value_. We will keep `Total` integer value in blockchain.
 2. _Get Total value_. Special tool for reading current `Total` value from blockchain. We can read this directly from blockchain via special `get` method.
-3. _Processing "Increment" text comment command_. When contract gets a message, it checks what the message says. If the message says "Increment," it will add `1` to the `Total` inside the piggy bank and update it. 
-4. _Processing `Add` message command_. If the message says "Add," it will add a specific number to the Total inside the piggy bank and update it. 
+3. _Processing "Increment" text comment command_. When contract gets a message, it checks what the message says. If the message says "Increment," it will add `1` to the `Total` inside the piggy bank and update it.
+4. _Processing `Add` message command_. If the message says "Add," it will add a specific number to the Total inside the piggy bank and update it.
 
 Additional restriction for our smart contract - It will check if the person sending the message is the owner of the piggy bank or not. This way, only the owner can add or increment the `Total` inside the piggy bank.
 
@@ -114,7 +114,7 @@ contract SampleTactContract with Deployable {
     self.counter = 0;
   }
 
-// recievers definition here
+// receivers definition here
 
 // get functions definition here
 ```

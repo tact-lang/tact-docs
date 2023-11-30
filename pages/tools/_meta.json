@@ -1,4 +1,5 @@
 {
     "typescript": "Typescript",
-    "vs": "VS Code Extension"
+    "vs": "VS Code Extension",
+    "jetbrains": "Jetbrains IDEs Plugin"
 }

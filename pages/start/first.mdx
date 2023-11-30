@@ -3,9 +3,10 @@
 TON contract is an isolated object that have state and code, can send and receive messages and export get-methods for off-chain reading of a contract state.
 
 The code of the contract dictates how:
-* it manipulates it's own state
-* it reacts to incoming messages
-* exposes it's state to off-chain world
+
+- it manipulates it's own state
+- it reacts to incoming messages
+- exposes it's state to off-chain world
 
 ## Contract example
 
@@ -23,7 +24,7 @@ contract Counter {
     }
 
     receive("increment") {
-        self.counter = (self.counter + v);
+        self.counter = (self.counter + 1);
     }
 
     get fun counter(): Int {
@@ -40,20 +41,20 @@ contract Counter {
 
 This contract has two state variables that persisted between contract calls: `owner` and `counter`. The state variables are declared in the contract header and initialized in the `init` function. The `init` function is called **before** contract is deployed.
 
-`counter` variable is declared as `Int as uint32` which means that it will be stored as `uint32` in the contract state. The `Int` type is used to represent integer numbers in the contract code. `Int` is 257-bit signed integer. Size checks are perfomed only when storing. Overflowing `Int` causes an exception and aborting the transaction.
+`counter` variable is declared as `Int as uint32` which means that it will be stored as `uint32` in the contract state. The `Int` type is used to represent integer numbers in the contract code. `Int` is 257-bit signed integer. Size checks are performed only when storing. Overflowing `Int` causes an exception and aborting the transaction.
 
 ## Receiver
 
-Notation `receive("increment")` means declaration of a `receiver` function that will be called when a text with value `"increment"` is sent to the contract. The function body can modify the state of the contract and send messages to other contracts. It is impossbile to call `receiver` directly. If you need to reuse some logic you can declare a function and call it from `receiver`.
+Notation `receive("increment")` means declaration of a `receiver` function that will be called when a text with value `"increment"` is sent to the contract. The function body can modify the state of the contract and send messages to other contracts. It is impossible to call `receiver` directly. If you need to reuse some logic you can declare a function and call it from `receiver`.
 
 There are several receiver functions. All receiver functions are processed in the order they are listed below:
-* `receive()` - called when an empty message is sent to the contract
-* `receive("message")` - called when a text message with a specific comment is sent to the contract
-* `receive(str: String)` - called when an arbitrary text message is sent to the contract
-* `receive(msg: MyMessage)` - called when binary message of type `MyMessage` is sent to the contract
-* `receive(msg: Slice)` - called when binary message of unknown type is sent to the contract
-* `bounced(msg: Slice)` - called when outgoing message bounced
 
+- `receive()` - called when an empty message is sent to the contract
+- `receive("message")` - called when a text message with a specific comment is sent to the contract
+- `receive(str: String)` - called when an arbitrary text message is sent to the contract
+- `receive(msg: MyMessage)` - called when binary message of type `MyMessage` is sent to the contract
+- `receive(msg: Slice)` - called when binary message of unknown type is sent to the contract
+- `bounced(msg: Slice)` - called when outgoing message bounced
 
 ## Getters
 

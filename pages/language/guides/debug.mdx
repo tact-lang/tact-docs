@@ -1,6 +1,6 @@
 # Debugging Tact Contracts
 
-Tact has a first-class support for Jest and `ton-emulator` for contract tests and debugging. Prefered type of tests are the one with inline snapwshots. They are easy to write and easy to debug.
+Tact has a first-class support for Jest and `@tact-lang/emulator` for contract tests and debugging. Preferred type of tests are the one with inline snapshots. They are easy to write and easy to debug.
 
 For quick start, it is better to use `tact-template` that has everything built in.
 
@@ -17,12 +17,12 @@ dump(123 + 444);
 dump(a != null);
 ```
 
-## Using `ton-emulator`
+## Using `@tact-lang/emulator`
 
 Ton Emulator allows you to have a small virtual blockchain in your nodejs code. This library is built specifically for testing smart contracts in unit tests.
 
 ```typescript
-import { ContractSystem } from 'ton-emulator';
+import { ContractSystem } from '@tact-lang/emulator';
 import { sample_Contract } from './output/sample_Contract';
 
 //
@@ -84,7 +84,7 @@ One of the most powerful features of Jest is the ability to write snapshot tests
 Example of a minimal test file:
 
 ```typescript
-import { ContractSystem } from 'ton-emulator';
+import { ContractSystem } from '@tact-lang/emulator';
 import { sample_Contract } from './output/sample_Contract';
 
 describe("contract", () => {
@@ -108,7 +108,7 @@ describe("contract", () => {
 
 ### Generating snapshots
 
-After running `yarn jest` command, the line with `toMatchInlineSnapshot` of the test will be automagically updated with a snapshot of the output.
+After running `yarn jest` command, the line with `toMatchInlineSnapshot` of the test will be automatically updated with a snapshot of the output.
 
 ```typescript
 // ...

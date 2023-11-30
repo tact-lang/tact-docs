@@ -1,0 +1,35 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Bounced messages
+
+When contract sends a message with a flag bounce set to true, than if the message wasn't processed properly, it would bounce back to the sender. This is useful when you want to make sure that the message was processed properly and if not - revert the changes.
+
+## Caveats
+
+Currently in TON bounced messages have only 224 usable data bits in the message and no references. This means that you can't recover much of a data from the bounced message. This is a limitation of the TON blockchain and will be fixed in the future. Tact helps you to check if your message fits the limit and if not - it will suggest to use a special type modifier `bounced<T>` for receiver that would construct a partial representation that fits into required limits.
+
+## Bounced messages in Tact
+
+<Callout type="warning" emoji="⚠️">
+Bounced text messages are not supported yet.
+</Callout>
+
+To receive a bounced message you need to define a `bounced` receiver in your contract or a trait:
+
+```tact
+contract MyContract {
+    bounced(src: bounced<MyMessage>) {
+        // ...
+    }
+}
+```
+
+To process bounced message manually, you can use a fallback definition that handles raw `Slice` instead of a message:
+
+```tact
+contract MyContract {
+    bounced(src: Slice) {
+        // ...
+    }
+}
+```

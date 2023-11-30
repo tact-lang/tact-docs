@@ -2,13 +2,19 @@
   "types": "Type system",
   "functions": "Functions",
   "statements": "Statements",
+  "constants": "Constants",
+  "receive": "Receive Messages",
+  "bounced": "Bounced Messages",
+  "external": "External Messages",
   "lifecycle": "Message lifecycle",
   "send": "Send messages",
+  "deploy": "Deploy contracts",
+  "debug": "Debugging",
   "upgrades": "Contract upgrades",
   "masterchain": "Masterchain",
   "func": "Compatibility with Func",
-  "debug": "Debugging",
   "config": "Configuration",
   "programmatic": "Programmatic API",
-  "grammar": "Grammar"
+  "grammar": "Grammar",
+  "changelog": "Changelog"
 }

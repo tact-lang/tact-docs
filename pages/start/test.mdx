@@ -1,0 +1,80 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Writing Tests with Blueprint
+
+## Overview
+
+Test toolkit (usually, sandbox) already included to the TypeScript SDK named [Blueprint](https://github.com/ton-org/blueprint). You can create demo project and launch default test with two steps:
+
+1. Create a new Blueprint project:
+```bash
+npm create ton@latest MyProject
+```
+
+2. Run a test:
+```bash
+cd MyProject
+npx blueprint test
+```
+
+As a result you'll see corresponding output in the terminal window:
+
+```bash
+% npx blueprint test
+
+> MyProject@0.0.1 test
+> jest
+
+ PASS  tests/Main.spec.ts
+  Main
+    ✓ should deploy (127 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        1.224 s, estimated 2 s
+Ran all test suites.
+```
+
+## Basic Usage
+Testing of smart contracts allows for the coverage of security, optimization of gas spending, and examination of edge cases.
+Writing tests in Blueprint (that based on [Sandbox](https://github.com/ton-org/sandbox)) works through defining arbitrary actions with the contract and comparing their results with the expected result, for example:
+
+```typescript
+it('should execute with success', async () => {                              // description of the test case
+    const res = await main.sendMessage(sender.getSender(), toNano('0.05'));  // performing an action with contract main and saving result in res
+
+    expect(res.transactions).toHaveTransaction({                             // configure the expected result with expect() function
+        from: main.address,                                                  // set expected sender for transaction we want to test matcher properties from
+        success: true                                                        // set the desirable result using matcher property success
+    });
+
+    printTransactionFees(res.transactions);                                  // print table with details on spent fees
+});
+```
+
+
+### Writing Tests for Complex Assertion
+
+The basic workflow of creating a test is:
+1. Create a specific wrapped `Contract` entity using `blockchain.openContract()`.
+2. Describe the actions your `Contract` should perform and save the execution result in `res` variable.
+3. Verify the properties using the `expect()` function and the matcher `toHaveTransaction()`.
+
+The `toHaveTransaction` matcher expects an object with any combination of fields from the `FlatTransaction` type defined with the following properties
+
+| Name                 | Type          | Description                                                                                                                                                         |
+|----------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| from                 | Address?      | Contract address of the message sender                                                                                                                              |
+| on                   | Address       | Contract address of the message destination  (Alternative name of the property `to`).                                                                               |
+| value                | bigint?       | Amount of Toncoins in the message in nanotons                                                                                                                       |
+| body                 | Cell          | Message body defined as a Cell                                                                                                                                              |
+| op                   | number?       | Op code is the operation identifier number (crc32 from TL-B usually). Expected in the first 32 bits of a message body.                                              |
+|success| boolean?       | Custom Sandbox flag that defines the resulting status of a certain transaction. True - if both the compute and the action phase succeeded. Otherwise - False.       |
+
+You can omit those that you're not interested in, and you can also pass in functions accepting those types returning booleans (`true` meaning good) to check for example number ranges, message opcodes, etc. Note however that if a field is optional (like `from?: Address`), then the function needs to accept the optional type, too.
+
+
+<Callout type="warning" emoji="⚠️">
+Learn the whole list of matcher fields from the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).
+</Callout>

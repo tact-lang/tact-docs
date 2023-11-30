@@ -20,7 +20,13 @@
 		"include": "#contract-or-trait"
 	  },
 	  {
+		"include": "#annotation"
+	  },
+	  {
 		"include": "#fun-declaration"
+	  },
+	  {
+		"include": "#const-declaration"
 	  },
 	  {
 		"include": "#statements"
@@ -172,6 +178,9 @@
 			"include": "#fun-declaration"
 		  },
 		  {
+			"include": "#const-declaration"
+		  },
+		  {
 			"include": "#field-declaration"
 		  }
 		]
@@ -191,6 +200,39 @@
 		  }
 		},
 		"patterns": [
+		  {
+			"include": "#comments"
+		  },
+		  {
+			"include": "#type-annotation"
+		  },
+		  {
+			"include": "#variable-init"
+		  }
+		]
+	  },
+	  "const-declaration": {
+		"name": "meta.struct.field.tact",
+		"begin": "(?=\\b(?:(?:get|native|extends|mutates|virtual|override|inline|abstract)\\s*)*const\\b)",
+		"end": "(;)",
+		"endCaptures": {
+		  "1": {
+			"name": "punctuation.terminator.tact"
+		  }
+		},
+		"patterns": [
+		  {
+			"name": "storage.type.tact",
+			"match": "const"
+		  },
+		  {
+			"name": "storage.modifier.tact",
+			"match": "\\b(get|native|extends|mutates|virtual|override|inline|abstract)\\b"
+		  },
+		  {
+			"name": "variable.name.tact",
+			"match": "\\b[\\w]+\\b"
+		  },
 		  {
 			"include": "#comments"
 		  },
@@ -225,7 +267,7 @@
 	  },
 	  "receive-declaration": {
 		"name": "meta.struct.field.tact",
-		"begin": "(receive)",
+		"begin": "(receive|external)",
 		"beginCaptures": {
 		  "1": {
 			"name": "keyword.control.receive.tact"
@@ -246,7 +288,7 @@
 	  },
 	  "bounce-declaration": {
 		"name": "meta.struct.field.tact",
-		"begin": "(bounce)",
+		"begin": "(bounced)",
 		"beginCaptures": {
 		  "1": {
 			"name": "keyword.control.bounce.tact"
@@ -267,14 +309,21 @@
 	  },
 	  "fun-declaration": {
 		"name": "meta.function.tact",
-		"begin": "\\b(get|native|extends|mutates|fun)\\b",
-		"beginCaptures": {
-		  "1": {
-			"name": "storage.modifier.tact"
-		  }
-		},
+		"begin": "(?=\\b(?:(?:get|native|extends|mutates|virtual|override|inline|abstract)\\s*)*fun\\b)",
 		"end": "(?<=\\}|;)",
 		"patterns": [
+		  {
+			"name": "storage.type.tact",
+			"match": "fun"
+		  },
+		  {
+			"name": "storage.modifier.tact",
+			"match": "\\b(get|native|extends|mutates|virtual|override|inline|abstract)\\b"
+		  },
+		  {
+			"name": "meta.definition.function.tact entity.name.function.tact",
+			"match": "(\\b[\\w]+\\b)"
+		  },
 		  {
 			"include": "#fun-declaration-body"
 		  }
@@ -293,14 +342,6 @@
 		  },
 		  {
 			"include": "#block-declaration"
-		  },
-		  {
-			"name": "storage.modifier.tact",
-			"match": "\\b(get|native|extends|mutates|fun)\\b"
-		  },
-		  {
-			"name": "meta.definition.function.tact entity.name.function.tact",
-			"match": "\\b[\\w]+\\b"
 		  }
 		]
 	  },
@@ -326,16 +367,16 @@
 			"include": "#strings"
 		  },
 		  {
-			"match": "(?:(self)|(\\b[\\w]+\\b))\\s*(:)\\s*(\\b[\\w]+\\b)",
+			"include": "#type-annotation"
+		  },
+		  {
+			"match": "(?:(self)|(\\b[\\w]+\\b))",
 			"captures": {
 			  "1": {
 				"name": "variable.language.self.tact"
 			  },
 			  "2": {
 				"name": "variable.name.tact"
-			  },
-			  "4": {
-				"name": "entity.name.type.tact"
 			  }
 			}
 		  }
@@ -371,6 +412,44 @@
 		  },
 		  {
 			"include": "#expressions"
+		  }
+		]
+	  },
+	  "annotation": {
+		"name": "meta.annotation.tact",
+		"begin": "(@)([\\w_]+)(\\()",
+		"beginCaptures": {
+		  "1": {
+			"name": "keyword.control.annotation.tact"
+		  },
+		  "2": {
+			"name": "keyword.control.annotation.tact"
+		  },
+		  "3": {
+			"name": "punctuation.definition.annotation.tact"
+		  }
+		},
+		"end": "\\)",
+		"endCaptures": {
+		  "0": {
+			"name": "punctuation.definition.annotation.tact"
+		  }
+		},
+		"patterns": [
+		  {
+			"include": "#annotation-argument"
+		  }
+		]
+	  },
+	  "annotation-argument": {
+		"patterns": [
+		  {
+			"match": "[\\w_]+",
+			"captures": {
+			  "0": {
+				"name": "entity.name.function.tact"
+			  }
+			}
 		  }
 		]
 	  },
@@ -520,7 +599,7 @@
 	  "type-as": {
 		"name": "meta.type.annotation.as.tact",
 		"begin": "(as)\\s+",
-		"end": "(?=\\{|\\;|\\=|\\,|\\))",
+		"end": "(?=\\{|\\;|\\=|\\,|\\)|\\>)",
 		"beginCaptures": {
 		  "1": {
 			"name": "keyword.control.as.tact"
@@ -540,7 +619,7 @@
 		"patterns": [
 		  {
 			"name": "keyword.control.tact",
-			"match": "\\b(if|else|while|do|until|repeat|return|extends|mutates|native|let|fun|self|is|initOf|map|get|as)\\b"
+			"match": "\\b(if|else|while|do|until|repeat|return|extends|mutates|virtual|override|inline|native|let|const|fun|self|is|initOf|map|bounced|get|as)\\b"
 		  },
 		  {
 			"name": "keyword.operator",
