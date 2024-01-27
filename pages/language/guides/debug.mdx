@@ -1,14 +1,14 @@
 # Debugging Tact Contracts
 
-Tact has a first-class support for Jest and `@tact-lang/emulator` for contract tests and debugging. Preferred type of tests are the one with inline snapshots. They are easy to write and easy to debug.
+Tact has first-class support for Jest and `@tact-lang/emulator` for contract tests and debugging. The preferred type of test is the one with inline snapshots. They are easy to write and easy to debug.
 
-For quick start, it is better to use `tact-template` that has everything built in.
+For a quick start, it is better to use a `tact-template` that has everything built in.
 
 ## Printing out debug data
 
 Tact has a built-in `dump` function that is similar to the one in FunC that allows you to print out data in your contract. It is very useful for debugging.
 
-To make `dump` work you need to enable feature `debug` in `tact.conf.json`.
+To make `dump` work you need to enable the feature `debug` in `tact.conf.json`.
 
 Example:
 ```tact
@@ -19,7 +19,7 @@ dump(a != null);
 
 ## Using `@tact-lang/emulator`
 
-Ton Emulator allows you to have a small virtual blockchain in your nodejs code. This library is built specifically for testing smart contracts in unit tests.
+Ton Emulator allows you to have a small virtual blockchain in your node js code. This library is built specifically for testing smart contracts in unit tests.
 
 ```typescript
 import { ContractSystem } from '@tact-lang/emulator';
@@ -52,11 +52,11 @@ let logger = system.log(contract.address);
 // Sending a message
 //
 
-// First we enqueue a messages. NOTE: You can enqueue multiple messages in row
-await contract.send(treasure, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
+// First we enqueue messages. NOTE: You can enqueue multiple messages in a row
+awaiting the contract.send(treasure, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
 await contract.send(treasure, { value: toNano(1) }, { $$type: "Increment" });
 
-// Run system until there are no more messages
+// Run the system until there are no more messages
 await system.run();
 
 //
@@ -108,7 +108,7 @@ describe("contract", () => {
 
 ### Generating snapshots
 
-After running `yarn jest` command, the line with `toMatchInlineSnapshot` of the test will be automatically updated with a snapshot of the output.
+After running the `yarn jest` command, the line with `toMatchInlineSnapshot` of the test will be automatically updated with a snapshot of the output.
 
 ```typescript
 // ...
@@ -163,4 +163,4 @@ After running `yarn jest` command, the line with `toMatchInlineSnapshot` of the 
 
 ### Updating snapshots
 
-When you change your contract, your snapshots will be outdated. For example, gas usage or addresses was changed. To update them, you need to run `yarn jest -u` command.
+When you change your contract, your snapshots will be outdated. For example, gas usage or addresses were changed. To update them, you need to run the `yarn jest -u` command.

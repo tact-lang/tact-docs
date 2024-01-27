@@ -11,7 +11,7 @@ Functions in Tact could be defined in different ways:
 
 ## Global static functions
 
-You can define global function anywhere in you program:
+You can define global function anywhere in your program:
 
 ```tact
 fun pow(a: Int, c: Int): Int {
@@ -25,10 +25,10 @@ fun pow(a: Int, c: Int): Int {
 
 ## Extension function
 
-Extension functions allows you to implement extension for any possible type.
+Extension functions allow you to implement extensions for any possible type.
 
 > **Warning**
-> Name of the first argument MUST be named `self` and type of this argument is the type you are extending.
+> The name of the first argument MUST be named `self` and the type of this argument is the type you are extending.
 
 ```tact
 extends fun pow(self: Int, c: Int) {
@@ -42,7 +42,7 @@ extends fun pow(self: Int, c: Int) {
 
 ## Mutable functions
 
-Mutable functions are performing mutation of a value replacing it with an execution result. To perform mutation function must change `self` value.
+Mutable functions are performing mutation of a value replacing it with an execution result. To perform the mutation function must change the `self` value.
 
 ```tact
 extends mutates fun pow(self: Int, c: Int) {
@@ -56,10 +56,10 @@ extends mutates fun pow(self: Int, c: Int) {
 
 ## Native functions
 
-Native functions are direct binding to a func functions:
+Native functions are directly binding to a func function:
 
 > **Note**
-> Native functions could be also mutable and extension one
+> Native functions could be also mutable and extensions of one
 
 ```tact
 @name(store_uint)
@@ -71,14 +71,14 @@ extends mutates native loadInt(self: Slice, l: Int): Int;
 
 ## Receiver functions
 
-Receiver functions are special function that are responsible of receiving messages in contracts and could be defined only within a contract or trait.
+Receiver functions are special functions that are responsible for receiving messages in contracts and could be defined only within a contract or trait.
 
 ```tact
 contract Treasure {
 
   // ...
   
-  // This means that this contract can receive comment "Increment" and this function would be called for such messages
+  // This means that this contract can receive the comment "Increment" and this function would be called for such messages
   receive("Increment") {
     self.counter = self.counter + 1;
   }
@@ -87,7 +87,7 @@ contract Treasure {
 
 ## Getter Functions
 
-Getter functions that defines getters on smart contract and can be defined only within a contract or trait.
+Getter functions that define getters on smart contracts and can be defined only within a contract or trait.
 
 ```tact
 contract Treasure {
