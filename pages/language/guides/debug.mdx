@@ -53,7 +53,7 @@ let logger = system.log(contract.address);
 //
 
 // First we enqueue messages. NOTE: You can enqueue multiple messages in a row
-awaiting the contract.send(treasure, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
+await contract.send(treasure, { value: toNano(1) }, { $$type: "Deploy", queryId: 0n });
 await contract.send(treasure, { value: toNano(1) }, { $$type: "Increment" });
 
 // Run the system until there are no more messages
