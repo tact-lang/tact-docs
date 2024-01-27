@@ -23,7 +23,7 @@ Also, most primitive types, structs, and messages could be nullable.
 Structs and Messages are almost the same thing with the only difference being that a message has a header in its serialization and therefore could be used as receivers.
 
 > **Warning**
-> Currently circular **types** are not possible. This means that struct/message **A** can't have a field of a struct/message **B** that has a field of a struct/message **A**.
+> Currently circular **types** are not possible. This means that struct/message **A** can't have a field of a struct/message **B** that has a field of the struct/message **A**.
 
 Example:
 ```tact
