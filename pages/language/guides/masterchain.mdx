@@ -3,19 +3,19 @@ import { Callout } from 'nextra-theme-docs'
 # Masterchain
 
 <Callout type="warning" emoji="⚠️">
-Masterchain support must be enabled explicitly in project configuration. Without enabling it all masterchain addresses will be treated as invalid.
+Masterchain support must be enabled explicitly in the project configuration. Without enabling it all masterchain addresses will be treated as invalid.
 </Callout>
 
 Most of the contract developers don't need a masterchain. Masterchain is needed only for participating in elections or storing libraries. If you don't need to participate in elections or store libraries, you don't need a masterchain.
 
 ## How contract is protected from masterchain
 
-Most of the contracts written in `func` enforce all incoming addresses to be `basechain` one. This is done to prevent masterchain addresses from being used in the contract. Tact does this **by default**.
+Most of the contracts written in `func` enforce all incoming addresses to be `basechain` ones. This is done to prevent masterchain addresses from being used in the contract. Tact does this **by default**.
 
-What prohibited to do without masterchain support enabled:
-* Deploy contract to masterchain. `init` function would throw `Masterchain support is not enabled for this contract` error for every message.
+What is prohibited to do without masterchain support enabled:
+* Deploy contract to masterchain. The `init` function would throw a `Masterchain support is not enabled for this contract` error for every message.
 * Receive messages from masterchain accounts.
-* Receive structs that has masterchain addresses in it.
+* Receive structs that have masterchain addresses in them.
 * Send messages to masterchain accounts.
 * Use masterchain addresses in arguments of get methods.
 

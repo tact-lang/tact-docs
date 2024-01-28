@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- bitwise and and or operations
+- bitwise 'and' and 'or' operations
 - statically compile expressions with bitwise operations if possible
 
 ## [1.1.2] - 2023-04-28
@@ -29,9 +29,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ⚡️ Breaking changes
 
-- `reply` is now a method of `Contract` instead of global context and changed it's behaviour if storage reserve is non-zero in contract.
-- Logical expressions are now calculated differently: `&&` now does not execute right expression if left is `false` and `||` does not execute right expression if left is `true`. Before it was executed in any case. This change is made in attempt to reduce unexpected behaviour.
-- `OwnableTransferable` is now sends response to the sender.
+- `reply` is now a method of `Contract` instead of global context and changed its behavior if the storage reserve is non-zero in the contract.
+- Logical expressions are now calculated differently: `&&` now does not execute the right expression if the left is `false` and `||` does not execute the right expression if the left is `true`. Before it was executed in any case. This change is made in an attempt to reduce unexpected behavior.
+- `OwnableTransferable` now sends a response to the sender.
 - `overwrites` was renamed to `override`
 - `Deployable` trait now sends non-bounceable notifications instead of bounceable ones.
 
@@ -40,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Address` to `Address` maps
 - Ability to define key and value serializations for maps
 - `sha256` hashing
-- `forward` and `notify` functions that can be used to send messages to other contracts using remaining value of incoming message
+- `forward` and `notify` functions that can be used to send messages to other contracts using the remaining value of the incoming message
 - `virtual` and `abstract` constants that can be shared between traits
 - `storageReserve` constant in every contract that can be used to reserve some storage space by any trait
 - `abstract` functions that can be implemented in contracts
@@ -62,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `sender()` function to get message sender address
+- `sender()` function to get the message sender address
 - `pow` function for exponentiation
 - `address()` compile-time function for creating addresses from strings
 - `cell()` compile-time function for creating cells from base64 strings
@@ -70,14 +70,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - report workchain support in interfaces
 - exported `check` function for language server support
 - `logger` interface to programmatic API
-- `verify` function to verify compiled package
+- `verify` function to verify the compiled package
 
 ### Changed
 
 - Upgrade `func` to `0.4.2`
 - Contracts now work only with basic workchain. To enable masterchain support set `masterchain: true` in `tact.conf.json`
 - Contracts now can be deployed only to the basic workchain unless `masterchain` set `true`
-- Checking field initialization in init function
+- Checking field initialization in the init function
 
 ### Fixed
 
@@ -85,7 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Removed jetton library from stdlib. It would be re-introduced after 1.0 version with more thought put into it.
+- Removed Jetton library from stdlib. It would be re-introduced after the 1.0 version with more thought put into it.
 
 ## [0.10.1] - 2023-02-23
 
@@ -102,19 +102,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Tact contracts are now [Argument-addressable](https://docs.tact-lang.org/evolution/OTP-005) meaning that they depend on init arguments and code hash only. Init function is now called when first valid message is received.
+- Tact contracts are now [Argument-addressable](https://docs.tact-lang.org/evolution/OTP-005) meaning that they depend on init arguments and code hash only. The init function is now called when the first valid message is received.
 - Refactoring of allocator
-- Moving contract's load function to the beginning of the execution
-- Moving contract's save function to the end of the execution
-- moving `debug` flag from `experimental` to `parameters` in `tact.config.json`
-- Unknown fields in config are now considered an error
+- Moving the contract's load function to the beginning of the execution
+- Moving the contract's save function to the end of the execution
+- moving the `debug` flag from `experimental` to `parameters` in `tact.config.json`
+- Unknown fields in the config are now considered an error
 - Allow contracts without fields
-- Typescript bindings are now working in browser and doesn't have `ton-emulator` dependency
+- Typescript bindings are now working in the browser and don't have `ton-emulator` dependency
 - `map` syntax now uses `<>` instead of `[]` for future compatibility with generics
 
 ### Added
 
-- Allow `Builder` type as a field type similar to `Cell` and `Slice`
+- Allow the `Builder` type as a field type similar to `Cell` and `Slice`
 - Allow `String` type as a field type
 
 ## [0.9.3] - 2023-02-19
@@ -133,13 +133,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `emptyMap()` for creating empty maps
-- Allowing assigning `null` value to a map variable (same as calling `emptyMap()`)
+- Allowing assigning the `null` value to a map variable (same as calling `emptyMap()`)
 
 ## [0.9.1] - 2023-02-03
 
 ### Changed
 
-- Update `dump` function to handle booleans and strings, better type checking or arguments
+- Update the `dump` function to handle booleans and strings, better type checking or arguments
 - Report `org.ton.debug.v0` interface if debug mode is enabled
 - Update bindings generator to support `ton-emulator >= v2.1.0`
 
@@ -241,12 +241,12 @@ Fixing missing NPM release
 
 ### Changed
 
-- Changed message id algorithm to the one based on type signatures instead of tlb
+- Changed message ID algorithm to the one based on type signatures instead of TLB
 
 ### Added
 
 - Dictionaries in typescript bindings
-- Introduced packaging compilation step that packages a contract to a single package that can be deployed in predictable way.
+- Introduced a packaging compilation step that packages a contract to a single package that can be deployed predictably.
 - `tact-bindings` to build bindings to non-tact contracts
 
 ## [0.7.1] - 2023-01-04
@@ -269,8 +269,8 @@ Fixing missing NPM release
 
 ### Changed
 
-- Updated codegen to prefix function names with a `$` to avoid clashing with system functions
-- `random` and `randomInt` that are correctly initialized on first use unlike native one
+- Updated code generation to prefix function names with a `$` to avoid clashing with system functions
+- `random` and `randomInt` that are correctly initialized on first use unlike the native one
 - Changed the way get and init methods expect their arguments and return values to match func-like primitives
 
 ### Fixed
@@ -299,7 +299,7 @@ Fixing missing NPM release
 
 ### Changed
 
-- `require` now accepts two arguments, second one must be a string literal that has error message. This error message then will be exported to ABI
+- `require` now accepts two arguments: the second one must be a string literal that has an error message. This error message then will be exported to ABI
 - Optional `Address` fields are not encoded using native representation
 
 ## [0.4.0] - 2022-12-22
@@ -319,23 +319,23 @@ Fixing missing NPM release
 - `String` literals and variables
 - `Int.toString()` and `Int.toFloatString()`
 - `StringBuilder` for gas-efficient string building
-- Global compile-time `ton` function that converts string to Int during compile time.
+- Global compile-time `ton` function that converts a string to `Int` during compile time.
 - `checkDataSignature` similar to func `check_data_signature`
 - `String.asComment` for conversion text to a comment payload
-- `Resumable` trait, allows to resume contract operations once it was stopped
+- `Resumable` trait, allows to resume operations, once the contract was stopped
 - Comment receiver that allows to receive arbitrary comment
 - `String.asSlice` cast string to a slice for parsing
 - Binary shift operators `>>` and `<<`
-- `Slice.fromBase64` that converts text slice that has base64 to binary representation (both classic and url)
+- `Slice.fromBase64` that converts text slice that has base64 to binary representation (both classic and URL)
 - `Slice.asCell`, `Builder.asCell`, `Cell.asSlice`, `Builder.asCell` convenience functions
-- `Slice.loadCoins` that reads coins from slice
-- `myBalance` that returns current balance of a contract before execution phase
+- `Slice.loadCoins` that reads coins from a slice
+- `myBalance` that returns the current balance of a contract before the execution phase
 
 ### Changed
 
-- `contractAddress` now accepts single argument of type `StateInit` and always produces address for workchain. Old method is renamed to `contractAddressExt`.
-- `hashCell` and `hashSlice` are now extension function `hash` on `Slice` and `Cell`
-- Removed some keywords such as `message`, `contract`, `init` to allow use this names as variable names
+- `contractAddress` now accepts a single argument of type `StateInit` and always produces an address for the workchain. The old method is renamed to `contractAddressExt`.
+- `hashCell` and `hashSlice` are now extension functions `hash` on `Slice` and `Cell`
+- Removed some keywords such as `message`, `contract`, `init` to allow the use of these names as variable names
 - Renamed `receiveBounced` to `bounced`
 
 ### Fixed
@@ -352,4 +352,4 @@ Fixing missing NPM release
 ### Added
 
 - `supported_interfaces` TEP support. TACT now automatically builds a list of supported interfaces of a contract
-- `IPFS`-based ABI reporting. TACT now automatically calculates and embeds ABI hash into smart contract and prepares a file to upload to IPFS.
+- `IPFS`-based ABI reporting. TACT now automatically calculates and embeds ABI hash into smart contracts and prepares a file to upload to IPFS.

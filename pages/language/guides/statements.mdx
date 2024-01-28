@@ -2,7 +2,7 @@
 
 ## Variable declaration
 
-Declaring variable always requires initial value and an explicit type:
+Declaring variable always requires an initial value and an explicit type:
 
 ```tact
 let value: Int = 123;
@@ -10,7 +10,7 @@ let value: Int = 123;
 
 ## Static function call
 
-Anywhere in the function body a static functions can be called:
+Anywhere in the function body, a static function can be called:
 
 ```tact
 let expiration: Int = now() + 1000; // now() is stdlib static function
@@ -28,12 +28,12 @@ let some: String = 95.toString(); // toString() is a stdlib function that is def
 
 Tact supports operations:
 
-- `!!` suffix operator - enforce non-null value, defined only for nullable types.
-- `!` - logical inversion, defined only for `Bool` type.
-- `/`, `*`, `%` - division and multiplication operations, defined only for `Int` type
+- `!!` suffix operator - enforces non-null value, defined only for nullable types.
+- `!` - logical inversion, defined only for the `Bool` type.
+- `/`, `*`, `%` - division and multiplication operations, defined only for the `Int` type
 - `-`, `+` - arithmetic operations, defined only for `Int` type
 - `!=`, `==` - equality operations
-- `>`, `<`, `>=`, `<=` - compare operations, defined only for `Int` type
+- `>`, `<`, `>=`, `<=` - compare operations, defined only for the `Int` type
 - `&&`, `||` - logical `AND` and `OR`
 
 ## Loops
@@ -50,7 +50,7 @@ repeat(10) {
 ```
 
 > **Note**
-> Repeat number must be 32 bit int or out of range exception is thrown. Negative values are ignored.
+> Repeat number must be a 32-bit int or of range exception is thrown. Negative values are ignored.
 
 ### While loop
 

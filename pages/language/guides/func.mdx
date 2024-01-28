@@ -1,18 +1,18 @@
 # Compatibility with func
 
-Tact itself compiles to `func` and allows to map Tact entities directly to various `func` and `tl-b` types.
+Tact itself compiles to `func` and maps Tact entities directly to various `func` and `tl-b` types.
 
 ## Convert types
 
-Primitive types in `tact` are directly mapped to `func` one. All rules about copying variables are the same. One of the big differences is that there are no visible mutation operator in `tact` and most `Slice` operations mutate variables in place.
+Primitive types in `tact` are directly mapped to `func` one. All rules about copying variables are the same. One of the big differences is that there are no visible mutation operators in `tact` and most `Slice` operations mutate variables in place.
 
 ## Convert serialization
 
-Tact structs and messages serialization is automatic unlike `func` where you need to define serialization logic manually. To build a `tact` types that serializes to specific `tl-b`.
+Tact structs and messages serialization is automatic unlike `func` where you need to define serialization logic manually. To build a `tact` type that serializes to specific `tl-b`.
 
-Tact auto-layout algorithm is greedy. Means that it takes next variable, calculates it's size and tries to fit into a current cell. If it doesn't fit, it creates a new cell and continues. All inner structs for auto-layout are flattened before allocation.
+The tact auto-layout algorithm is greedy. This means that it takes the next variable, calculates its size, and tries to fit it into a current cell. If it doesn't fit, it creates a new cell and continues. All inner structs for auto-layout are flattened before allocation.
 
-All, except `Address`, optional types are serialized as `Maybe` in `tl-b`. There are no support for `Either` since it does not define what to pick during serialization in some cases.
+All, except `Address`, optional types are serialized as `Maybe` in `tl-b`. There is no support for `Either` since it does not define what to pick during serialization in some cases.
 
 ### Examples
 
@@ -96,7 +96,7 @@ struct SomeValue {
 
 ## Convert received messages to `op` operations
 
-Tact generates a unique `op` for every received typed  message, but it can be overwritten.
+Tact generates a unique `op` for every received typed message, but it can be overwritten.
 
 Code in `func`:
 ```func
@@ -165,9 +165,9 @@ get fun seqno(): Int {
 
 ### Tensor return types
 
-In `func` there are a difference between tensor type `(int, int)` and `(int, (int))`, but for TVM there are no difference, they all represent a stack of two ints.
+In `func` there is a difference between tensor type `(int, int)` and `(int, (int))`, but for TVM there are no differences, they all represent a stack of two ints.
 
-To convert tensor that returned from `func` get-method, you need to define a `struct` that has same amount of fields as tensor and in the same order.
+To convert the tensor that returned from the `func` get-method, you need to define a `struct` that has the same amount of fields as the tensor and in the same order.
 
 Code in `func`:
 ```func
@@ -194,7 +194,7 @@ get fun get_wallet_data(): JettonWalletData {
 
 ### Tuple return type
 
-In `func` if you are returning a tuple, instead of a tensor you need to follow process as for tensor type, but define return type of a get method as optional.
+In `func` if you are returning a tuple, instead of a tensor you need to follow the process for tensor type, but define return type of a get method as optional.
 
 Code in `func`:
 ```func
@@ -248,7 +248,7 @@ get fun get_contract_state(): ContractState {
 
 ### Arguments mapping
 
-Conversion of get-methods arguments are straight forward. Each argument is mapped as-is to `func` one, and each tuple is mapped to a struct.
+Conversion of get-methods arguments is forward. Each argument is mapped as-is to `func` one, and each tuple is mapped to a struct.
 
 Code in `func`:
 ```func
