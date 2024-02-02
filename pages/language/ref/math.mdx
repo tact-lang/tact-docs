@@ -11,7 +11,7 @@ Note that `CHKSIGNU` creates a 256-bit slice with the `hash` and calls `CHKSIGNS
 
 ## checkDataSignature
 ```tact
-fun checkDataSignature(data: Slice, signature: Slice, public_key: Slice): Bool;
+fun checkDataSignature(data: Slice, signature: Slice, public_key: Int): Bool;
 ```
 Checks whether `signature` is a valid Ed25519 signature of the data portion of `data` using `public_key`, similarly to `checkSignature`. If the bit length of `data` is not divisible by eight, it throws a cell underflow exception. The verification of Ed25519 signatures is a standard one, with sha256 used to reduce `data` to the 256-bit number that is actually signed. If the signature is valid, the result is true; otherwise, it is false.
 
