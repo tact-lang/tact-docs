@@ -25,6 +25,7 @@ export default {
   project: {
     link: 'https://github.com/tact-lang/tact-docs',
   },
+  docsRepositoryBase: 'https://github.com/tact-lang/tact-docs/edit/main/',
   feedback: {
     content: null
   },
