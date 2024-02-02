@@ -13,4 +13,4 @@ Generates a new pseudo-random unsigned 256-bit integer `x`. The algorithm is as 
 fun random(from: Int, to: Int): Int;
 ```
 
-Generates a new pseudo-random unsigned integer in provided interval: `from <= x <= to` or `from >= x >= to` (for negative values).
+Generates a new pseudo-random unsigned integer in the provided semi-closed interval: `from <= x < to` or `from >= x > to`, if both `from` and `to` are negative.
