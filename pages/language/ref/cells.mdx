@@ -3,195 +3,267 @@
 Cells is a low level primitive that represents data in TON blockchain. Cell consists of a 1023 bits of data with up to 4 references to another Cells. Cells are read-only and immutable. Builders are immutable structures that can be used to construct Cells. Slices are a way to parse cells.
 
 ## beginCell
+
 ```tact
 fun beginCell(): Builder
 ```
+
 Creates a new empty Builder.
 
 ## Builder.endCell
+
 ```tact
 extends fun endCell(self: Builder): Cell;
 ```
+
 Converts `Builder` into an ordinary `Cell`.
 
 ## Builder.storeUint
+
 ```tact
 extends fun storeUint(self: Builder, value: Int, bits: Int): Builder;
 ```
+
 Stores an unsigned `bits`-bit integer `value` into `s` for `0 ≤ bits ≤ 256`.
 
 ## Builder.storeInt
+
 ```tact
 extends fun storeInt(self: Builder, value: Int, bits: Int): Builder;
 ```
+
 Stores a signed `len`-bit integer `x` into `b` for `0 ≤ len ≤ 257`.
 
 ## Builder.storeBool
+
 ```tact
 extends fun storeBool(self: Builder, value: Bool): Builder;
 ```
-Stores Bool `value` into Builder `s`. It will write to `s` integer `x`.  `x = -1` if `value = True` or `x = 0` integer if `value = False`.
+
+Stores Bool `value` into Builder `s`. It will write to `s` integer `x`. `x = -1` if `value = True` or `x = 0` integer if `value = False`.
 
 ## Builder.storeSlice
+
 ```tact
 extends fun storeSlice(self: Builder, cell: Slice): Builder;
 ```
+
 Stores slice `cell` into builder `s`.
 
 ## Builder.storeCoins
+
 ```tact
 extends fun storeCoins(self: Builder, value: Int): Builder;
 ```
+
 Stores (serializes) an integer `value` in the range `0..2^120 − 1` into builder `s`. The serialization of `value` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l ≥ 0`, such that `value < 2^8l`, followed by an `8l`-bit unsigned big-endian representation of `value`. If `value` does not belong to the supported range, a range check exception is thrown.
 
 It is the most common way of storing Toncoins.
 
 ## Builder.storeAddress
+
 ```tact
 extends fun storeAddress(self: Builder, address: Address): Builder;
 ```
+
 Stores `address` in Builder `s`. About Address.
 
 ## Builder.storeRef
+
 ```tact
 extends fun storeRef(self: Builder, cell: Cell): Builder;
 ```
+
 Stores a reference `c` into builder `b` and returns updated `b'`.
 
 ## Builder.refs
+
 ```tact
 extends fun refs(self: Builder): Int;
 ```
+
 Returns the number of cell references already stored in builder `self`.
 
 ## Builder.bits
+
 ```tact
 extends fun bits(self: Builder): Int;
 ```
+
 Returns the number of data bits already stored in builder `self`.
 
 ## Builder.asSlice
+
 ```tact
 extends fun asSlice(self: Builder): Slice;
 ```
+
 Converts Builder to a slice. Alias to `self.endCell().beginParse()`.
 
 ## Builder.asCell
+
 ```tact
 extends fun asCell(self: Builder): Cell;
 ```
+
 Converts builder to a cell. Alias to `Builder.endCell()`.
 
 ## Cell.beginParse
+
 ```tact
 extends fun beginParse(self: Cell): Slice;
 ```
+
 Opens cell to parsing.
 
 ## Cell.hash
+
 ```tact
 extends fun hash(self: Cell): Int;
 ```
+
 Calculates hash of a cell.
 
 ## Cell.asSlice
+
 ```tact
 extends fun asSlice(self: Cell): Slice;
 ```
+
 Converts Cell to a Slice. Alias to `Cell.beginParse`.
 
 ## Slice.loadInt
+
 ```tact
 extends mutates fun loadInt(self: Slice, l: Int): Int;
 ```
+
 Loads a signed `l`-bit integer from `slice`.
 
 ## Slice.preloadInt
+
 ```tact
 extends mutates fun preloadInt(self: Slice, l: Int): Int;
 ```
+
 Preloads a signed `len`-bit integer from `slice`.
 
 ## Slice.loadUint
+
 ```tact
 extends mutates fun loadUint(self: Slice, l: Int): Int;
 ```
+
 Loads an unsigned `l`-bit integer from `slice`.
 
 ## Slice.preloadUint
+
 ```tact
 extends mutates fun preloadUint(self: Slice, l: Int): Int;
 ```
+
 Preloads an unsigned `l`-bit integer from `slice`.
 
 ## Slice.loadBits
+
 ```tact
 extends mutates fun loadBits(self: Slice, l: Int): Slice;
 ```
+
 Loads the first `0 ≤ l ≤ 1023` bits from `slice` and returns it as a separate Slice.
 
 ## Slice.preloadBits
+
 ```tact
 extends mutates fun preloadBits(self: Slice, l: Int): Slice;
 ```
+
 Preloads the first `0 ≤ l ≤ 1023` bits from `slice` and returns it as a separate Slice.
 
 ## Slice.loadCoins
+
 ```tact
 extends mutates fun loadCoins(self: Slice): Int;
 ```
+
 Loads serialized amount of nanoToncoins (any unsigned integer up to `2^120 - 1`).
 
+## Slice.loadAddress
+
+```tact
+extends mutates fun loadAddress(self: Slice): Addresss;
+```
+
+Loads Address format
+
 ## Slice.loadRef
+
 ```tact
 extends mutates fun loadRef(self: Slice): Cell;
 ```
+
 Loads the first reference from a `slice`.
 
 ## Slice.refs
+
 ```tact
 extends fun refs(self: Slice): Int;
 ```
+
 Returns the number of references in slice `slice`.
 
 ## Slice.bits
+
 ```tact
 extends fun bits(self: Slice): Int;
 ```
+
 Returns the number of data bits in slice `slice`.
 
 ## Slice.empty
+
 ```tact
 extends fun empty(self: Slice): Bool;
 ```
+
 Checks whether slice `slice` is empty (i.e., contains no bits of data and no cell references).
 
 ## Slice.dataEmpty
+
 ```tact
 extends fun dataEmpty(slice: Slice): Bool;
 ```
+
 Checks whether slice `slice` has no bits of data.
 
 ## Slice.refsEmpty
+
 ```tact
 extends fun refsEmpty(slice: Slice): Bool;
 ```
+
 Checks whether slice `slice` has no references.
 
 ## Slice.hash
+
 ```tact
 extends fun hash(self: Slice): Int;
 ```
+
 Calculates hash of a slice.
 
 ## Slice.asCell
+
 ```tact
 extends fun asCell(self: Slice): Cell;
 ```
+
 Converts Slice to a Cell. Alias to `beginCell().storeSlice(self).endCell()`.
 
 ## emptyCell
+
 ```tact
 fun emptyCell(): Cell;
 ```
+
 Creates and returns empty(without data and references) Cell. Alias to `beginCell().endCell()`.
