@@ -24,7 +24,7 @@ Converts `Builder` into an ordinary `Cell`.
 extends fun storeUint(self: Builder, value: Int, bits: Int): Builder;
 ```
 
-Stores an unsigned `bits`-bit integer `value` into `s` for `0 ≤ bits ≤ 256`.
+Stores an unsigned `bits`-bit integer `value` into the `Builder` for `0 ≤ bits ≤ 256`.
 
 ## Builder.storeInt
 
@@ -32,7 +32,8 @@ Stores an unsigned `bits`-bit integer `value` into `s` for `0 ≤ bits ≤ 256`.
 extends fun storeInt(self: Builder, value: Int, bits: Int): Builder;
 ```
 
-Stores a signed `len`-bit integer `x` into `b` for `0 ≤ len ≤ 257`.
+Stores a signed `bits`-bit integer `value` into the `Builder` for `0 ≤ bits ≤ 257`.
+
 
 ## Builder.storeBool
 
@@ -40,7 +41,7 @@ Stores a signed `len`-bit integer `x` into `b` for `0 ≤ len ≤ 257`.
 extends fun storeBool(self: Builder, value: Bool): Builder;
 ```
 
-Stores Bool `value` into Builder `s`. It will write to `s` integer `x`. `x = -1` if `value = True` or `x = 0` integer if `value = False`.
+Stores Bool `value` into the `Builder`. It will write `-1` if `value` is `True`, or `0` if `value` is `False`.
 
 ## Builder.storeSlice
 
@@ -48,7 +49,7 @@ Stores Bool `value` into Builder `s`. It will write to `s` integer `x`. `x = -1`
 extends fun storeSlice(self: Builder, cell: Slice): Builder;
 ```
 
-Stores slice `cell` into builder `s`.
+Stores slice `cell` into the `Builder`.
 
 ## Builder.storeCoins
 
@@ -56,7 +57,7 @@ Stores slice `cell` into builder `s`.
 extends fun storeCoins(self: Builder, value: Int): Builder;
 ```
 
-Stores (serializes) an integer `value` in the range `0..2^120 − 1` into builder `s`. The serialization of `value` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l ≥ 0`, such that `value < 2^8l`, followed by an `8l`-bit unsigned big-endian representation of `value`. If `value` does not belong to the supported range, a range check exception is thrown.
+Stores (serializes) an integer `value` in the range `0..2^120 − 1` into the `Builder`. The serialization of `value` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l ≥ 0`, such that `value < 2^8l`, followed by an `8l`-bit unsigned big-endian representation of `value`. If `value` does not belong to the supported range, a range check exception is thrown.
 
 It is the most common way of storing Toncoins.
 
@@ -66,7 +67,7 @@ It is the most common way of storing Toncoins.
 extends fun storeAddress(self: Builder, address: Address): Builder;
 ```
 
-Stores `address` in Builder `s`. About Address.
+Stores (serializes) an integer `value` in the range `0..2^120 − 1` into the `Builder`. About Address.
 
 ## Builder.storeRef
 
