@@ -1,41 +1,107 @@
 # @stdlib/ownable
 
-This library provides a contract traits for ownable contracts. This is most commonly used trait that is required by most other traits.
+Provides a contract traits for ownable contracts. This is most commonly used trait that is required by most other traits.
 
-## Ownable
-This trait declares an owner (non-editable) of a contract, provides a helper function `requireOwner()` that checks that a message was sent by an owner.
+To use this library, import `@stdlib/ownable`:
 
-Ownable trait requires a field `owner: Address` to be declared and exposes get-method `owner` to read it from the contract.
+```tact
+import "@stdlib/ownable";
+```
 
-### Usage
+## Messages
+
+### ChangeOwner
+
+```tact
+message ChangeOwner {
+    queryId: Int as uint64;
+    newOwner: Address;
+}
+```
+
+### ChangeOwnerOk
+
+```tact
+message ChangeOwnerOk {
+    queryId: Int as uint64;
+    newOwner: Address;
+}
+```
+
+## Traits
+
+### Ownable
+
+Trait `Ownable` declares an owner (non-editable) of a contract and provides a helper function `requireOwner()` that checks that a message was sent by an owner.
+
+This trait requires a field `owner: Address` to be declared and exposes get-method `owner` to read it from the contract.
+
+Source code:
+
+```tact
+@interface("org.ton.ownable")
+trait Ownable {
+    owner: Address;
+    fun requireOwner() {
+        nativeThrowUnless(132, sender() == self.owner);
+    }
+    get fun owner(): Address {
+        return self.owner;
+    }
+}
+```
+
+Usage example:
 
 ```tact
 import "@stdlib/ownable";
 
 contract ExampleContract with Ownable {
-    
     owner: Address;
-    
     init(owner: Address) {
         self.owner = owner;
     }
 }
 ```
 
-## OwnableTransferable
+### OwnableTransferable
 
-`OwnableTransferable` is an extension of an `Ownable` that allows to transfer ownership of a contract to another address. It provides a secure handle `ChangeOwner` that could be called by an owner to transfer ownership.
+`OwnableTransferable` is an extension of an [Ownable](#ownable) that allows to transfer ownership of a contract to another address. It provides a secure handle message [ChangeOwner](#changeowner) that could be called by an owner to transfer ownership.
 
-### Usage
+If the owner transfer request succeeds, the contract will reply with a [ChangeOwnerOk](#changeownerok) message.
+
+Source code:
+
+```tact
+@interface("org.ton.ownable.transferable.v2")
+trait OwnableTransferable with Ownable {
+    owner: Address;
+    receive(msg: ChangeOwner) {
+        // Check if the sender is the owner
+        self.requireOwner();
+
+        // Update owner
+        self.owner = msg.newOwner;
+
+        // Reply result
+        self.reply(ChangeOwnerOk{ queryId: msg.queryId, newOwner:msg.newOwner }.toCell());
+    }
+}
+```
+
+Usage example:
+
 ```tact
 import "@stdlib/ownable";
 
 contract ExampleContract with OwnableTransferable {
-    
     owner: Address;
-    
     init(owner: Address) {
         self.owner = owner;
     }
 }
 ```
+
+## Sources
+
+* [ownable.tact](https://github.com/tact-lang/tact/blob/61541b7783098e1af669faccd7d2334c10981c72/stdlib/libs/ownable.tact)
