@@ -1,6 +1,7 @@
 {
   "overview": "Overview",
   "config": "@stdlib/config",
+  "content": "@stdlib/content",
   "deploy": "@stdlib/deploy",
   "ownable": "@stdlib/ownable",
   "stoppable": "@stdlib/stoppable"
