@@ -1,21 +1,54 @@
 # @stdlib/stoppable
 
-Traits that allows to stop contract. Useful for emergency or maintenance mode. Requires `Ownable` trait. This trait just manages a single flag `stopped` in the contract and handling stopped state have to be done in the contract itself.
+Provides traits that allow to stop a contract. Useful for emergency or maintenance modes. Requires an [Ownable](/language/libs/ownable#ownable) trait from [@stdlib/ownable](/language/libs/ownable). This trait just manages a single flag `stopped` in the contract and handling stopped state have to be done in the contract itself.
 
-## Stoppable
-
-`Stoppable` trait implements receiver for message "Stop" that can be sent by owner, implements `stopped` get-method that returns `true` if contract is stopped and provides private functions `requireNotStopped` and `requireStopped`.
-
-### Usage
+To use this library, import `@stdlib/stoppable` and `@stdlib/ownable`:
 
 ```tact
+import "@stdlib/ownable";
+import "@stdlib/stoppable";
+```
+
+## Traits
+
+### Stoppable
+
+Trait `Stoppable` implements receiver for the message [string](/language/ref/strings) "Stop" that can be sent by owner, implements `stopped` get-method that returns `true` if contract is stopped and provides private (non-getter) functions `requireNotStopped` and `requireStopped`.
+
+Source code:
+
+```tact
+@interface("org.ton.stoppable")
+trait Stoppable with Ownable {
+    stopped: Bool;
+    owner: Address;
+    fun requireNotStopped() {
+        require(!self.stopped, "Contract stopped");
+    }
+    fun requireStopped() {
+        require(self.stopped, "Contract not stopped");
+    }
+    receive("Stop") {
+        self.requireOwner();
+        self.requireNotStopped();
+        self.stopped = true;
+        self.reply("Stopped".asComment());
+    }
+    get fun stopped(): Bool {
+        return self.stopped;
+    }
+}
+```
+
+Usage example:
+
+```tact
+import "@stdlib/ownable";
 import "@stdlib/stoppable";
 
 contract MyContract with Stoppable {
-
     owner: Address;
     stopped: Bool;
-
     init(owner: Address) {
         self.owner = owner;
         self.stopped = false;
@@ -23,23 +56,42 @@ contract MyContract with Stoppable {
 }
 ```
 
-## Resumable
+### Resumable
 
-`Resumable` trait extends `Stoppable` and allows to resume contract execution.
+`Resumable` trait extends [Stoppable](#stoppable) and allows to resume contract execution.
 
-### Usage
+Source code:
 
 ```tact
+@interface("org.ton.resumable")
+trait Resumable with Stoppable {
+    stopped: Bool;
+    owner: Address;
+    receive("Resume") {
+        self.requireOwner();
+        self.requireStopped();
+        self.stopped = false;
+        self.reply("Resumed".asComment());
+    }
+}
+```
+
+Usage example:
+
+```tact
+import "@stdlib/ownable";
 import "@stdlib/stoppable";
 
 contract MyContract with Resumable {
-
     owner: Address;
     stopped: Bool;
-
     init(owner: Address) {
         self.owner = owner;
         self.stopped = false;
     }
 }
 ```
+
+## Sources
+
+* [stoppable.tact](https://github.com/tact-lang/tact/blob/61541b7783098e1af669faccd7d2334c10981c72/stdlib/libs/stoppable.tact)
