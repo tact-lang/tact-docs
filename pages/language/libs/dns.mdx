@@ -28,6 +28,7 @@ Converts a DNS string to a [Slice?](/language/ref/cells).
 Signature:
 
 ```tact
+@name(dns_string_to_internal)
 native dnsStringToInternal(str: String): Slice?;
 ```
 
@@ -40,6 +41,7 @@ Normalizes the internal DNS representation of the [Slice](/language/ref/cells).
 Signature:
 
 ```tact
+@name(dns_internal_normalize)
 native dnsInternalNormalize(src: Slice): Slice;
 ```
 
@@ -52,6 +54,7 @@ Verifies the internal DNS representation of the subdomain [Slice](/language/ref/
 Signature:
 
 ```tact
+@name(dns_internal_verify)
 native dnsInternalVerify(subdomain: Slice): Bool;
 ```
 
