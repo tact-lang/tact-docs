@@ -28,7 +28,7 @@ extends fun storeUint(self: Builder, value: Int, bits: Int): Builder;
 
 Extension function for the Builder.
 
-Stores an unsigned `bits`-bit Int `value` into the Builder for `0 ≤ bits ≤ 257`. Returns modified Builder.
+Stores an unsigned `bits`-bit Int `value` into the Builder for $0 ≤ bits ≤ 256$. Returns modified Builder.
 
 ## Builder.storeInt
 
@@ -38,7 +38,7 @@ extends fun storeInt(self: Builder, value: Int, bits: Int): Builder;
 
 Extension function for the Builder.
 
-Stores a signed `bits`-bit Int `value` into the Builder for `0 ≤ bits ≤ 256`. Returns modified Builder.
+Stores a signed `bits`-bit Int `value` into the Builder for $0 ≤ bits ≤ 257$. Returns modified Builder.
 
 ## Builder.storeBool
 
@@ -68,7 +68,7 @@ extends fun storeCoins(self: Builder, value: Int): Builder;
 
 Extension function for the Builder.
 
-Stores (serializes) an integer `value` in the range `0..2^120 − 1` into Builder. The serialization of `value` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l ≥ 0`, such that `value < 2^8l`, followed by an `8l`-bit unsigned big-endian representation of `value`. If `value` does not belong to the supported range, a range check exception is thrown. Returns modified Builder.
+Stores (serializes) an integer `value` in the range $0 .. 2^{120} − 1$ into the Builder. The serialization of `value` consists of a 4-bit unsigned big-endian integer $l$, which is the smallest integer $l ≥ 0$, such that `value` $< 2^{8 * l}$, followed by an $8 * l$-bit unsigned big-endian representation of `value`. If `value` does not belong to the supported range, a range check exception is thrown. Returns modified Builder.
 
 This is the most common way of storing Toncoins.
 
@@ -210,7 +210,7 @@ extends mutates fun loadBits(self: Slice, l: Int): Slice;
 
 Extension mutation function for the Slice.
 
-Loads the first `0 ≤ l ≤ 1023` bits from the Slice, and returns it as a separate Slice.
+Loads the first $0 ≤ l ≤ 1023$ bits from the Slice, and returns it as a separate Slice.
 
 ## Slice.preloadBits
 
@@ -220,7 +220,7 @@ extends mutates fun preloadBits(self: Slice, l: Int): Slice;
 
 Extension mutation function for the Slice.
 
-Preloads the first `0 ≤ l ≤ 1023` bits from the Slice, and returns it as a separate Slice.
+Preloads the first $0 ≤ l ≤ 1023$ bits from the Slice, and returns it as a separate Slice.
 
 ## Slice.loadCoins
 
@@ -230,7 +230,7 @@ extends mutates fun loadCoins(self: Slice): Int;
 
 Extension mutation function for the Slice.
 
-Loads serialized amount of nanoToncoins (any unsigned integer up to `2^120 - 1`) as an Int.
+Loads serialized amount of nanoToncoins (any unsigned integer up to $2^{120} - 1$) as an Int.
 
 ## Slice.loadAddress
 

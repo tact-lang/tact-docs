@@ -31,7 +31,8 @@ const withNextra = require('nextra')({
   themeConfig: './theme.config.jsx',
   mdxOptions: {
     rehypePrettyCodeOptions
-  }
+  },
+  latex: true,
 });
 
 module.exports = withNextra({
