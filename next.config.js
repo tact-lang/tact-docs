@@ -2,6 +2,7 @@ const { getHighlighter, BUNDLED_LANGUAGES } = require('shiki');
 const fs = require('fs');
 const grammarTact = JSON.parse(fs.readFileSync(require.resolve('./grammars/grammar-tact.json'), 'utf-8'));
 const grammarFunc = JSON.parse(fs.readFileSync(require.resolve('./grammars/grammar-func.json'), 'utf-8'));
+const grammarOhm = JSON.parse(fs.readFileSync(require.resolve('./grammars/grammar-ohm.json'), 'utf-8'));
 
 const rehypePrettyCodeOptions = {
   getHighlighter: options => {
@@ -20,6 +21,12 @@ const rehypePrettyCodeOptions = {
           scopeName: 'source.func',
           grammar: grammarFunc,
           aliases: ['func'],
+        },
+        {
+          id: 'ohm',
+          scopeName: 'source.ohm',
+          grammar: grammarOhm,
+          aliases: ['ohm'],
         },
       ],
     });
