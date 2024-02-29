@@ -2,7 +2,7 @@
 #
 # To get started with Next.js see: https://nextjs.org/docs/getting-started
 #
-name: Deploy Next.js site to Pages
+name: Deploy tact-docs to Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -30,17 +30,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Detect package manager
-        id: detect-package-manager
-        run: |
-          echo "manager=yarn" >> $GITHUB_OUTPUT
-          echo "command=install" >> $GITHUB_OUTPUT
-          echo "runner=yarn" >> $GITHUB_OUTPUT
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: "16"
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
+          cache: yarn
+
       - name: Setup Pages
         uses: actions/configure-pages@v2
         with:
@@ -49,6 +45,7 @@ jobs:
           #
           # You may remove this line if you want to manage the configuration yourself.
           static_site_generator: next
+
       - name: Restore cache
         uses: actions/cache@v3
         with:
@@ -59,10 +56,13 @@ jobs:
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
+
       - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-      - name: Build Documentation
-        run: ${{ steps.detect-package-manager.outputs.runner }} build-pages
+        run: yarn install
+
+      - name: Build documentation
+        run: yarn build-pages
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
