@@ -1,7 +1,7 @@
 const { getHighlighter, BUNDLED_LANGUAGES } = require('shiki');
 const fs = require('fs');
-const grammarTact = JSON.parse(fs.readFileSync(require.resolve('./grammar-tact.json'), 'utf-8'));
-const grammarFunc = JSON.parse(fs.readFileSync(require.resolve('./grammar-func.json'), 'utf-8'));
+const grammarTact = JSON.parse(fs.readFileSync(require.resolve('./grammars/grammar-tact.json'), 'utf-8'));
+const grammarFunc = JSON.parse(fs.readFileSync(require.resolve('./grammars/grammar-func.json'), 'utf-8'));
 
 const rehypePrettyCodeOptions = {
   getHighlighter: options => {
