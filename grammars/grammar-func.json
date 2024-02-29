@@ -31,29 +31,36 @@
 	],
 	"repository": {
 		"keywords": {
-			"patterns": [{
-				"name": "keyword.control.",
-				"match": "\\b(if|ifnot|else|elseif|elseifnot|while|do|until|repeat|return|impure|method_id|forall|asm|inline|inline_ref)\\b"
-			}, {
-				"name": "keyword.operator",
-				"match": "(?<=\\s)(<=>|>=|<=|!=|==|\\^>>|\\~>>|>>|<<|\\/%|\\^%|\\~%|\\^\\/|\\~\\/|\\+=|-=|\\*=|\\/=|~\\/=|\\^\\/=|%=|\\^%=|<<=|>>=|~>>=|\\^>>=|&=|\\|=|\\^=|\\^|=|~|\\/|%|-|\\*|\\+|>|<|&|\\||:|\\?)(?=\\s)"
-			}, {
-				"name": "keyword.other",
-				"match": "\\b(false|true)\\b"
-			}]
+			"patterns": [
+				{
+					"name": "keyword.control.",
+					"match": "\\b(if|ifnot|else|elseif|elseifnot|while|do|until|repeat|return|impure|method_id|forall|asm|inline|inline_ref)\\b"
+				},
+				{
+					"name": "keyword.operator",
+					"match": "(?<=\\s)(<=>|>=|<=|!=|==|\\^>>|\\~>>|>>|<<|\\/%|\\^%|\\~%|\\^\\/|\\~\\/|\\+=|-=|\\*=|\\/=|~\\/=|\\^\\/=|%=|\\^%=|<<=|>>=|~>>=|\\^>>=|&=|\\|=|\\^=|\\^|=|~|\\/|%|-|\\*|\\+|>|<|&|\\||:|\\?)(?=\\s)"
+				},
+				{
+					"name": "keyword.other",
+					"match": "\\b(false|true)\\b"
+				}
+			]
 		},
 		"directives": {
 			"name": "storage.modifier.import",
 			"begin": "#include|#pragma",
 			"end": ";",
-			"patterns": [{
-				"begin": "\"",
-				"end": "\"",
-				"name": "string.quoted.double"
-			}, {
-				"match": "(>=|<=|=|>|<|\\^)?([0-9]+)(.[0-9]+)?(.[0-9]+)?",
-				"name": "constant.numeric"
-			}]
+			"patterns": [
+				{
+					"begin": "\"",
+					"end": "\"",
+					"name": "string.quoted.double"
+				},
+				{
+					"match": "(>=|<=|=|>|<|\\^)?([0-9]+)(.[0-9]+)?(.[0-9]+)?",
+					"name": "constant.numeric"
+				}
+			]
 		},
 		"strings": {
 			"name": "string.quoted.double.",
@@ -78,13 +85,16 @@
 			]
 		},
 		"storage": {
-			"patterns": [{
-				"name": "storage.type",
-				"match": "\\b(var|int|slice|tuple|cell|builder|cont|_)(?=[\\s\\),\\[\\]])"
-			}, {
-				"name": "storage.modifier",
-				"match": "\\b(global|const)\\s"
-			}]
+			"patterns": [
+				{
+					"name": "storage.type",
+					"match": "\\b(var|int|slice|tuple|cell|builder|cont|_)(?=[\\s\\),\\[\\]])"
+				},
+				{
+					"name": "storage.modifier",
+					"match": "\\b(global|const)\\s"
+				}
+			]
 		},
 		"variables": {
 			"patterns": [
