@@ -9,7 +9,7 @@
   },
   "scripts": {
     "clean": "rm -fr .next",
-    "pre-build": "node ./proposals-generate.js",
+    "pre-build": "node ./scripts/proposals-generate.js",
     "dev": "yarn clean && yarn pre-build && next",
     "build": "yarn clean && yarn pre-build && next build",
     "build-pages": "yarn build && next export"
