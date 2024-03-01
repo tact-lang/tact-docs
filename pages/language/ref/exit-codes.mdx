@@ -1,0 +1,377 @@
+# Exit Codes 
+
+What is an exit code?
+* An exit code is a 16 bit unsigned integer which ranges between 0 to 65535 (or 2<sup>16</sup>-1).
+The best practice is to allocate 0 to 127 codes for native FunC, 128 to 255 for native Tact, and 256 to 65535 for your desired throw codes.
+Most of the native Tact exit codes(128-137) are covered with examples.
+
+How to observe an exit code when it is thrown?
+* In TACT, it's not wise to print the transactions to see the results because they are not easy to read. If you want to see the exit code of a transaction,
+use the below template in typescript:
+
+```typescript
+const sender = await blockchain.treasury('sender');
+const result = await contractName.send(sender.getSender(), { value: toNano('0.05'), }, { transactionData });
+expect(result.transactions).toHaveTransaction(
+    { from: sender.address, to: contractName.address, exitCode: YOUR_DESIRED_EXIT_CODE }
+    )
+```
+- &nbsp; First line defines the sender.
+- &nbsp; Second line sends the transaction.
+- &nbsp; In the third line, you check if the result has a transaction from sender to your contract with your desired exit code.
+
+Keywords:
+- Compute phase: in this phase, TVM is executing the contract (see below) and the result of the contract execution is an aggregation of exit_code,
+actions (serialized list of actions), gas_details, new_storage and some others.
+- Action phase: if the compute phase was successful, in this phase, actions from the compute phase are processed.
+In particular, actions may include sending messages, updating the smart contract code, updating the libraries, etc.
+Note that some actions may fail during processing (for instance, if we try to send message with more TON than the contract has),
+in that case the whole transaction may revert or this action may be skipped (it depends on the mode of the actions, in other words,
+the contract may send a send-or-revert or try-send-if-no-ignore type of message).
+- Tact compute phase: It's a new keyword similar to normal compute phase but, it is checked in transpiled FunC code.
+- Continuation: Represents an “execution token” for TVM, which may be invoked (executed) later. As such, it generalizes function addresses
+(i.e., function pointers and references), subroutine return addresses, instruction pointer addresses, exception handler addresses, closures,
+partial applications, anonymous functions, and so on.
+
+## A list of different Tact exit codes
+
+**0: Successful execution** (compute phase)\
+If you see this, you are a lucky developer! This exit code means that the Compute Phase of the transaction was completed successfully.
+
+Example :
+```tact
+return ;
+```
+
+---
+
+**2: Stack undeflow** (compute phase)\
+If an opcode asks for a special stack element which doesn't exist, this error is thrown.
+For example, if you want to pop the 10'th element of your stack but your stack doesn't have 10'th element.
+
+Example :
+```tact
+// function definition can be found in the Fireworks contract (https://github.com/ton-community/tact-fireworks/tree/main/contracts)
+pop_10();
+```
+Opcodes:
+- POP s(i) : Removes the top-of-stack value and puts it into the (new) s(i − 1), or the old s(i)
+
+---
+
+**3: Stack overflow** (compute phase)\
+It's opposite of the previous exit code. Any code before execution becomes a continuation.
+This is a special data type that contains a slice with code, a stack, registers, and other data necessary for the execution of the code.
+Such a continuation can be run later if necessary, passing the necessary parameters for the initial state of the stack.
+First, we build such a continuation. In this case, this is just an empty continuation that does nothing.
+Next, using the opcode 0 SETNUMARGS, we indicate that there should be no values ​​in the stack at the beginning of execution.
+Then, using the opcode 1 -1 SETCONTARGS, we call the continuation, passing 1 value.
+Since there should have been no values, we get a stack overflow error.
+
+Example :
+```tact
+// function definition can be found in the Fireworks contract (https://github.com/ton-community/tact-fireworks/tree/main/contracts)
+stack_overflow();
+```
+Opcodes:
+- SETNUMARGS: it sets the number of input into a continuation
+- SETCONTARGS: it sets an input to the continuation
+
+---
+
+**4: Integer overflow** (compute phase)\
+Oh my God! You have done something crazy! In TVM, integer can be in the range -2<sup>256</sup> < x < 2<sup>256</sup>.
+If the value during the calculation went beyond this range, then 4 exit code is thrown.
+
+Example :
+```tact
+self.id = 1; // force not to ignore it by using storage variables
+repeat(256) {
+    self.id = 2 * self.id;
+}
+```
+
+---
+
+**5: Integer out of expected range** (compute phase)\
+If the integer value went beyond the expected range, then 5 exit code is thrown.
+For example, if a negative value was used in the .store_uint() function. In Tact, there are some other new situations such as:\
+1- As you know, you can define more limited integers in Tact (integers with less than 257 bits).
+If you try to store a number in this kind of integers and the number doesn't fit to this limited range, you will face this exit code.\
+2- according to ```storeUint(self: Builder, value: Int, bits: Int)``` function, it's not possible to use ```storeUint(0, 257)``` becuase ```0 ≤ bits ≤ 256```.
+
+Example :
+```tact
+// option 1 -> id: Int as uint32
+self.id = 1; // force not to ignore it by using storage variables
+repeat(32) {
+    self.id = 2 * self.id;
+}
+// option 2 -> according to storeUint(self: Builder, value: Int, bits: Int) function, it's not possible to use storeUint(0, 1024) becuase 0 ≤ bits ≤ 256
+let s: Slice = beginCell().storeUint(0, 257).asSlice();
+```
+
+---
+
+**6: Invalid opcode** (compute phase)\
+It throws when an unknown opcode is called but, Tact has a built-in pre-compile opcode checker which avoids this exit code.
+
+---
+
+**7: Type check error** (compute phase)\
+It is a quite common error that occurs when receiving the wrong data type.
+
+Example :
+```tact
+// function definition can be found in the Fireworks contract (https://github.com/ton-community/tact-fireworks/tree/main/contracts)
+type_check_error();
+```
+Opcodes:
+- SETNUMARGS: it sets the number of input into a continuation
+- SETCONTARGS: it sets an input to the continuation
+- PUSHINT: push an integer into the stack
+
+---
+
+**8: Cell overflow** (compute phase)\
+A cell has the capacity to store 1023 bits of data and 4 references to other cells.
+If you try to write more than 1023 bits or more than 4 references, 8 exit code is thrown.
+
+Example :
+```tact
+// according to storeUint(self: Builder, value: Int, bits: Int) function, it's not possible to use storeUint(0, 1024) becuase 0 ≤ bits ≤ 256
+let s: Slice = beginCell().storeUint(0, 256).storeUint(0, 256).storeUint(0, 256).storeUint(0, 256).asSlice();       
+```
+
+---
+
+**9: Cell underflow** (compute phase)\
+If you try to read more data from a slice than it contains, then 9 exit code is thrown.
+
+Example :
+```tact
+let s: Slice = emptySlice();
+self.id = s.loadUint(1); // force not to ignore it by using storage variables
+```
+
+---
+
+**10: Dictionary error** (compute phase)\
+This error is thrown when working with dictionaries.
+As an example, the case when the value that belongs to the key is stored in another cell as a reference.
+In this case, you need to use the .udict_get_ref() function to get such a value.
+However, the link to another cell should be only 1 and not 2, as in our Fireworks contract.
+
+Example :
+```tact
+// function definition can be found in the Fireworks contract (https://github.com/ton-community/tact-fireworks/tree/main/contracts)
+dict_exit_10();
+```
+
+---
+
+**13: Out of gas error** (compute phase)\
+If there isn't enough TON to handle compute phase, this error is thrown.
+During processing, the NOT operation is applied to this value, which changes this value to -14.
+This is done so that this exit code cannot be faked using the throw function, since all such functions accept only positive values for the exit code as it was discussed previously.
+
+Example :
+```tact
+repeat(10000) {
+    self.id = self.id + 1;
+}
+```
+
+---
+
+**32: Method ID not found** (action phase)\
+Action Phase begins after Compute Phase and it processes actions that were written to register c5 during Compute Phase.
+If the data in this register is incorrectly written, then 32 exit code will be thrown.
+
+Example :
+```tact
+// function definition can be found in the Fireworks contract (https://github.com/ton-community/tact-fireworks/tree/main/contracts)
+set_c5(beginCell().storeBool(true).endCell());
+```
+Opcodes:
+- c5 POP : set the c5 register. The output actions of a smart contract are accumulated in cell stored in control register c5.
+
+---
+
+**34: Action is invalid or not supported** (action phase)\
+This exit code is responsible for most of the errors when working with actions: invalid message, incorrect action, and so on.
+
+Example :
+```tact
+nativeSendMessage(emptyCell(), 0);
+```
+
+---
+
+**37: Not enough TON** (action phase)\
+It means that there isn't enough TON to send the specified amount of it.
+
+Example :
+```tact
+send(SendParameters{to: context().sender, value: ton("10")});
+```
+
+---
+
+**38: Not enough extra-currencies** (action phase)\
+It refers to the lack of extra currency on the balance but, Tact doesn't support extra currency, right now.
+
+---
+
+**128: Null reference exception** (Tact compute phase)\
+This exit code throws in situations when compiler expects an integer or cell but you pass a null value.
+
+---
+
+**129: Invalid serialization prefix** (Tact compute phase)\
+When you send a message to a contract, the first 32 bits of message body is the op code. It determines the function that must be run.
+After the op code was determined and the function was run, the op code will be checked again.
+If there is any inconsistency with the previous check, this exit code will be thrown.
+
+---
+
+**130: Invalid incoming message** (Tact compute phase)\
+When you send a message to a contract, the first 32 bits of message body is the op code. It determines the operation that must be done.
+In FunC, if no op code is found, 0xffff will be thrown. In Tact, 130 exit code will be thrown.
+
+Example :\
+First, define an empty contract like below:
+```tact
+contract Fireworks {
+
+    init(){
+
+    }
+}
+```
+Then, send a message to this contract. Because no suitable operation is found, you will get this exit code.
+
+---
+
+**131: Constraints error** (Tact compute phase)\
+There is no information about this exit code.
+
+---
+
+**132: Access denied** (Tact compute phase)\
+First, you should import and inherit from Ownable Trait. After it, your contract will have an owner.
+You can ask for a check by calling ```self.requireOwner();``` in your functions. It will ensure that only the owner can send message to your contract.
+
+Example :
+```tact
+import "@stdlib/deploy";
+import "@stdlib/ownable";
+
+message FakeLaunch {
+
+}
+
+contract Fireworks with Deployable, Ownable {
+    owner: Address;
+
+    init(){
+        self.owner = sender();
+    }
+
+    receive(msg: FakeLaunch){
+        self.requireOwner();
+    }
+}
+
+fun requireOwner() {
+        nativeThrowUnless(132, sender() == self.owner);
+}
+```
+
+---
+
+**133: Contract stopped** (Tact compute phase)\
+The stoppable trait allows to stop the contract.
+If you send a message to a stopped contract, and the contract asks for a check by running ```self.requireNotStopped();```, this exit code will be thrown.
+In the current version of Tact, 40368 exit code will be thrown instead of 133.
+
+Example :
+```tact
+import "@stdlib/deploy";
+import "@stdlib/ownable";
+import "@stdlib/stoppable";
+
+message FakeLaunch {
+
+}
+
+contract Fireworks with Deployable, Ownable, Stoppable {
+    owner: Address;
+    stopped: Bool;
+
+    init(){
+        self.owner = sender();
+        self.stopped = false;
+    }
+
+    receive(msg: FakeLaunch){
+        self.stopped = true;
+        self.requireNotStopped();
+    }
+}
+
+fun requireNotStopped() {
+        require(!self.stopped, "Contract stopped");
+}
+```
+
+---
+
+**134: Invalid argument** (Tact compute phase)\
+This will be thrown by the below FunC function(in the last part of a bunch of if conditions). This function reads something from Base64.
+If the input characters don't fit into base64 chars, you will encounter this exit code.
+
+Example :
+```tact
+let code: Slice = beginCell().storeUint(0, 8).asSlice().fromBase64();
+// 0 is not a valid ASCII code so it cannot be converted to Base64
+```
+
+---
+
+**135: Code of a contract was not found** (Tact compute phase)\
+It will check the return flag of a search on the dictionary keys.
+
+Example :
+```tact
+// copy & paste the below line in wrapper file(../build/ContractName/tact_ContractName.ts) instead of the second line of ContractName_init() function - this is a dictionary containing another smart contract code which leads to 135 exit code
+// const __system = Cell.fromBase64('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');
+let ctx: Context = context();
+let fireworks_init: StateInit = initOf Fireworks(0);
+```
+
+---
+
+**136: Invalid address** (Tact compute phase)\
+1- In TON, all addresses are 267 bits. If you violate this rule, you will face this exit code.\
+2- Currently, TON only supports two chain id. 0 for basechain and -1 for masterchain. If you address isn't from basechain, 136 exit code will be thrown.
+
+Example :
+```tact
+// fun newAddress(chain: Int, hash: Int): Address;
+// creates a new address from chain and hash values.
+let zeroAddress: Address = newAddress(1, 0); // invalid-chain zero address
+```
+
+---
+
+**137: Masterchain support is not enabled for this contract** (Tact compute phase)\
+Currently, TON only supports two chain id. 0 for basechain and -1 for masterchain.
+Tact only supports basechain and if you address is from masterchain, 137 exit code will be thrown.
+
+Example :
+```tact
+// fun newAddress(chain: Int, hash: Int): Address;
+// creates a new address from chain and hash values.
+let zeroAddress: Address = newAddress(-1, 0); // master-chain zero address
+```
