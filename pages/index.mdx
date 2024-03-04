@@ -1,18 +1,116 @@
-# Tact Documentation
+# Learn all about programming in ⚡ Tact
 
-![Banner](public/banner.jpeg)
+import { Cards, Steps, Tabs } from 'nextra/components'
 
-**Tact is a new programming language for TON blockchain that is focused on efficiency and simplicity.**
+![Tact banner](public/banner.jpeg)
 
-**It is designed to be easy to learn and use, and to be a good fit for smart contracts. Tact is a statically typed language with a simple syntax and a powerful type system.**
+Tact is a new programming language for TON Blockchain that is focused on efficiency and simplicity. It is designed to be easy to learn and use, and to be a good fit for smart contracts. Tact is a statically typed language with a simple syntax and a powerful type system.
 
-### Content
+## Let's start! [#start]
 
-- [Getting Started](/start)
-- [Language and stdlib documentation](/language/guides/types)
-- [Tools](/tools/typescript)
+<Steps>
 
-### Community
+### Ensure that Node.js LTS is installed and available
 
-- [✈️ Telegram Group](https://t.me/tactlang)
-- [🐦 Twitter](https://twitter.com/tact_language)
+To check it, run `node --version{:shell}` — it should show you the version 18.0.0 or later.
+
+### Run the following command to create a new project with the simple counter contract
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+  <Tabs.Tab>
+    ```shell
+    npm create ton -- simple-counter --type tact-counter --contractName SimpleCounter
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```shell
+    yarn create ton -- simple-counter --type tact-counter --contractName SimpleCounter
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```shell
+    pnpm create ton simple-counter --type tact-counter --contractName SimpleCounter
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+### That's it! Your first contract project is written and compiled already!
+
+Go check it out by moving into the relevant directory — `cd simple-counter/contracts{:shell}`.
+
+To re-compile, use commands in the scripts section of `package.json` in the root of this newly created project.
+
+To deploy, refer to the documentation of [Blueprint](https://github.com/ton-org/blueprint) — this is a tool we've used to create and compile your first simple counter contract in Tact. In fact, Blueprint can do much more than that: including tests, customizations and more.
+
+</Steps>
+
+## Where to go next? [#next]
+
+<Steps>
+
+### Have some blockchain knowledge already?
+
+Check the following cheatsheets to quickly get started!
+
+<Cards>
+  <Cards.Card
+    icon="💎 "
+    title="Coming from FunC (TON)"
+    href="/book/cs/from-func"
+  />
+  <Cards.Card
+    icon="🔷 "
+    title="Coming from Solidity (Ethereum)"
+    href="/book/cs/from-solidity"
+  />
+</Cards>
+
+### Want to know more?
+
+For further guidance on compilation, testing and deployment see the [Getting started](/book/guides/getting-started) guide.
+
+For custom plugins for your favorite editor and other tooling see the [Tools](/ecosystem/tools) page.
+
+Alternatively, take a look at the following broader sections:
+* [Book](/book) helps you learn the language step-by-step
+* [Language](/language) provides a complete references of everething there is in it
+* Finally, [Ecosystem](/ecosystem) describes "what's out there" in the Tacts' and TONs' ecosystems
+
+<Cards>
+  <Cards.Card
+    icon="📚 "
+    title="Read the Book of Tact"
+    href="/book"
+  />
+  <Cards.Card
+    icon="🔬 "
+    title="Study the Language"
+    href="/language"
+  />
+  <Cards.Card
+    icon="🗺️ "
+    title="Embrace the Ecosystem"
+    href="/ecosystem"
+  />
+</Cards>
+
+### Feeling a bit uncomfortable?
+
+If you ever get stuck, don't hesitate to reach out to Tact's flourishing community:
+
+<Cards>
+  <Cards.Card
+    icon="✈️ "
+    title="Telegram Group"
+    href="https://t.me/tactlang"
+  />
+  <Cards.Card
+    icon="🐦 "
+    title="X/Twitter"
+    href="https://twitter.com/tact_language"
+  />
+</Cards>
+
+Good luck on your coding adventure with ⚡ Tact!
+
+</Steps>
