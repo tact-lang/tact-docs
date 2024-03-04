@@ -1,4 +1,10 @@
-export default {
+import { useRouter } from 'next/router'
+import { DocsThemeConfig } from 'nextra-theme-docs'
+
+/**
+ * @type {DocsThemeConfig}
+ */
+const config = {
   logo: (
     <svg width="217" height="30" viewBox="0 0 247 34" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M44.248 9.13488H53.0165V12.1116H50.126V25H47.063V12.1116H44.248V9.13488Z" fill="currentColor" />
@@ -21,6 +27,7 @@ export default {
       <path fillRule="evenodd" clipRule="evenodd" d="M2.89671 31.4666L13.5452 19.7152L3.50521 15.7065L28.99 1.0932C26.5378 -2.74133e-09 23.0142 0 17 0C9.73879 0 6.10818 0 3.61017 1.92391C2.97777 2.41098 2.41098 2.97777 1.92391 3.61017C0 6.10818 0 9.73879 0 17C0 24.2612 0 27.8918 1.92391 30.3898C2.21981 30.774 2.54513 31.134 2.89671 31.4666ZM4.39128 32.5948C6.86599 34 10.4607 34 17 34C24.2612 34 27.8918 34 30.3898 32.0761C31.0222 31.589 31.589 31.0222 32.0761 30.3898C34 27.8918 34 24.2612 34 17C34 9.73879 34 6.10818 32.0761 3.61017C31.6542 3.06237 31.1725 2.56381 30.6401 2.12364L20.2292 13.6125L30.807 18.159L4.39128 32.5948Z" fill="currentColor" />
     </svg>
   ),
+  darkMode: true,
   nextThemes: {
     defaultTheme: 'dark',
   },
@@ -28,8 +35,26 @@ export default {
     link: 'https://github.com/tact-lang/tact-docs',
   },
   docsRepositoryBase: 'https://github.com/tact-lang/tact-docs/edit/main/',
+  i18n: [
+    { locale: 'en', text: 'English' },
+    // { locale: 'zh', text: '中文' },
+  ],
+  sidebar: {
+    autoCollapse: true,
+    defaultMenuCollapseLevel: 1,
+    toggleButton: true,
+  },
   feedback: {
     content: null
+  },
+  editLink: {
+    text: function useText() {
+      const { locale } = useRouter()
+      return {
+        'en': 'Edit this page on GitHub',
+        // 'zh': '在 GitHub 上编辑此页',
+      }[locale ?? "en"]
+    }
   },
   footer: {
     text: <span>
@@ -44,20 +69,13 @@ export default {
   head: () => (
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
       <meta name="description" content="Tact Language Documentation" />
-
       <meta name="og:title" content="Tact Language Documentation" />
-
       <meta name="og:description" content="Language reference and guides for Tact" />
-
       <meta name="twitter:card" content="summary_large_image" />
-
       <meta name="twitter:site" content="@tact_language" />
-
       <meta name="apple-mobile-web-app-title" content="Tact" />
-
-      <link rel="icon" href="favicon.png" type="image/x-icon"/>
+      <link rel="icon" href="favicon.png" type="image/x-icon" />
 
       <script
         lang="javascript"
@@ -73,3 +91,5 @@ export default {
     </>
   )
 }
+
+export default config

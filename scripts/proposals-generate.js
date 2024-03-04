@@ -7,15 +7,16 @@ const process = require('process');
 let meta = {
     "index": "Evolution Process"
 };
+const prefix = '/pages/language/evolution';
 const cwd = process.cwd(); // current working directory of the process
-const files = fs.readdirSync(cwd + '/pages/evolution');
+const files = fs.readdirSync(cwd + prefix);
 for (let f of files) {
     if (f.endsWith('.mdx') && f.startsWith("OTP-")) {
-        let name = f.substring(0, f.length - 4);
-        let title = matter(fs.readFileSync(path.join(cwd, '/pages/evolution', f), 'utf8')).data.title;
+        const name = f.substring(0, f.length - 4);
+        const title = matter(fs.readFileSync(path.join(cwd, prefix, f), 'utf8')).data.title;
         meta[name] = title;
     }
 }
 
 // Write metadata
-fs.writeFileSync(path.join(cwd, '/pages/evolution/_meta.json'), JSON.stringify(meta, null, 4));
+fs.writeFileSync(path.join(cwd, `${prefix}/_meta.json`), JSON.stringify(meta, null, 4));
