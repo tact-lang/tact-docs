@@ -55,11 +55,12 @@ export default withNextra({
   images: {
     unoptimized: true
   },
-  i18n: {
-    // locales: ['en', 'zh'],
-    locales: ['en'],
-    defaultLocale: 'en'
-  },
+  // i18n: {
+  //   // locales: ['default', 'en', 'zh'],
+  //   locales: ['default', 'en'],
+  //   defaultLocale: 'default',
+  //   // localeDetection: false,
+  // },
   redirects: () => [
     // Language→Guides pages are moved under Book section
     {
