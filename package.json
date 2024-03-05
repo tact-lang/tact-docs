@@ -13,7 +13,8 @@
     "dev": "yarn clean && next",
     "build": "yarn clean && next build",
     "post-build": "echo 'spell checking, link checking, formatting'",
-    "build-pages": "yarn build && next export"
+    "build-pages": "yarn build && next export",
+    "next": "next"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
