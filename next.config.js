@@ -68,16 +68,6 @@ export default withNextra({
       destination: '/book/:page*',
       permanent: true,
     },
-    {
-      source: '/book/guides', // <- base link used in docs
-      destination: '/book/guides/getting-started',
-      permanent: true,
-    },
-    {
-      source: '/book/cs', // <- base link used in docs
-      destination: '/book/cs/from-func',
-      permanent: true,
-    },
 
     // Getting Started is now a part of Book→Guides sub-section
     {
@@ -105,11 +95,6 @@ export default withNextra({
       permanent: true,
     },
     {
-      source: '/language/evolution', // <- base link used in docs
-      destination: '/language/evolution/overview',
-      permanent: true,
-    },
-    {
       source: '/evolution/:page*',
       destination: '/language/evolution/:page*',
       permanent: true,
@@ -122,30 +107,13 @@ export default withNextra({
       permanent: true,
     },
 
-    // Additional conveniences for Language section
-    {
-      source: '/language/ref', // <- base link used in docs
-      destination: '/language/ref/common',
-      permanent: true,
-    },
-    {
-      source: '/language/libs', // <- base link used in docs
-      destination: '/language/libs/overview',
-      permanent: true,
-    },
-
     // Tools are now part of a new Ecosystem section
     {
       source: '/tools/:page*',
       destination: '/ecosystem/tools/:page*',
       permanent: true,
     },
-    {
-      source: '/ecosystem/tools', // <- base link used in docs
-      destination: '/ecosystem/tools/typescript',
-      permanent: true,
-    },
-
+    
     // Small updates in naming of pages or sub-sections
     {
       source: '/book/message-modes',
