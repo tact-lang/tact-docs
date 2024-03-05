@@ -4,5 +4,6 @@ export default {
 	random: 'Random',
 	math: 'Math',
 	cells: 'Cells, Builders and Slices',
-	advanced: 'Advanced'
+	advanced: 'Advanced',
+	'exit-codes': 'Exit codes',
 }
