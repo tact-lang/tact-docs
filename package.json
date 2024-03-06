@@ -9,11 +9,12 @@
     "react-dom": "^18.2.0"
   },
   "scripts": {
-    "clean": "rm -fr .next",
-    "dev": "yarn clean && next",
-    "build": "yarn clean && next build",
+    "clean": "rm -fr .next out",
+    "deps": "yarn install --frozen-lockfile",
+    "dev": "yarn deps && yarn clean && next",
+    "build": "yarn deps && yarn clean && next build",
     "post-build": "echo 'spell checking, link checking, formatting'",
-    "build-pages": "yarn build && next export",
+    "build-pages": "yarn build && next export && node ./scripts/redirects-generate.js",
     "next": "next"
   },
   "devDependencies": {
