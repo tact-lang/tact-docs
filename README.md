@@ -47,10 +47,10 @@ Use Gitpod for a hassle-free cloud-based IDE experience:
 1. Clone this GitHub repository.
 2. Make sure to have the latest version of [NodeJS LTS](https://nodejs.org/en/download/) installed.
 3. Open your terminal in the project directory.
-4. Install dependencies:
+4. Install dependencies without modifying the `yarn.lock`:
 
     ```
-    yarn
+    yarn deps
     ```
 
 5. Start your local development server:
