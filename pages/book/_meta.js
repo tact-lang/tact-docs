@@ -2,6 +2,7 @@ export default {
   index: 'Overview',
   guides: 'Guides',
   cs: 'Cheatsheets',
+  cookbook: 'Cookbook',
   '--': {
     type: 'separator',
   },
