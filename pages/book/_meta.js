@@ -7,6 +7,7 @@ export default {
     type: 'separator',
   },
   types: 'Type system',
+  integers: 'Integers',
   functions: 'Functions',
   statements: 'Statements',
   constants: 'Constants',
