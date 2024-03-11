@@ -1,42 +1,49 @@
-# Tact type system
+# Type system overview
 
-Every variable, item, and value in a Tact program has a type:
+import { Callout } from 'nextra/components'
 
-* Primitives: Int, Bool, Slice, Cell, Builder, String and StringBuilder;
-* Map
-* Structs and Messages
-* Contracts and Traits
+Every variable, item, and value in Tact programs has a type. They can be:
 
-Also, most primitive types, structs, and messages could be nullable.
+* One of the [primitive types](#primitive-types)
+* [Maps](#maps)
+* Composite types, such as [Structs and Messages](#structs-and-messages)
+* or [Contracts](#contracts) and [Traits](#traits)
+
+Also, many of those types [can be made nullable](/book/defining-types#optionals).
 
 ## Primitive types
 
-* Int - all integers in Tact are 257-bit signed integers.
-* Bool - classical boolean with true/false values.
-* Address - standard address.
-* Slice, Cell, Builder - low-level primitive of TON VM.
-* String - type that represents text strings in TON VM.
-* StringBuilder - helper type that allows you to concatenate strings in a gas-efficient way
+* Int — all numbers in Tact are 257-bit signed integers, but [smaller representations](/book/integers#serialization) can be used to reduce storage costs.
+* Bool — classical boolean with `true` and `false` values.
+* Address — standard [smart contract address](https://docs.ton.org/learn/overviews/addresses#address-of-smart-contract) in TON Blockchain.
+* Slice, Cell, Builder — low-level primitives of TON VM.
+* String — represents text strings in TON VM.
+* StringBuilder — helper type that allows you to concatenate strings in a gas-efficient way.
+* `null` — represents the intentional absence of any other value, makes the variables into [optionals](/book/defining-types#optionals).
 
 ## Structs and Messages
 
-Structs and Messages are almost the same thing with the only difference being that a message has a header in its serialization and therefore could be used as receivers.
+[Struct](/book/defining-types#structs) example:
 
-> **Warning**
-> Currently circular **types** are not possible. This means that struct/message **A** can't have a field of a struct/message **B** that has a field of the struct/message **A**.
-
-Example:
 ```tact
 struct Point {
     x: Int;
     y: Int;
 }
+```
 
-message SetValue {
+[Message](/book/defining-types#messages) example:
+
+```tact
+// Custom numeric id of the Message
+message(0x11111111) SetValue {
     key: Int;
     value: Int?; // Optional
+    coins: Int as coins; // Serialization into TL-B types
 }
 ```
+
+Learn more about them on a dedicated page about [defining composite types](/book/defining-types).
 
 ## Maps
 
@@ -51,39 +58,40 @@ Possible value types:
 * Bool
 * Cell
 * Address
-* Struct/Message
+* [Struct](/book/defining-types#structs)
+* [Message](/book/defining-types#messages)
 
 ```tact
 contract HelloWorld {
-  counters: map<Int, Int>;
+    counters: map<Int, Int>;
 }
 ```
 
 ## Contracts
 
-Contracts are the main entry of a smart contract on the TON blockchain. It holds all functions, getters, and receivers of a contract.
+Contracts are the main entry of a smart contract on the TON blockchain. It holds all functions, getters, and receivers of a TON contract.
 
 ```tact
 contract HelloWorld {
-  counter: Int;
+    counter: Int;
 
-  init() {
-    self.counter = 0;
-  }
+    init() {
+        self.counter = 0;
+    }
 
-  receive("increment") {
-    self.counter = self.counter + 1;
-  }
+    receive("increment") {
+        self.counter = self.counter + 1;
+    }
 
-  get fun counter(): Int {
-    return self.counter;
-  }
+    get fun counter(): Int {
+        return self.counter;
+    }
 }
 ```
 
 ## Traits
 
-Tact doesn't support classical class inheritance, but instead introduces the concept of **traits**. Trait defines functions, receivers, and required fields. The trait is like abstract classes, but it does not define how and where fields must be stored. **All** fields from all traits must be explicitly declared in the contract itself. Traits itself also don't have constructors and all initial field initialization also must be done in the main contract.
+Tact doesn't support classical class inheritance, but instead introduces the concept of **traits**. Trait defines functions, receivers, and required fields. The trait is like abstract classes, but it does not define how and where fields must be stored. **All** fields from all traits must be explicitly declared in the contract itself. Traits themselves don't have `init()` constructors, so all initial field initialization also must be done in the main contract.
 
 ```tact
 trait Ownable {
