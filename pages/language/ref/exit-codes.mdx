@@ -3,34 +3,34 @@
 * An exit code is a 16-bit unsigned integer which ranges between 0 to 65535 (or 2<sup>16</sup>-1).
 * The best practice is to allocate 0 to 127 codes for Func Exit Codes, 128 to 255 for Tact Exit Codes, and 256 to 65535 for developer-defined Exit Codes.
 
-| Exit Code  | TVM Phase      | Description                                                                                                                                                                                                                                                                           |
-|------------|----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `0`        | Compute Phase | Standard successful execution exit code                                                                                                                                                                                                                                                |
-| `2`        | Compute Phase | Stack underflow. Last op-code consumed more elements than there are on the stacks                                                                                                                                                                                                      |
-| `3`        | Compute Phase | Stack overflow. More values have been stored on a stack than allowed by this version of TVM                                                                                                                                                                                            |
-| `4`        | Compute Phase | Integer overflow. Integer does not fit into −2<sup>256</sup> ≤ x < 2<sup>256</sup> or a division by zero has occurred                                                                                                                                                                  |
-| `5`        | Compute Phase | Integer out of expected range                                                                                                                                                                                                                                                          |
-| `6`        | Compute Phase | Invalid opcode. Instruction is unknown in the current TVM version                                                                                                                                                                                                                      |
-| `7`        | Compute Phase | Type check error. An argument to a primitive is of an incorrect value type                                                                                                                                                                                                             |
-| `8`        | Compute Phase | Cell overflow. Writing to builder is not possible since after operation there would be more than 1023 bits or 4 references                                                                                                                                                             |
-| `9`        | Compute Phase | Cell underflow. Read from slice primitive tried to read more bits or references than there are                                                                                                                                                                                         |
-| `10`       | Compute Phase | Dictionary error. Error during manipulation with dictionary (hashmaps)                                                                                                                                                                                                                 |
-| `13`       | Compute Phase | Out of gas error. Thrown by TVM when the remaining gas becomes negative                                                                                                                                                                                                                |
-| `-14`      | Compute Phase | It means out of gas error, same as `13`. Negative, because it cannot be faked                                                                                                                                                                                                          |
-| `32`       | Action Phase  | Action list is invalid. Set during action phase if c5 register after execution contains unparsable object                                                                                                                                                                              |
-| `34`       | Action Phase  | Action is invalid or not supported. Set during action phase if current action cannot be applied                                                                                                                                                                                        |
-| `37`       | Action Phase  | Not enough TON. Message sends too much TON (or there is not enough TON after deducting fees)                                                                                                                                                                                           |
-| `38`       | Action Phase  | Not enough extra-currencies                                                                                                                                                                                                                                                            |
-| `128`      | Tact Phase    | Compiler expects an integer or cell but a null value has been passed                                                                                                                                                                                                                   |
-| `129`      | Tact Phase    | If there is any inconsistency with the previous op-code check, this exit code will be thrown                                                                                                                                                                                           |
-| `130`      | Tact Phase    | No suitable operation is found                                                                                                                                                                                                                                                         |
-| `131`      | Tact Phase    | No info                                                                                                                                                                                                                                                                                |
-| `132`      | Tact Phase    | Someone other than the owner sent a message to the contract                                                                                                                                                                                                                            |
-| `133`      | Tact Phase    | A message has been sent to a stopped contract                                                                                                                                                                                                                                          |
-| `134`      | Tact Phase    | Invalid Base64 string                                                                                                                                                                                                                                                                  |
-| `135`      | Tact Phase    | False flag for a dictionary call                                                                                                                                                                                                                                                       |
-| `136`      | Tact Phase    | Non 267-bit address or Invalid chain id (other than 0 or -1)                                                                                                                                                                                                                           |
-| `137`      | Tact Phase    | No support for Masterchain addresses                                                                                                                                                                                                                                                   |
+| Exit Code  | Phase           | Description                                                                                                                                                                                                                                                                           |
+|------------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `0`        | Compute Phase   | Standard successful execution exit code                                                                                                                                                                                                                                               |
+| `2`        | Compute Phase   | Stack underflow. Last op-code consumed more elements than there are on the stacks                                                                                                                                                                                                     |
+| `3`        | Compute Phase   | Stack overflow. More values have been stored on a stack than allowed by this version of TVM                                                                                                                                                                                           |
+| `4`        | Compute Phase   | Integer overflow. Integer does not fit into −2<sup>256</sup> ≤ x < 2<sup>256</sup> or a division by zero has occurred                                                                                                                                                                 |
+| `5`        | Compute Phase   | Integer out of expected range                                                                                                                                                                                                                                                         |
+| `6`        | Compute Phase   | Invalid opcode. Instruction is unknown in the current TVM version                                                                                                                                                                                                                     |
+| `7`        | Compute Phase   | Type check error. An argument to a primitive is of an incorrect value type                                                                                                                                                                                                            |
+| `8`        | Compute Phase   | Cell overflow. Writing to builder is not possible since after operation there would be more than 1023 bits or 4 references                                                                                                                                                            |
+| `9`        | Compute Phase   | Cell underflow. Read from slice primitive tried to read more bits or references than there are                                                                                                                                                                                        |
+| `10`       | Compute Phase   | Dictionary error. Error during manipulation with dictionary (hashmaps)                                                                                                                                                                                                                |
+| `13`       | Compute Phase   | Out of gas error. Thrown by TVM when the remaining gas becomes negative                                                                                                                                                                                                               |
+| `-14`      | Compute Phase   | It means out of gas error, same as `13`. Negative, because it cannot be faked                                                                                                                                                                                                         |
+| `32`       | Action Phase    | Action list is invalid. Set during action phase if c5 register after execution contains unparsable object                                                                                                                                                                             |
+| `34`       | Action Phase    | Action is invalid or not supported. Set during action phase if current action cannot be applied                                                                                                                                                                                       |
+| `37`       | Action Phase    | Not enough TON. Message sends too much TON (or there is not enough TON after deducting fees)                                                                                                                                                                                          |
+| `38`       | Action Phase    | Not enough extra-currencies                                                                                                                                                                                                                                                           |
+| `128`      | Tact (Compiler) | Compiler expects an integer or cell but a null value has been passed                                                                                                                                                                                                                  |
+| `129`      | Tact (Compiler) | If there is any inconsistency with the previous op-code check, this exit code will be thrown                                                                                                                                                                                          |
+| `130`      | Tact (Compiler) | No suitable operation is found                                                                                                                                                                                                                                                        |
+| `131`      | Tact (Compiler) | No info                                                                                                                                                                                                                                                                               |
+| `132`      | Tact (Compiler) | Someone other than the owner sent a message to the contract                                                                                                                                                                                                                           |
+| `133`      | Tact (Compiler) | A message has been sent to a stopped contract                                                                                                                                                                                                                                         |
+| `134`      | Tact (Compiler) | Invalid Base64 string                                                                                                                                                                                                                                                                 |
+| `135`      | Tact (Compiler) | False flag for a dictionary call                                                                                                                                                                                                                                                      |
+| `136`      | Tact (Compiler) | Non 267-bit address or Invalid chain id (other than 0 or -1)                                                                                                                                                                                                                          |
+| `137`      | Tact (Compiler) | No support for Masterchain address                                                                                                                                                                                                                                                  |
 
 Where to observe the list of all auto-generated exit codes in your project?
 * The Tact Compiler collects all exit codes at the end of a *.md file and you can track them in the directory along
@@ -59,7 +59,7 @@ In particular, actions may include sending messages, updating the smart contract
 Note that some actions may fail during processing (for instance, if we try to send message with more TON than the contract has),
 in that case the whole transaction may revert or this action may be skipped (it depends on the mode of the actions, in other words,
 the contract may send a send-or-revert or try-send-if-no-ignore type of message).
-- Tact phase: It's a new keyword similar to normal compute phase but, it is checked in transpiled FunC code.
+- Tact (Compiler): It's a new keyword similar to normal compute phase but, it is checked in transpiled FunC code.
 
 ## 2. Exit Code Examples
 
@@ -168,9 +168,9 @@ send(SendParameters{to: context().sender, value: ton("10")});
 
 ---
 
-### 2.3 Tact Phase
+### 2.3 Tact (Compiler)
 
-**130: Invalid incoming message** (Tact)\
+**130: Invalid incoming message**\
 When you send a message to a contract, the first 32 bits of message body is the op code. It determines the operation that must be done.
 In FunC, if no op code is found, 0xffff will be thrown. In Tact, 130 exit code will be thrown.
 
@@ -188,7 +188,7 @@ Then, send a message to this contract. Because no suitable operation is found, y
 
 ---
 
-**132: Access denied** (Tact)\
+**132: Access denied**\
 First, you should import and inherit from Ownable Trait. After it, your contract will have an owner.
 You can ask for a check by calling ```self.requireOwner();``` in your functions. It will ensure that only the owner can send message to your contract.
 
@@ -220,7 +220,7 @@ fun requireOwner() {
 
 ---
 
-**133: Contract stopped** (Tact)\
+**133: Contract stopped**\
 The stoppable trait allows to stop the contract.
 If you send a message to a stopped contract, and the contract asks for a check by running ```self.requireNotStopped();```, this exit code will be thrown.
 In the current version of Tact, 40368 exit code will be thrown instead of 133.
@@ -257,7 +257,7 @@ fun requireNotStopped() {
 
 ---
 
-**134: Invalid argument** (Tact)\
+**134: Invalid argument**\
 This will be thrown by the below FunC function(in the last part of a bunch of if conditions). This function reads something from Base64.
 If the input characters don't fit into base64 chars, you will encounter this exit code.
 
@@ -269,7 +269,7 @@ let code: Slice = beginCell().storeUint(0, 8).asSlice().fromBase64();
 
 ---
 
-**135: Code of a contract was not found** (Tact)\
+**135: Code of a contract was not found**\
 It will check the return flag of a search on the dictionary keys.
 
 Example :
@@ -282,7 +282,7 @@ let fireworks_init: StateInit = initOf Fireworks(0);
 
 ---
 
-**136: Invalid address** (Tact)\
+**136: Invalid address**\
 1- In TON, all addresses are 267 bits. If you violate this rule, you will face this exit code.\
 2- Currently, TON only supports two chain id. 0 for basechain and -1 for masterchain. If you address isn't from basechain, 136 exit code will be thrown.
 
@@ -295,7 +295,7 @@ let zeroAddress: Address = newAddress(1, 0); // invalid-chain zero address
 
 ---
 
-**137: Masterchain support is not enabled for this contract** (Tact)\
+**137: Masterchain support is not enabled for this contract**\
 Currently, TON only supports two chain id. 0 for basechain and -1 for masterchain.
 Tact only supports basechain and if you address is from masterchain, 137 exit code will be thrown.
 
