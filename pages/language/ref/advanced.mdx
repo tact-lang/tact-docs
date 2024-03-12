@@ -1,96 +1,125 @@
 # Advanced
 
+import { Callout } from 'nextra/components'
+
 Dangerous or unstable features meant to be used by advanced users only.
 
+<Callout type="warning" emoji="⚠️">
+  Proceed with caution.
+</Callout>
+
 ## readForwardFee
+
 ```tact
-extends fun readForwardFee(self: Context): Int 
+extends fun readForwardFee(self: Context): Int
 ```
-Read and computes forward fee from Context and return it as Int value in nanoToncoins.
+
+Read and compute forward fee from the `Context{:tact}` and return it as `Int{:tact}` value in nanoToncoins (nano-tons).
 
 ## throw
+
 ```tact
 fun throw(code: Int);
 ```
-Throw exception with error code equal `code`.
+
+Throw an exception with error code equal `code`.
 
 ## nativeThrowWhen
+
 ```tact
 fun nativeThrowWhen(code: Int, condition: Bool);
 ```
-Throw exception with error code equal `code` when `condition` equal True.
+
+Throw an exception with error code equal to `code` when `condition` is equal to `true{:tact}`.
 
 ## nativeThrowUnless
+
 ```tact
 fun nativeThrowUnless(code: Int, condition: Bool);
 ```
-Throw exception with error code equal `code` when `condition` equal False.
+
+Throw an exception with error code equal to `code` when `condition` is equal to `false{:tact}`.
 
 ## getConfigParam
+
 ```tact
 fun getConfigParam(id: Int): Cell?;
 ```
-Loads network configuration parameter from the blockchain.
+
+Load network configuration parameter from the blockchain.
 
 ## nativeRandomize
+
 ```tact
 fun nativeRandomize(x: Int);
 ```
-Randomizes the random number generator with the specified seed.
+
+Randomize the random number generator with the specified seed `x`.
 
 ## nativeRandomizeLt
+
 ```tact
 fun nativeRandomizeLt();
 ```
-Randomizes the random number generator with the current logical time.
+
+Randomize the random number generator with the current logical time.
 
 ## nativePrepareRandom
+
 ```tact
 fun nativePrepareRandom();
 ```
-This function prepares random number generator by calling `nativeRandomizeLt` once and called internally by `random` and `randomInt` functions.
+
+This function prepares random number generator by calling [nativeRandomizeLt](#nativeRandomizeLt) once and called internally by [random](#random) and [randomInt](#randomInt) functions.
 
 ## nativeRandom
+
 ```tact
 fun nativeRandom(): Int;
 ```
-You shouldn't use this function directly, use `random` and `randomInt` functions instead.
-This function generates 256-bit random number just like `randomInt` function, but random generator is not initialized by `nativePrepareRandom` function.
+
+You shouldn't use this function directly, use [random](#random) and [randomInt](#randomInt) functions instead.\
+This function generates 256-bit random number just like [randomInt](#randomInt) function, but random generator is not initialized by [nativePrepareRandom](#nativePrepareRandom) function.
 
 ## nativeRandomInterval
+
 ```tact
 fun nativeRandomInterval(max: Int): Int;
 ```
-You shouldn't use this function directly, use `random` and `randomInt` functions instead.
-This function generates random number in the range from 0 to `max`. This call doesn't prepare initialization by `nativePrepareRandom` function.
+
+You shouldn't use this function directly, use [random](#random) and [randomInt](#randomInt) functions instead.\
+This function generates random number in the range from 0 to `max`. This call doesn't prepare initialization by [nativePrepareRandom](#nativePrepareRandom) function.
 
 ## nativeReserve
+
 ```tact
 fun nativeReserve(amount: Int, mode: Int);
 ```
-Calls native `raw_reserve` function with specified amount and mode. 
 
-The `raw_reserve()` is a function that creates an output action to reserve a specific amount of nanotoncoins from the remaining balance of the account. It has the following signature:
+Calls native `raw_reserve` function with specified amount and mode. The `raw_reserve` is a function that creates an output action to reserve a specific amount of nanoToncoins (nano-tons) from the remaining balance of the account.
 
+It has the following signature in FunC:
+
+```func
 raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
+```
 
 The function takes two arguments:
+* `amount`: The number of nanotoncoins to reserve.
+* `mode`: Determines the reservation behavior.
 
-amount: The number of nanotoncoins to reserve.
-mode: Determines the reservation behavior.
-mode can have the following values:
+The resulting `mode` value can have the following base modes:
+* $0$: Reserve exactly amount nanotoncoins.
+* $1$ or $3$: Reserve all but amount nanotoncoins.
+* $2$: Reserve at most amount nanotoncoins.
 
-  0: Reserve exactly amount nanotoncoins.
-  1 or 3: Reserve all but amount nanotoncoins.
-  2: Reserve at most amount nanotoncoins.
-  Additionally, mode can have the following flags:
+Additionally, the resulting `mode` can have the following optional flags added:
+* $+2$: If the specified amount cannot be reserved, reserve the remaining balance instead of failing.
+* $+4$: Increase amount by the original balance of the current account (before the compute phase), including all extra currencies.
+* $+8$: Negate the amount before performing further actions.
 
-  +2: If the specified amount cannot be reserved, reserve the remaining balance instead of failing.
-  +4: Increase amount by the original balance of the current account (before the compute phase), including all extra currencies.
-  +8: Negate the amount before performing further actions.
-  raw_reserve() is roughly equivalent to creating an outbound message carrying amount nanotoncoins (or b - amount nanotoncoins, where b is the remaining balance) to oneself. This ensures that subsequent output actions cannot spend more money than the remainder.
+Function `raw_reserve` is roughly equivalent to creating an outbound message carrying the specified `amount` of nanoToncoins (or `b`-amount nanoToncoins, where `b` is the remaining balance) to oneself. This ensures that subsequent output actions cannot spend more money than the remainder.
 
-> Currently, amount must be a non-negative integer, and mode must be in the range 0..15.
-
-
-
+<Callout type="warning" emoji="⚠️">
+  Currently, `amount` must be a non-negative integer, and `mode` must be in the range 0..15, inclusive.
+</Callout>
