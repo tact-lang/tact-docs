@@ -9,35 +9,44 @@ It's capable of storing integers between $-2^{256}$ and $2^{256} - 1.$
 
 ## Notation
 
-Tact supports various ways of writing primitive values of `Int{:tact}` (integer literals). Most of the notations allow adding underscores (`_`) in-between digits, except for the certain case of decimal numeral system numbers, which start with $0,$ as well as for representations in strings (as seen in [nano-tons](#nano-tons) case)
+Tact supports various ways of writing primitive values of `Int{:tact}` (integer literals).
+
+Most of the notations allow adding underscores (`_`) in-between digits, except for:
+* Representations in strings, as seen in [nano-tons](#nano-tons) case.
+* Decimal numbers written with a leading zero $0.$ Their use is generally discouraged, see [below](#decimal).
+
+Additionally, several underscores in a row as in $4\_\_2$, or trailing underscores as in $42\_$ are **not** allowed.
 
 ### Decimal
 
 Most common and most used way of representing numbers, using the [decimal numeral system](https://en.wikipedia.org/wiki/Decimal): $123456789.$\
-You can use underscores (`_`) to improve readability: $123\_456\_789.$
+You can use underscores (`_`) to improve readability: $123\_456\_789$ is equal to $123456789.$
 
-Alternatively, you can prefix the number with one $0$, which prohibits use of underscores and only allows decimal digits: $0123 = 123.$
+<Callout type="warning" emoji="⚠️">
+  Alternatively, you can prefix the number with one $0$, which prohibits use of underscores and only allows decimal digits: $0123 = 123.$
+  Note, that using this notation with leading zero is **strongly discouraged** due to possible confusion with octal integer literals in TypeScript, which is often used alongside Tact to develop and test contracts.
+</Callout>
 
 ### Hexadecimal
 
 Represent numbers using [hexadecimal numeral system](https://en.wikipedia.org/wiki/Hexadecimal), denoted by the $\mathrm{0x}$ prefix: $\mathrm{0xFFFFFFFFF}.$\
-Use underscores (`_`) to improve readability: $\mathrm{0xFFF\_FFF\_FFF}.$
+Use underscores (`_`) to improve readability: $\mathrm{0xFFF\_FFF\_FFF}$ is equal to $\mathrm{0xFFFFFFFFF}.$
 
 ### Octal
 
 Represent numbers using [octal numeral system](https://en.wikipedia.org/wiki/Octal), denoted by the $\mathrm{0o}$ prefix: $\mathrm{0o777777777.}$\
-Use underscores (`_`) to improve readability: $\mathrm{0o777\_777\_777}.$
+Use underscores (`_`) to improve readability: $\mathrm{0o777\_777\_777}$ is equal to $\mathrm{0o777777777}.$
 
 ### Binary
 
 Represent numbers using [binary numeral system](https://en.wikipedia.org/wiki/Binary_number), denoted by the $\mathrm{0b}$ prefix: $\mathrm{0b111111111.}$\
-Use underscores (`_`) to improve readability: $\mathrm{0x111\_111\_111}.$
+Use underscores (`_`) to improve readability: $\mathrm{0b111\_111\_111}$ is equal to $\mathrm{0b111111111}.$
 
 ### Nano-tons
 
 For example, arithmetic with dollars requires two decimal places after the dot — those are used for the cents value. But how would we represent the number \$$1.25$ if we're only able to work with integers? The solution is to work with _cents_ directly. This way, \$$1.25$ becomes $125$ cents. We simply memorize that the two rightmost digits represent the numbers after the decimal point.
 
-Similarly, working with Toncoins requires nine decimal places instead of the two. Therefore, the amount of $1.25$ TON, which can be represented in Tact as [`ton("1.25"){:tact}`](/language/ref/common#ton), is actually the number $1250000000$. We refer to such numbers as _nano-tons_ rather than _cents_.
+Similarly, working with Toncoins requires nine decimal places instead of the two. Therefore, the amount of $1.25$ TON, which can be represented in Tact as [`ton("1.25"){:tact}`](/language/ref/common#ton), is actually the number $1250000000$. We refer to such numbers as _nano-tons_ (or _nanoToncoins_) rather than _cents_.
 
 ## Serialization
 
@@ -77,22 +86,22 @@ Motivation is very simple:
 
 ### Serialization types
 
-Name             | Inclusive range                           | Space taken
-:--------------- | :---------------------------------------: | :------------------------:
-`uint8{:tact}`   | $0$ to $255$                              | 8 bit = 1 byte
-`uint16{:tact}`  | $0$ to $65\_535$                          | 16 bit = 2 bytes
-`uint32{:tact}`  | $0$ to $4\_294\_967\_295$                 | 32 bit = 4 bytes
-`uint64{:tact}`  | $0$ to $2^{64} - 1$                       | 64 bit = 8 bytes
-`uint128{:tact}` | $0$ to $2^{128} - 1$                      | 128 bit = 16 bytes
-`uint256{:tact}` | $0$ to $2^{256} - 1$                      | 256 bit = 32 bytes
-`int8{:tact}`    | $-128$ to $127$                           | 8 bit = 1 byte
-`int16{:tact}`   | $-32\_768$ to $32\_767$                   | 16 bit = 2 bytes
-`int32{:tact}`   | $-2\_147\_483\_648$ to $2\_147\_483\_647$ | 32 bit = 4 bytes
-`int64{:tact}`   | $-2^{63}$ to $2^{63} - 1$                 | 64 bit = 8 bytes
-`int128{:tact}`  | $-2^{127}$ to $2^{127} - 1$               | 128 bit = 16 bytes
-`int256{:tact}`  | $-2^{255}$ to $2^{255} - 1$               | 256 bit = 32 bytes
-`int257{:tact}`  | $-2^{256}$ to $2^{256} - 1$               | 257 bit = 32 bytes + 1 bit
-`coins{:tact}`   | $0$ to $2^{120} - 1$                      | 120 bit = 15 bytes
+Name             | Inclusive range             | Space taken
+:--------------- | :-------------------------: | :------------------------:
+`uint8{:tact}`   | $0$ to $2^{8} - 1$          | 8 bit = 1 byte
+`uint16{:tact}`  | $0$ to $2^{16} - 1$         | 16 bit = 2 bytes
+`uint32{:tact}`  | $0$ to $2^{32} - 1$         | 32 bit = 4 bytes
+`uint64{:tact}`  | $0$ to $2^{64} - 1$         | 64 bit = 8 bytes
+`uint128{:tact}` | $0$ to $2^{128} - 1$        | 128 bit = 16 bytes
+`uint256{:tact}` | $0$ to $2^{256} - 1$        | 256 bit = 32 bytes
+`int8{:tact}`    | $-2^{7}$ to $2^{7} - 1$     | 8 bit = 1 byte
+`int16{:tact}`   | $-2^{15}$ to $2^{15} - 1$   | 16 bit = 2 bytes
+`int32{:tact}`   | $-2^{31}$ to $2^{31} - 1$   | 32 bit = 4 bytes
+`int64{:tact}`   | $-2^{63}$ to $2^{63} - 1$   | 64 bit = 8 bytes
+`int128{:tact}`  | $-2^{127}$ to $2^{127} - 1$ | 128 bit = 16 bytes
+`int256{:tact}`  | $-2^{255}$ to $2^{255} - 1$ | 256 bit = 32 bytes
+`int257{:tact}`  | $-2^{256}$ to $2^{256} - 1$ | 257 bit = 32 bytes + 1 bit
+`coins{:tact}`   | $0$ to $2^{120} - 1$        | 120 bit = 15 bytes
 
 <Callout>
   Read more on serialization here: [Compatibility with FunC](/book/func##convert-serialization)
