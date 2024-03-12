@@ -200,6 +200,23 @@ let hasNoData: Bool = slice_with_data.dataEmpty(); // true
 
 ### How to determine if Slices are equal
 
+Direct comparison:
+
+```tact
+let firstSlice: Slice = "A".asSlice();
+let secondSlice: Slice = "A".asSlice();
+
+let areEqual: Bool = firstSlice == secondSlice;
+let areNotEqual: Bool = firstSlice != secondSlice;
+
+dump(areEqual) // true;
+dump(areNotEqual) // false;
+```
+
+Note, that direct comparison via `=={:tact}` or `!={:tact}` operators implicitly uses hashes under the hood.
+
+Explicit comparisons using `.hash(){:tact}` are also available:
+
 ```tact
 fun areSlicesEqual(a: Slice, b: Slice): Bool {
     return a.hash() == b.hash();
@@ -258,7 +275,24 @@ slice.empty();
 
 ### How to determine if Cells are equal
 
-We can easily determine Cell equality based on their hash.
+Direct comparison:
+
+```tact
+let a: Cell = beginCell()
+    .storeUint(123, 16)
+    .endCell();
+
+let b: Cell = beginCell()
+    .storeUint(123, 16)
+    .endCell();
+
+let areCellsEqual: Bool = a == b; // true
+let areCellsNotEqual: Bool = a != b; // false
+```
+
+Note, that direct comparison via `=={:tact}` or `!={:tact}` operators implicitly uses hashes under the hood.
+
+Explicit comparisons using `.hash(){:tact}` are also available:
 
 ```tact
 let a: Cell = beginCell()
@@ -270,6 +304,7 @@ let b: Cell = beginCell()
     .endCell();
 
 let areCellsEqual: Bool = a.hash() == b.hash(); // true
+let areCellsNotEqual: Bool = a.hash() != b.hash(); // false
 ```
 
 <Callout>
