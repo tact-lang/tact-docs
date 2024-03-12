@@ -94,7 +94,7 @@ If the integer value went beyond the expected range, then 5 exit code is thrown.
 For example, if a negative value was used in the .store_uint() function. In Tact, there are some other new situations such as:\
 1- As you know, you can define more limited integers in Tact (integers with less than 257 bits).
 If you try to store a number in this kind of integers and the number doesn't fit to this limited range, you will face this exit code.\
-2- according to ```storeUint(self: Builder, value: Int, bits: Int)``` function, it's not possible to use ```storeUint(0, 257)``` becuase ```0 ≤ bits ≤ 256```.
+2- according to ```storeUint(self: Builder, value: Int, bits: Int)``` function, it's not possible to use ```storeUint(0, 257)``` because ```0 ≤ bits ≤ 256```.
 
 Example :
 ```tact
@@ -103,7 +103,7 @@ self.id = 1; // force not to ignore it by using storage variables
 repeat(32) {
     self.id = 2 * self.id;
 }
-// option 2 -> according to storeUint(self: Builder, value: Int, bits: Int) function, it's not possible to use storeUint(0, 1024) becuase 0 ≤ bits ≤ 256
+// option 2 -> according to storeUint(self: Builder, value: Int, bits: Int) function, it's not possible to use storeUint(0, 1024) because 0 ≤ bits ≤ 256
 let s: Slice = beginCell().storeUint(0, 257).asSlice();
 ```
 
@@ -115,7 +115,7 @@ If you try to write more than 1023 bits or more than 4 references, 8 exit code i
 
 Example :
 ```tact
-// according to storeUint(self: Builder, value: Int, bits: Int) function, it's not possible to use storeUint(0, 1024) becuase 0 ≤ bits ≤ 256
+// according to storeUint(self: Builder, value: Int, bits: Int) function, it's not possible to use storeUint(0, 1024) because 0 ≤ bits ≤ 256
 let s: Slice = beginCell().storeUint(0, 256).storeUint(0, 256).storeUint(0, 256).storeUint(0, 256).asSlice();       
 ```
 
