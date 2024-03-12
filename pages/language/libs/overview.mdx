@@ -2,33 +2,23 @@ import { Callout } from 'nextra-theme-docs'
 
 # Overview
 
-Tact allows you to import Tact and [FunC](https://docs.ton.org/develop/func/overview) code — any given `.tact` or `.fc`/`.func` file can be imported into your project. Additionally, Tact's compiler has a versatile set of standard libraries, which come bundled in.
+Some standard libraries (also referred to as stdlibs) come bundled with Tact compiler, but aren't automatically included to your project until explicitly made to.
 
-This page describes how to use bundled libraries, and how to import other Tact or FunC code.
-
-<Callout type="warning" emoji="⚠️">
-NOTE: All imported code is combined together with yours, so it's important to avoid name collisions and always double-check the sources!
-</Callout>
-
-## Standard libraries
-
-Standard libraries (also referred to as stdlib) come bundled with Tact compiler, but not automatically included to your project until explicitly made to.
-
-To import any standard library, use the `import` statement followed by the name of that library in a [string](/language/ref/strings), like so:
+To import any standard library, use the `import{:tact}` statement followed by the name of that library in a [string](/language/ref/strings), like so:
 
 ```tact
 import "@stdlib/deploy"; // this would include everything from @stdlib/deploy library into your codebase
 ```
 
-List of standard libraries:
+## List of standard libraries: [#list]
 
-Library                | Description                                                   | Commonly used APIs
--------                | -----------                                                   | ------------------
-[@stdlib/config][1]    | Config and elector address retrieval.                         | `getConfigAddress`, `getElectorAddress`
-[@stdlib/content][2]   | Encoding off-chain link [strings][str] to a [Cell][cell].     | `createOffchainContent`
-[@stdlib/deploy][3]    | Unified mechanism for deployments.                            | `Deployable`, `FactoryDeployable`
-[@stdlib/dns][4]       | Resolution of [DNS](https://docs.ton.org/participate/web3/dns) names.                                 | `DNSResolver`, `dnsInternalVerify`
-[@stdlib/ownable][5]   | Traits for ownership management.                              | `Ownable`, `OwnableTransferable`
+Library                | Description                                                      | Commonly used APIs
+:--------------------- | :--------------------------------------------------------------- | :-----------------
+[@stdlib/config][1]    | Config and elector address retrieval.                            | `getConfigAddress`, `getElectorAddress`
+[@stdlib/content][2]   | Encoding off-chain link [strings][str] to a [Cell][cell].        | `createOffchainContent`
+[@stdlib/deploy][3]    | Unified mechanism for deployments.                               | `Deployable`, `FactoryDeployable`
+[@stdlib/dns][4]       | Resolution of [DNS][dns] names.                                  | `DNSResolver`, `dnsInternalVerify`
+[@stdlib/ownable][5]   | Traits for ownership management.                                 | `Ownable`, `OwnableTransferable`
 [@stdlib/stoppable][6] | Traits that allow contract stops. Requires [@stdlib/ownable][5]. | `Stoppable`, `Resumable`
 
 [1]: /language/libs/config
@@ -39,30 +29,4 @@ Library                | Description                                            
 [6]: /language/libs/stoppable
 [cell]: /language/ref/cells
 [str]: /language/ref/strings
-
-## Import Tact code
-
-In addition to standard libraries, it's possible to import any Tact code using the `import` statement and providing a relative path to the target `.tact` file like so:
-
-```tact
-import "./relative/path/to/the/target/tact/file.tact";
-```
-
-## Import FunC code
-
-It's possible to import code written in FunC code directly just as it's done with Tact code imports:
-
-```tact
-import "./relative/path/to/the/target/func/file.fc";
-```
-
-But in order to use functions from such file, one has to declare them as `native` functions first. For example, when standard library [@stdlib/dns](/language/libs/dns) uses a `dns.fc` FunC file, it maps FunC functions to Tact ones like so:
-
-```tact
-// FunC code located in a file right next to the current Tact one:
-import "./dns.fc";
-
-// Mapping function signatures from FunC to Tact:
-@name(dns_string_to_internal)
-native dnsStringToInternal(str: String): Slice?;
-```
+[dns]: https://docs.ton.org/participate/web3/dns
