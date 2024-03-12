@@ -2,6 +2,7 @@ export default {
   index: 'Overview',
   guides: 'Guides',
   cs: 'Cheatsheets',
+  cookbook: 'Cookbook',
   '--': {
     type: 'separator',
   },
@@ -18,6 +19,7 @@ export default {
   deploy: 'Deploy contracts',
   debug: 'Debugging',
   upgrades: 'Contract upgrades',
+  import: 'Importing code',
   masterchain: 'Masterchain',
   func: 'Compatibility with Func',
   config: 'Configuration',
