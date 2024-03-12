@@ -6,11 +6,12 @@ export default {
   '--': {
     type: 'separator',
   },
-  types: 'Type system',
+  types: 'Type system overview',
   integers: 'Integers',
   functions: 'Functions',
   statements: 'Statements',
   constants: 'Constants',
+  'defining-types': 'Defining composite types',
   receive: 'Receive Messages',
   bounced: 'Bounced Messages',
   external: 'External Messages',
