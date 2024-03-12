@@ -19,7 +19,6 @@ Also, many of those types [can be made nullable](/book/defining-types#optionals)
 * Slice, Cell, Builder — low-level primitives of TON VM.
 * String — represents text strings in TON VM.
 * StringBuilder — helper type that allows you to concatenate strings in a gas-efficient way.
-* `null` — represents the intentional absence of any other value, makes the variables into [optionals](/book/defining-types#optionals).
 
 ## Structs and Messages
 
@@ -47,7 +46,7 @@ Learn more about them on a dedicated page about [defining composite types](/book
 
 ## Maps
 
-The type `map<k, v>` is used as a way to associate data with corresponding keys.
+The type `map<k, v>{:tact}` is used as a way to associate data with corresponding keys.
 
 Possible key types:
 * Int
@@ -91,7 +90,7 @@ contract HelloWorld {
 
 ## Traits
 
-Tact doesn't support classical class inheritance, but instead introduces the concept of **traits**. Trait defines functions, receivers, and required fields. The trait is like abstract classes, but it does not define how and where fields must be stored. **All** fields from all traits must be explicitly declared in the contract itself. Traits themselves don't have `init()` constructors, so all initial field initialization also must be done in the main contract.
+Tact doesn't support classical class inheritance, but instead introduces the concept of **traits**. Trait defines functions, receivers, and required fields. The trait is like abstract classes, but it does not define how and where fields must be stored. **All** fields from all traits must be explicitly declared in the contract itself. Traits themselves don't have `init(){:tact}` constructors, so all initial field initialization also must be done in the main contract.
 
 ```tact
 trait Ownable {

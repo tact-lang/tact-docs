@@ -94,25 +94,29 @@ message(0x7362d09c) TokenNotification {
 }
 ```
 
+This is useful for cases where you want to handle certain opcodes (operation codes) of a given smart contract, such as [Jetton standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md). The short-list of opcodes this contract is able to process is [given here in FunC](https://github.com/ton-blockchain/token-contract/blob/main/ft/op-codes.fc). They serve as an interface to the smart contract.
+
 <Callout>
 
   For more in-depth information on this see:\
   [Convert received messages to `op` operations](/book/func#convert-received-messages-to-op-operations)\
-  [Internal message body layout in TON Docs](https://docs.ton.org/develop/smart-contracts/guidelines/internal-messages#internal-message-body)
+  [Internal message body layout in TON Docs](https://docs.ton.org/develop/smart-contracts/guidelines/internal-messages#internal-message-body)\
+  [Messages of the Jetton implementation in Tact](https://github.com/howardpen9/jetton-implementation-in-tact/blob/9eee917877a92af218002874a9f2bd3f9c619229/sources/messages.tact)\
+  [Jetton Standard in Tact on Tact-by-Example](https://tact-by-example.org/07-jetton-standard)
 
 </Callout>
 
 ## Optionals
 
-As it was mentioned in [type system overview](/book/types), most [primitive types](/book/types#primitive-types), [Structs](#structs) and [Messages](#messages) could be nullable. That is, they don't necessarily hold any value, aside from `null`.
+As it was mentioned in [type system overview](/book/types), most [primitive types](/book/types#primitive-types), [Structs](#structs) and [Messages](#messages) could be nullable. That is, they don't necessarily hold any value, aside from `null{:tact}` — a special value, which represents the intentional absence of any other value.
 
-[Variables](/book/statements#variable-declaration) or fields of [Structs](#structs) and [Messages](#messages) that can hold `null` are called "optionals". They're useful to reduce state size when the variable isn't necesserily used.
+[Variables](/book/statements#variable-declaration) or fields of [Structs](#structs) and [Messages](#messages) that can hold `null{:tact}` are called "optionals". They're useful to reduce state size when the variable isn't necesserily used.
 
-You can make any variable an optional by adding a question mark (`?`) after its type declaration. The only exceptions are [map\<>](/book/types#maps) and [bounced\<>](/book/bounced#bounced-messages-in-tact), where you can't make them, inner key/value type (in case of a map) or the inner [Message](#messages) (in case of a bounced) optional.
+You can make any variable an optional by adding a question mark (`?`) after its type declaration. The only exceptions are [`map<>{:tact}`](/book/types#maps) and [`bounced<>{:tact}`](/book/bounced#bounced-messages-in-tact), where you can't make them, inner key/value type (in case of a map) or the inner [Message](#messages) (in case of a bounced) optional.
 
-Optional variables that are not defined hold the `null` value by default. You cannot access them without checking for `null` first. But if you're certain the optional variable is not `null`, use the non-null assertion operator (`!!`, also called double-bang or double exclamation mark operator) to access its value.
+Optional variables that are not defined hold the `null{:tact}` value by default. You cannot access them without checking for `null{:tact}` first. But if you're certain the optional variable is not `null{:tact}`, use the non-null assertion operator (`!!`, also called double-bang or double exclamation mark operator) to access its value.
 
-Trying to access the value of an optional variable without using `!!` or checking for `null` beforehand will result in a compilation error.
+Trying to access the value of an optional variable without using `!!` or checking for `null{:tact}` beforehand will result in a compilation error.
 
 Example of optionals:
 
