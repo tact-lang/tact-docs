@@ -67,7 +67,7 @@ contract SerializationExample {
 }
 ```
 
-Integer serialization is also available for the fields of [Structs](/book/defining-types#structs) and [Messages](/book/defining-types#structs), as well as in key/value types of [maps](/book/types#maps):
+Integer serialization is also available for the fields of [Structs](/book/composite-types#structs) and [Messages](/book/composite-types#structs), as well as in key/value types of [maps](/book/types#maps):
 
 ```tact
 struct StSerialization {
@@ -111,6 +111,29 @@ Name             | Inclusive range             | Space taken
 
 All runtime calculations with numbers are done at 257-bits, so [overflows](https://en.wikipedia.org/wiki/Integer_overflow) are quite rare. Nevertheless, if any math operation overflows, an exception will be thrown, and the transaction will fail. You could say that Tact's math is safe by default.
 
-Note, that there is no problem with mixing variables of [different state sizes](#serialization) in the same calculation. At runtime, they are all the same type no matter what — $257$-bit signed, so they all will fit.
+Note, that there is no problem with mixing variables of [different state sizes](#serialization) in the same calculation. At runtime they are all the same type no matter what — $257$-bit signed, so overflows won't happen then.
 
-Math operators on integers are listed there, while all the math functions of the standard library are listed [here](/library/ref/).
+However, this can still lead to **errors** in the [compute phase](https://docs.ton.org/learn/tvm-instructions/tvm-overview#compute-phase) of the transaction. Consider the following example:
+
+```tact
+import "@stdlib/deploy";
+
+contract ComputeErrorsOhNo with Deployable {
+    oneByte: Int as uint8; // persistent state variable, max value is 255
+
+    init() {
+        self.oneByte = 255; // initial value is 255, everything fits
+    }
+
+    receive("lets break it") {
+        let oneByteMultiplied: Int = self.oneByte * 256; // no runtime overflow
+        self.oneByte = tmp; // whoops, oneByteMultiplied value is out of the expected range of oneByte
+    }
+}
+```
+
+Here, `oneByte` is serialized as a [`uint8`](#serialization-types), which occupies only one byte and ranges from $0$ to $2^{8} - 1$, which is $255$. And when used in runtime calculations no overflow happens and everything is calculated as a $257$-bit signed integers. But the very moment we decide to store the value of `oneByteMultiplied` back into `oneByte` we get an error with the [exit code](https://docs.ton.org/learn/tvm-instructions/tvm-exit-codes) 5, which states the following: `Integer out of the expected range`.
+
+<Callout type="warning" emoji="⚠️">
+  Therefore, be **very** careful with numbers and always double-check calculations when using serialization.
+</Callout>
