@@ -11,7 +11,7 @@ export default {
   functions: 'Functions',
   statements: 'Statements',
   constants: 'Constants',
-  'defining-types': 'Defining composite types',
+  'composite-types': 'Composite types',
   receive: 'Receive Messages',
   bounced: 'Bounced Messages',
   external: 'External Messages',

@@ -115,6 +115,11 @@ const getRedirects = () => [
     subSources: undefined,
     destination: '/book/integers',
   },
+  {
+    source: '/book/defining-types',
+    subSources: undefined,
+    destination: '/book/composite-types',
+  },
 ];
 
 /**
