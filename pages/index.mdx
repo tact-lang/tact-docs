@@ -10,11 +10,13 @@ Tact is a new programming language for TON Blockchain that is focused on efficie
 
 <Steps>
 
-### Ensure that Node.js LTS is installed and available
+### Ensure that Node.js LTS is installed and available [#start-1]
 
 To check it, run `node --version{:shell}` — it should show you the version 18.0.0 or later.
 
-### Run the following command to create a new project with the simple counter contract
+### Run the following command [#start-2]
+
+It will create a new project with the simple counter contract:
 
 <Tabs items={['npm', 'yarn', 'pnpm']}>
   <Tabs.Tab>
@@ -24,7 +26,7 @@ To check it, run `node --version{:shell}` — it should show you the version 18.
   </Tabs.Tab>
   <Tabs.Tab>
     ```shell
-    yarn create ton -- simple-counter --type tact-counter --contractName SimpleCounter
+    yarn create ton simple-counter --type tact-counter --contractName SimpleCounter
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -34,13 +36,58 @@ To check it, run `node --version{:shell}` — it should show you the version 18.
   </Tabs.Tab>
 </Tabs>
 
-### That's it! Your first contract project is written and compiled already!
+### That's it! [#start-3]
 
-Go check it out by moving into the relevant directory — `cd simple-counter/contracts{:shell}`.
+Your first contract project is written and compiled already! Go check it out by moving into the relevant directory — `cd simple-counter/contracts{:shell}`.
 
-To re-compile, use commands in the scripts section of `package.json` in the root of this newly created project.
+It will look like this, but without the comments:
 
-To deploy, refer to the documentation of [Blueprint](https://github.com/ton-org/blueprint) — this is a tool we've used to create and compile your first simple counter contract in Tact. In fact, Blueprint can do much more than that: including tests, customizations and more.
+```tact
+import "@stdlib/deploy"; // one of the standard libraries
+
+// Defining a new Message type, which consists of two fields
+message Add {
+    queryId: Int as uint64; // unsigned integer value stored in 8 bytes
+    amount: Int as uint32; // unsigned integer value stored in 4 bytes
+}
+
+// Defining a contract with the Deployable trait from @stdlib/deploy:
+contract SimpleCounter with Deployable {
+    // Persistent state variables of the contract:
+    id: Int as uint32;
+    counter: Int as uint32;
+
+    // This gets run when the contract is deployed.
+    // All state variables have to be initialized with either of:
+    // 1. default values in their definition above
+    // 2. assignments in the init()
+    init(id: Int) { // <- you can pass values for deployment
+        self.id = id;     // <- store the id passed on deployment
+        self.counter = 0; // <- reset the counter
+    }
+
+    // Register a receiver of messages from other contracts.
+    // Messages in Tact can be one of the two:
+    // 1. Message type, as defined above
+    // 2. String type, like "I am the message!"
+    receive(msg: Add) {
+        self.counter += msg.amount; // <- increase the counter
+    }
+
+    // This is a getter function, which are special external interface functions
+    // that allow users to query information from the contract.
+    get fun counter(): Int {
+        return self.counter; // <- return the counter value
+    }
+
+    // Another getter function, but for the id:
+    get fun id(): Int {
+        return self.id; // <- return the id value
+    }
+}
+```
+
+To re-compile or deploy, refer to the commands in the scripts section of `package.json` in the root of this newly created projec and to the documentation of [Blueprint](https://github.com/ton-org/blueprint) — this is a tool we've used to create and compile your first simple counter contract in Tact. In fact, Blueprint can do much more than that: including tests, customizations and more.
 
 </Steps>
 
@@ -48,9 +95,9 @@ To deploy, refer to the documentation of [Blueprint](https://github.com/ton-org/
 
 <Steps>
 
-### Have some blockchain knowledge already?
+### Have some blockchain knowledge already? [#next-1]
 
-Check the following cheatsheets to quickly get started!
+See the [Tact Cookbook](/book/cookbook), or check the following cheatsheets to quickly get started!
 
 <Cards>
   <Cards.Card
@@ -65,7 +112,7 @@ Check the following cheatsheets to quickly get started!
   />
 </Cards>
 
-### Want to know more?
+### Want to know more? [#next-2]
 
 For further guidance on compilation, testing and deployment see the [Getting started](/book/guides/getting-started) guide.
 
@@ -94,17 +141,19 @@ Alternatively, take a look at the following broader sections:
   />
 </Cards>
 
-### Feeling a bit uncomfortable?
+### Feeling a bit uncomfortable? [#next-3]
 
 If you ever get stuck, don't hesitate to reach out to Tact's flourishing community:
 
 <Cards>
   <Cards.Card
+    arrow
     icon="✈️ "
     title="Telegram Group"
     href="https://t.me/tactlang"
   />
   <Cards.Card
+    arrow
     icon="🐦 "
     title="X/Twitter"
     href="https://twitter.com/tact_language"
