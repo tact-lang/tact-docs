@@ -40,49 +40,35 @@ It will create a new project with the simple counter contract:
 
 Your first contract project is written and compiled already! Go check it out by moving into the relevant directory — `cd simple-counter/contracts{:shell}`.
 
-It will look like this, but without the comments:
+Here's how it would look like:
 
 ```tact
-import "@stdlib/deploy"; // one of the standard libraries
+import "@stdlib/deploy";
 
-// Defining a new Message type, which consists of two fields
 message Add {
-    queryId: Int as uint64; // unsigned integer value stored in 8 bytes
-    amount: Int as uint32; // unsigned integer value stored in 4 bytes
+    queryId: Int as uint64;
+    amount: Int as uint32;
 }
 
-// Defining a contract with the Deployable trait from @stdlib/deploy:
 contract SimpleCounter with Deployable {
-    // Persistent state variables of the contract:
     id: Int as uint32;
     counter: Int as uint32;
 
-    // This gets run when the contract is deployed.
-    // All state variables have to be initialized with either of:
-    // 1. default values in their definition above
-    // 2. assignments in the init()
-    init(id: Int) { // <- you can pass values for deployment
-        self.id = id;     // <- store the id passed on deployment
-        self.counter = 0; // <- reset the counter
+    init(id: Int) {
+        self.id = id;
+        self.counter = 0;
     }
 
-    // Register a receiver of messages from other contracts.
-    // Messages in Tact can be one of the two:
-    // 1. Message type, as defined above
-    // 2. String type, like "I am the message!"
     receive(msg: Add) {
-        self.counter += msg.amount; // <- increase the counter
+        self.counter += msg.amount;
     }
 
-    // This is a getter function, which are special external interface functions
-    // that allow users to query information from the contract.
     get fun counter(): Int {
-        return self.counter; // <- return the counter value
+        return self.counter;
     }
 
-    // Another getter function, but for the id:
     get fun id(): Int {
-        return self.id; // <- return the id value
+        return self.id;
     }
 }
 ```
