@@ -105,6 +105,21 @@ const getRedirects = () => [
     subSources: undefined,
     destination: '/ecosystem/tools/vscode',
   },
+  {
+    source: '/book/ints',
+    subSources: undefined,
+    destination: '/book/integers',
+  },
+  {
+    source: '/book/numbers',
+    subSources: undefined,
+    destination: '/book/integers',
+  },
+  {
+    source: '/book/defining-types',
+    subSources: undefined,
+    destination: '/book/composite-types',
+  },
 ];
 
 /**
