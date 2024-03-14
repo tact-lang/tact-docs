@@ -1,0 +1,139 @@
+# Integers
+
+import { Callout } from 'nextra/components'
+
+Arithmetic in smart contracts on TON is always done with integers and never with floating-point numbers since the floats are [unpredictable](https://learn.microsoft.com/en-us/cpp/build/why-floating-point-numbers-may-lose-precision). Therefore, the big accent goes on integers and their handling.
+
+The only primitive number type in Tact is `Int{:tact}`, for $257$-bit signed integers.\
+It's capable of storing integers between $-2^{256}$ and $2^{256} - 1.$
+
+## Notation
+
+Tact supports various ways of writing primitive values of `Int{:tact}` (integer literals).
+
+Most of the notations allow adding underscores (`_`) in-between digits, except for:
+* Representations in strings, as seen in [nano-tons](#nano-tons) case.
+* Decimal numbers written with a leading zero $0.$ Their use is generally discouraged, see [below](#decimal).
+
+Additionally, several underscores in a row as in $4\_\_2$, or trailing underscores as in $42\_$ are **not** allowed.
+
+### Decimal
+
+Most common and most used way of representing numbers, using the [decimal numeral system](https://en.wikipedia.org/wiki/Decimal): $123456789.$\
+You can use underscores (`_`) to improve readability: $123\_456\_789$ is equal to $123456789.$
+
+<Callout type="warning" emoji="⚠️">
+  Alternatively, you can prefix the number with one $0$, which prohibits use of underscores and only allows decimal digits: $0123 = 123.$
+  Note, that using this notation with leading zero is **strongly discouraged** due to possible confusion with octal integer literals in TypeScript, which is often used alongside Tact to develop and test contracts.
+</Callout>
+
+### Hexadecimal
+
+Represent numbers using [hexadecimal numeral system](https://en.wikipedia.org/wiki/Hexadecimal), denoted by the $\mathrm{0x}$ prefix: $\mathrm{0xFFFFFFFFF}.$\
+Use underscores (`_`) to improve readability: $\mathrm{0xFFF\_FFF\_FFF}$ is equal to $\mathrm{0xFFFFFFFFF}.$
+
+### Octal
+
+Represent numbers using [octal numeral system](https://en.wikipedia.org/wiki/Octal), denoted by the $\mathrm{0o}$ prefix: $\mathrm{0o777777777.}$\
+Use underscores (`_`) to improve readability: $\mathrm{0o777\_777\_777}$ is equal to $\mathrm{0o777777777}.$
+
+### Binary
+
+Represent numbers using [binary numeral system](https://en.wikipedia.org/wiki/Binary_number), denoted by the $\mathrm{0b}$ prefix: $\mathrm{0b111111111.}$\
+Use underscores (`_`) to improve readability: $\mathrm{0b111\_111\_111}$ is equal to $\mathrm{0b111111111}.$
+
+### Nano-tons
+
+For example, arithmetic with dollars requires two decimal places after the dot — those are used for the cents value. But how would we represent the number \$$1.25$ if we're only able to work with integers? The solution is to work with _cents_ directly. This way, \$$1.25$ becomes $125$ cents. We simply memorize that the two rightmost digits represent the numbers after the decimal point.
+
+Similarly, working with Toncoins requires nine decimal places instead of the two. Therefore, the amount of $1.25$ TON, which can be represented in Tact as [`ton("1.25"){:tact}`](/language/ref/common#ton), is actually the number $1250000000$. We refer to such numbers as _nano-tons_ (or _nanoToncoins_) rather than _cents_.
+
+## Serialization
+
+When encoding `Int{:tact}` values to persistent state (fields of [Contracts](/book/types#contracts) and [Traits](/book/types#traits)), it's usually better to use smaller representations than $257$-bits to reduce storage costs. Usage of such representations is also called "serialization" due to them representing the native [TL-B](https://docs.ton.org/develop/data-formats/tl-b-languagehttps://docs.ton.org/develop/data-formats/tl-b-language) types which TON Blockchain operates on.
+
+The persistent state size is specified in every declaration of a state variable after the `as{:tact}` keyword:
+
+```tact
+contract SerializationExample {
+    // contract persistent state variables
+    oneByte: Int as int8 = 0; // ranges from -128 to 127 (takes 8 bit = 1 byte)
+    twoBytes: Int as int16;   // ranges from -32,768 to 32,767 (takes 16 bit = 2 bytes)
+
+    init() {
+        // needs to be initialized in the init() because it doesn't have the default value
+        self.twoBytes = 55*55;
+    }
+}
+```
+
+Integer serialization is also available for the fields of [Structs](/book/composite-types#structs) and [Messages](/book/composite-types#structs), as well as in key/value types of [maps](/book/types#maps):
+
+```tact
+struct StSerialization {
+    martin: Int as int8;
+}
+
+message MsgSerialization {
+    seamus: Int as int8;
+    mcFly: map<Int as int8, Int as int8>;
+}
+```
+
+Motivation is very simple:
+* Storing $1000$ $257$-bit integers in state [costs](https://docs.ton.org/develop/smart-contracts/fees#how-to-calculate-fees) about $0.184$ TON per year.
+* Storing $1000$ $32$-bit integers only costs $0.023$ TON per year by comparison.
+
+### Serialization types
+
+Name             | Inclusive range             | Space taken
+:--------------- | :-------------------------: | :------------------------:
+`uint8{:tact}`   | $0$ to $2^{8} - 1$          | 8 bit = 1 byte
+`uint16{:tact}`  | $0$ to $2^{16} - 1$         | 16 bit = 2 bytes
+`uint32{:tact}`  | $0$ to $2^{32} - 1$         | 32 bit = 4 bytes
+`uint64{:tact}`  | $0$ to $2^{64} - 1$         | 64 bit = 8 bytes
+`uint128{:tact}` | $0$ to $2^{128} - 1$        | 128 bit = 16 bytes
+`uint256{:tact}` | $0$ to $2^{256} - 1$        | 256 bit = 32 bytes
+`int8{:tact}`    | $-2^{7}$ to $2^{7} - 1$     | 8 bit = 1 byte
+`int16{:tact}`   | $-2^{15}$ to $2^{15} - 1$   | 16 bit = 2 bytes
+`int32{:tact}`   | $-2^{31}$ to $2^{31} - 1$   | 32 bit = 4 bytes
+`int64{:tact}`   | $-2^{63}$ to $2^{63} - 1$   | 64 bit = 8 bytes
+`int128{:tact}`  | $-2^{127}$ to $2^{127} - 1$ | 128 bit = 16 bytes
+`int256{:tact}`  | $-2^{255}$ to $2^{255} - 1$ | 256 bit = 32 bytes
+`int257{:tact}`  | $-2^{256}$ to $2^{256} - 1$ | 257 bit = 32 bytes + 1 bit
+`coins{:tact}`   | $0$ to $2^{120} - 1$        | 120 bit = 15 bytes
+
+<Callout>
+  Read more on serialization here: [Compatibility with FunC](/book/func##convert-serialization)
+</Callout>
+
+## Operations
+
+All runtime calculations with numbers are done at 257-bits, so [overflows](https://en.wikipedia.org/wiki/Integer_overflow) are quite rare. Nevertheless, if any math operation overflows, an exception will be thrown, and the transaction will fail. You could say that Tact's math is safe by default.
+
+Note, that there is no problem with mixing variables of [different state sizes](#serialization) in the same calculation. At runtime they are all the same type no matter what — $257$-bit signed, so overflows won't happen then.
+
+However, this can still lead to **errors** in the [compute phase](https://docs.ton.org/learn/tvm-instructions/tvm-overview#compute-phase) of the transaction. Consider the following example:
+
+```tact
+import "@stdlib/deploy";
+
+contract ComputeErrorsOhNo with Deployable {
+    oneByte: Int as uint8; // persistent state variable, max value is 255
+
+    init() {
+        self.oneByte = 255; // initial value is 255, everything fits
+    }
+
+    receive("lets break it") {
+        let tmp: Int = self.oneByte * 256; // no runtime overflow
+        self.oneByte = tmp; // whoops, tmp value is out of the expected range of oneByte
+    }
+}
+```
+
+Here, `oneByte` is serialized as a [`uint8`](#serialization-types), which occupies only one byte and ranges from $0$ to $2^{8} - 1$, which is $255$. And when used in runtime calculations no overflow happens and everything is calculated as a $257$-bit signed integers. But the very moment we decide to store the value of `tmp` back into `oneByte` we get an error with the [exit code](https://docs.ton.org/learn/tvm-instructions/tvm-exit-codes) 5, which states the following: `Integer out of the expected range`.
+
+<Callout type="warning" emoji="⚠️">
+  Therefore, be **very** careful with numbers and always double-check calculations when using serialization.
+</Callout>

@@ -9,20 +9,58 @@ Every variable, item, and value in Tact programs has a type. They can be:
 * Composite types, such as [Structs and Messages](#structs-and-messages)
 * or [Contracts](#contracts) and [Traits](#traits)
 
-Also, many of those types [can be made nullable](/book/defining-types#optionals).
+Also, many of those types [can be made nullable](/book/composite-types#optionals).
 
 ## Primitive types
 
-* Int — all numbers in Tact are 257-bit signed integers, but [smaller representations](/book/integers#serialization) can be used to reduce storage costs.
-* Bool — classical boolean with `true` and `false` values.
-* Address — standard [smart contract address](https://docs.ton.org/learn/overviews/addresses#address-of-smart-contract) in TON Blockchain.
-* Slice, Cell, Builder — low-level primitives of TON VM.
-* String — represents text strings in TON VM.
-* StringBuilder — helper type that allows you to concatenate strings in a gas-efficient way.
+* [`Int{:tact}`](/book/integers) — all numbers in Tact are $257$-bit signed integers, but [smaller representations](/book/integers#serialization) can be used to reduce storage costs.
+* [`Bool{:tact}`](#booleans) — classical boolean with `true{:tact}` and `false{:tact}` values.
+* `Address{:tact}` — standard [smart contract address](https://docs.ton.org/learn/overviews/addresses#address-of-smart-contract) in TON Blockchain.
+* `Slice{:tact}`, `Cell{:tact}`, `Builder{:tact}` — low-level primitives of TON VM.
+* `String{:tact}` — represents text strings in TON VM.
+* `StringBuilder{:tact}` — helper type that allows you to concatenate strings in a gas-efficient way.
+
+## Booleans
+
+The primitive type `Bool{:tact}` can hold only the two values: `true{:tact}` and `false{:tact}`. It's convenient for boolean and logical operations, as well as for storing flags.
+
+There are no implicit type conversions in Tact, so addition (`+`) of two boolean values isn't possible. Hovewer, many comparison [operators](/book/statements#operators) are available, such as:
+
+* `&&` for logical `AND`,
+* `||` for logical `OR`,
+* and `!` for logical inversion.
+
+Persisting bools to state is very space-efficient, as they only take 1-bit. Storing 1000 bools in state [costs](https://ton.org/docs/develop/smart-contracts/fees#how-to-calculate-fees) about $0.00072$ TON per year.
+
+## Maps
+
+The type `map<k, v>{:tact}` is used as a way to associate data with corresponding keys.
+
+Possible key types:
+
+* [`Int{:tact}`](/book/integers)
+* `Address{:tact}`
+
+Possible value types:
+
+* [`Int{:tact}`](/book/integers)
+* [`Bool{:tact}`](#booleans)
+* `Cell{:tact}`
+* `Address{:tact}`
+* [Struct](#structs-and-messages)
+* [Message](#structs-and-messages)
+
+```tact
+contract HelloWorld {
+    counters: map<Int, Int>;
+}
+```
 
 ## Structs and Messages
 
-[Struct](/book/defining-types#structs) example:
+[Structs][structs] and [Messages][messages] are two main ways of combining multiple [primitive types](#primitive-types) into a composite one.
+
+Example of a [Struct][structs]:
 
 ```tact
 struct Point {
@@ -31,46 +69,28 @@ struct Point {
 }
 ```
 
-[Message](/book/defining-types#messages) example:
+Example of a [Message][messages]:
 
 ```tact
 // Custom numeric id of the Message
 message(0x11111111) SetValue {
     key: Int;
-    value: Int?; // Optional
+    value: Int?; // Optional, Int or null
     coins: Int as coins; // Serialization into TL-B types
 }
 ```
 
-Learn more about them on a dedicated page about [defining composite types](/book/defining-types).
+Learn more about them on a dedicated page about [composite types](/book/composite-types).
 
-## Maps
-
-The type `map<k, v>{:tact}` is used as a way to associate data with corresponding keys.
-
-Possible key types:
-* Int
-* Address
-
-Possible value types:
-* Int
-* Bool
-* Cell
-* Address
-* [Struct](/book/defining-types#structs)
-* [Message](/book/defining-types#messages)
-
-```tact
-contract HelloWorld {
-    counters: map<Int, Int>;
-}
-```
+[structs]: /book/composite-types#structs
+[messages]: /book/composite-types#messages
 
 ## Contracts
 
-Contracts are the main entry of a smart contract on the TON blockchain. It holds all functions, getters, and receivers of a TON contract.
+Contracts are the main entry of a smart contract on the TON blockchain. It holds all [functions](/book/functions), [getters](/book/functions#getter-functions), and [receivers](/book/functions#receiver-functions) of a TON contract.
 
 ```tact
+// Basic example of a counter contract:
 contract HelloWorld {
     counter: Int;
 
