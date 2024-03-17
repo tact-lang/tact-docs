@@ -5,5 +5,4 @@ export default {
 	math: 'Math',
 	cells: 'Cells, Builders and Slices',
 	advanced: 'Advanced',
-	'exit-codes': 'Exit codes',
 }

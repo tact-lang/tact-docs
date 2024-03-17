@@ -39,6 +39,7 @@ export default {
   config: 'Configuration',
   masterchain: 'Using masterchain',
   func: 'Compatibility with FunC',
+  'exit-codes': 'Exit codes',
   programmatic: 'Programmatic API',
   '-- Community': {
     type: 'separator',

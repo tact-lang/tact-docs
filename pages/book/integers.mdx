@@ -132,7 +132,7 @@ contract ComputeErrorsOhNo with Deployable {
 }
 ```
 
-Here, `oneByte` is serialized as a [`uint8`](#serialization-types), which occupies only one byte and ranges from $0$ to $2^{8} - 1$, which is $255$. And when used in runtime calculations no overflow happens and everything is calculated as a $257$-bit signed integers. But the very moment we decide to store the value of `tmp` back into `oneByte` we get an error with the [exit code](https://docs.ton.org/learn/tvm-instructions/tvm-exit-codes) 5, which states the following: `Integer out of the expected range`.
+Here, `oneByte` is serialized as a [`uint8`](#serialization-types), which occupies only one byte and ranges from $0$ to $2^{8} - 1$, which is $255$. And when used in runtime calculations no overflow happens and everything is calculated as a $257$-bit signed integers. But the very moment we decide to store the value of `tmp` back into `oneByte` we get an error with the [exit code 5](/book/exit-codes#5), which states the following: `Integer out of the expected range`.
 
 <Callout type="warning" emoji="⚠️">
   Therefore, be **very** careful with numbers and always double-check calculations when using serialization.
