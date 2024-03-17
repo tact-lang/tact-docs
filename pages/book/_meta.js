@@ -3,28 +3,42 @@ export default {
   guides: 'Guides',
   cs: 'Cheatsheets',
   cookbook: 'Cookbook',
-  '--': {
+  '-- 1': {
     type: 'separator',
+    title: 'Fundamentals of Tact',
   },
   types: 'Type system overview',
   integers: 'Integers',
-  functions: 'Functions',
+  operators: 'Operators',
   statements: 'Statements',
   constants: 'Constants',
+  functions: 'Functions',
   'composite-types': 'Composite types',
-  receive: 'Receive Messages',
-  bounced: 'Bounced Messages',
-  external: 'External Messages',
+  // <- a place for https://github.com/tact-lang/tact-docs/issues/115
+  '-- 2': {
+    type: 'separator',
+    title: 'Communication',
+  },
+  // <- NOTE
+  //    potential place for a rather short overview page describing asyncronous & actor-model nature
+  //    of TON Blockchain with respect to Tact and exchanging messages with it
+  receive: 'Receive messages',
+  bounced: 'Bounced messages',
+  external: 'External messages',
   lifecycle: 'Message lifecycle',
   send: 'Sending messages',
   'message-mode': 'Message mode',
-  deploy: 'Deploy contracts',
+  '-- 3': {
+    type: 'separator',
+    title: 'Going places',
+  },
+  deploy: 'Deployment',
   debug: 'Debugging',
   upgrades: 'Contract upgrades',
   import: 'Importing code',
-  masterchain: 'Masterchain',
-  func: 'Compatibility with Func',
   config: 'Configuration',
+  masterchain: 'Using masterchain',
+  func: 'Compatibility with FunC',
   programmatic: 'Programmatic API',
   '-- Community': {
     type: 'separator',
