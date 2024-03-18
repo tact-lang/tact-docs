@@ -173,7 +173,7 @@ get fun seqno(): Int {
 
 ### Tensor return types
 
-In FunC there is a difference between tensor type `(int, int){:func}` and `(int, (int)){:func}`, but for TVM there are no differences, they all represent a stack of two ints.
+In FunC there is a difference between tensor type `(int, int){:func}` and `(int, (int)){:func}`, but for TVM there are no differences, they all represent a stack of two integers.
 
 To convert the tensor that returned from the FunC get-method, you need to define a [Struct](/book/composite-types#structs) that has the same amount of fields as the tensor and in the same order.
 
@@ -257,7 +257,7 @@ get fun get_contract_state(): ContractState {
 
 ### Arguments mapping
 
-Conversion of get-methods arguments is forward. Each argument is mapped as-is to FunC one, and each tuple is mapped to a [Struct](/book/composite-types#structs).
+Conversion of `get`-methods arguments is straightforward. Each argument is mapped as-is to FunC one, and each tuple is mapped to a [Struct](/book/composite-types#structs).
 
 The following code in FunC:
 

@@ -18,8 +18,6 @@ let valueMap: map<Int, Int> = emptyMap();
 let valueMapWithSerialization: map<Int as uint8, Int as uint8> = emptyMap();
 ```
 
-Variable declaration uses the [assignment operator](/book/operators#assignment).
-
 ## `return` statement [#return]
 
 The `return{:tact}` statement ends [function](/book/functions) execution and specifies a value to be returned to the [function](/book/functions) caller.
@@ -138,7 +136,7 @@ Conditionally repeat certain blocks of code multiple times.
 
 ### `repeat` [#repeat-loop]
 
-The `repeat{:tact}` loop executes a block of code a specified number of times. Number of repetitions must be a non-negative $32$-bit [`Int{:tact}`](/book/integers). Otherwise an `Integer is of range` exception would be thrown.
+The `repeat{:tact}` loop executes a block of code a specified number of times. Number of repetitions must be a non-negative $32$-bit [`Int{:tact}`](/book/integers). Otherwise an error with the [exit code 5](/book/exit-codes#5), `Integer out of the expected range` would be thrown.
 
 In the following example, code inside the loop will be executed $10$ times:
 
@@ -171,6 +169,6 @@ In the following example, the value of `x` is decremented by $1$ on each iterati
 ```tact
 let x: Int = 10;
 do {
-    x = x - 1;  // executes this code block at least once
+    x -= 1;  // executes this code block at least once
 } until (x <= 0);
 ```
