@@ -175,7 +175,7 @@ get fun seqno(): Int {
 
 In FunC there is a difference between tensor type `(int, int){:func}` and `(int, (int)){:func}`, but for TVM there are no differences, they all represent a stack of two integers.
 
-To convert the tensor that returned from the FunC get-method, you need to define a [Struct](/book/composite-types#structs) that has the same amount of fields as the tensor and in the same order.
+To convert the tensor that returned from a FunC `get`-method, you need to define a [Struct](/book/composite-types#structs) that has the same field types as the tensor and in the same order.
 
 The following code in FunC:
 
