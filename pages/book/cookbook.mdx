@@ -19,9 +19,9 @@ contract HelloWorld {
 }
 ```
 
-### How to write an 'if' statement in Tact
+### How to write an `if` statement in Tact
 
-Tact supports `if` statements in a similar syntax to most programming languages. The condition of the statement can be any boolean expression.
+Tact supports `if...else{:tact}` statements in a similar syntax to most programming languages. The condition of the statement can be any boolean expression.
 
 ```tact
 let value: Int = 9001;
@@ -47,9 +47,9 @@ if (value > 9000) {
 
 ## Loops
 
-### How to write a repeat loop
+### How to write a `repeat` loop
 
-Please make sure the input number for the [repeat](/book/statements#repeat-loop) loop statement is within the range of an int32 data type, as an exception will be thrown otherwise.
+Please make sure the input number for the [`repeat{:tact}`](/book/statements#repeat-loop) loop statement is within the range of an $32$-bit [`Int{:tact}`](/book/integers) data type, as an exception will be thrown otherwise.
 
 ```tact
 let sum: Int = 0;
@@ -64,12 +64,12 @@ repeat (10) {               // repeat exactly 10 times
 <Callout>
 
   **Useful links:**\
-  [`repeat` loop in the Book](/book/statements#repeat-loop)\
+  [`repeat{:tact}` loop in the Book](/book/statements#repeat-loop)\
   [Loops in Tact-By-Example](https://tact-by-example.org/04-loops)
 
 </Callout>
 
-### How to write a while loop
+### How to write a `while` loop
 
 ```tact
 let i: Int = 0;
@@ -82,15 +82,15 @@ while (i < 10) {
 <Callout>
 
   **Useful links:**\
-  [`while` loop in the Book](/book/statements#while-loop)\
+  [`while{:tact}` loop in the Book](/book/statements#while-loop)\
   [Loops in Tact-By-Example](https://tact-by-example.org/04-loops)
 
 </Callout>
 
 
-### How to write a do until loop
+### How to write a `do...until` loop [#how-to-write-a-do-until-loop]
 
-When we need the cycle to run at least once, we use the [do-until](/book/statements#until-loop) loop.
+When we need the cycle to run at least once, we use the [`do...until{:tact}`](/book/statements#do-until-loop) loop.
 
 ```tact
 let num: Int;               // A variable to store the random number
@@ -106,7 +106,7 @@ dump("The loop is over!");
 <Callout>
 
   **Useful links:**\
-  [`do-until` loop in the Book](/book/statements#until-loop)\
+  [`do...until{:tact}` loop in the Book](/book/statements#do-until-loop)\
   [`random()` in Language→Reference](/language/ref/random#random)\
   [Loops in Tact-By-Example](https://tact-by-example.org/04-loops)
 
@@ -115,20 +115,20 @@ dump("The loop is over!");
 ## Map
 
 ```tact
-// Create empty map
+// Create an empty map
 let m: map<Int, String> = emptyMap();
 
-// Add key/value to the map
+// Add the key/value pair to the map
 m.set(1, "a");
 
-// Get value by key from the map
+// Get the value by the key from the map
 let first: String? = m.get(1);
 
-// Check key is exists
+// Check if the key exists
 if (first == null) {
     // do something...
 } else {
-    // Cast value if key exists
+    // Cast value if the key exists
     let firstStr: String = first!!;
     // do something...
 }
@@ -137,20 +137,20 @@ if (first == null) {
 <Callout>
 
   **Useful links:**\
-  [Map type in the Book](/book/types#maps)
+  [`map<k, v>{:tact}` type in the Book](/book/types#maps)
 
 </Callout>
 
-## Slice
+## `Slice`
 
-### How to determine if slice is empty
+### How to determine if a `Slice` is empty
 
-A Slice is considered *empty* if it has no stored `data` **and** no stored `references`.
+A [`Slice{:tact}`](/book/types#primitive-types) is considered _empty_ if it has no stored `data` **and** no stored `references`.
 
-Use `empty()` method to check if a Slice is empty.
+Use `empty(){:tact}` method to check if a [`Slice{:tact}`](/book/types#primitive-types) is empty.
 
 ```tact
-// Create an empty slice with no data and no refs
+// Create an empty Slice with no data and no refs
 let empty_slice: Slice = emptyCell().asSlice();
 // Returns `true`, because `empty_slice` doesn't have any data or refs
 empty_slice.empty();
@@ -178,7 +178,7 @@ let slice_with_data_and_refs: Slice  = beginCell().
 slice_with_data_and_refs.empty();
 ```
 
-### How to determine if a slice has no refs (but may have bits)
+### How to determine if a `Slice` has no refs (but may have bits)
 
 ```tact
 let slice_with_data: Slice = beginCell().
@@ -188,7 +188,7 @@ let refsCount: Int = slice_with_data.refs(); // 0
 let hasNoRefs: Bool = slice_with_data.refsEmpty(); // true
 ```
 
-### How to determine if a Slice has no data (no bits, but may have refs)
+### How to determine if a `Slice` has no data (no bits, but may have refs)
 
 ```tact
 let slice_with_data: Slice = beginCell().
@@ -198,7 +198,7 @@ let bitsCount: Int = slice_with_data.bits(); // 0
 let hasNoData: Bool = slice_with_data.dataEmpty(); // true
 ```
 
-### How to determine if Slices are equal
+### How to determine if two Slices are equal
 
 Direct comparison:
 
@@ -232,15 +232,15 @@ dump(result) // true;
 <Callout>
 
   **Useful links:**\
-  [`String.asSlice()` in Language→Reference](/language/ref/strings#stringasslice)
+  [`String.asSlice(){:tact}` in Language→Reference](/language/ref/strings#stringasslice)
 
 </Callout>
 
-## Cell
+## `Cell`
 
-### How to determine if a Cell is empty
+### How to determine if a `Cell` is empty
 
-To check if there is any data in the Cell, we should first convert it to the Slice. If we are only interested in having bits, we should use `dataEmpty()`, if only refs - `refsEmpty()`. In case we want to check for the presence of any data, regardless of whether it is a bit or ref, we need to use `empty()`.
+To check if there is any data in the [`Cell{:tact}`](/book/types#primitive-types), we should first convert it to the [`Slice{:tact}`](/book/types#primitive-types). If we are only interested in having bits, we should use `dataEmpty(){:tact}`, if only refs - `refsEmpty(){:tact}`. In case we want to check for the presence of any data, regardless of whether it is a bit or ref, we need to use `empty(){:tact}`.
 
 ```tact
 // Create an empty cell with no data and no refs
@@ -264,16 +264,16 @@ slice.empty();
 <Callout>
 
   **Useful links:**\
-  [`empty()` in Language→Reference](/language/ref/cells#sliceempty)\
-  [`dataEmpty()` in Language→Reference](/language/ref/cells#slicedataempty)\
-  [`refsEmpty()` in Language→Reference](/language/ref/cells#slicerefsempty)\
-  [`emptyCell()` in Language→Reference](/language/ref/cells#emptycell)\
-  [`beginCell()` in Language→Reference](/language/ref/cells#begincell)\
-  [`endCell()` in Language→Reference](/language/ref/cells#builderendcell)
+  [`empty(){:tact}` in Language→Reference](/language/ref/cells#sliceempty)\
+  [`dataEmpty(){:tact}` in Language→Reference](/language/ref/cells#slicedataempty)\
+  [`refsEmpty(){:tact}` in Language→Reference](/language/ref/cells#slicerefsempty)\
+  [`emptyCell(){:tact}` in Language→Reference](/language/ref/cells#emptycell)\
+  [`beginCell(){:tact}` in Language→Reference](/language/ref/cells#begincell)\
+  [`endCell(){:tact}` in Language→Reference](/language/ref/cells#builderendcell)
 
 </Callout>
 
-### How to determine if Cells are equal
+### How to determine if two Cells are equal
 
 Direct comparison:
 
@@ -310,7 +310,7 @@ let areCellsNotEqual: Bool = a.hash() != b.hash(); // false
 <Callout>
 
   **Useful links:**\
-  [`Cell.hash` in Language→Reference](/language/ref/cells#cellhash)
+  [`Cell.hash(){:tact}` in Language→Reference](/language/ref/cells#cellhash)
 
 </Callout>
 
@@ -328,7 +328,7 @@ send(SendParameters{
 
 ### How to send a message with the entire balance
 
-If we need to send the whole balance of the smart contract, then we should use the `SendRemainingBalance` send mode. Alternatively, we can use `mode 128`, which has the same meaning.
+If we need to send the whole balance of the smart contract, then we should use the `SendRemainingBalance{:tact}` send mode. Alternatively, we can use `mode: 128{:tact}`, which has the same meaning.
 
 ```tact
 send(SendParameters{
@@ -347,7 +347,7 @@ send(SendParameters{
 
 </Callout>
 
-### How to convert String to Int
+### How to convert a `String` to an `Int`
 
 ```tact
 // Dangerously casts string as slice for parsing. Use it only if you know what you are doing.
@@ -365,7 +365,7 @@ while (!string.empty()) {                   // A loop until slice has bytes
 dump(number);
 ```
 
-### How to convert Int to String
+### How to convert an `Int` to a `String`
 
 ```tact
 let number: Int = 261119911;
@@ -388,17 +388,17 @@ dump(coinsString); // "0.261119911"
 <Callout>
 
   **Useful links:**\
-  [`Int.toString` in Language→Reference](/language/ref/strings#inttostring)\
-  [`Int.toFloatString` in Language→Reference](/language/ref/strings#inttofloatstring)\
-  [`Int.toCoinsString` in Language→Reference](/language/ref/strings#inttocoinsstring)
+  [`Int.toString(){:tact}` in Language→Reference](/language/ref/strings#inttostring)\
+  [`Int.toFloatString(){:tact}` in Language→Reference](/language/ref/strings#inttofloatstring)\
+  [`Int.toCoinsString(){:tact}` in Language→Reference](/language/ref/strings#inttocoinsstring)
 
 </Callout>
 
-### How to get current time
+### How to get the current time
 
-Use the `now()` method to obtain the current standard [Unix time](https://en.wikipedia.org/wiki/Unix_time).
+Use the `now(){:tact}` method to obtain the current standard [Unix time](https://en.wikipedia.org/wiki/Unix_time).
 
-If you need to store the time in state or encode it in a message, use `Int as uint32`.
+If you need to store the time in state or encode it in a message, use the following [serialization](/book/integers#serialization): `Int as uint32{:tact}`.
 
 ```tact
 let currentTime: Int = now();
@@ -411,7 +411,7 @@ if (currentTime > 1672080143) {
 <Callout>
 
   **Useful links:**\
-  [`now()` in Language→Reference](/language/ref/common#now)\
+  [`now(){:tact}` in Language→Reference](/language/ref/common#now)\
   ["Current Time" in Tact-By-Example](https://tact-by-example.org/04-current-time)
 
 </Callout>
@@ -432,14 +432,14 @@ number = random(1, 12);
 <Callout>
 
   **Useful links:**\
-  [`randomInt()` in Language→Reference](/language/ref/random#randomInt)\
-  [`random()` in Language→Reference](/language/ref/random#random)
+  [`randomInt(){:tact}` in Language→Reference](/language/ref/random#randomInt)\
+  [`random(){:tact}` in Language→Reference](/language/ref/random#random)
 
 </Callout>
 
 ### How to throw errors
 
-The throw function in a contract is useful when we don't know how often to perform a specific action.
+The `throw(){:tact}` function in a contract is useful when we don't know how often to perform a specific action.
 
 It allows intentional exception or error handling, which leads to the termination of the current transaction and reverts any state changes made during that transaction.
 
@@ -459,14 +459,14 @@ nativeThrowUnless(39, number == 198);
 <Callout>
 
   **Useful links:**\
-  [`throw()` in Language→Reference](/language/ref/advanced#throw)\
+  [`throw(){:tact}` in Language→Reference](/language/ref/advanced#throw)\
   [Errors in Tact-By-Example](https://tact-by-example.org/03-errors)
 
 </Callout>
 
 ### How to send a message with a long text comment
 
-If we need to send a message with a lengthy text comment, we should create a String that consists of more than `127` characters. To do this, we can utilize the StringBuilder primitive type and its methods called `beginComment()` and `append()`. Prior to sending, we should convert this string into a cell using the `toCell()` method.
+If we need to send a message with a lengthy text comment, we should create a [`String{:tact}`](/book/types#primitive-types) that consists of more than $127$ characters. To do this, we can utilize the [`StringBuilder{:tact}`](/book/types#primitive-types) primitive type and its methods called `beginComment(){:tact}` and `append(){:tact}`. Prior to sending, we should convert this string into a cell using the `toCell(){:tact}` method.
 
 ```tact
 let comment: StringBuilder = beginComment();
@@ -485,17 +485,17 @@ send(SendParameters{
 <Callout>
 
   **Useful links:**\
-  ["Sending messages" in docs](/language/guides/send#send-message)\
-  [`StringBuilder` in docs](/language/guides/types#primitive-types)\
-  [`Cell` in Language→Reference](/language/ref/cells)
+  ["Sending messages" in the Book](/book/send#send-message)\
+  [`StringBuilder{:tact}` in the Book](/book/types#primitive-types)\
+  [`Cell{:tact}` in Language→Reference](/language/ref/cells)
 
 </Callout>
 
-### How to calculate NFT item address by its index
+### How to calculate the NFT item `Address` by its index
 
-For Tacts' example, you should have the Tact code of the NFT item contract, placed in the same file. You can use the function as you wish, both inside and outside of a contract.
+For Tact's example, you should have the Tact code of the NFT item contract, placed in the same file. You can use the function as you wish, both inside and outside of a contract.
 
-For FunCs' example, you should have the code of item contract as a Cell. The function can be used outside of a contract by changing `self.nftItemCode` with a preassigned `nftItemCode`.
+For FunC's example, you should have the code of item contract as a [`Cell{:tact}`](/book/types#primitive-types). The function can be used outside of a contract by changing `self.nftItemCode{:tact}` with a preassigned `nftItemCode`.
 
 Tact:
 
@@ -511,7 +511,7 @@ let itemInit: StateInit = self.getNftItemInit(itemIndex);
 let itemAddress: Address = contractAddress(nft_init);
 ```
 
-FunC (may also vary depending on collection's `deploy_item()` function):
+FunC (may also vary depending on collection's `deploy_item(){:tact}` function):
 
 ```func
 fun getNftItemInit(item_index: Int): StateInit {
@@ -530,8 +530,8 @@ let itemAddress: Address = contractAddress(self.getNftItemInit(itemIndex));
 <Callout>
 
   **Useful links:**\
-  [`initOf()` in the Book](/book/statements#initof)\
-  [`contractAddress()` in Language→Reference](/language/ref/common#contractaddress)\
+  [`initOf{:tact}` in the Book](/book/expressions#initof)\
+  [`contractAddress(){:tact}` in Language→Reference](/language/ref/common#contractaddress)\
   [Tact collection and item contracts example](https://github.com/howardpen9/nft-template-in-tact/blob/tutorial/sources/contract.tact)\
   [FunC collection and item contracts example](https://github.com/Cosmodude/TAP/tree/main/contracts)
 

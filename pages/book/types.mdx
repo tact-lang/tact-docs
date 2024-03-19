@@ -13,7 +13,7 @@ Also, many of those types [can be made nullable](/book/composite-types#optionals
 
 ## Primitive types
 
-* [`Int{:tact}`](/book/integers) — all numbers in Tact are $257$-bit signed integers, but [smaller representations](/book/integers#serialization) can be used to reduce storage costs.
+* [`Int{:tact}`][int] — all numbers in Tact are $257$-bit signed integers, but [smaller representations](/book/integers#serialization) can be used to reduce storage costs.
 * [`Bool{:tact}`](#booleans) — classical boolean with `true{:tact}` and `false{:tact}` values.
 * `Address{:tact}` — standard [smart contract address](https://docs.ton.org/learn/overviews/addresses#address-of-smart-contract) in TON Blockchain.
 * `Slice{:tact}`, `Cell{:tact}`, `Builder{:tact}` — low-level primitives of TON VM.
@@ -24,37 +24,58 @@ Also, many of those types [can be made nullable](/book/composite-types#optionals
 
 The primitive type `Bool{:tact}` can hold only the two values: `true{:tact}` and `false{:tact}`. It's convenient for boolean and logical operations, as well as for storing flags.
 
-There are no implicit type conversions in Tact, so addition (`+`) of two boolean values isn't possible. Hovewer, many comparison [operators](/book/statements#operators) are available, such as:
+There are no implicit type conversions in Tact, so addition (`+{:tact}`) of two boolean values isn't possible. Hovewer, many comparison [operators](/book/statements#operators) are available, such as:
 
-* `&&` for logical `AND`,
-* `||` for logical `OR`,
-* and `!` for logical inversion.
+* `&&{:tact}` for [logical AND](/book/operators#binary-logical-and),
+* `||{:tact}` for [logical OR](/book/operators#binary-logical-or),
+* `!{:tact}` for [logical inversion](/book/operators#unary-inverse),
+* `=={:tact}` for checking [equality](/book/operators#binary-equal),
+* `!={:tact}` for checking [inequality](/book/operators#binary-not-equal),
+* and `!!{:tact}` for [non-null assertion](/book/composite-types#optionals).
 
 Persisting bools to state is very space-efficient, as they only take 1-bit. Storing 1000 bools in state [costs](https://ton.org/docs/develop/smart-contracts/fees#how-to-calculate-fees) about $0.00072$ TON per year.
 
 ## Maps
 
-The type `map<k, v>{:tact}` is used as a way to associate data with corresponding keys.
+The type `map<k, v>{:tact}` is used as a way to associate values of type `v` with corresponding keys of type `k`.
 
 Possible key types:
 
-* [`Int{:tact}`](/book/integers)
+* [`Int{:tact}`][int]
 * `Address{:tact}`
 
 Possible value types:
 
-* [`Int{:tact}`](/book/integers)
+* [`Int{:tact}`][int]
 * [`Bool{:tact}`](#booleans)
 * `Cell{:tact}`
 * `Address{:tact}`
 * [Struct](#structs-and-messages)
 * [Message](#structs-and-messages)
 
+For example, `map<Int, Int>{:tact}` uses [`Int{:tact}`][int] type for its keys and values:
+
 ```tact
-contract HelloWorld {
+struct IntToInt {
     counters: map<Int, Int>;
 }
 ```
+
+Additionally, maps allow [integer serialization](/book/integers#serialization-types) of its keys, values or both to [preserve space and reduce storage costs](/book/integers#serialization):
+
+```tact
+struct SerializedMapInside {
+    countersButCompact: map<Int as uint8, Int as uint8>;
+}
+```
+
+<Callout>
+
+  Other serialization options are available too: [Compatibility with FunC](/book/func#convert-serialization)
+
+</Callout>
+
+[int]: /book/integers
 
 ## Structs and Messages
 

@@ -112,11 +112,11 @@ As it was mentioned in [type system overview](/book/types), most [primitive type
 
 [Variables](/book/statements#variable-declaration) or fields of [Structs](#structs) and [Messages](#messages) that can hold `null{:tact}` are called "optionals". They're useful to reduce state size when the variable isn't necesserily used.
 
-You can make any variable an optional by adding a question mark (`?`) after its type declaration. The only exceptions are [`map<>{:tact}`](/book/types#maps) and [`bounced<>{:tact}`](/book/bounced#bounced-messages-in-tact), where you can't make them, inner key/value type (in case of a map) or the inner [Message](#messages) (in case of a bounced) optional.
+You can make any variable or a field an optional by adding a question mark (`?{:tact}`) after its type declaration. The only exceptions are [`map<>{:tact}`](/book/types#maps) and [`bounced<>{:tact}`](/book/bounced#bounced-messages-in-tact), where you can't make them, inner key/value type (in case of a map) or the inner [Message](#messages) (in case of a bounced) optional.
 
-Optional variables that are not defined hold the `null{:tact}` value by default. You cannot access them without checking for `null{:tact}` first. But if you're certain the optional variable is not `null{:tact}`, use the non-null assertion operator (`!!`, also called double-bang or double exclamation mark operator) to access its value.
+Optional variables or optional fields that are not defined hold the `null{:tact}` value by default. You cannot access them without checking for `null{:tact}` first. But if you're certain they are not `null{:tact}` at a given moment, use the non-null assertion operator (`!!{:tact}`) to access their value.
 
-Trying to access the value of an optional variable without using `!!` or checking for `null{:tact}` beforehand will result in a compilation error.
+Trying to access the value of an optional variable or an optional field without using `!!{:tact}` or without checking for `null{:tact}` beforehand will result in a compilation error.
 
 Example of optionals:
 

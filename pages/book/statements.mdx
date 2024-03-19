@@ -1,122 +1,174 @@
 # Statements
 
-## Variable declaration
+import { Callout } from 'nextra/components'
 
-Declaring variable always requires an initial value and an explicit type:
+The following statements can appear anywhere in the [function](/book/functions) body.
 
-```tact
-let value: Int = 123;
-```
+## `let` statement [#let]
 
-## Static function call
+The `let{:tact}` statement allows local and [block](#block)-scoped variable declaration.
 
-Anywhere in the function body, a static function can be called:
+In Tact, declaring a variable always requires an initial value and an explicit type:
 
 ```tact
-let expiration: Int = now() + 1000; // now() is stdlib static function
+let value: Int = 123;           // declaration
+let valueOptional: Int? = null; // Int or null
+
+let valueMap: map<Int, Int> = emptyMap();
+let valueMapWithSerialization: map<Int as uint8, Int as uint8> = emptyMap();
 ```
 
-## Extension function call
+## `return` statement [#return]
 
-Some functions are defined only for specific types, they can be called this way:
+The `return{:tact}` statement ends [function](/book/functions) execution and specifies a value to be returned to the [function](/book/functions) caller.
 
 ```tact
-let some: String = 95.toString(); // toString() is a stdlib function that is defined on Int type
+// Simple wrapper over stdlib function now()
+fun getTimeFromNow(offset: Int): Int {
+    return now() + offset;
+}
 ```
 
-## Operators
+## Block
 
-Tact supports operations:
+A block statement is used to group zero or more statements. The block is delimited by a pair of braces ("curly braces", `{}{:tact}`) and contains a list of zero or more statements and declarations.
 
-- `!!` suffix operator - enforces non-null value, defined only for nullable types.
-- `!` - logical inversion, defined only for the `Bool` type.
-- `/`, `*`, `%` - division and multiplication operations, defined only for the `Int` type
-- `-`, `+` - arithmetic operations, defined only for `Int` type
-- `!=`, `==` - equality operations
-- `>`, `<`, `>=`, `<=` - compare operations, defined only for the `Int` type
-- `&&`, `||` - logical `AND` and `OR`
+```tact
+{ // <- start of the block
+    // arbitrary statements:
+    let value: Int = 2 + 2;
+    dump(value);
+} // <- end of the block
+
+{ dump(2 + 2); } // a block with only one statement
+```
+
+## Expression
+
+An expression statement is an expression used in a place where a statement is expected. The expression is evaluated and its result is discarded — therefore, it makes sense only for expressions that have side effects, such as executing a function or updating a variable.
+
+```tact
+dump(2 + 2); // stdlib function
+```
+
+## Assignment
+
+Assignment statements use an [assignment operator](/book/operators#assignment) (`={:tact}`) or [augmented assignment operators](/book/operators#augmented-assignment) (assignments combined with an operation):
+
+```tact
+let value: Int; // declaration
+value = 5;      // assignment
+value += 5;     // augmented assignment (one of the many, see below)
+```
+
+<Callout>
+
+  Read more about assignment and augmented assignment in their dedicated section: [assignment operators](/book/operators#assignment).
+
+</Callout>
+
+## Branches
+
+Control the flow of the code.
+
+### `if...else` [#if-else]
+
+<Callout type="warning" emoji="⚠️">
+
+  Curly brackets (code blocks) are required!
+
+</Callout>
+
+When executing an `if...else{:tact}` statement, first, the specified condition gets evaluated. If the resulting value is `true{:tact}`, the `then{:tact}` statement block gets executed. Otherwise, if the condition evaluates to `false{:tact}`, the optional `else{:tact}` statement block will be executed. If the `else{:tact}` block is missing, nothing happens and execution continues further.
+
+Regular `if{:tact}`-statement:
+
+```tact
+// condition
+// ↓
+if (true) { // consequence, when condition is true
+    dump(2 + 2);
+}
+```
+
+With `else{:tact}` clause:
+
+```tact
+// condition
+// ↓
+if (2 + 2 == 4) {
+    // consequence, when condition is true
+    dump(true);
+} else {
+    // alternative, when condition is false
+    dump(false);
+}
+```
+
+With nested `if...else{:tact}`:
+
+```tact
+// condition
+// ↓
+if (2 + 2 == 3) {
+    // consequence, when condition is true
+    dump("3?");
+//        condition2
+//        ↓
+} else if (2 + 2 == 4) {
+    // another consequence, when condition2 is true
+    dump(true);
+} else {
+    // alternative, when both condition and condition2 are false
+    dump(false);
+}
+```
+
+<Callout>
+
+  Tact also has a ternary expression `?:{:tact}`, which is described earlier in the Book: [Ternary](/book/operators#ternary).
+
+</Callout>
 
 ## Loops
 
-### Repeat loop
+Conditionally repeat certain blocks of code multiple times.
 
-The Repeat Loop executes a block of code a specified number of times. In the example you provided, the code inside the loop will be executed 10 times.
+### `repeat` [#repeat-loop]
+
+The `repeat{:tact}` loop executes a block of code a specified number of times. Number of repetitions must be a non-negative $32$-bit [`Int{:tact}`](/book/integers). Otherwise an error with the [exit code 5](/book/exit-codes#5), `Integer out of the expected range` would be thrown.
+
+In the following example, code inside the loop will be executed $10$ times:
 
 ```tact
 let a: Int = 1;
-repeat(10) {
-  a = a * a;
+repeat (10) {
+    a *= a;
 }
 ```
 
-> **Note**
-> Repeat number must be a 32-bit int or of range exception is thrown. Negative values are ignored.
+### `while` [#while-loop]
 
-### While loop
+While loop continues executing the block of code as long as the given condition is `true{:tact}`.
 
-The While Loop continues executing the block of code as long as the given condition is true.
+In the following example, the value of `x` is decremented by $1$ on each iteration, so the loop will run $10$ times:
 
 ```tact
 let x: Int = 10;
-while(x > 0) {
-  x = x - 1;
+while (x > 0) {
+    x -= 1;
 }
 ```
 
-**Explanation**:
+### `do...until` [#do-until-loop]
 
-- The code inside the loop will execute as long as � > 0 x>0.
-- In the example, the value of � x is decremented by 1 in each iteration, so the loop will run 10 times.
+The `do...until{:tact}` loop is a post-test loop that executes the block of code at least once, and then continues to execute it until the given condition becomes `true{:tact}`.
 
-### Until loop
-
-The Until Loop is a post-test loop that executes the block of code at least once and then continues to execute it until the given condition becomes true.
+In the following example, the value of `x` is decremented by $1$ on each iteration, so the loop will run $10$ times:
 
 ```tact
 let x: Int = 10;
 do {
-  x = x - 1;  # do something no matter at least one time
+    x -= 1;  // executes this code block at least once
 } until (x <= 0);
-```
-
-**Explanation**:
-
-- The code inside the loop will execute at least once, and then it will continue to execute until \( x \leq 0 \).
-- In the example, the value of \( x \) is decremented by 1 in each iteration, so the loop will run 10 times.
-
-## If Statements
-
-> **Warn**
-> Curly brackets are required
-
-```tact
-if (condition) {
-  doSomething();
-}
-```
-
-```tact
-if (condition) {
-  doSomething();
-} else {
-  doSomething2();
-}
-```
-
-```tact
-if (condition) {
-  doSomething();
-} else if (condition2) {
-  doSomething2();
-} else {
-  doSomething3();
-}
-```
-
-## initOf
-
-Allows to compute init state for a contract:
-
-```tact
-let state: StateInit = initOf Contract(123, 123);
 ```
