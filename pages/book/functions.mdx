@@ -17,7 +17,7 @@ You can define global function anywhere in your program:
 fun pow(a: Int, c: Int): Int {
   let res: Int = 1;
   repeat(c) {
-    res = res * a;
+    res *= a;
   }
   return res;
 }
@@ -34,7 +34,7 @@ Extension functions allow you to implement extensions for any possible type.
 extends fun pow(self: Int, c: Int) {
   let res: Int = 1;
   repeat(c) {
-    res = res * self;
+    res *= self;
   }
   return res;
 }
@@ -48,7 +48,7 @@ Mutable functions are performing mutation of a value replacing it with an execut
 extends mutates fun pow(self: Int, c: Int) {
   let res: Int = 1;
   repeat(c) {
-    res = res * self;
+    res *= self;
   }
   self = res;
 }
@@ -80,7 +80,7 @@ contract Treasure {
   
   // This means that this contract can receive the comment "Increment" and this function would be called for such messages
   receive("Increment") {
-    self.counter = self.counter + 1;
+    self.counter += 1;
   }
 }
 ```

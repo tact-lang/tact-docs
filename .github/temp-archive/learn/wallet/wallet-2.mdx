@@ -126,18 +126,18 @@ contract Wallet {
         require(msg.transfer.seqno == self.seqno, "Invalid seqno");
 
         // Increment seqno
-        self.seqno = self.seqno + 1;
+        self.seqno += 1;
 
         // Send message
         send(SendParameters{value: msg.transfer.amount, to: msg.transfer.to, mode: msg.transfer.mode, body: msg.transfer.body});
     }
 
     receive(msg: Slice) {
-            self.seqno = self.seqno + 1;
+            self.seqno += 1;
     }
 
     receive("notify") {
-            self.seqno = self.seqno + 1;
+            self.seqno += 1;
     }
 
     receive("duplicate") {

@@ -80,7 +80,7 @@ fun dnsExtractTopDomainLength(subdomain: Slice): Int {
         let char: Int = subdomain.loadUint(8); // we do not check domain.length because it MUST contain \0 character
         needBreak = char == 0;
         if (!needBreak) {
-            i = i + 8;
+            i += 8;
         }
     } until (needBreak);
     require(i != 0, "Invalid DNS name");
@@ -167,7 +167,7 @@ trait DNSResolver {
         let delta: Int = 0;
         if (subdomain.preloadUint(8) == 0) {
             subdomain.loadUint(8); // Skip first byte
-            delta = delta + 8;
+            delta += 8;
         }
 
         // Checks correctness

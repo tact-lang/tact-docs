@@ -120,7 +120,7 @@ contract HelloWorld {
     }
 
     receive("increment") {
-        self.counter = self.counter + 1;
+        self.counter += 1;
     }
 
     get fun counter(): Int {
