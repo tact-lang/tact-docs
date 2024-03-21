@@ -110,6 +110,8 @@ Learn more about them on a dedicated page about [composite types](/book/composit
 
 Contracts are the main entry of a smart contract on the TON blockchain. It holds all [functions](/book/functions), [getters](/book/functions#getter-functions), and [receivers](/book/functions#receiver-functions) of a TON contract.
 
+Contracts and [traits](#traits) have a built-in [identifier](/book/expressions#identifiers) `self{:tact}`, which is used for referring to their fields (persistent state variables) and methods (internal functions).
+
 ```tact
 // Basic example of a counter contract:
 contract HelloWorld {

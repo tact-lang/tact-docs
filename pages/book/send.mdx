@@ -55,7 +55,7 @@ send(SendParameters{
 
 ## Deploy contract
 
-To deploy a contract you need to calculate its address and init package, then send it with an initial message. You can always send an init package with a message and it would be ignored, but would cost more than the message without an init package.
+To deploy a contract you need to calculate its address and initial state with [`initOf{:tact}`](/book/expressions#initof), then send them in the initialization message:
 
 ```tact
 let init: StateInit = initOf SecondContract(arg1, arg2);
