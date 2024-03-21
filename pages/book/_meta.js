@@ -10,6 +10,7 @@ export default {
   types: 'Type system overview',
   integers: 'Integers',
   operators: 'Operators',
+  expressions: 'Expressions',
   statements: 'Statements',
   constants: 'Constants',
   functions: 'Functions',
