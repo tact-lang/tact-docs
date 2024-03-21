@@ -52,6 +52,7 @@ const withNextra = nextra({
  * @type {import('next').NextConfig}
  */
 export default withNextra({
+  output: 'export',
   images: {
     unoptimized: true
   },
