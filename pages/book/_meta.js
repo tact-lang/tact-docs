@@ -9,14 +9,20 @@ export default {
   },
   types: 'Type system overview',
   integers: 'Integers',
+  maps: 'Maps',
+  'structs-and-messages': 'Structs and Messages',
+  optionals: 'Optionals',
+  // <- a place for https://github.com/tact-lang/tact-docs/issues/115 + brief info on comments
+  '-- 2': {
+    type: 'separator',
+    title: 'Expressiveness',
+  },
   operators: 'Operators',
   expressions: 'Expressions',
   statements: 'Statements',
   constants: 'Constants',
   functions: 'Functions',
-  'composite-types': 'Composite types',
-  // <- a place for https://github.com/tact-lang/tact-docs/issues/115
-  '-- 2': {
+  '-- 3': {
     type: 'separator',
     title: 'Communication',
   },
@@ -29,7 +35,7 @@ export default {
   lifecycle: 'Message lifecycle',
   send: 'Sending messages',
   'message-mode': 'Message mode',
-  '-- 3': {
+  '-- 4': {
     type: 'separator',
     title: 'Going places',
   },

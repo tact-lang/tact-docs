@@ -10,7 +10,7 @@ All rules about copying variables are the same. One of the big differences is th
 
 ## Convert serialization
 
-Serialization of [Structs](/book/composite-types#structs) and [Messages](/book/composite-types#messages) in Tact is automatic, unlike FunC where you need to define serialization logic manually.
+Serialization of [Structs](/book/structs-and-messages#structs) and [Messages](/book/structs-and-messages#messages) in Tact is automatic, unlike FunC where you need to define serialization logic manually.
 
 Tact's auto-layout algorithm is greedy. This means that it takes the next variable, calculates its size, and tries to fit it into a current cell. If it doesn't fit, it creates a new cell and continues. All inner structs for auto-layout are flattened before allocation.
 
@@ -174,7 +174,7 @@ get fun seqno(): Int {
 
 In FunC there is a difference between tensor type `(int, int){:func}` and `(int, (int)){:func}`, but for TVM there are no differences, they all represent a stack of two integers.
 
-To convert the tensor that returned from a FunC `get`-method, you need to define a [Struct](/book/composite-types#structs) that has the same field types as the tensor and in the same order.
+To convert the tensor that returned from a FunC `get`-method, you need to define a [Struct](/book/structs-and-messages#structs) that has the same field types as the tensor and in the same order.
 
 The following code in FunC:
 
@@ -230,7 +230,7 @@ contract StatefulContract {
 
 ### Mixed tuple and tensor return types
 
-When some of the tensors are a tuple, you need to define a struct as in previous steps and the tuple one must be defined as a separate [Struct](/book/composite-types#structs).
+When some of the tensors are a tuple, you need to define a struct as in previous steps and the tuple one must be defined as a separate [Struct](/book/structs-and-messages#structs).
 
 The following code in FunC:
 
@@ -262,7 +262,7 @@ contract StatefulContract {
 
 ### Arguments mapping
 
-Conversion of `get`-methods arguments is straightforward. Each argument is mapped _as-is_ to FunC one, and each tuple is mapped to a [Struct](/book/composite-types#structs).
+Conversion of `get`-methods arguments is straightforward. Each argument is mapped _as-is_ to FunC one, and each tuple is mapped to a [Struct](/book/structs-and-messages#structs).
 
 The following code in FunC:
 

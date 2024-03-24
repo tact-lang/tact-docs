@@ -5,24 +5,26 @@ import { Callout } from 'nextra/components'
 Every variable, item, and value in Tact programs has a type. They can be:
 
 * One of the [primitive types](#primitive-types)
-* [Maps](#maps)
-* Composite types, such as [Structs and Messages](#structs-and-messages)
-* or [Contracts](#contracts) and [Traits](#traits)
+* or [composite types](#composite-types)
 
-Also, many of those types [can be made nullable](/book/composite-types#optionals).
+Additionally, many of those types [can be made nullable](#optionals).
 
 ## Primitive types
 
-* [`Int{:tact}`][int] — all numbers in Tact are $257$-bit signed integers, but [smaller representations](/book/integers#serialization) can be used to reduce storage costs.
+Tact supports a number of primitive data types that are tailored for smart contract use:
+
+* [`Int{:tact}`][ints] — all numbers in Tact are $257$-bit signed integers, but [smaller representations](/book/integers#serialization) can be used to reduce storage costs.
 * [`Bool{:tact}`](#booleans) — classical boolean with `true{:tact}` and `false{:tact}` values.
 * `Address{:tact}` — standard [smart contract address](https://docs.ton.org/learn/overviews/addresses#address-of-smart-contract) in TON Blockchain.
 * `Slice{:tact}`, `Cell{:tact}`, `Builder{:tact}` — low-level primitives of TON VM.
 * `String{:tact}` — represents text strings in TON VM.
 * `StringBuilder{:tact}` — helper type that allows you to concatenate strings in a gas-efficient way.
 
-## Booleans
+[ints]: /book/integers
 
-The primitive type `Bool{:tact}` can hold only the two values: `true{:tact}` and `false{:tact}`. It's convenient for boolean and logical operations, as well as for storing flags.
+### Booleans [#booleans]
+
+The primitive type `Bool{:tact}` is the classical boolean type, which can hold only the two values: `true{:tact}` and `false{:tact}`. It's convenient for boolean and logical operations, as well as for storing flags.
 
 There are no implicit type conversions in Tact, so addition (`+{:tact}`) of two boolean values isn't possible. Hovewer, many comparison [operators](/book/statements#operators) are available, such as:
 
@@ -31,53 +33,35 @@ There are no implicit type conversions in Tact, so addition (`+{:tact}`) of two 
 * `!{:tact}` for [logical inversion](/book/operators#unary-inverse),
 * `=={:tact}` for checking [equality](/book/operators#binary-equal),
 * `!={:tact}` for checking [inequality](/book/operators#binary-not-equal),
-* and `!!{:tact}` for [non-null assertion](/book/composite-types#optionals).
+* and `!!{:tact}` for [non-null assertion](/book/optionals).
 
 Persisting bools to state is very space-efficient, as they only take 1-bit. Storing 1000 bools in state [costs](https://ton.org/docs/develop/smart-contracts/fees#how-to-calculate-fees) about $0.00072$ TON per year.
 
-## Maps
+## Composite types
 
-The type `map<k, v>{:tact}` is used as a way to associate values of type `v` with corresponding keys of type `k`.
+Using individual means of storage often becomes cumbersome, so there are ways to combine multiple [primitive types](#primitive-types) together to create composite types:
 
-Possible key types:
+* [Maps](#maps) — associations of keys with values.
+* [Structs and Messages](#structs-and-messages) — data structures with typed fields.
+* [Optionals](#optionals) — `null{:tact}` values for variables or fields of [Structs and Messages](#structs-and-messages).
 
-* [`Int{:tact}`][int]
-* `Address{:tact}`
+Note, while [contracts](#contracts) and [traits](#traits) are also considered a part of the Tacts type system, one can't pass them around like [Structs and Messages](#structs-and-messages). Instead, it's possible to obtain the initial state of the given contract by using the [`initOf{:tact}`](/book/expressions#initof) expression.
 
-Possible value types:
+### Maps
 
-* [`Int{:tact}`][int]
-* [`Bool{:tact}`](#booleans)
-* `Cell{:tact}`
-* `Address{:tact}`
-* [Struct](#structs-and-messages)
-* [Message](#structs-and-messages)
+The type [`map<k, v>{:tact}`][maps] is used as a way to associate keys of type `k` with corresponding values of type `v`.
 
-For example, `map<Int, Int>{:tact}` uses [`Int{:tact}`][int] type for its keys and values:
+Example of a [`map<k, v>{:tact}`][maps]:
 
 ```tact
-struct IntToInt {
-    counters: map<Int, Int>;
-}
+let mapExample: map<Int, Int> = emptyMap(); // empty map with Int keys and values
 ```
 
-Additionally, maps allow [integer serialization](/book/integers#serialization-types) of its keys, values or both to [preserve space and reduce storage costs](/book/integers#serialization):
+Learn more about them on a dedicated page: [Maps][maps].
 
-```tact
-struct SerializedMapInside {
-    countersButCompact: map<Int as uint8, Int as uint8>;
-}
-```
+[maps]: /book/maps
 
-<Callout>
-
-  Other serialization options are available too: [Compatibility with FunC](/book/func#convert-serialization)
-
-</Callout>
-
-[int]: /book/integers
-
-## Structs and Messages
+### Structs and Messages
 
 [Structs][structs] and [Messages][messages] are two main ways of combining multiple [primitive types](#primitive-types) into a composite one.
 
@@ -101,12 +85,27 @@ message(0x11111111) SetValue {
 }
 ```
 
-Learn more about them on a dedicated page about [composite types](/book/composite-types).
+Learn more about them on a dedicated page: [Structs and Messages][s-n-m].
 
-[structs]: /book/composite-types#structs
-[messages]: /book/composite-types#messages
+[s-n-m]: /book/structs-and-messages
+[structs]: /book/structs-and-messages#structs
+[messages]: /book/structs-and-messages#messages
 
-## Contracts
+### Optionals
+
+All [primitive types](#primitive-types), as well as [Structs and Messages](#structs-and-messages) could be nullable and hold a special `null{:tact}` value.
+
+Example of an [optional][optionals]:
+
+```tact
+let opt: Int? = null; // Int or null, with explicitly assigned null
+```
+
+Learn more about them on a dedicated page: [Optionals][optionals].
+
+[optionals]: /book/optionals
+
+### Contracts
 
 Contracts are the main entry of a smart contract on the TON blockchain. It holds all [functions](/book/functions), [getters](/book/functions#getter-functions), and [receivers](/book/functions#receiver-functions) of a TON contract.
 
@@ -131,7 +130,7 @@ contract HelloWorld {
 }
 ```
 
-## Traits
+### Traits
 
 Tact doesn't support classical class inheritance, but instead introduces the concept of **traits**. Trait defines functions, receivers, and required fields. The trait is like abstract classes, but it does not define how and where fields must be stored. **All** fields from all traits must be explicitly declared in the contract itself. Traits themselves don't have `init(){:tact}` constructors, so all initial field initialization also must be done in the main contract.
 
@@ -153,11 +152,11 @@ And the contract that uses trait:
 
 ```tact
 contract Treasure with Ownable {
-  owner: Address; // Field from trait MUST be defined in contract itself
+    owner: Address; // Field from trait MUST be defined in contract itself
 
-  // Here we init the way we need, trait can't specify how you must init owner field
-  init(owner: Address) {
-    self.owner = owner;
-  }
+    // Here we init the way we need, trait can't specify how you must init owner field
+    init(owner: Address) {
+        self.owner = owner;
+    }
 }
 ```
