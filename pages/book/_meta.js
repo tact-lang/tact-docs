@@ -2,7 +2,6 @@ export default {
   index: 'Overview',
   guides: 'Guides',
   cs: 'Cheatsheets',
-  cookbook: 'Cookbook',
   '-- 1': {
     type: 'separator',
     title: 'Fundamentals of Tact',
