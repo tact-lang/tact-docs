@@ -61,6 +61,9 @@ const config = {
       CC BY 4.0, Tact Software Foundation
     </span>,
   },
+  toc: {
+    backToTop: true,
+  },
   useNextSeoProps() {
     return {
       titleTemplate: '%s – Tact'

@@ -11,6 +11,10 @@ export default {
     title: "Book",
     type: 'page',
   },
+  cookbook: {
+    title: "Cookbook",
+    type: 'page',
+  },
   language: {
     title: "Language",
     type: 'page',

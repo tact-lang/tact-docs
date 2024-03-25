@@ -125,6 +125,11 @@ const getRedirects = () => [
     subSources: undefined,
     destination: '/book/types#composite-types',
   },
+  {
+    source: '/book/cookbook',
+    subSources: undefined,
+    destination: '/cookbook',
+  },
 ];
 
 /**
