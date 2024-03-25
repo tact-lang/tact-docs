@@ -1,0 +1,43 @@
+# Maps
+
+import { Callout } from 'nextra/components'
+
+The type `map<k, v>{:tact}` is used as a way to associate keys of type `k` with corresponding values of type `v`.
+
+Possible key types:
+
+* [`Int{:tact}`][ints]
+* `Address{:tact}`
+
+Possible value types:
+
+* [`Int{:tact}`][ints]
+* [`Bool{:tact}`](/book/types#booleans)
+* `Cell{:tact}`
+* `Address{:tact}`
+* [Struct](/book/structs-and-messages#structs)
+* [Message](/book/structs-and-messages#messages)
+
+For example, `map<Int, Int>{:tact}` uses [`Int{:tact}`][ints] type for its keys and values:
+
+```tact
+struct IntToInt {
+    counters: map<Int, Int>;
+}
+```
+
+Additionally, maps allow [integer serialization](/book/integers#serialization-types) of their keys, values or both to [preserve space and reduce storage costs](/book/integers#serialization):
+
+```tact
+struct SerializedMapInside {
+    countersButCompact: map<Int as uint8, Int as uint8>;
+}
+```
+
+<Callout>
+
+  Read about other serialization options: [Compatibility with FunC](/book/func#convert-serialization)
+
+</Callout>
+
+[ints]: /book/integers

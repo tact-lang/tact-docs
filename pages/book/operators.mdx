@@ -8,7 +8,7 @@ This page lists all the operators in Tact in decreasing order of their [preceden
 
 <Callout>
 
-  Note, that there are no implicit type conversions in Tact, so operators can't be used to, say, add values of different type or compare them in terms of equality without explicitly casting to the same type. That's done with certain functions from the standard library. See [`Int.toString(){:tact}`](https://docs.tact-lang.org/language/ref/strings#inttostring) for an example of such function.
+  Note, that there are no implicit type conversions in Tact, so operators can't be used to, say, add values of different type or compare them in terms of equality without explicitly casting to the same type. That's done with certain functions from the standard library. See [`Int.toString(){:tact}`](/language/ref/strings#inttostring) for an example of such function.
 
 </Callout>
 
@@ -51,7 +51,7 @@ Unary double-exclamation mark (_non-null assertion_) operator `!!{:tact}` is a p
 
 <Callout>
 
-  Read more about optional variables and fields here: [Book→Composite Types](https://docs.tact-lang.org/book/composite-types#optionals)
+  Read more about optional variables and fields here: [Optionals](/book/optionals)
 
 </Callout>
 
@@ -135,7 +135,7 @@ two % 1; // 1
 -1 % -5; // -1
 ```
 
-The simplest way to avoid confusion between the two is to prefer using positive values via [`abs(x: Int){:tact}`](https://docs.tact-lang.org/language/ref/math#abs):
+The simplest way to avoid confusion between the two is to prefer using positive values via [`abs(x: Int){:tact}`](/language/ref/math#abs):
 
 ```tact
 abs(-1) % abs(-5); // 1
@@ -297,7 +297,7 @@ Can be applied to values of following types:
 * [`Cell{:tact}`](/book/types#primitive-types), implicitly compares via `.hash(){:tact}`
 * [`Slice{:tact}`](/book/types#primitive-types), implicitly compares via `.hash(){:tact}`
 * [`String{:tact}`](/book/types#primitive-types)
-* [`map<k, v>{:tact}`](/book/types#maps), but only if their key and value types are identical
+* [`map<k, v>{:tact}`](/book/maps), but only if their key and value types are identical
 
 ```tact
 // Int:
@@ -344,7 +344,7 @@ Can be applied to values of following types:
 * [`Cell{:tact}`](/book/types#primitive-types), implicitly compares via `.hash(){:tact}`
 * [`Slice{:tact}`](/book/types#primitive-types), implicitly compares via `.hash(){:tact}`
 * [`String{:tact}`](/book/types#primitive-types)
-* [`map<k, v>{:tact}`](/book/types#maps), but only if their key and value types are identical
+* [`map<k, v>{:tact}`](/book/maps), but only if their key and value types are identical
 
 ```tact
 // Int:
@@ -480,7 +480,7 @@ true ? (false ? 1 : 2) : 3;  // 2
 
 ## Assignment, `=` [#assignment]
 
-Assignment operator `={:tact}` is used to assign a value to a variable, or to a property of a [Message](/book/composite-types#messages) or a [Struct](/book/composite-types#structs). The assignent is a statement and it doesn't return a value.
+Assignment operator `={:tact}` is used to assign a value to a variable, or to a property of a [Message](/book/structs-and-messages#messages) or a [Struct](/book/structs-and-messages#structs). The assignment is a statement and it doesn't return a value.
 
 ```tact
 let someVar: Int = 5;    // assignment operator = is used here...
