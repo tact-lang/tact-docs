@@ -98,8 +98,6 @@ On deployment of the contract, the constructor function `init(){:tact}` is run.
 
 If a contract has any [persistent state variables](#variables) without default values specified, it must initialize them in this function.
 
-As stated previously, [contract constants](#constants) don't need to be initialized in the `init{:tact}` function, as they get their values in _compile-time_ and don't consume space in persistent state.
-
 ```tact
 contract Example {
     // persistent state variables
