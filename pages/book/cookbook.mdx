@@ -536,3 +536,39 @@ let itemAddress: Address = contractAddress(self.getNftItemInit(itemIndex));
   [FunC collection and item contracts example](https://github.com/Cosmodude/TAP/tree/main/contracts)
 
 </Callout>
+
+## Receiving messages
+
+### How to check sender privileges using Ownable trait
+
+```tact
+// Ownable has to be imported from stdlib, as well as Deployable, for convenience:
+import "@stdlib/ownable";
+import "@stdlib/deploy";
+
+message FooBarMsg {
+    newVal: Int as uint32;
+}
+
+// Ownable trait can limit certain actions to the owner only
+contract SenderChecker with Deployable, Ownable {
+    owner: Address;     // Ownable trait requires you to add this exact state variable
+    val: Int as uint32; // some value
+
+    init() {
+        // we can initialize owner to any value we want, the deployer in this case:
+        self.owner = sender();
+        self.val = 0;
+    }
+
+    receive("inc") {
+        require(self.owner == sender(), "Only the owner can increase the value!");
+        self.val += 1;
+    }
+
+    receive(msg: FooBarMsg) {
+        require(self.owner == sender(), "Only the owner can set the value!");
+        self.val = msg.newVal;
+    }
+}
+```
