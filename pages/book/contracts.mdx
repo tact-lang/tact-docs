@@ -11,10 +11,10 @@ Contracts and [traits](/book/types#traits) have a built-in [identifier](/book/ex
 ```tact
 contract Example {
     // persistent state variables
-    var: Int;
+    foo: Int;
 
     init() {
-        self.var = 42; // <- referencing the var through self.
+        self.foo = 42; // <- referencing variable foo through self.
     }
 }
 ```
@@ -98,8 +98,6 @@ On deployment of the contract, the constructor function `init(){:tact}` is run.
 
 If a contract has any [persistent state variables](#variables) without default values specified, it must initialize them in this function.
 
-As stated previously, [contract constants](#constants) don't need to be initialized in the `init{:tact}` function, as they get their values in _compile-time_ and don't consume space in persistent state.
-
 ```tact
 contract Example {
     // persistent state variables
@@ -121,52 +119,73 @@ contract Example {
 
 ### Getter functions
 
-Getter functions are **not accessible from other contracts and exported only to off-chain world**:
+[Getter functions](/book/functions#getter-functions) are **not accessible from other contracts and exported only to off-chain world**.
+
+Additionally, **getters cannot modify the contract's state variables**, only read their values and use them in expressions.
 
 ```tact
 contract HelloWorld {
-    counter: Int;
+    foo: Int;
 
     init() {
-        self.counter = 0;
-    }
-
-    receive("increment") {
-        self.counter += 1;
+        self.foo = 0;
     }
 
     // getter function with return type Int
-    get fun counter(): Int {
-        return self.counter;
+    get fun foo(): Int {
+        return self.foo; // can't change self.foo here
     }
 }
 ```
 
-Read more about them in their dedicated section: [Functions](/book/functions#getter-functions)
+Read more about them in their dedicated section: [Getter functions](/book/functions#getter-functions)
 
 ### Receiver functions
 
-Receiver functions in Tact can be one of three kinds:
+[Receiver functions](/book/functions#receiver-functions) in Tact can be one of the following three kinds:
 
 * [`receive(){:tact}`](/book/receive), which receive internal messages (from other contracts).
 * [`bounced(){:tact}`](/book/bounced), which are called when outgoing message from this contract has bounced back.
-* [`external(){:tact}`](/book/bounced), which don't have a sender and can be sent by anyone in the world.
+* [`external(){:tact}`](/book/external), which don't have a sender and can be sent by anyone in the world.
 
 ```tact
+message CanBounce {
+    counter: Int;
+}
+
 contract HelloWorld {
     counter: Int;
 
     init() {
         self.counter = 0;
+    }
+
+    get fun counter(): Int {
+        return self.counter;
     }
 
     // internal message receiver, which responds to a string message "increment"
     receive("increment") {
         self.counter += 1;
+
+        // sending the message back to the sender
+        send(SendParameters{
+            to: sender(),
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors,
+            body: CanBounce{counter: self.counter}.toCell()
+        });
     }
 
-    get fun counter(): Int {
-        return self.counter;
+    // bounced message receiver, which is called when the message bounces back to this contract
+    bounced(src: bounced<MsBounced>) {
+        self.counter = 0; // reset the counter in case message bounced
+    }
+
+    // external message receiver, which responds to off-chain message "hello, it's me"
+    external("hello, it's me") {
+        // can't be replied to as there's no sender!
+        self.counter = 0;
     }
 }
 ```
