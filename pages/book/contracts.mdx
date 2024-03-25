@@ -171,6 +171,7 @@ contract HelloWorld {
         // sending the message back to the sender
         send(SendParameters{
             to: sender(),
+            value: 0,
             mode: SendRemainingValue + SendIgnoreErrors,
             body: CanBounce{counter: self.counter}.toCell()
         });
