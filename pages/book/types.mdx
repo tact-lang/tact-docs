@@ -26,7 +26,7 @@ Tact supports a number of primitive data types that are tailored for smart contr
 
 The primitive type `Bool{:tact}` is the classical boolean type, which can hold only the two values: `true{:tact}` and `false{:tact}`. It's convenient for boolean and logical operations, as well as for storing flags.
 
-There are no implicit type conversions in Tact, so addition (`+{:tact}`) of two boolean values isn't possible. Hovewer, many comparison [operators](/book/statements#operators) are available, such as:
+There are no implicit type conversions in Tact, so addition ([`+{:tact}`](/book/operators#binary-add)) of two boolean values isn't possible. Hovewer, many comparison [operators](/book/statements#operators) are available, such as:
 
 * `&&{:tact}` for [logical AND](/book/operators#binary-logical-and),
 * `||{:tact}` for [logical OR](/book/operators#binary-logical-or),
@@ -107,54 +107,65 @@ Learn more about them on a dedicated page: [Optionals][optionals].
 
 ### Contracts
 
-Contracts are the main entry of a smart contract on the TON blockchain. It holds all [functions](/book/functions), [getters](/book/functions#getter-functions), and [receivers](/book/functions#receiver-functions) of a TON contract.
+[Contracts](/book/contracts) in Tact serve as the main entrypoints of smart contracts of TON blockchain. They hold all [functions](/book/functions), [getters](/book/functions#getter-functions), and [receivers](/book/functions#receiver-functions) of a TON contract, and much more.
 
-Contracts and [traits](#traits) have a built-in [identifier](/book/expressions#identifiers) `self{:tact}`, which is used for referring to their fields (persistent state variables) and methods (internal functions).
+Example of a [contract](/book/contracts):
 
 ```tact
-// Basic example of a counter contract:
 contract HelloWorld {
+    // persistent state variable
     counter: Int;
 
+    // constructor function init(), where all the variables are initialized
     init() {
         self.counter = 0;
     }
 
+    // internal message receiver, which responds to a string message "increment"
     receive("increment") {
         self.counter += 1;
     }
 
+    // getter function with return type Int
     get fun counter(): Int {
         return self.counter;
     }
 }
 ```
 
+Read more about them on the dedicated page: [Contracts](/book/contracts).
+
 ### Traits
 
-Tact doesn't support classical class inheritance, but instead introduces the concept of **traits**. Trait defines functions, receivers, and required fields. The trait is like abstract classes, but it does not define how and where fields must be stored. **All** fields from all traits must be explicitly declared in the contract itself. Traits themselves don't have `init(){:tact}` constructors, so all initial field initialization also must be done in the main contract.
+Tact doesn't support classical class inheritance, but instead introduces the concept of _traits_, which can be viewed as abstract contracts (like abstract classes in popular object-oriented languages). They have the same structure as [contracts](#contracts), but can't [initialize persistent state variables](/book/contracts#init-function), while allowing to override some of their behaviors.
+
+Example of a trait [`Ownable`](/language/libs/ownable#ownable) from [`@stdlib/ownable`](/language/libs/ownable):
 
 ```tact
 trait Ownable {
+    // persistent state variable, which cannot be initialized in the trait
     owner: Address;
 
+    // internal function
     fun requireOwner() {
         nativeThrowUnless(132, context().sender == self.owner);
     }
 
+    // getter function with return type Address
     get fun owner(): Address {
         return self.owner;
     }
 }
 ```
 
-And the contract that uses trait:
+And the [contract](#contracts) that uses trait [`Ownable`](/language/libs/ownable#ownable):
 
 ```tact
 contract Treasure with Ownable {
-    owner: Address; // Field from trait MUST be defined in contract itself
+    // persistent state variable, which MUST be defined in the contract
+    owner: Address;
 
-    // Here we init the way we need, trait can't specify how you must init owner field
+    // constructor function init(), where all the variables are initialized
     init(owner: Address) {
         self.owner = owner;
     }
