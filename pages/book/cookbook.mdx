@@ -316,10 +316,19 @@ let areCellsNotEqual: Bool = a.hash() != b.hash(); // false
 
 ## Sending messages
 
+### How to make a basic reply
+
+```tact
+receive() {
+    self.reply("Hello, World!".asComment()); // asComment converts a String to a Cell with a comment
+}
+```
+
 ### How to send a simple message
 
 ```tact
 send(SendParameters{
+    bounce: true, // default
     to: destinationAddress,
     value: ton("0.01"), // attached amount of Tons to send
     body: "Hello from Tact!".asComment() // comment (optional)
@@ -335,9 +344,39 @@ send(SendParameters{
     to: ctx.sender,
     value: 0,
     mode: SendRemainingBalance, // or mode: 128
-    bounce: true
+    body: "Hello from Tact!".asComment() // comment (optional)
 });
 ```
+
+### How to send a message with the remaining value
+
+If we want to make a reply to the same sender, we can use the mode `SendRemainingValue{:tact}` (i.e. `mode: 64{:tact}`), which carries all the remaining value of the inbound message in addition to the value initially indicated in the new message.
+
+```tact
+receive() {
+    send(SendParameters{
+        to: sender(),
+        value: 0,
+        mode: SendRemainingValue,
+        body: "Hello from Tact!".asComment() // comment (optional)
+    });
+}
+```
+
+It's often useful to add the `SendIgnoreErrors{:tact}` flag too, in order to ignore any errors arising while processing this message during the action phaseL
+
+```tact
+receive() {
+    send(SendParameters{
+        to: sender(),
+        value: 0,
+        mode: SendRemainingValue + SendIgnoreErrors,
+        body: "Hello from Tact!".asComment() // comment (optional)
+    });
+}
+```
+
+The latter example is identical to using a [`.reply(){:tact}` function](#how-to-make-a-basic-reply).
 
 <Callout>
 
