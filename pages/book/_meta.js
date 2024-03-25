@@ -12,7 +12,7 @@ export default {
   maps: 'Maps',
   'structs-and-messages': 'Structs and Messages',
   optionals: 'Optionals',
-  // <- a place for https://github.com/tact-lang/tact-docs/issues/115 + brief info on comments
+  contracts: 'Contracts',
   '-- 2': {
     type: 'separator',
     title: 'Expressiveness',

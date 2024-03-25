@@ -96,7 +96,7 @@ Read more about working with `null{:tact}` on the dedicated page: [Optionals](/b
 
 ## Identifiers
 
-An identifier is a sequence of characters in the code that _identifies_ a [variable](/book/statements#let), [constant](/book/constants), [map](/book/maps) and a [function](/book/functions), as well as a [Struct][s], [Message][m], [contract](/book/types#contract), [trait](/book/types#trait), or their fields and methods. Identifiers are case-sensitive and not quoted.
+An identifier is a sequence of characters in the code that _identifies_ a [variable](/book/statements#let), [constant](/book/constants), [map](/book/maps) and a [function](/book/functions), as well as a [Struct][s], [Message][m], [contract](/book/contracts), [trait](/book/types#traits), or their fields and methods. Identifiers are case-sensitive and not quoted.
 
 In Tact, identifiers can contain latin lowercase letters (`a-z`), latin uppercase letters (`A-Z`), underscores (`_`) and digits ($\mathrm{0 - 9}$), but may not start with a digit. An identifier differs from a [string](#string-literals) in that a string is data, while an identifier is part of the code. 
 
@@ -152,7 +152,7 @@ fun example(): Int {
 
 ## Static function call
 
-Anywhere in the function body, a global [static function](/book/functions#global-static-functions) or an internal function of a contract can be called:
+Anywhere in the function body, a global [static function](/book/functions#global-static-functions) or an internal function of a [contract](/book/contracts) can be called:
 
 ```tact
 contract ExampleContract {
@@ -170,7 +170,7 @@ contract ExampleContract {
 
 ## `initOf`
 
-Expression `initOf{:tact}` computes initial state (`StateInit{:tact}`) of a [contract](/book/types#contracts):
+Expression `initOf{:tact}` computes initial state (`StateInit{:tact}`) of a [contract](/book/contracts):
 
 ```tact
 //                     argument values for the init() function of the contract
@@ -185,8 +185,8 @@ Where `StateInit{:tact}` is a built-in [Struct][s], that consists of:
 
 Field  | Type               | Description
 :----- | :----------------- | :----------
-`code` | [`Cell{:tact}`][p] | initial code of the contract (the compiled bytecode)
-`data` | [`Cell{:tact}`][p] | initial data of the contract (arguments of `init(){:tact}` function of the contract)
+`code` | [`Cell{:tact}`][p] | initial code of the [contract](/book/contracts) (the compiled bytecode)
+`data` | [`Cell{:tact}`][p] | initial data of the [contract](/book/contracts) (arguments of `init(){:tact}` function of the contract)
 
 [p]: /book/types#primitive-types
 [s]: /book/structs-and-messages#structs

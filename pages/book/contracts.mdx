@@ -1,0 +1,222 @@
+# Contracts
+
+import { Callout } from 'nextra/components'
+
+Contracts in Tact are similar to classes in popular object-oriented languages, except that their instances are deployed on the blockchain and they can't be passed around like [Structs and Messages](/book/structs-and-messages).
+
+## Self-references [#self]
+
+Contracts and [traits](/book/types#traits) have a built-in [identifier](/book/expressions#identifiers) `self{:tact}`, which is used for referring to their fields (persistent state [variables](#variables) and [constants](#variables)) and methods ([internal functions](#internal-functions)):
+
+```tact
+contract Example {
+    // persistent state variables
+    foo: Int;
+
+    init() {
+        self.foo = 42; // <- referencing variable foo through self.
+    }
+}
+```
+
+## Structure
+
+Each contract can contain:
+
+* [Persistent state variables](#variables)
+* [Constructor function `init(){:tact}`](#init-function)
+* [Contract constants](#constants)
+* [Getter functions](#get-functions)
+* [Receiver functions](#receiver-functions)
+* [Internal functions](#internal-functions)
+
+Furthermore, contracts can inherit all the declarations from [traits](/book/types#traits) and override some of their default behaviours.
+
+### Persistent state variables [#variables]
+
+Contracts can define state variables that persist between contract calls. Contracts in TON [pay rent](https://docs.ton.org/develop/smart-contracts/fees#storage-fee) in proportion to the amount of persistent space they consume, so [compact representations via serialization](/book/integers#serialization) are encouraged.
+
+```tact
+contract Example {
+    // persistent state variables
+    val: Int;              // Int
+    val32: Int as uint32;  // Int serialized to an 32-bit unsigned
+    mapVal: map<Int, Int>; // Int keys to Int values
+    optVal: Int?;          // Int or null
+}
+```
+
+State variables must have a default value or initialized in [`init(){:tact}`](#init-function) function, that runs on deployment of the contract.
+
+<Callout>
+
+  Note, that Tact supports local, non-persistent-state variables too, see: [Variable declaration](/book/statements#let).
+
+</Callout>
+
+### Contract constants [#constants]
+
+Unlike [variables](#variables), constants cannot change. Their values are calculated in _compile-time_ and cannot change during execution.
+
+There isn't much difference between constants defined outside of a contract (global constants) and inside the contract (contract constants). Those defined outside can be used by other contracts in your project.
+
+Constant initializations must be relatively simple and only rely on values known during compilation. If you add two numbers for example, the compiler will calculate the result during build and put the result in your compiled code.
+
+You can read constants both in [receivers](#receiver-functions) and in [getters](#getter-functions).
+
+Unlike [contract variables](#variables), **contract constants don't consume space in persistent state**. Their values are stored directly in the code [`Cell{:tact}`](/book/types#primitive-types) of the contract.
+
+```tact
+// global constants are calculared in compile-time and cannot change
+const GlobalConst1: Int = 1000 + ton("42") + pow(10, 9);
+
+contract Example {
+    // contract constants are also calculated in compile-time and cannot change
+    const ContractConst1: Int = 2000 + ton("43") pow(10, 9);
+
+    // contract constants can be an easy alternative to enums
+    const StateUnpaid: Int = 0;
+    const StatePaid: Int = 1;
+    const StateDelivered: Int = 2;
+    const StateDisputed: Int = 3;
+
+    // no need to init constants
+    init() {}
+
+    get fun sum(): Int {
+        // access constants from anywhere
+        return GlobalConst1 + self.ContractConst1 + self.StatePaid;
+    }
+}
+```
+
+Read more about constants on their dedicated page: [Constants](/book/constants).
+
+### Constructor function `init()` [#init-function]
+
+On deployment of the contract, the constructor function `init(){:tact}` is run.
+
+If a contract has any [persistent state variables](#variables) without default values specified, it must initialize them in this function.
+
+```tact
+contract Example {
+    // persistent state variables
+    var1: Int = 0; // initialized with default value 0
+    var2: Int;     // must be initialized in the init() function
+
+    // constructor function
+    init() {
+        self.var2 = 42;
+    }
+}
+```
+
+<Callout>
+
+  To obtain initial state of the target contract in [internal functions](#internal-functions), [receivers](#receiver-functions) or [getters](#getter-functions) use [`initOf{:tact}`](/book/expressions#initof) expression.
+
+</Callout>
+
+### Getter functions
+
+[Getter functions](/book/functions#getter-functions) are **not accessible from other contracts and exported only to off-chain world**.
+
+Additionally, **getters cannot modify the contract's state variables**, only read their values and use them in expressions.
+
+```tact
+contract HelloWorld {
+    foo: Int;
+
+    init() {
+        self.foo = 0;
+    }
+
+    // getter function with return type Int
+    get fun foo(): Int {
+        return self.foo; // can't change self.foo here
+    }
+}
+```
+
+Read more about them in their dedicated section: [Getter functions](/book/functions#getter-functions)
+
+### Receiver functions
+
+[Receiver functions](/book/functions#receiver-functions) in Tact can be one of the following three kinds:
+
+* [`receive(){:tact}`](/book/receive), which receive internal messages (from other contracts).
+* [`bounced(){:tact}`](/book/bounced), which are called when outgoing message from this contract has bounced back.
+* [`external(){:tact}`](/book/external), which don't have a sender and can be sent by anyone in the world.
+
+```tact
+message CanBounce {
+    counter: Int;
+}
+
+contract HelloWorld {
+    counter: Int;
+
+    init() {
+        self.counter = 0;
+    }
+
+    get fun counter(): Int {
+        return self.counter;
+    }
+
+    // internal message receiver, which responds to a string message "increment"
+    receive("increment") {
+        self.counter += 1;
+
+        // sending the message back to the sender
+        send(SendParameters{
+            to: sender(),
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors,
+            body: CanBounce{counter: self.counter}.toCell()
+        });
+    }
+
+    // bounced message receiver, which is called when the message bounces back to this contract
+    bounced(src: bounced<MsBounced>) {
+        self.counter = 0; // reset the counter in case message bounced
+    }
+
+    // external message receiver, which responds to off-chain message "hello, it's me"
+    external("hello, it's me") {
+        // can't be replied to as there's no sender!
+        self.counter = 0;
+    }
+}
+```
+
+### Internal functions
+
+These functions behave similarly to private methods in popular object-oriented languages — they're internal to contracts and can be called by prefixing them with a special [identifier `self{:tact}`](#field-access). That's why internal functions can sometimes be referred to as "contract methods".
+
+Internal functions can access the contract's [persistent state variables](#variables) and [constants](#constants).
+
+They can only be called from [receivers](#receiver-functions), [getters](#getter-functions) and other internal functions, but not from other contracts or [`init(){:tact}`](#init-function).
+
+```tact
+contract Functions {
+    val: Int = 0;
+    init() {}
+
+    // this contract method can only be called from within this contract and access its variables
+    fun onlyZeros() {
+        require(self.val == 0, "Only zeros are permitted!");
+    }
+
+    // receiver function, which calls the internal function onlyZeros
+    receive("only zeros") {
+        self.onlyZeros();
+    }
+}
+```
+
+<Callout>
+
+  Note, that Tact supports other kinds of functions too, see: [Functions](/book/functions).
+
+</Callout>
