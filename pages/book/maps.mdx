@@ -35,8 +35,8 @@ Allowed value types:
 As a [local variable](/book/statements#let), using `emptyMap(){:tact}` function of standard library:
 
 ```tact
-let fizz: map<Int, String> = emptyMap();
-let fizz: map<Int, String> = null; // identical to the previous line, but less descriptive
+let fizz: map<Int, Int> = emptyMap();
+let fizz: map<Int, Int> = null; // identical to the previous line, but less descriptive
 ```
 
 As a [persistent state variables](/book/contracts#variables):
@@ -58,14 +58,14 @@ To set or replace the value under a key call the `.set(){:tact}` [method](/book/
 
 ```tact
 // Empty map
-let fizz: map<Int, String> = emptyMap();
+let fizz: map<Int, Int> = emptyMap();
 
 // Setting a couple of values under different keys
-fizz.set(7, "nice");
-fizz.set(42, "the answer");
+fizz.set(7, 7);
+fizz.set(42, 42);
 
 // Overriding one of the existing key-value pairs
-fizz.set(7, "42 over 6"); // key 7 now points to value "42 over 6"
+fizz.set(7, 68); // key 7 now points to value 68
 ```
 
 ### Get values, `.get()` [#get]
@@ -74,10 +74,10 @@ To check if a key is found in the map by calling the `.get(){:tact}` [method](/b
 
 ```tact
 // Empty map
-let fizz: map<Int, String> = emptyMap();
+let fizz: map<Int, Int> = emptyMap();
 
 // Setting a value
-fizz.set(68, "almost nice");
+fizz.set(68, 0);
 
 // Getting the value by its key
 let gotButUnsure: String? = fizz.get(68);          // returns String or null, therefore the type is String?
@@ -99,11 +99,11 @@ To delete a single key-value pair (single entry), simply assign the `null{:tact}
 
 ```tact
 // Empty map
-let fizz: map<Int, String> = emptyMap();
+let fizz: map<Int, Int> = emptyMap();
 
 // Setting a couple of values under different keys
-fizz.set(7, "nice");
-fizz.set(42, "the answer");
+fizz.set(7, 123);
+fizz.set(42, 321);
 
 // Deleting one of the keys
 fizz.set(7, null); // the entry under key 7 is now deleted
@@ -113,11 +113,11 @@ To delete all the entries from the map, re-assign the map using the `emptyMap(){
 
 ```tact
 // Empty map
-let fizz: map<Int, String> = emptyMap();
+let fizz: map<Int, Int> = emptyMap();
 
 // Setting a couple of values under different keys
-fizz.set(7, "nice");
-fizz.set(42, "the answer");
+fizz.set(7, 123);
+fizz.set(42, 321);
 
 // Deleting all of the entries at once
 fizz = emptyMap();
@@ -160,22 +160,31 @@ At the moment Tact doesn't have a special syntax for iterating over maps. Howeve
 ```tact
 contract MapAsArray {
     // Persistent state variables
-    arr: map<Int, String>; // «array» of String values as a map
-    arrLength: Int = 0;    // length of the «array», defaults to 0
+    arr: map<Int, Int>; // «array» of Int values as a map
+    arrLength: Int = 0; // length of the «array», defaults to 0
 
     // Constructor (initialization) function of the contract
     init() {}
 
     // Internal function for pushing an item to the end of the «array»
-    fun arrPush(item: String) {
+    fun arrPush(item: Int) {
         self.arr.set(self.arrLength, item);
         self.arrLength += 1;
+    }
+
+    // Internal function for popping the last item of the «array» and returning its value
+    fun arrPop(): Int {
+        let lastItem: Int = self.arr.get(self.arrLength - 1)!!;
+        self.arr.set(self.arrLength - 1, null);
+        self.arrLength -= 1;
+
+        return lastItem;
     }
 
     // Internal message receiver, which responds to a String message "item"
     receive("item") {
         // add a new item + increase the counter
-        self.arrPush("item");
+        self.arrPush(42);
     }
 
     // Internal message receiver, which responds to a String message "get_last"
@@ -188,7 +197,7 @@ contract MapAsArray {
     }
 
     // Getter function for obtaining the «array»
-    get fun map(): map<Int, String> {
+    get fun map(): map<Int, Int> {
         return self.arr;
     }
 
@@ -245,7 +254,7 @@ contract Example {
     const MaxMapSize: Int = 42;
 
     // Persistent state variables
-    arr: map<Int, String>; // "array" of String values as a map
+    arr: map<Int, Int>; // "array" of String values as a map
     arrLength: Int = 0;    // length of the "array", defaults to 0
 
     // Constructor (initialization) function of the contract

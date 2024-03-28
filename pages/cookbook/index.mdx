@@ -175,7 +175,7 @@ contract Iteration with Deployable {
 
 </Callout>
 
-### How to make a cyclic array with a map
+### How to make a circular buffer with a map
 
 ```tact
 import "@stdlib/deploy"; // for Deployable trait
@@ -183,7 +183,7 @@ import "@stdlib/deploy"; // for Deployable trait
 // This contract records the last 5 timestamps of when "timer" message was received
 contract Arrays with Deployable {
     // Declare a compile-time constant upper bound for our map representing a buffer
-    const MaxBufferSize: Int = 42;
+    const MaxBufferSize: Int = 5;
 
     // Persistent state variables
     buffer: map<Int, Int>; // this is our buffer implemented with a map
@@ -195,12 +195,12 @@ contract Arrays with Deployable {
 
     // Internal function for adding a new item into the buffer
     fun bufferPush(item: Int) {
-        if (self.arrLength < self.MaxSize) {
+        if (self.arrLength < self.MaxBufferSize) {
             self.arr.set(self.arrLength, item);
-            self.arrLength = self.arrLength + 1;
+            self.arrLength += 1;
         } else {
             self.arr.set(self.arrStart, item);
-            self.arrStart = (self.arrStart + 1) % self.MaxSize;
+            self.arrStart = (self.arrStart + 1) % self.MaxBufferSize;
         }
     }
 
@@ -209,7 +209,7 @@ contract Arrays with Deployable {
         let i: Int = self.arrStart;
         repeat (self.arrLength) {
             dump(self.arr.get(i)!!); // !! tells the compiler this can't be null
-            i = (i + 1) % self.MaxSize;
+            i = (i + 1) % self.MaxBufferSize;
         }
     }
 
