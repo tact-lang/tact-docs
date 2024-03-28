@@ -2,23 +2,9 @@
 
 import { Callout } from 'nextra/components'
 
-The type `map<k, v>{:tact}` is used as a way to associate keys of type `k` with corresponding values of type `v`.
+The [composite type](/book/types#composite-types) `map<k, v>{:tact}` is used as a way to associate keys of type `k` with corresponding values of type `v`.
 
-Possible key types:
-
-* [`Int{:tact}`][ints]
-* `Address{:tact}`
-
-Possible value types:
-
-* [`Int{:tact}`][ints]
-* [`Bool{:tact}`](/book/types#booleans)
-* `Cell{:tact}`
-* `Address{:tact}`
-* [Struct](/book/structs-and-messages#structs)
-* [Message](/book/structs-and-messages#messages)
-
-For example, `map<Int, Int>{:tact}` uses [`Int{:tact}`][ints] type for its keys and values:
+For example, `map<Int, Int>{:tact}` uses [`Int{:tact}`][int] type for its keys and values:
 
 ```tact
 struct IntToInt {
@@ -26,18 +12,255 @@ struct IntToInt {
 }
 ```
 
-Additionally, maps allow [integer serialization](/book/integers#serialization-types) of their keys, values or both to [preserve space and reduce storage costs](/book/integers#serialization):
+## Allowed types
+
+Allowed key types:
+
+* [`Int{:tact}`][int]
+* [`Address{:tact}`][p]
+
+Allowed value types:
+
+* [`Int{:tact}`][int]
+* [`Bool{:tact}`](/book/types#booleans)
+* [`Cell{:tact}`][p]
+* [`Address{:tact}`][p]
+* [Struct](/book/structs-and-messages#structs)
+* [Message](/book/structs-and-messages#messages)
+
+## Operations
+
+### Declare
+
+As a [local variable](/book/statements#let), using `emptyMap(){:tact}` function of standard library:
+
+```tact
+let fizz: map<Int, String> = emptyMap();
+let fizz: map<Int, String> = null; // identical to the previous line, but less descriptive
+```
+
+As a [persistent state variables](/book/contracts#variables):
+
+```tact
+contract Example {
+    fizz: map<Int, Int>; // Int keys to Int values
+    init() {
+        self.fizz = emptyMap(); // redundant and can be removed!
+    }
+}
+```
+
+Note, that [persistent state variables](/book/contracts#variables) of type `map<k, v>{:tact}` are initialized empty by default and don't need default values or an initialization in the [`init(){:tact}` function](/book/contracts#init-function).
+
+### Set values, `.set()` [#set]
+
+To set or replace the value under a key call the `.set(){:tact}` [method](/book/functions#extension-function), which is accessible for all maps.
+
+```tact
+// Empty map
+let fizz: map<Int, String> = emptyMap();
+
+// Setting a couple of values under different keys
+fizz.set(7, "nice");
+fizz.set(42, "the answer");
+
+// Overriding one of the existing key-value pairs
+fizz.set(7, "42 over 6"); // key 7 now points to value "42 over 6"
+```
+
+### Get values, `.get()` [#get]
+
+To check if a key is found in the map by calling the `.get(){:tact}` [method](/book/functions#extension-function), which is accessible for all maps. This will return `null{:tact}` if the key is missing, or the value if the key is found.
+
+```tact
+// Empty map
+let fizz: map<Int, String> = emptyMap();
+
+// Setting a value
+fizz.set(68, "almost nice");
+
+// Getting the value by its key
+let gotButUnsure: String? = fizz.get(68);          // returns String or null, therefore the type is String?
+let mustHaveGotOrErrored: String = fizz.get(68)!!; // explicitly asserting that the value must not be null,
+                                                   // which may crush at runtime if the value is, in fact, null
+
+// Alternatively, we can check for the key in the if statement
+if (gotButUnsure != null) {
+    // Hooray, let's use !! without fear now and cast String? to String
+    let definitelyGotIt: String = fizz.get(68)!!;
+} else {
+    // Do something else...
+}
+```
+
+### Delete entries
+
+To delete a single key-value pair (single entry), simply assign the `null{:tact}` value to the key when using the [`.set(){:tact}`](#set) [method](/book/functions#extension-function).
+
+```tact
+// Empty map
+let fizz: map<Int, String> = emptyMap();
+
+// Setting a couple of values under different keys
+fizz.set(7, "nice");
+fizz.set(42, "the answer");
+
+// Deleting one of the keys
+fizz.set(7, null); // the entry under key 7 is now deleted
+```
+
+To delete all the entries from the map, re-assign the map using the `emptyMap(){:tact}` function:
+
+```tact
+// Empty map
+let fizz: map<Int, String> = emptyMap();
+
+// Setting a couple of values under different keys
+fizz.set(7, "nice");
+fizz.set(42, "the answer");
+
+// Deleting all of the entries at once
+fizz = emptyMap();
+fizz = null; // identical to the previous line, but less descriptive
+```
+
+### Convert to a `Cell`, `.asCell()`
+
+Use `.asCell(){:tact}` [method](/book/functions#extension-function) on maps to convert all their values to a [`Cell{:tact}`][p] type. Be mindful, that [`Cell{:tact}`][p] type is able to store up to 1023 bits, so converting larger maps to the Cell will result in error.
+
+As an example, this method is useful for sending small maps directly in the body of the reply:
+
+```tact
+contract Example {
+    // Persistent state variables
+    fizz: map<Int, Int>; // our map
+
+    // Constructor (initialization) function of the contract
+    init() {
+        // Setting a bunch of values
+        self.fizz.set(0, 3);
+        self.fizz.set(1, 14);
+        self.fizz.set(2, 15);
+        self.fizz.set(3, 926);
+        self.fizz.set(4, 5_358_979_323_846);
+    }
+
+    // Internal message receiver, which responds to empty messages
+    receive() {
+        // Here we're converting the map to a Cell and making a reply with it
+        self.reply(self.fizz.asCell());
+    }
+}
+```
+
+### Traverse over entries
+
+At the moment Tact doesn't have a special syntax for iterating over maps. However, it's possible to use maps as a simple arrays if you define a `map<Int, v>{:tact}` with an [`Int{:tact}`][int] type for the keys and keep track of the number of items in the separate variable:
+
+```tact
+contract MapAsArray {
+    // Persistent state variables
+    arr: map<Int, String>; // «array» of String values as a map
+    arrLength: Int = 0;    // length of the «array», defaults to 0
+
+    // Constructor (initialization) function of the contract
+    init() {}
+
+    // Internal function for pushing an item to the end of the «array»
+    fun arrPush(item: String) {
+        self.arr.set(self.arrLength, item);
+        self.arrLength += 1;
+    }
+
+    // Internal message receiver, which responds to a String message "item"
+    receive("item") {
+        // add a new item + increase the counter
+        self.arrPush("item");
+    }
+
+    // Internal message receiver, which responds to a String message "get_last"
+    receive("get_last") {
+        // Reply back with the latest item in the map if it exists
+        if (self.arrLength > 0) {
+            // Note, that we use !! operator as we know for sure that the value would be there
+            self.reply((self.arr.get(self.arrLength - 1)!!).asComment());
+        }
+    }
+
+    // Getter function for obtaining the «array»
+    get fun map(): map<Int, String> {
+        return self.arr;
+    }
+
+    // Getter function for obtaining the current length of the «array»
+    get fun length(): Int {
+        return self.arrLength;
+    }
+}
+```
+
+Additionally, it's useful to set an upper-bound restriction on such maps, so that you [don't hit the limits](#limits-and-drawbacks).
+
+## Serialization
+
+It's possible to do [integer serialization](/book/integers#serialization-types) of map keys, values or both to [preserve space and reduce storage costs](/book/integers#serialization):
 
 ```tact
 struct SerializedMapInside {
+    // Both keys and values here would be serialized as 8-bit unsigned integers,
+    // thus preserving the space and reducing storage costs:
     countersButCompact: map<Int as uint8, Int as uint8>;
 }
 ```
 
 <Callout>
 
-  Read about other serialization options: [Compatibility with FunC](/book/func#convert-serialization)
+  Read about other serialization options: [Compatibility with FunC](/book/func#convert-serialization).
 
 </Callout>
 
-[ints]: /book/integers
+## Limits and drawbacks
+
+While maps can be convenient to work with on a small scale, they cause a number of issues if the number of items is unbounded and map can significantly grow in size:
+
+* As the upper bound of the smart contract state size is around $65\,000$ items of type [`Cell{:tact}`][p], it constrains the storage limit of maps to be about $30\,000$ key-value pairs for the whole contract.
+
+* The more entries you have in a map, the bigger [compute fees](https://docs.ton.org/develop/howto/fees-low-level#computation-fees) you'll get. Thus, working with large maps makes compute fees tough to predict and manage.
+
+* Using a large map in a single contract doesn't allow to distribute its workload. Hence, it can make the overall performance much worse compared to  using a smaller map and a bunch of interacting smart contracts.
+
+To resolve such issues you can set an upper-bound restriction on a map as a constant and check against it every time you're setting a new value to the map:
+
+```tact
+contract Example {
+    // Declare a compile-time constant upper-bound for our map
+    const MaxMapSize: Int = 42;
+
+    // Persistent state variables
+    arr: map<Int, String>; // "array" of String values as a map
+    arrLength: Int = 0;    // length of the "array", defaults to 0
+
+    // Constructor (initialization) function of the contract
+    init() {}
+
+    // Internal function for pushing an item to the end of the "array"
+    fun arrPush(item: String) {
+        if (self.arrLength >= self.MaxMapSize) {
+            // Do something, stop the operation, for example
+        } else {
+            // Proceed with adding new item
+            self.arr.set(self.arrLength, item);
+            self.arrLength += 1;
+        }
+    }
+}
+```
+
+If you still need a large map or an unbound (infinitely large) map, it's better to architect your smart contracts according to the [asynchronous and actor-based model of TON blockchain](https://docs.ton.org/learn/overviews/ton-blockchain). That is, to use contract sharding and essentially make the whole blockchain a part of your map(s).
+
+{/*
+  TODO: Add reference to sharding page as per: https://github.com/tact-lang/tact-docs/issues/155
+*/}
+
+[int]: /book/integers
+[p]: /book/types#primitive-types
