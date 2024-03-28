@@ -25,11 +25,11 @@ $+32$      | `SendDestroyIfZero{:tact}`      | Current account must be destroyed
 
 ## Combining modes with flags
 
-To make the [`Int{:tact}`][int] value for `mode` field of SendParameters, you just have to combine base modes with optional flags by adding them together as numbers.
+To make the [`Int{:tact}`][int] value for `mode` field of SendParameters, you just have to combine base modes with optional flags by applying a [`bitwise OR{:tact}`](/book/operators#binary-bitwise-or).
 
-For example, if you want to send a regular message and pay transfer fees separately, use the mode $0$ (default) and a flag $+1$ to get `mode` $= 1$, which is equal to just use `SendPayGasSeparately{:tact}` constant.
+For example, if you want to send a regular message and pay transfer fees separately, use the mode $0$ (default) and a flag $+1$ to get `mode` $= 1$, which is equal to using `SendPayGasSeparately{:tact}` constant.
 
-Alternatively, if you want to send the whole contract balance and destroy it immediately, use the mode $128$ and flag $+32$ to get `mode` $= 160$, which is equal to `SendRemainingBalance{:tact}` + `SendDestroyIfZero{:tact}`.
+Alternatively, if you want to send the whole contract balance and destroy it immediately, use the mode $128$ and flag $+32$ to get `mode` $= 160$, which is equal to `SendRemainingBalance | SendDestroyIfZero{:tact}`.
 
 Here's how the latter example would look in code:
 
@@ -39,13 +39,21 @@ let value: Int = ton("1");
 send(SendParameters{
     to: to,
     value: value,
-    mode: SendRemainingBalance + SendDestroyIfZero,
+    mode: SendRemainingBalance | SendDestroyIfZero,
     body: "Hello, World!".asComment()
 });
 ```
 
+<Callout type="warning" emoji="⚠️">
+
+  Note, that while adding ([`+{:tact}`](/book/operators#binary-add)) base modes together with optional flags is possible, it is discouraged due to the possibility of excess values. Use the bitwise OR ([`|{:tact}`](/book/operators#binary-bitwise-or)) instead, as it's designed to work with such flag and bit manipulations of the `mode`.
+
+</Callout>
+
 <Callout>
-  NOTE: There can be only one [base mode](#base-modes), but number of [optional flags](#optional-flags) may vary: you can use them all, none or just some.
+
+  Also note, that there can be only one [base mode](#base-modes), but number of [optional flags](#optional-flags) may vary: you can use them all, none or just some.
+
 </Callout>
 
 [int]: /book/integers
