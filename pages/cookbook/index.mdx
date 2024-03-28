@@ -114,30 +114,129 @@ dump("The loop is over!");
 
 ## Map
 
+For description and basic usage see [`map<k, v>{:tact}` type in the Book](/book/maps).
+
+### How to iterate over map entries
+
 ```tact
-// Create an empty map
-let m: map<Int, String> = emptyMap();
+import "@stdlib/deploy"; // for Deployable trait
 
-// Add the key/value pair to the map
-m.set(1, "a");
+contract Iteration with Deployable {
+    // Persistent state variables
+    counter: Int as uint32;    // counter of map entries, serialized as a 32-bit unsigned
+    record: map<Int, Address>; // Int to Address map
 
-// Get the value by the key from the map
-let first: String? = m.get(1);
+    // Constructor (initialization) function of the contract
+    init() {
+        self.counter = 0; // Setting the self.counter to 0
+    }
 
-// Check if the key exists
-if (first == null) {
-    // do something...
-} else {
-    // Cast value if the key exists
-    let firstStr: String = first!!;
-    // do something...
+    // Internal message receiver, which responds to a String message "Add"
+    receive("Add") {
+        // Get the Context Struct
+        let ctx: Context = context();
+        // Set the entry: counter Int as a key, ctx.sender Address as a value
+        self.record.set(self.counter, ctx.sender);
+        // Increase the counter
+        self.counter = self.counter + 1;
+    }
+
+    // Internal message receiver, which responds to a String message "Send"
+    receive("Send") {
+        // Loop until the value of self.counter (over all the self.record entries)
+        let i: Int = 0; // declare usual i for loop iterations
+        while (i < self.counter) {
+           send(SendParameters{
+                bounce: false,              // do not bounce back this message
+                to: self.record.get(i)!!,   // set the sender address, knowing that key i exists in the map
+                value: ton("0.0000001"),    // 100 nanoToncoins (nano-tons)
+                mode: SendIgnoreErrors,     // send ignoring errors in transaction, if any
+                body: "SENDING".asComment() // String "SENDING" converted to a Cell as a message body
+            });
+            i += 1; // don't forget to increase the i
+        }
+    }
+
+    // Getter function for obtaining the value of self.record
+    get fun map(): map<Int, Address> {
+        return self.record;
+    }
+
+    // Getter function for obtaining the value of self.counter
+    get fun counter(): Int {
+        return self.counter;
+    }
 }
 ```
 
 <Callout>
 
-  **Useful links:**\
-  [`map<k, v>{:tact}` type in the Book](/book/maps)
+  This example is adapted from [howardpen9/while-example-tact](https://github.com/howardpen9/while-example-tact/blob/de5807fcd20dba5f6a3748d112511477fb22bfcc/contracts/awesome.tact#L19C10-L19C10).
+
+</Callout>
+
+### How to make a cyclic array with a map
+
+```tact
+import "@stdlib/deploy"; // for Deployable trait
+
+// This contract records the last 5 timestamps of when "timer" message was received
+contract Arrays with Deployable {
+    // Declare a compile-time constant upper-bound for our map
+    const MaxMapSize: Int = 42;
+
+    // Persistent state variables
+    arr: map<Int, Int>; // this is our array implemented with a map
+    arrLength: Int as uint8 = 0;
+    arrStart: Int as uint8 = 0; // our array is cyclic
+
+    // Constructor (initialization) function of the contract
+    init() {}
+
+    // Internal function for pushing an item to the end of the array
+    fun arrPush(item: Int) {
+        if (self.arrLength < self.MaxSize) {
+            self.arr.set(self.arrLength, item);
+            self.arrLength = self.arrLength + 1;
+        } else {
+            self.arr.set(self.arrStart, item);
+            self.arrStart = (self.arrStart + 1) % self.MaxSize;
+        }
+    }
+
+    // Iterate over all items in the array and dump them
+    fun arrPrint() {
+        let i: Int = self.arrStart;
+        repeat (self.arrLength) {
+            dump(self.arr.get(i)!!); // !! tells the compiler this can't be null
+            i = (i + 1) % self.MaxSize;
+        }
+    }
+
+    // Internal message receiver, which responds to a String message "timer"
+    // and records the timestamp when it receives such message
+    receive("timer") {
+        let timestamp: Int = now();
+        self.arrPush(timestamp);
+    }
+
+    receive("dump") {
+        self.arrPrint();
+    }
+
+    get fun length(): Int {
+        return self.arrLength;
+    }
+
+    get fun map(): map<Int, Int> {
+        return self.arr;
+    }
+}
+```
+
+<Callout>
+
+  This example is adapted from [Arrays page in Tact-By-Example](https://tact-by-example.org/04-arrays).
 
 </Callout>
 
