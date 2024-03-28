@@ -138,7 +138,7 @@ contract Iteration with Deployable {
         // Set the entry: counter Int as a key, ctx.sender Address as a value
         self.record.set(self.counter, ctx.sender);
         // Increase the counter
-        self.counter = self.counter + 1;
+        self.counter += 1;
     }
 
     // Internal message receiver, which responds to a String message "Send"
@@ -182,19 +182,19 @@ import "@stdlib/deploy"; // for Deployable trait
 
 // This contract records the last 5 timestamps of when "timer" message was received
 contract Arrays with Deployable {
-    // Declare a compile-time constant upper-bound for our map
-    const MaxMapSize: Int = 42;
+    // Declare a compile-time constant upper bound for our map representing a buffer
+    const MaxBufferSize: Int = 42;
 
     // Persistent state variables
-    arr: map<Int, Int>; // this is our array implemented with a map
-    arrLength: Int as uint8 = 0;
-    arrStart: Int as uint8 = 0; // our array is cyclic
+    buffer: map<Int, Int>; // this is our buffer implemented with a map
+    bufferLength: Int as uint8 = 0;
+    bufferStart: Int as uint8 = 0; // current index into the buffer
 
     // Constructor (initialization) function of the contract
     init() {}
 
-    // Internal function for pushing an item to the end of the array
-    fun arrPush(item: Int) {
+    // Internal function for adding a new item into the buffer
+    fun bufferPush(item: Int) {
         if (self.arrLength < self.MaxSize) {
             self.arr.set(self.arrLength, item);
             self.arrLength = self.arrLength + 1;
