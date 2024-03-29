@@ -25,7 +25,7 @@ $+32$      | `SendDestroyIfZero{:tact}`      | Current account must be destroyed
 
 ## Combining modes with flags
 
-To make the [`Int{:tact}`][int] value for `mode` field of SendParameters, you just have to combine base modes with optional flags by applying a [`bitwise OR{:tact}`](/book/operators#binary-bitwise-or).
+To make the [`Int{:tact}`][int] value for `mode` field of SendParameters, you just have to combine base modes with optional flags by applying the [`bitwise OR{:tact}`](/book/operators#binary-bitwise-or) operation.
 
 For example, if you want to send a regular message and pay transfer fees separately, use the mode $0$ (default) and a flag $+1$ to get `mode` $= 1$, which is equal to using `SendPayGasSeparately{:tact}` constant.
 
