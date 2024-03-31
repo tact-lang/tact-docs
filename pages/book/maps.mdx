@@ -158,61 +158,50 @@ contract Example {
 At the moment Tact doesn't have a special syntax for iterating over maps. However, it's possible to use maps as a simple arrays if you define a `map<Int, v>{:tact}` with an [`Int{:tact}`][int] type for the keys and keep track of the number of items in the separate variable:
 
 ```tact
-contract MapAsArray {
+contract Iteration {
     // Persistent state variables
-    arr: map<Int, Int>; // «array» of Int values as a map
-    arrLength: Int = 0; // length of the «array», defaults to 0
+    counter: Int as uint32;    // counter of map entries, serialized as a 32-bit unsigned
+    record: map<Int, Address>; // Int to Address map
 
     // Constructor (initialization) function of the contract
-    init() {}
-
-    // Internal function for pushing an item to the end of the «array»
-    fun arrPush(item: Int) {
-        self.arr.set(self.arrLength, item);
-        self.arrLength += 1;
+    init() {
+        self.counter = 0; // Setting the self.counter to 0
     }
 
-    // Internal function for popping the last item of the «array» and returning its value
-    fun arrPop(): Int {
-        require(self.arrLength > 0, "No items in the array to delete!");
-
-        let lastItem: Int = self.arr.get(self.arrLength - 1)!!;
-        self.arr.set(self.arrLength - 1, null);
-        self.arrLength -= 1;
-
-        return lastItem;
+    // Internal message receiver, which responds to a String message "Add"
+    receive("Add") {
+        // Get the Context Struct
+        let ctx: Context = context();
+        // Set the entry: counter Int as a key, ctx.sender Address as a value
+        self.record.set(self.counter, ctx.sender);
+        // Increase the counter
+        self.counter += 1;
     }
 
-    // Internal message receiver, which responds to a String message "push"
-    receive("push") {
-        // Add a new item and increase the counter
-        self.arrPush(42);
-    }
-
-    // Internal message receiver, which responds to a String message "pop"
-    receive("pop") {
-        // Remove the last item and decrease the counter
-        self.arrPop();
-    }
-
-    // Internal message receiver, which responds to a String message "get_last"
-    receive("get_last") {
-        // Reply back with the latest item in the map if it exists
-        if (self.arrLength > 0) {
-            // Note, that we use !! operator as we know for sure that the value would be there
-            let last: Int = self.arr.get(self.arrLength - 1)!!;
-            self.reply(last.toCoinsString().asComment());
+    // Internal message receiver, which responds to a String message "Send"
+    receive("Send") {
+        // Loop until the value of self.counter (over all the self.record entries)
+        let i: Int = 0; // declare usual i for loop iterations
+        while (i < self.counter) {
+           send(SendParameters{
+                bounce: false,              // do not bounce back this message
+                to: self.record.get(i)!!,   // set the sender address, knowing that key i exists in the map
+                value: ton("0.0000001"),    // 100 nanoToncoins (nano-tons)
+                mode: SendIgnoreErrors,     // send ignoring errors in transaction, if any
+                body: "SENDING".asComment() // String "SENDING" converted to a Cell as a message body
+            });
+            i += 1; // don't forget to increase the i
         }
     }
 
-    // Getter function for obtaining the «array»
-    get fun map(): map<Int, Int> {
-        return self.arr;
+    // Getter function for obtaining the value of self.record
+    get fun map(): map<Int, Address> {
+        return self.record;
     }
 
-    // Getter function for obtaining the current length of the «array»
-    get fun length(): Int {
-        return self.arrLength;
+    // Getter function for obtaining the value of self.counter
+    get fun counter(): Int {
+        return self.counter;
     }
 }
 ```
@@ -221,14 +210,16 @@ It's often useful to set an upper-bound restriction on such maps, so that you [d
 
 <Callout type="warning" emoji="⚠️">
 
-  Note, that manually keeping track of number of items or checking the length of such map is very error-prone and generally discouraged. Instead, try to wrap your map into the [Struct](/book/structs-and-messages#structs) and define [extension functions](/book/functions#extension-function) on it. See example in the Cookbook: [How to traverse a map wrapped in a Struct](/cookbook#how-to-traverse-a-map-wrapped-in-a-struct).
+  Note, that manually keeping track of number of items or checking the length of such map is very error-prone and generally discouraged. Instead, try to wrap your map into the [Struct](/book/structs-and-messages#structs) and define [extension functions](/book/functions#extension-function) on it. See example in the Cookbook: [How to emulate an array using a map wrapped in a Struct](/cookbook#how-to-emulate-an-array-using-a-map-wrapped-in-a-struct).
 
 </Callout>
 
 <Callout>
 
+  This example was adapted from [howardpen9/while-example-tact](https://github.com/howardpen9/while-example-tact/blob/de5807fcd20dba5f6a3748d112511477fb22bfcc/contracts/awesome.tact#L19C10-L19C10).
+
   See other examples of traversing maps in the Cookbook:\
-  [How to emulate an array using a map and iterate over its entries](/cookbook#how-to-emulate-an-array-using-a-map-and-iterate-over-its-entries)\
+  [How to emulate an array using a map](/cookbook#how_to_emulate_an_array_using_a_map)\
   [How to make a cyclic array with a map](/cookbook#how-to-make-a-cyclic-array-with-a-map)
 
 </Callout>
