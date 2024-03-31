@@ -545,8 +545,8 @@ receive() {
     send(SendParameters{
         to: sender(),
         value: 0,
-        mode: SendRemainingValue + SendIgnoreErrors,
-        body: "Hello from Tact!".asComment() // comment (optional)
+        mode: SendRemainingValue | SendIgnoreErrors, // prefer | over + for the mode
+        body: "Hello from Tact!".asComment()         // comment (optional)
     });
 }
 ```

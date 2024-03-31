@@ -172,7 +172,7 @@ contract HelloWorld {
         send(SendParameters{
             to: sender(),
             value: 0,
-            mode: SendRemainingValue + SendIgnoreErrors,
+            mode: SendRemainingValue | SendIgnoreErrors,
             body: CanBounce{counter: self.counter}.toCell()
         });
     }

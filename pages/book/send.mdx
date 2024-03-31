@@ -38,7 +38,7 @@ receive() {
         // bounce is set to true by default
         to: sender(), // sending message back to the sender
         value: 0, // don't add Toncoins to the message...
-        mode: SendRemainingValue + SendIgnoreErrors, // ...except for ones received from the sender due to SendRemainingValue
+        mode: SendRemainingValue | SendIgnoreErrors, // ...except for ones received from the sender due to SendRemainingValue
         body: "Hello, World".asComment(); // asComment converts a String to a Cell with a comment
     });
 }
