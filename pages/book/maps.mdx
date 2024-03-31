@@ -93,7 +93,7 @@ if (gotButUnsure != null) {
 }
 ```
 
-### Delete entries
+### Delete entries [#del]
 
 To delete a single key-value pair (single entry), simply assign the `null{:tact}` value to the key when using the [`.set(){:tact}`](#set) [method](/book/functions#extension-function).
 
@@ -124,7 +124,7 @@ fizz = emptyMap();
 fizz = null; // identical to the previous line, but less descriptive
 ```
 
-### Convert to a `Cell`, `.asCell()`
+### Convert to a `Cell`, `.asCell()` [#convert]
 
 Use `.asCell(){:tact}` [method](/book/functions#extension-function) on maps to convert all their values to a [`Cell{:tact}`][p] type. Be mindful, that [`Cell{:tact}`][p] type is able to store up to 1023 bits, so converting larger maps to the Cell will result in error.
 
@@ -153,7 +153,7 @@ contract Example {
 }
 ```
 
-### Traverse over entries
+### Traverse over entries [#traverse]
 
 At the moment Tact doesn't have a special syntax for iterating over maps. However, it's possible to use maps as a simple arrays if you define a `map<Int, v>{:tact}` with an [`Int{:tact}`][int] type for the keys and keep track of the number of items in the separate variable:
 
@@ -174,6 +174,8 @@ contract MapAsArray {
 
     // Internal function for popping the last item of the «array» and returning its value
     fun arrPop(): Int {
+        require(self.arrLength > 0, "No items in the array to delete!");
+
         let lastItem: Int = self.arr.get(self.arrLength - 1)!!;
         self.arr.set(self.arrLength - 1, null);
         self.arrLength -= 1;
@@ -181,10 +183,16 @@ contract MapAsArray {
         return lastItem;
     }
 
-    // Internal message receiver, which responds to a String message "item"
-    receive("item") {
-        // add a new item + increase the counter
+    // Internal message receiver, which responds to a String message "push"
+    receive("push") {
+        // Add a new item and increase the counter
         self.arrPush(42);
+    }
+
+    // Internal message receiver, which responds to a String message "pop"
+    receive("pop") {
+        // Remove the last item and decrease the counter
+        self.arrPop();
     }
 
     // Internal message receiver, which responds to a String message "get_last"
@@ -192,7 +200,8 @@ contract MapAsArray {
         // Reply back with the latest item in the map if it exists
         if (self.arrLength > 0) {
             // Note, that we use !! operator as we know for sure that the value would be there
-            self.reply((self.arr.get(self.arrLength - 1)!!).asComment());
+            let last: Int = self.arr.get(self.arrLength - 1)!!;
+            self.reply(last.toCoinsString().asComment());
         }
     }
 
@@ -208,12 +217,18 @@ contract MapAsArray {
 }
 ```
 
-Additionally, it's useful to set an upper-bound restriction on such maps, so that you [don't hit the limits](#limits-and-drawbacks).
+It's often useful to set an upper-bound restriction on such maps, so that you [don't hit the limits](#limits-and-drawbacks).
+
+<Callout type="warning" emoji="⚠️">
+
+  Note, that manually keeping track of number of items or checking the length of such map is very error-prone and generally discouraged. Instead, try to wrap your map into the [Struct](/book/structs-and-messages#structs) and define [extension functions](/book/functions#extension-function) on it. See example in the Cookbook: [How to traverse a map wrapped in a Struct](/cookbook#how-to-traverse-a-map-wrapped-in-a-struct).
+
+</Callout>
 
 <Callout>
 
   See other examples of traversing maps in the Cookbook:\
-  [How to iterate over map entries](/cookbook#how-to-iterate-over-map-entries)\
+  [How to emulate an array using a map and iterate over its entries](/cookbook#how-to-emulate-an-array-using-a-map-and-iterate-over-its-entries)\
   [How to make a cyclic array with a map](/cookbook#how-to-make-a-cyclic-array-with-a-map)
 
 </Callout>

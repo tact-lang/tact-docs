@@ -116,7 +116,7 @@ dump("The loop is over!");
 
 For description and basic usage see [`map<k, v>{:tact}` type in the Book](/book/maps).
 
-### How to iterate over map entries
+### How to emulate an array using a map and iterate over its entries
 
 ```tact
 import "@stdlib/deploy"; // for Deployable trait
@@ -175,13 +175,88 @@ contract Iteration with Deployable {
 
 </Callout>
 
+### How to traverse a map wrapped in a Struct
+
+```tact
+import "@stdlib/deploy";
+
+struct Array {
+    map: map<Int, Int>; // «array» of Int values as a map of Ints to Ints
+    length: Int = 0;    // length of the «array», defaults to 0
+}
+
+// Extension mutation function for adding new entries
+extends mutates fun push(self: Array, item: Int) {
+    self.map.set(self.length, item); // set the entry (key-value pair)
+    self.length = self.length + 1;   // increase the length field
+}
+
+// Extension mutation function for deleting the last entry and returning its value
+extends mutates fun pop(self: Array): Int {
+    require(self.length > 0, "No items in the array to delete!");
+
+    // Note, that we use !! operator as we know for sure that the value would be there
+    let lastItem: Int = self.map.get(self.length - 1)!!;
+    self.map.set(self.length - 1, null); // delete the entry
+    self.length = self.length - 1;       // decrease the length field
+
+    return lastItem;
+}
+
+// Extension function for returning the last value
+extends fun getLast(self: Array): Int {
+    require(self.length > 0, "No items in the array!");
+
+    // Note, that we use !! operator as we know for sure that the value would be there
+    return self.map.get(self.length - 1)!!;
+}
+
+contract MapsAsArrays with Deployable {
+    // Persistent state variables
+    array: Array; // our «array», which uses the map
+
+    // Constructor (initialization) function of the contract
+    init() {
+        self.array = Array{map: emptyMap()}; // length defaults to 0
+    }
+
+    // Internal message receiver, which responds to a String message "push"
+    receive("push") {
+        // Add a new item and increase the counter
+        self.array.push(42);
+    }
+
+    // Internal message receiver, which responds to a String message "pop"
+    receive("pop") {
+        // Remove the last item and decrease the counter
+        self.array.pop();
+    }
+
+    // Internal message receiver, which responds to a String message "get_last"
+    receive("get_last") {
+        // Reply back with the latest item in the map if it exists, or raise an error
+        self.reply(self.array.getLast().toCoinsString().asComment());
+    }
+
+    // Getter function for obtaining the «array»
+    get fun map(): map<Int, Int> {
+        return self.array.map;
+    }
+
+    // Getter function for obtaining the current length of the «array»
+    get fun length(): Int {
+        return self.array.length;
+    }
+}
+```
+
 ### How to make a circular buffer with a map
 
 ```tact
 import "@stdlib/deploy"; // for Deployable trait
 
 // This contract records the last 5 timestamps of when "timer" message was received
-contract Arrays with Deployable {
+contract CircularBuffer with Deployable {
     // Declare a compile-time constant upper bound for our map representing a buffer
     const MaxBufferSize: Int = 5;
 
@@ -195,20 +270,20 @@ contract Arrays with Deployable {
 
     // Internal function for adding a new item into the buffer
     fun bufferPush(item: Int) {
-        if (self.arrLength < self.MaxBufferSize) {
-            self.arr.set(self.arrLength, item);
-            self.arrLength += 1;
+        if (self.bufferLength < self.MaxBufferSize) {
+            self.buffer.set(self.bufferLength, item);
+            self.bufferLength += 1;
         } else {
-            self.arr.set(self.arrStart, item);
-            self.arrStart = (self.arrStart + 1) % self.MaxBufferSize;
+            self.buffer.set(self.bufferStart, item);
+            self.bufferStart = (self.bufferStart + 1) % self.MaxBufferSize;
         }
     }
 
-    // Iterate over all items in the array and dump them
-    fun arrPrint() {
-        let i: Int = self.arrStart;
-        repeat (self.arrLength) {
-            dump(self.arr.get(i)!!); // !! tells the compiler this can't be null
+    // Iterate over all items in the buffer and dump them
+    fun bufferPrint() {
+        let i: Int = self.bufferStart;
+        repeat (self.bufferLength) {
+            dump(self.buffer.get(i)!!); // !! tells the compiler this can't be null
             i = (i + 1) % self.MaxBufferSize;
         }
     }
@@ -217,19 +292,20 @@ contract Arrays with Deployable {
     // and records the timestamp when it receives such message
     receive("timer") {
         let timestamp: Int = now();
-        self.arrPush(timestamp);
+        self.bufferPush(timestamp);
     }
 
+    // Internal message receiver, which responds to a String message "dump"
     receive("dump") {
-        self.arrPrint();
+        self.bufferPrint();
     }
 
     get fun length(): Int {
-        return self.arrLength;
+        return self.bufferLength;
     }
 
     get fun map(): map<Int, Int> {
-        return self.arr;
+        return self.buffer;
     }
 }
 ```
