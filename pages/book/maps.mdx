@@ -124,6 +124,8 @@ fizz = emptyMap();
 fizz = null; // identical to the previous line, but less descriptive
 ```
 
+With this approach all previous entries of the map are completely discarded from the contract even if the map was declared as its persistent state variable. As a result, assigning maps to `emptyMap(){:tact}` **does not** inflict any hidden or sudden [storage fees](https://docs.ton.org/develop/smart-contracts/fees#storage-fee).
+
 ### Convert to a `Cell`, `.asCell()` [#convert]
 
 Use `.asCell(){:tact}` [method](/book/functions#extension-function) on maps to convert all their values to a [`Cell{:tact}`][p] type. Be mindful, that [`Cell{:tact}`][p] type is able to store up to 1023 bits, so converting larger maps to the Cell will result in error.
@@ -219,8 +221,8 @@ It's often useful to set an upper-bound restriction on such maps, so that you [d
   This example was adapted from [howardpen9/while-example-tact](https://github.com/howardpen9/while-example-tact/blob/de5807fcd20dba5f6a3748d112511477fb22bfcc/contracts/awesome.tact#L19C10-L19C10).
 
   See other examples of map usage in the Cookbook:\
-  [How to emulate an array using a map](/cookbook#how_to_emulate_an_array_using_a_map)\
-  [How to make a cyclic array with a map](/cookbook#how-to-make-a-cyclic-array-with-a-map)
+  [How to emulate a stack using a map wrapped in a Struct](/cookbook#how-to-emulate-a-circular-buffer-using-a-map-wrapped-in-a-struct)\
+  [How to emulate a circular buffer using a map wrapped in a Struct](/cookbook#how-to-emulate-a-circular-buffer-using-a-map-wrapped-in-a-struct)
 
 </Callout>
 
