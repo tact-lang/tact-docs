@@ -16,7 +16,7 @@ Usage example:
 
 ```tact
 receive() {
-  let whoSendMeMessage: Address = sender();
+  let whoSentMeMessage: Address = sender();
 }
 ```
 
@@ -46,7 +46,7 @@ require(now() > 1000, "We're in the first 1000 seconds of 1 January 1970!");
 fun now(): Int
 ```
 
-Returns current [Unix time](https://en.wikipedia.org/wiki/Unix_time).
+Returns the current [Unix time](https://en.wikipedia.org/wiki/Unix_time).
 
 Usage example:
 
@@ -60,7 +60,7 @@ let timeOffset: Int = now() + 1000; // thousand seconds from now()
 fun myBalance(): Int;
 ```
 
-Returns the remaining balance of the smart contract as an `int` value in nanoToncoins, where nanoToncoin is the $\frac{1}{10^{9}}\mathrm{th}$ of the Toncoin.
+Returns the remaining balance of the smart contract as an integer value in nanoToncoins, where nanoToncoin is the $\frac{1}{10^{9}}\mathrm{th}$ of the Toncoin.
 
 Usage example:
 
@@ -70,7 +70,7 @@ let iNeedADolla: Int = myBalance();
 
 <Callout type="warning" emoji="⚠️">
 
-  Note, that [`send(){:tact}` function](/book/send) does not update this field.
+  Note, that [`send(){:tact}` function](/book/send) does not update the contract's balance.
 
 </Callout>
 
@@ -128,7 +128,7 @@ let foundMeSome: Address = contractAddress(initOf SomeContract());
 fun contractAddressExt(chain: Int, code: Cell, data: Cell): Address;
 ```
 
-Computes smart contract's [`Address{:tact}`][p] based on the `chain` it, `code` and `data`. Use [`initOf{:tact}`](/book/expressions#initof) expression to obtain initial `code` and initial `data` of a given contract.
+Computes smart contract's [`Address{:tact}`][p] based on the `chain` id, contract's `code` and contract's initial state `data`. Use [`initOf{:tact}`](/book/expressions#initof) expression to obtain initial `code` and initial `data` of a given contract.
 
 Usage example:
 
