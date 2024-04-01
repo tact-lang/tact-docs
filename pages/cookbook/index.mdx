@@ -199,7 +199,7 @@ struct Array {
 // Extension mutation function for adding new entries
 extends mutates fun push(self: Array, item: Int) {
     self.map.set(self.length, item); // set the entry (key-value pair)
-    self.length = self.length + 1;   // increase the length field
+    self.length += 1;                // increase the length field
 }
 
 // Extension mutation function for deleting the last entry and returning its value
@@ -209,7 +209,7 @@ extends mutates fun pop(self: Array): Int {
     // Note, that we use !! operator as we know for sure that the value would be there
     let lastItem: Int = self.map.get(self.length - 1)!!;
     self.map.set(self.length - 1, null); // delete the entry
-    self.length = self.length - 1;       // decrease the length field
+    self.length -= 1;                    // decrease the length field
 
     return lastItem;
 }
