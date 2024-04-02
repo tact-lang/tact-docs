@@ -1,5 +1,6 @@
 export default {
   index: 'Overview',
+  dexes: 'Decentralized EXchanges (DEXes)',
   '-- Community': {
     type: 'separator',
   },
