@@ -1,5 +1,6 @@
 export default {
   index: 'Overview',
+  'primitive-types': 'Primitive types',
   'data-structures': 'Data Structures',
   jettons: 'Fungible Tokens (Jettons)',
   nfts: 'Non-Fungible Tokens (NFTs)',
