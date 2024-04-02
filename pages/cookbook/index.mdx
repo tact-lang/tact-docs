@@ -122,8 +122,9 @@ For description and basic usage see [`map<k, v>{:tact}` type in the Book](/book/
 import "@stdlib/deploy"; // for Deployable trait
 
 struct Array {
-    map: map<Int, Int>; // array of Int values as a map of Ints to Ints
-    length: Int = 0;    // length of the array, defaults to 0
+    map: map<Int as uint16, Int>; // array of Int values as a map of Ints to Ints,
+                                  // with serialization of its keys to uint16 to save space
+    length: Int = 0;              // length of the array, defaults to 0
 }
 
 // Compile-time constant upper bound for our map representing an array.
@@ -131,7 +132,7 @@ const MaxArraySize: Int = 5_000; // 5,000 entries max, to stay reasonably far fr
 
 // Extension mutation function for adding new entries to the end of the array
 extends mutates fun append(self: Array, item: Int) {
-    require(self.length + 1 < MaxArraySize, "No space in the array left for new items!");
+    require(self.length + 1 <= MaxArraySize, "No space in the array left for new items!");
 
     self.map.set(self.length, item); // set the entry (key-value pair)
     self.length += 1;                // increase the length field
@@ -139,7 +140,7 @@ extends mutates fun append(self: Array, item: Int) {
 
 // Extension mutation function for inserting new entries at the given index
 extends mutates fun insert(self: Array, item: Int, idx: Int) {
-    require(self.length + 1 < MaxArraySize, "No space in the array left for new items!");
+    require(self.length + 1 <= MaxArraySize, "No space in the array left for new items!");
     require(idx >= 0, "Index of the item cannot be negative!");
     require(idx < self.length, "Index is out of array bounds!");
 
@@ -272,12 +273,18 @@ A [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)) is a collect
 import "@stdlib/deploy"; // for Deployable trait
 
 struct Stack {
-    map: map<Int, Int>; // stack of Int values as a map of Ints to Ints
-    length: Int = 0;    // length of the stack, defaults to 0
+    map: map<Int as uint16, Int>; // stack of Int values as a map of Ints to Ints,
+                                  // with serialization of its keys to uint16 to save space
+    length: Int = 0;              // length of the stack, defaults to 0
 }
+
+// Compile-time constant upper bound for our map representing an stack.
+const MaxStackSize: Int = 5_000; // 5,000 entries max, to stay reasonably far from limits
 
 // Extension mutation function for adding new entries to the end of the stack
 extends mutates fun push(self: Stack, item: Int) {
+    require(self.length + 1 <= MaxStackSize, "No space in the stack left for new items!");
+
     self.map.set(self.length, item); // set the entry (key-value pair)
     self.length += 1;                // increase the length field
 }
@@ -365,9 +372,10 @@ A [circular buffer](https://en.wikipedia.org/wiki/Circular_buffer) (circular que
 import "@stdlib/deploy"; // for Deployable trait
 
 struct CircularBuffer {
-    map: map<Int, Int>; // circular buffer of Int values as a map of Ints to Ints
-    length: Int = 0;    // length of the circular buffer, defaults to 0
-    start: Int = 0;     // current index into the circular buffer, defaults to 0
+    map: map<Int as uint8, Int>; // circular buffer of Int values as a map of Ints to Ints,
+                                 // with serialization of its keys to uint8 to save space
+    length: Int = 0;             // length of the circular buffer, defaults to 0
+    start: Int = 0;              // current index into the circular buffer, defaults to 0
 }
 
 // Compile-time constant upper bound for our map representing a circular buffer.
