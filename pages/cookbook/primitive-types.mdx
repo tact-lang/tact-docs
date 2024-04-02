@@ -2,7 +2,7 @@
 
 import { Callout, Steps } from 'nextra/components'
 
-This page has more examples of using [primitive types][p] than covered in the [Book](/book) section.
+This page has additional examples of using [primitive types][p] on top of whose covered in the [Book](/book) section.
 
 Read about each of the [primitive types][p]:
 
@@ -182,6 +182,55 @@ dump(result) // true;
 
   **Useful links:**\
   [`String.asSlice(){:tact}` in Language→Reference](/language/ref/strings#stringasslice)
+
+</Callout>
+
+## `Int` ↔ `String` [#int-and-string]
+
+### How to convert a `String` to an `Int`
+
+```tact
+// Dangerously casts a String as a Slice for parsing. Use it only if you know what you are doing!
+let string: Slice = "26052021".asSlice();  // trying to parse the String as a Slice
+
+// A variable to store the number
+let number: Int = 0;
+
+// Loop until the String is empty
+while (!string.empty()) {
+    let char: Int = string.loadUint(8);   // load Slice bytes
+    number = (number * 10) + (char - 48); // here we use ASCII table to get number
+}
+
+dump(number);
+```
+
+### How to convert an `Int` to a `String`
+
+```tact
+let number: Int = 261119911;
+
+// Converting the [number] to a String
+let numberString: String = number.toString();
+
+// Converting the [number] to a Float String
+// passed argument `3` is is a exponentiation parameter of expression 10^(-3) that will be used for computing float number. This parameter required to be `0 <= digits < 77`
+let floatString: String = number.toFloatString(3);
+
+// Converting the [number] as coins to human readable String
+let coinsString: String = number.toCoinsString();
+
+dump(numberString); // "261119911"
+dump(floatString); // "261119.911"
+dump(coinsString); // "0.261119911"
+```
+
+<Callout>
+
+  **Useful links:**\
+  [`Int.toString(){:tact}` in Language→Reference](/language/ref/strings#inttostring)\
+  [`Int.toFloatString(){:tact}` in Language→Reference](/language/ref/strings#inttofloatstring)\
+  [`Int.toCoinsString(){:tact}` in Language→Reference](/language/ref/strings#inttocoinsstring)
 
 </Callout>
 
