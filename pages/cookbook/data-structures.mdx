@@ -1,4 +1,4 @@
-# Data Structures
+# Data structures
 
 import { Callout, Steps } from 'nextra/components'
 
@@ -10,7 +10,7 @@ Most of the data structures here are made using the built-in [`map<k, v>{:tact}`
 
 ## Array
 
-An [array](https://en.wikipedia.org/wiki/Array_(data_structure)) is a continuous block of memory representing a collection of elements of same memory size, each identified by at least one array key or _index_.
+An [array](https://en.wikipedia.org/wiki/Array_(data_structure)) is a data structure consisting of a continuous block of memory, which represents a collection of elements of same memory size, each identified by at least one array key or _index_.
 
 Following example emulates an array using a [`map<Int, v>{:tact}`][map] wrapped in a [Struct](/book/structs-and-messages#structs), where `v` can be any of the [allowed value types](/book/maps#allowed-types) of the map:
 
@@ -160,7 +160,7 @@ contract MapAsArray with Deployable {
 
 ## Stack
 
-A [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)) is a collection of elements with two main operations:
+A [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)) is a data structure consisting of a collection of elements with two main operations:
 
 * push, which adds an element to the end of the collection
 * pop, which removes the most recently added element
@@ -200,7 +200,7 @@ extends mutates fun pop(self: Stack): Int {
 }
 
 // Extension function for returning the last value
-extends fun getLast(self: Stack): Int {
+extends fun peek(self: Stack): Int {
     require(self.length > 0, "No items in the stack!");
 
     // Note, that we use !! operator as we know for sure that the value would be there
@@ -239,10 +239,10 @@ contract MapAsStack with Deployable {
         self.reply(self.stack.pop().toCoinsString().asComment());
     }
 
-    // Internal message receiver, which responds to a String message "get_last"
-    receive("get_last") {
+    // Internal message receiver, which responds to a String message "peek"
+    receive("peek") {
         // Reply back with the latest item in the map if it exists, or raise an error
-        self.reply(self.stack.getLast().toCoinsString().asComment());
+        self.reply(self.stack.peek().toCoinsString().asComment());
     }
 
     // Internal message receiver, which responds to a String message "delete_all"
