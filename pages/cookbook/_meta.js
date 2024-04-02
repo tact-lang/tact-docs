@@ -1,6 +1,8 @@
 export default {
   index: 'Overview',
   'data-structures': 'Data Structures',
+  jettons: 'Fungible Tokens (Jettons)',
+  nfts: 'Non-Fungible Tokens (NFTs)',
   dexes: 'Decentralized EXchanges (DEXes)',
   '-- Community': {
     type: 'separator',
