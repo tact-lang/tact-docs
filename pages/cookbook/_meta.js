@@ -16,7 +16,7 @@ export default {
     type: 'separator',
     title: 'Multiple contracts',
   },
-  'mass-communication': 'Mass, multi-contract communication',
+  'multi-communication': 'Multi-contract communication',
   jettons: 'Fungible Tokens (Jettons)',
   nfts: 'Non-Fungible Tokens (NFTs)',
   dexes: 'Decentralized EXchanges (DEXes)',
