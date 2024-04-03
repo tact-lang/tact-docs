@@ -1,0 +1,59 @@
+# Miscellaneous
+
+import { Callout } from 'nextra/components'
+
+Various niche examples which don't yet have a dedicated page, but are useful and interesting nonetheless.
+
+## How to throw errors
+
+The `throw(){:tact}` function in a contract is useful when we don't know how often to perform a specific action.
+
+It allows intentional exception or error handling, which leads to the termination of the current transaction and reverts any state changes made during that transaction.
+
+```tact
+let number: Int = 198;
+
+// the error will be triggered anyway
+throw(36);
+
+// the error will be triggered only if the number is greater than 50
+nativeThrowWhen(35, number > 50);
+
+// the error will be triggered only if the number is NOT EQUAL to 198
+nativeThrowUnless(39, number == 198);
+```
+
+<Callout>
+
+  **Useful links:**\
+  [`throw(){:tact}` in Language→Reference](/language/ref/advanced#throw)\
+  [Errors in Tact-By-Example](https://tact-by-example.org/03-errors)
+
+</Callout>
+
+## How to generate a random number
+
+```tact
+// Declare a variable to store the random number
+let number: Int;
+
+// Generate a new random number, which is an unsigned 256-bit integer
+number = randomInt();
+
+// Generate a random number between 1 and 12
+number = random(1, 12);
+```
+
+<Callout>
+
+  **Useful links:**\
+  [`randomInt(){:tact}` in Language→Reference](/language/ref/random#randomInt)\
+  [`random(){:tact}` in Language→Reference](/language/ref/random#random)
+
+</Callout>
+
+<Callout type="info" emoji="🤔">
+
+  Didn't find your favorite example of working with something niche? Have cool implementations in mind? [Contributions are welcome!](https://github.com/tact-lang/tact-docs/issues)
+
+</Callout>
