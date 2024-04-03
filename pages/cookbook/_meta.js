@@ -10,7 +10,7 @@ export default {
   algo: 'Algorithms',
   time: 'Time and date',
   access: 'Access control',
-  randomness: 'Randomness',
+  random: 'Randomness',
   misc: 'Miscellaneous',
   '-- 2+': {
     type: 'separator',
