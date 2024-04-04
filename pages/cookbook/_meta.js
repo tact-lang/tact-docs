@@ -5,7 +5,7 @@ export default {
     title: 'Single contract',
   },
   'single-communication': 'Single-contract communication',
-  'primitive-types': 'Primitive types',
+  'type-conversions': 'Type conversions',
   'data-structures': 'Data structures',
   algo: 'Algorithms',
   time: 'Time and date',
