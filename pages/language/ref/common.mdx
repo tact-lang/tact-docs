@@ -26,6 +26,12 @@ receive() {
 
 </Callout>
 
+<Callout>
+
+  In order to reduce gas usage, prefer using this function over calling [`context().sender{:tact}`](#context) when you only need to know the sender of the message.
+
+</Callout>
+
 ## require
 
 ```tact
@@ -37,6 +43,7 @@ Checks the `condition` and throws an exception with `error` message if the `cond
 Usage example:
 
 ```tact
+// now() has to return a value greater than 1000, otherwise an error message will be thrown
 require(now() > 1000, "We're in the first 1000 seconds of 1 January 1970!");
 ```
 
@@ -80,7 +87,7 @@ let iNeedADolla: Int = myBalance();
 fun myAddress(): Address;
 ```
 
-Returns the internal address of the current smart contract as an [`Address{:tact}`][p].
+Returns the address of the current smart contract as an [`Address{:tact}`][p].
 
 Usage example:
 
@@ -94,17 +101,31 @@ let meMyselfAndI: Address = myAddress();
 fun newAddress(chain: Int, hash: Int): Address;
 ```
 
-Creates a new [`Address{:tact}`][p] based on the `chain` id (usually $0$) and the `hash` value.
+Creates a new [`Address{:tact}`][p] based on the [`chain` id](https://ton-blockchain.github.io/docs/#/overviews/TON_blockchain_overview) and the [SHA-256](/language/ref/math#sha256) encoded [`hash` value](https://docs.ton.org/learn/overviews/addresses#account-id).
 
 Usage example:
 
 ```tact
-let oldTonFoundationAddress: Address = newAddress(0, 0x83dfd552e63729b472fcbcc8c45ebcc6691702558b68ec7527e1ba403a0f31a8);
+let oldTonFoundationAddr: Address =
+    newAddress(0, 0x83dfd552e63729b472fcbcc8c45ebcc6691702558b68ec7527e1ba403a0f31a8);
+    //         ↑  ------------------------------------------------------------------
+    //         |  ↑
+    //         |  sha-256 hash of contract's init package (StateInit)
+    //         chain id: 0 is a workchain, -1 is a masterchain
 ```
 
 <Callout type="warning" emoji="⚠️">
 
-  This method throws an error if the `chain` is invalid or it points to the masterchain ($-1$) without [masterchain support](/book/masterchain) enabled.
+  This method throws an error with the [exit code 136](/book/exit-codes#136) if `chain` is invalid or [exit code 137](/book/exit-codes#137) if `chain` points to the masterchain ($-1$) without [masterchain support](/book/masterchain) enabled.
+
+</Callout>
+
+<Callout>
+
+  **Useful links:**\
+  [`chain` (Workchain ID) in TON Docs](https://docs.ton.org/learn/overviews/addresses#workchain-id)\
+  [`hash` (Account ID) in TON Docs](https://docs.ton.org/learn/overviews/addresses#account-id)\
+  [Contract's init package (`StateInit{:tact}`)](/book/expressions#initof)
 
 </Callout>
 
@@ -139,9 +160,27 @@ let hereBeDragons: Address = contractAddressExt(0, initPkg.code, initPkg.data);
 
 <Callout type="warning" emoji="⚠️">
 
-  This method throws an error if `chain` is invalid or it points to the masterchain ($-1$) without [masterchain support](/book/masterchain) enabled.
+  This method throws an error with the [exit code 136](/book/exit-codes#136) if `chain` is invalid or [exit code 137](/book/exit-codes#137) if `chain` points to the masterchain ($-1$) without [masterchain support](/book/masterchain) enabled.
 
 </Callout>
+
+## address
+
+```tact
+fun address(s: String): Address;
+```
+
+A compile-time function that converts a [`String{:tact}`][p] with an address into the Address type.
+
+Usage example:
+
+```tact
+contract Example {
+    // Persistent state variables
+    addr: Address =
+        address("EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N"); // works at compile-time!
+}
+```
 
 ## emit
 
@@ -172,6 +211,13 @@ Usage example:
 cell("te6cckEBAQEAYgAAwP8AIN0gggFMl7qXMO1E0NcLH+Ck8mCDCNcYINMf0x/TH/gjE7vyY+1E0NMf0x/T/9FRMrryoVFEuvKiBPkBVBBV+RDyo/gAkyDXSpbTB9QC+wDo0QGkyMsfyx/L/8ntVD++buA=");
 ```
 
+<Callout>
+
+  **Useful links:**\
+  [Bag of Cells in TON Docs](https://docs.ton.org/develop/data-formats/cell-boc#bag-of-cells)
+
+</Callout>
+
 ## ton
 
 ```tact
@@ -194,7 +240,7 @@ ton("0.000000001"); // 1 nanoToncoin, which is equal to 10^-9 Toncoins
 fun dump(arg);
 ```
 
-Prints the argument `arg` to the contract's debug console.
+Prints the argument `arg` to the contract's debug console. Evaluated only if `debug` option is set in the [configuration file](/book/config), otherwise does nothing.
 
 Can be applied to special values ([`null{:tact}`](/book/optionals), `void`) and values of the following types:
 
@@ -235,7 +281,7 @@ dump(emit("msg".asComment())); // As emit() function doesn't return a value, dum
 
 <Callout>
 
-  For this function to work, the compiler option `debug` has to be set to `true{:tact}` for the current project in the [`tact.config.json`](/book/config). Read more about debugging on the dedicated page: [Debugging](/book/debug).
+  For this function to work, the compiler option `debug` has to be set to `true{:tact}` for the current project in the [configuration file](/book/config). Read more about debugging on the dedicated page: [Debugging](/book/debug).
 
 </Callout>
 
@@ -260,6 +306,12 @@ Usage example:
 let ctx: Context = context();
 require(ctx.value != 68 + 1, "Invalid amount of nanoToncoins, bye!");
 ```
+
+<Callout>
+
+  Note, that if you only need to know who sent the message, use the [`sender(){:tact}`](#sender) function, as it's less gas-expensive.
+
+</Callout>
 
 [p]: /book/types#primitive-types
 [bool]: /book/types#booleans
