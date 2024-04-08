@@ -3,3 +3,9 @@ node_modules
 out
 package-lock.json
 yarn-error.log
+
+# Editors
+.vscode/
+.idea/
+.helix/
+.vim/
