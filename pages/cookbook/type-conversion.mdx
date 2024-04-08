@@ -1,0 +1,75 @@
+# Type conversion
+
+import { Callout, Steps } from 'nextra/components'
+
+This page shows examples of converting between [primitive types][p] and obtaining them from [composite types](/book/types#composite-types).
+
+## `Int` ↔ `String` [#int-string]
+
+### How to convert a `String` to an `Int`
+
+```tact
+// Defining a new extension function for type String that returns value of type Int
+// Caution: produces unexpected results when String contains non-numeric characters!
+extends fun toInt(self: String): Int {
+    // Cast the String as a Slice for parsing
+    let string: Slice = self.asSlice();
+
+    // A variable to store the accumulated number
+    let acc: Int = 0;
+
+    // Loop until the String is empty
+    while (!string.empty()) {
+        let char: Int = string.loadUint(8); // load 8 bits (1 byte) from the Slice
+        acc = (acc * 10) + (char - 48);     // using ASCII table to get numeric value
+        // Note, that this approach would produce unexpected results
+        //   when the starting String contains non-numeric characters!
+    }
+
+    // Produce the resulting number
+    return acc;
+}
+
+fun runMe() {
+    let string: String = "26052021";
+    dump(string.toInt());
+}
+```
+
+### How to convert an `Int` to a `String`
+
+```tact
+let number: Int = 261119911;
+
+// Converting the [number] to a String
+let numberString: String = number.toString();
+
+// Converting the [number] to a float String,
+//   where passed argument 3 is the exponent of 10^(-3) of resulting float String,
+//   and it can be any integer between 0 and 76 including both ends
+let floatString: String = number.toFloatString(3);
+
+// Converting the [number] as coins to a human-readable String
+let coinsString: String = number.toCoinsString();
+
+dump(numberString); // "261119911"
+dump(floatString);  // "261119.911"
+dump(coinsString);  // "0.261119911"
+```
+
+<Callout>
+
+  **Useful links:**\
+  [`Int.toString(){:tact}` in Language→Reference](/language/ref/strings#inttostring)\
+  [`Int.toFloatString(){:tact}` in Language→Reference](/language/ref/strings#inttofloatstring)\
+  [`Int.toCoinsString(){:tact}` in Language→Reference](/language/ref/strings#inttocoinsstring)
+
+</Callout>
+
+<Callout type="info" emoji="🤔">
+
+  Didn't find your favorite example of type conversion? Have cool implementations in mind? [Contributions are welcome!](https://github.com/tact-lang/tact-docs/issues)
+
+</Callout>
+
+[p]: /book/types#primitive-types
