@@ -293,7 +293,7 @@ Binary inequality (_not equal_) operator `!={:tact}` checks whether its two oper
 
 Both operators require operands to be of the same type and both don't perform implicit type conversions, except for the [`Cell{:tact}`][p] and [`Slice{:tact}`][p] types, which are implicitly compared by their hashes.
 
-Can be applied to [optionals](/book/optionals) and values of following types:
+Both operators can be applied to the following list of types and values:
 
 * [`Int{:tact}`][int]
 * [`Bool{:tact}`][bool]
@@ -302,6 +302,7 @@ Can be applied to [optionals](/book/optionals) and values of following types:
 * [`Slice{:tact}`][p], implicitly compares via `.hash(){:tact}`
 * [`String{:tact}`][p]
 * [`map<k, v>{:tact}`](/book/maps), but only if their key and value types are identical
+* [Optionals and `null{:tact}` value](/book/optionals)
 
 ```tact
 // Int:

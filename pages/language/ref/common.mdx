@@ -242,13 +242,15 @@ fun dump(arg);
 
 Prints the argument `arg` to the contract's debug console. Evaluated only if `debug` option is set in the [configuration file](/book/config), otherwise does nothing.
 
-Can be applied to special values ([`null{:tact}`](/book/optionals), `void`) and values of the following types:
+Can be applied to the following list of types and values:
 
 * [`Int{:tact}`][int]
 * [`Bool{:tact}`][bool]
 * [`Builder{:tact}`][p], [`Cell{:tact}`][p] or [`Slice{:tact}`][p]
 * [`String{:tact}`][p] or [`StringBuilder{:tact}`][p]
 * [`map<k, v>{:tact}`](/book/maps)
+* [Optionals and `null{:tact}` value](/book/optionals)
+* `void`, which is implicitly returned when a function doesn't have return value defined
 
 Usage examples:
 
