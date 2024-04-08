@@ -38,7 +38,7 @@ Parentheses (also can be called round brackets, `(){:tact}`) are more of a punct
 
 ## Unary
 
-Unary here means that they are applied only to one operand of the given expression. All unary operators, except for the non-null assertion, are of the same [precedence](#precedence).
+Unary here means that they are applied only to one operand of the given expression. All unary operators, except for the [non-null assertion](#unary-non-null-assert), are of the same [precedence](#precedence).
 
 Unary operators can be one of the two types:
 
@@ -61,7 +61,7 @@ Although unary plus sign operator `+{:tact}` is specified in the grammar of Tact
 
 ### Negate, `-` [#unary-negate]
 
-Unary minus sign (_negation_) operator `-{:tact}` is a prefix operator, which reverses the sign of the expression. Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Unary minus sign (_negation_) operator `-{:tact}` is a prefix operator, which reverses the sign of the expression. Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let five: Int = 5;
@@ -72,7 +72,7 @@ five + -five; // here, the minus sign is a negation operator, not a subtraction 
 
 ### Inverse, `!` [#unary-inverse]
 
-Unary exclamation mark (_inversion_) operator `!{:tact}` is a prefix operator, which inverts the boolean value of the expression — changes `true{:tact}` to `false{:tact}`, and vice versa. Can only be applied to values of type [`Bool{:tact}`](/book/types#booleans):
+Unary exclamation mark (_inversion_) operator `!{:tact}` is a prefix operator, which inverts the boolean value of the expression — changes `true{:tact}` to `false{:tact}`, and vice versa. Can only be applied to values of type [`Bool{:tact}`][bool]:
 
 ```tact
 let iLikeTact: Bool = true;
@@ -94,7 +94,7 @@ Multiply, divide or obtain a remainder.
 
 Binary asterisk (_multiplication_) operator `*{:tact}` is used for multiplication of two values. Can cause [integer overflows](/book/integers#operations).
 
-Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -109,7 +109,7 @@ pow(2, 255) * pow(2, 255); // build error: integer overflow!
 
 Binary slash (_division_) operator `/{:tact}` is used for integer division of two values, which truncates towards zero. An attempt to divide by zero would result in an error with [exit code 4](/book/exit-codes#4): `Integer overflow`.
 
-Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -122,7 +122,7 @@ two / 1; // 0
 
 Binary percent sign (_modulo_) operator `%{:tact}` is used for getting the modulo of an integer division, which must not be confused with getting a remainder. For two values of the same sign, modulo and remainder operations are equivalent, but when the operands are of different signs, the modulo result always has the same sign as the _divisor_ (value on the right), while the remainder has the same sign as the _dividend_ (value on the left), which can make them differ by one unit of the _divisor_.
 
-Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -155,9 +155,9 @@ Add or subtract.
 
 #### Add, `+` [#binary-add]
 
-Binary plus (_addition_) operator `+{:tact}` is used for adding numbers together. Going beyond the maximum value of an [`Int{:tact}`](/book/integers) will result in an error with [exit code 4](/book/exit-codes#4): `Integer overflow`.
+Binary plus (_addition_) operator `+{:tact}` is used for adding numbers together. Going beyond the maximum value of an [`Int{:tact}`][int] will result in an error with [exit code 4](/book/exit-codes#4): `Integer overflow`.
 
-Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -171,9 +171,9 @@ pow(2, 255) - 1 + pow(2, 255); // 2^256 - 1, maximal value of any integer in Tac
 
 #### Subtract, `-` [#binary-subtract]
 
-Binary minus (_subtraction_) operator `-{:tact}` is used for subtracting numbers from each other. Going beyond the minimum value of an [`Int{:tact}`](/book/integers) will result in an error with [exit code 4](/book/exit-codes#4): `Integer overflow`.
+Binary minus (_subtraction_) operator `-{:tact}` is used for subtracting numbers from each other. Going beyond the minimum value of an [`Int{:tact}`][int] will result in an error with [exit code 4](/book/exit-codes#4): `Integer overflow`.
 
-Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -193,7 +193,7 @@ Manipulate individual bits.
 
 Binary double greater than (_bitwise shift right_) operator `>>{:tact}` returns an integer which binary representation is the _left operand_ value shifted by the _right operand_ number of bits to the right. Excess bits shifted off to the right are discarded, and copies of the leftmost bit are shifted in from the left. This operation is also called "sign-propagating right shift" or "arithmetic right shift", because the sign of the resulting number is the same as the sign of the _left operand_. This is a more effective way to divide the _left operand_ by $2^n$, where $n$ is equal to the _right operand_.
 
-Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -213,9 +213,9 @@ pow(2, 254) >> 254; // 1
 
 #### Shift left, `<<` [#binary-bitwise-shift-left]
 
-Binary double greater than (_bitwise shift right_) operator `<<{:tact}` returns an integer which binary representation is the _left operand_ value shifted by the _right operand_ number of bits to the left. Excess bits shifted off to the left are discarded, and zero bits are shifted in from the right. This is a more effective way to multiply the _left operand_ by $2^n$, where $n$ is equal to the _right operand_. Going beyond the maximum value of an [`Int{:tact}`](/book/integers) will result in an error with [exit code 4](/book/exit-codes#4): `Integer overflow`.
+Binary double greater than (_bitwise shift right_) operator `<<{:tact}` returns an integer which binary representation is the _left operand_ value shifted by the _right operand_ number of bits to the left. Excess bits shifted off to the left are discarded, and zero bits are shifted in from the right. This is a more effective way to multiply the _left operand_ by $2^n$, where $n$ is equal to the _right operand_. Going beyond the maximum value of an [`Int{:tact}`][int] will result in an error with [exit code 4](/book/exit-codes#4): `Integer overflow`.
 
-Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -239,7 +239,7 @@ pow(2, 255) == 1 << 255; // true, but we're very close to overflow here!
 
 Binary ampersand (_bitwise and_) operator `&{:tact}` applies a [bitwise AND](https://en.wikipedia.org/wiki/Bitwise_operation#AND), which performs the [logical AND](#binary-logical-and) operation on each pair of the corresponding bits of operands. This is useful when we want to clear selected bits off a number, where each bit represents an individual flag or a boolean state, which makes it possible to "store" up to $257$ boolean values per integer, as all integers in Tact are $257$-bit signed.
 
-Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -261,7 +261,7 @@ two & 1;          // 0
 
 Binary bar (_bitwise or_) operator `|{:tact}` applies a [bitwise OR](https://en.wikipedia.org/wiki/Bitwise_operation#OR), which performs the [logical OR](#binary-logical-or) operation on each pair of the corresponding bits of operands. This is useful when we want to apply a specific [bitmask](https://en.wikipedia.org/wiki/Mask_(computing)).
 
-Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -285,103 +285,71 @@ two | 1; // 3
 
 Perform inequality and equality checks, find bigger, smaller or equal values.
 
-#### Not equal, `!=` [#binary-not-equal]
+#### Equal and not equal, `==` `!=` [#binary-equality]
 
-Binary inequality (_not equal_) operator `!={:tact}` checks whether its two operands are _not equal_, returning a result of type [`Bool{:tact}`](/books/types#booleans). Doesn't perform implicit type conversions, always strict and requires both operands to be of the same type.
+Binary equality (_equal_) operator `=={:tact}` checks whether its two operands are _equal_, returning a result of type [`Bool{:tact}`][bool].
 
-Can be applied to values of following types:
+Binary inequality (_not equal_) operator `!={:tact}` checks whether its two operands are _not equal_, returning a result of type [`Bool{:tact}`][bool].
 
-* [`Int{:tact}`](/book/integers)
-* [`Bool{:tact}`](/book/types#booleans)
-* [`Address{:tact}`](/book/types#primitive-types)
-* [`Cell{:tact}`](/book/types#primitive-types), implicitly compares via `.hash(){:tact}`
-* [`Slice{:tact}`](/book/types#primitive-types), implicitly compares via `.hash(){:tact}`
-* [`String{:tact}`](/book/types#primitive-types)
+Both operators require operands to be of the same type and both don't perform implicit type conversions, except for the [`Cell{:tact}`][p] and [`Slice{:tact}`][p] types, which are implicitly compared by their hashes.
+
+Both operators can be applied to the following list of types and values:
+
+* [`Int{:tact}`][int]
+* [`Bool{:tact}`][bool]
+* [`Address{:tact}`][p]
+* [`Cell{:tact}`][p], implicitly compares via `.hash(){:tact}`
+* [`Slice{:tact}`][p], implicitly compares via `.hash(){:tact}`
+* [`String{:tact}`][p]
 * [`map<k, v>{:tact}`](/book/maps), but only if their key and value types are identical
+* [Optionals and `null{:tact}` value](/book/optionals)
 
 ```tact
 // Int:
+2 == 3; // false
 2 != 3; // true
 
 // Bool:
+true == true;  // true
 false != true; // true
 
 // Address:
+myAddress() == myAddress(); // true
 myAddress() != myAddress(); // false
 
 // Cell:
+emptyCell() == emptyCell(); // true
 emptyCell() != emptyCell(); // false
 
 // Slice:
+"A".asSlice() == "A".asSlice(); // true
 "A".asSlice() != "A".asSlice(); // false
 
 // String:
+"A" == "A"; // true
 "A" != "A"; // false
 
 // map<k, v>:
 let map1: map<Int, Int> = emptyMap();
 let map2: map<Int, Int> = emptyMap();
-map1 != map2; // false
-```
-
-Can also be used with `null` values:
-
-```tact
-let nullable: Int? = null;
-nullable != null; // false
-null != null;     // false
-```
-
-#### Equal, `==` [#binary-equal]
-
-Binary equality (_equal_) operator `!={:tact}` checks whether its two operands are _equal_, returning a result of type [`Bool{:tact}`](/books/types#booleans). Doesn't perform implicit type conversions, always strict and requires both operands to be of the same type.
-
-Can be applied to values of following types:
-
-* [`Int{:tact}`](/book/integers)
-* [`Bool{:tact}`](/book/types#booleans)
-* [`Address{:tact}`](/book/types#primitive-types)
-* [`Cell{:tact}`](/book/types#primitive-types), implicitly compares via `.hash(){:tact}`
-* [`Slice{:tact}`](/book/types#primitive-types), implicitly compares via `.hash(){:tact}`
-* [`String{:tact}`](/book/types#primitive-types)
-* [`map<k, v>{:tact}`](/book/maps), but only if their key and value types are identical
-
-```tact
-// Int:
-2 == 3; // false
-
-// Bool:
-true == true; // true
-
-// Address:
-myAddress() == myAddress(); // true
-
-// Cell:
-emptyCell() == emptyCell(); // true
-
-// Slice:
-"A".asSlice() == "A".asSlice(); // true
-
-// String:
-"A" == "A"; // true
-
-// map<k, v>:
-let map1: map<Int, Int> = emptyMap();
-let map2: map<Int, Int> = emptyMap();
 map1 == map2; // true
-```
+map1 != map2; // false
 
-Can also be used with `null` values:
-
-```tact
+// Optionals and null values themselves
 let nullable: Int? = null;
 nullable == null; // true
 null == null;     // true
+nullable != null; // false
+null != null;     // false
+
+let anotherNullable: Int? = 5;
+nullable == anotherNullable; // false
+nullable != anotherNullable; // true
 ```
 
 #### Greater than, `>` [#binary-greater]
 
-Binary _greater than_ operator `>{:tact}` returns `true{:tact}` if the left operand is greater than the right operand, and `false{:tact}` otherwise. Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Binary _greater than_ operator `>{:tact}` returns `true{:tact}` if the left operand is greater than the right operand, and `false{:tact}` otherwise. Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -391,7 +359,7 @@ two > 2; // false
 
 #### Greater than or equal to, `>=` [#binary-greater-equal]
 
-Binary _greater than or equal to_ operator `>={:tact}` returns `true{:tact}` if the left operand is greater than or to the right operand, and `false{:tact}` otherwise. Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Binary _greater than or equal to_ operator `>={:tact}` returns `true{:tact}` if the left operand is greater than or to the right operand, and `false{:tact}` otherwise. Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -401,7 +369,7 @@ two >= 2; // true
 
 #### Less than, `<` [#binary-less]
 
-Binary _less than_ operator `<{:tact}` returns `true{:tact}` if the left operand is less than the right operand, and `false{:tact}` otherwise. Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Binary _less than_ operator `<{:tact}` returns `true{:tact}` if the left operand is less than the right operand, and `false{:tact}` otherwise. Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -411,7 +379,7 @@ two < 2; // false
 
 #### Less than or equal to, `<=` [#binary-less-equal]
 
-Binary _less than or equal to_ operator `<={:tact}` returns `true{:tact}` if the left operand is less than or equal to the right operand, and `false{:tact}` otherwise. Can only be applied to values of type [`Int{:tact}`](/book/integers):
+Binary _less than or equal to_ operator `<={:tact}` returns `true{:tact}` if the left operand is less than or equal to the right operand, and `false{:tact}` otherwise. Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
@@ -423,7 +391,7 @@ two <= 2; // true
 
 Binary logical AND ([logical conjunction](https://en.wikipedia.org/wiki/Logical_conjunction)) operator `&&{:tact}` returns `true{:tact}` if both operands are `true{:tact}`, and `false{:tact}` otherwise. It's short-circuited, meaning that it would immediately evaluate the whole expression as `false{:tact}` if the left operand is `false{:tact}`, without evaluating the right one.
 
-Can only be applied to values of type [`Bool{:tact}`](/book/types#booleans):
+Can only be applied to values of type [`Bool{:tact}`][bool]:
 
 ```tact
 let iLikeTact: Bool = true;
@@ -436,7 +404,7 @@ false && iLikeTact; // false, didn't evaluate iLikeTact
 
 Binary logical OR ([logical disjunction](https://en.wikipedia.org/wiki/Logical_disjunction)) operator `||{:tact}` returns `false{:tact}` only if both operands are `false{:tact}`, and `true{:tact}` otherwise. It's short-circuited, meaning that it would immediately evaluate the whole expression as `true{:tact}` if the left operand is `true{:tact}`, without evaluating the right one.
 
-Can only be applied to values of type [`Bool{:tact}`](/book/types#booleans):
+Can only be applied to values of type [`Bool{:tact}`][bool]:
 
 ```tact
 let iLikeSnails: Bool = false;
@@ -449,7 +417,7 @@ true && iLikeSnails;  // true, didn't evaluate iLikeSnails
 
 Conditional (_ternary_) operator is the only Tact operator that takes three operands: a condition followed by a question mark (`?{:tact}`), then an expression to execute if the condition is evaluated to `true{:tact}` followed by a colon (`:{:tact}`), and finally the expression to execute if the condition is evaluated to `false{:tact}`. This operator is frequently used as an alternative to an [`if...else{:tact}`](/book/statements#if-else) statement.
 
-Condition must resolve to type [`Bool{:tact}`](/book/types#booleans):
+Condition must resolve to type [`Bool{:tact}`][bool]:
 
 ```tact
 // condition
@@ -505,11 +473,11 @@ value = value + 5;
 
 List of augmented assignment operators:
 
-* `+={:tact}`, which uses [addition operator `+{:tact}`](#binary-add). Can only be applied to values of type [`Int{:tact}`](/book/integers).
-* `-={:tact}`, which uses [subtraction operator `-{:tact}`](#binary-subtract). Can only be applied to values of type [`Int{:tact}`](/book/integers).
-* `*={:tact}`, which uses [multiplication operator `*{:tact}`](#binary-multiply). Can only be applied to values of type [`Int{:tact}`](/book/integers).
-* `/={:tact}`, which uses [division operator `/{:tact}`](#binary-divide). Can only be applied to values of type [`Int{:tact}`](/book/integers).
-* `%={:tact}`, which uses [modulo operator `%{:tact}`](#binary-modulo). Can only be applied to values of type [`Int{:tact}`](/book/integers).
+* `+={:tact}`, which uses [addition operator `+{:tact}`](#binary-add). Can only be applied to values of type [`Int{:tact}`][int].
+* `-={:tact}`, which uses [subtraction operator `-{:tact}`](#binary-subtract). Can only be applied to values of type [`Int{:tact}`][int].
+* `*={:tact}`, which uses [multiplication operator `*{:tact}`](#binary-multiply). Can only be applied to values of type [`Int{:tact}`][int].
+* `/={:tact}`, which uses [division operator `/{:tact}`](#binary-divide). Can only be applied to values of type [`Int{:tact}`][int].
+* `%={:tact}`, which uses [modulo operator `%{:tact}`](#binary-modulo). Can only be applied to values of type [`Int{:tact}`][int].
 
 ```tact
 let value: Int = 5;
@@ -539,3 +507,7 @@ value % 5;         // gets modulo by 5
 value = value % 5; // gets modulo by 5 and assigns result back
 value %= value;    // also gets modulo by 5 and assigns result back
 ```
+
+[p]: /book/types#primitive-types
+[bool]: /book/types#booleans
+[int]: /book/integers
