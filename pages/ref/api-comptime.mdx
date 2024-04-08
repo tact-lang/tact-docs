@@ -60,6 +60,21 @@ ton("0.1");         // 10^8 nanoToncoins, which is equal to 0.1 Toncoin
 ton("0.000000001"); // 1 nanoToncoin, which is equal to 10^-9 Toncoins
 ```
 
+## pow
+
+```tact
+fun pow(a: Int, b: Int): Int;
+```
+
+A compile-time function that computes the exponent `b` of value `a`. Exponent `b` must be non-negative.
+
+Usage example:
+
+```tact
+pow(2, 3); // raises 2 to the 3rd power, which is 8
+pow(5, 0); // raises 5 to the power 0, which always produces 1
+```
+
 [p]: /book/types#primitive-types
 [bool]: /book/types#booleans
 [int]: /book/integers

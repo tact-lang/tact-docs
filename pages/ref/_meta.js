@@ -16,7 +16,7 @@ export default {
   'api-advanced': 'Advanced',
   '-- Stdlib': {
     type: 'separator',
-    title: 'Standard Libraries',
+    title: 'Standard libraries',
   },
   'standard-libraries': 'Overview',
   'stdlib-config': '@stdlib/config',
