@@ -86,19 +86,25 @@ extends fun asSlice(self: String): Slice;
 **Dangerously** casts string as slice for future parsing. Use it only if you know what you are doing.
 
 ## Slice.asString
+
 ```tact
 extends fun asString(self: Slice): String;
 ```
+
 **Dangerously** casts slice as string. Use it only if you know what you are doing.
 
 ## String.fromBase64
+
 ```tact
 extends fun fromBase64(self: String): Slice;
 ```
+
 Decodes base64 string to a slice. NOTE: This method is very limited and can be used only for small strings that fits a single cell.
 
 ## Slice.fromBase64
+
 ```tact
 extends fun fromBase64(self: Slice): Slice;
 ```
+
 Decodes base64 slice to a slice. Alias for `self.asString().fromBase64()`

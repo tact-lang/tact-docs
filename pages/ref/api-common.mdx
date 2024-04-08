@@ -2,7 +2,8 @@
 
 import { Callout } from 'nextra-theme-docs'
 
-List of a basic functions that are available in all smart contracts.
+List of the most commonly used built-in [global static functions](/book/functions#global-static-functions).
+
 
 ## sender
 
@@ -31,21 +32,6 @@ receive() {
   In order to reduce gas usage, prefer using this function over calling [`context().sender{:tact}`](#context) when you only need to know the sender of the message.
 
 </Callout>
-
-## require
-
-```tact
-fun require(condition: Bool, error: String);
-```
-
-Checks the `condition` and throws an exception with `error` message if the `condition` is `false{:tact}`. Does nothing otherwise.
-
-Usage example:
-
-```tact
-// now() has to return a value greater than 1000, otherwise an error message will be thrown
-require(now() > 1000, "We're in the first 1000 seconds of 1 January 1970!");
-```
 
 ## now
 
@@ -164,23 +150,11 @@ let hereBeDragons: Address = contractAddressExt(0, initPkg.code, initPkg.data);
 
 </Callout>
 
-## address
+<Callout>
 
-```tact
-fun address(s: String): Address;
-```
+  For this function to work, the compiler option `debug` has to be set to `true{:tact}` for the current project in the [configuration file](/book/config). Read more about debugging on the dedicated page: [Debugging](/book/debug).
 
-A compile-time function that converts a [`String{:tact}`][p] with an address into the Address type.
-
-Usage example:
-
-```tact
-contract Example {
-    // Persistent state variables
-    addr: Address =
-        address("EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N"); // works at compile-time!
-}
-```
+</Callout>
 
 ## emit
 
@@ -195,97 +169,6 @@ Usage example:
 ```tact
 emit("Catch me if you can".asComment()); // asComment() converts a String to a Cell
 ```
-
-## cell
-
-```tact
-fun cell(bocBase64: String): Cell;
-```
-
-A compile-time function that embeds a base64-encoded [BoC](https://docs.ton.org/develop/data-formats/cell-boc#bag-of-cells) `bocBase64` as a [`Cell{:tact}`][p] into the contract.
-
-Usage example:
-
-```tact
-// Init package for Wallet V3R1 as a base64-encoded BoC:
-cell("te6cckEBAQEAYgAAwP8AIN0gggFMl7qXMO1E0NcLH+Ck8mCDCNcYINMf0x/TH/gjE7vyY+1E0NMf0x/T/9FRMrryoVFEuvKiBPkBVBBV+RDyo/gAkyDXSpbTB9QC+wDo0QGkyMsfyx/L/8ntVD++buA=");
-```
-
-<Callout>
-
-  **Useful links:**\
-  [Bag of Cells in TON Docs](https://docs.ton.org/develop/data-formats/cell-boc#bag-of-cells)
-
-</Callout>
-
-## ton
-
-```tact
-fun ton(value: String): Int;
-```
-
-A compile-time function that converts the given Toncoins `value` from a human-readable format [`String{:tact}`][p] to the nanoToncoins [`Int{:tact}`][int] format.
-
-Usage example:
-
-```tact
-ton("1");           // 10^9 nanoToncoins, which is equal to one Toncoin
-ton("0.1");         // 10^8 nanoToncoins, which is equal to 0.1 Toncoin
-ton("0.000000001"); // 1 nanoToncoin, which is equal to 10^-9 Toncoins
-```
-
-## dump
-
-```tact
-fun dump(arg);
-```
-
-Prints the argument `arg` to the contract's debug console. Evaluated only if `debug` option is set in the [configuration file](/book/config), otherwise does nothing.
-
-Can be applied to the following list of types and values:
-
-* [`Int{:tact}`][int]
-* [`Bool{:tact}`][bool]
-* [`Builder{:tact}`][p], [`Cell{:tact}`][p] or [`Slice{:tact}`][p]
-* [`String{:tact}`][p] or [`StringBuilder{:tact}`][p]
-* [`map<k, v>{:tact}`](/book/maps)
-* [Optionals and `null{:tact}` value](/book/optionals)
-* `void`, which is implicitly returned when a function doesn't have return value defined
-
-Usage examples:
-
-```tact
-// Int
-dump(42);
-
-// Bool
-dump(true);
-dump(false);
-
-// Builder, Cell or Slice
-dump(beginCell());           // Builder
-dump(emptyCell());           // Cell
-dump(emptyCell().asSlice()); // Slice
-
-// String or StringBuilder
-dump("Hello, my name is..."); // String
-dump(beginTailString());      // StringBuilder
-
-// Maps
-let m: map<Int, Int> = emptyMap();
-m.set(2 + 2, 4);
-dump(m);
-
-// Special values
-dump(null);
-dump(emit("msg".asComment())); // As emit() function doesn't return a value, dump() would print #DEBUG#: void.
-```
-
-<Callout>
-
-  For this function to work, the compiler option `debug` has to be set to `true{:tact}` for the current project in the [configuration file](/book/config). Read more about debugging on the dedicated page: [Debugging](/book/debug).
-
-</Callout>
 
 ## context
 
