@@ -141,9 +141,9 @@ The `repeat{:tact}` loop executes a block of code a specified number of times. N
 In the following example, code inside the loop will be executed $10$ times:
 
 ```tact
-let a: Int = 1;
-repeat (10) {
-    a *= a;
+let twoPow: Int = 1;
+repeat (10) {  // repeat exactly 10 times
+    twoPow *= 2;
 }
 ```
 
@@ -172,3 +172,9 @@ do {
     x -= 1;  // executes this code block at least once
 } until (x <= 0);
 ```
+
+<Callout>
+
+  For more loop examples see: [Loops in Tact-By-Example](https://tact-by-example.org/04-loops).
+
+</Callout>
