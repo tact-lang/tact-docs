@@ -285,56 +285,13 @@ two | 1; // 3
 
 Perform inequality and equality checks, find bigger, smaller or equal values.
 
-#### Not equal, `!=` [#binary-not-equal]
+#### Equal and not equal, `==` `!=` [#binary-equality]
 
-Binary inequality (_not equal_) operator `!={:tact}` checks whether its two operands are _not equal_, returning a result of type [`Bool{:tact}`][bool]. Requires both operands to be of the same type and doesn't perform implicit type conversions, except for the [`Cell{:tact}`][p] and [`Slice{:tact}`][p] types, which are implicitly compared by their hashes.
+Binary equality (_equal_) operator `=={:tact}` checks whether its two operands are _equal_, returning a result of type [`Bool{:tact}`][bool].
 
-Can be applied to [optionals](/book/optionals) and values of following types:
+Binary inequality (_not equal_) operator `!={:tact}` checks whether its two operands are _not equal_, returning a result of type [`Bool{:tact}`][bool].
 
-* [`Int{:tact}`][int]
-* [`Bool{:tact}`][bool]
-* [`Address{:tact}`][p]
-* [`Cell{:tact}`][p], implicitly compares via `.hash(){:tact}`
-* [`Slice{:tact}`][p], implicitly compares via `.hash(){:tact}`
-* [`String{:tact}`][p]
-* [`map<k, v>{:tact}`](/book/maps), but only if their key and value types are identical
-
-```tact
-// Int:
-2 != 3; // true
-
-// Bool:
-false != true; // true
-
-// Address:
-myAddress() != myAddress(); // false
-
-// Cell:
-emptyCell() != emptyCell(); // false
-
-// Slice:
-"A".asSlice() != "A".asSlice(); // false
-
-// String:
-"A" != "A"; // false
-
-// map<k, v>:
-let map1: map<Int, Int> = emptyMap();
-let map2: map<Int, Int> = emptyMap();
-map1 != map2; // false
-
-// Optionals and null values themselves
-let nullable: Int? = null;
-nullable != null; // false
-null != null;     // false
-
-let anotherNullable: Int? = 5;
-nullable != anotherNullable; // true
-```
-
-#### Equal, `==` [#binary-equal]
-
-Binary equality (_equal_) operator `=={:tact}` checks whether its two operands are _equal_, returning a result of type [`Bool{:tact}`][bool]. Requires both operands to be of the same type and doesn't perform implicit type conversions, except for the [`Cell{:tact}`][p] and [`Slice{:tact}`][p] types, which are implicitly compared by their hashes.
+Both operators require operands to be of the same type and both don't perform implicit type conversions, except for the [`Cell{:tact}`][p] and [`Slice{:tact}`][p] types, which are implicitly compared by their hashes.
 
 Can be applied to [optionals](/book/optionals) and values of following types:
 
@@ -349,34 +306,44 @@ Can be applied to [optionals](/book/optionals) and values of following types:
 ```tact
 // Int:
 2 == 3; // false
+2 != 3; // true
 
 // Bool:
-true == true; // true
+true == true;  // true
+false != true; // true
 
 // Address:
 myAddress() == myAddress(); // true
+myAddress() != myAddress(); // false
 
 // Cell:
 emptyCell() == emptyCell(); // true
+emptyCell() != emptyCell(); // false
 
 // Slice:
 "A".asSlice() == "A".asSlice(); // true
+"A".asSlice() != "A".asSlice(); // false
 
 // String:
 "A" == "A"; // true
+"A" != "A"; // false
 
 // map<k, v>:
 let map1: map<Int, Int> = emptyMap();
 let map2: map<Int, Int> = emptyMap();
 map1 == map2; // true
+map1 != map2; // false
 
 // Optionals and null values themselves
 let nullable: Int? = null;
 nullable == null; // true
 null == null;     // true
+nullable != null; // false
+null != null;     // false
 
 let anotherNullable: Int? = 5;
 nullable == anotherNullable; // false
+nullable != anotherNullable; // true
 ```
 
 #### Greater than, `>` [#binary-greater]

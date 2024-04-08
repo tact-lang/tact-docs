@@ -31,8 +31,7 @@ There are no implicit type conversions in Tact, so addition ([`+{:tact}`](/book/
 * `&&{:tact}` for [logical AND](/book/operators#binary-logical-and),
 * `||{:tact}` for [logical OR](/book/operators#binary-logical-or),
 * `!{:tact}` for [logical inversion](/book/operators#unary-inverse),
-* `=={:tact}` for checking [equality](/book/operators#binary-equal),
-* `!={:tact}` for checking [inequality](/book/operators#binary-not-equal),
+* `=={:tact}` and `!={:tact}` for checking [equality](/book/operators#binary-equality),
 * and `!!{:tact}` for [non-null assertion](/book/optionals).
 
 Persisting bools to state is very space-efficient, as they only take 1-bit. Storing 1000 bools in state [costs](https://ton.org/docs/develop/smart-contracts/fees#how-to-calculate-fees) about $0.00072$ TON per year.
