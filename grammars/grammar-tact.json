@@ -175,7 +175,7 @@
       ]
     },
     "operator-logic": {
-      "match": "(==|<(?!<)|<=|>(?!>)|>=|\\&\\&|\\|\\||\\:(?!=)|\\?|\\!)",
+      "match": "(==|<(?!<)|<=|>(?!>)|>=|\\&\\&|\\|\\||\\:(?!=)|\\?|^\\!(=|!)?)$",
       "name": "keyword.operator.logic"
     },
     "operator-mapping": {
@@ -191,7 +191,7 @@
       "name": "keyword.operator.binary"
     },
     "operator-assignment": {
-      "match": "(\\:?=)",
+      "match": "(\\:?=^\\!)",
       "name": "keyword.operator.assignment"
     },
     "control": {
