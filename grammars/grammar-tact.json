@@ -191,7 +191,7 @@
       "name": "keyword.operator.binary"
     },
     "operator-assignment": {
-      "match": "(\\:?=^\\!)",
+      "match": "(\\:?=[^\\!])",
       "name": "keyword.operator.assignment"
     },
     "control": {
