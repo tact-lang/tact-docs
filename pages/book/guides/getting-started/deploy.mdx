@@ -9,7 +9,7 @@ To deploy a smart contract in TON you need to send a message with `init` data at
 ```typescript
 import base64url from 'base64url';
 import qs from 'qs';
-import { Address, beginCell, storeStateInit, contractAddress, toNano } from 'ton-core';
+import { Address, beginCell, storeStateInit, contractAddress, toNano } from '@ton/core';
 import { Counter } from './output/sample_Counter';
 
 // Forming an init package
