@@ -4,7 +4,7 @@ import { Callout } from 'nextra/components'
 
 As it was mentioned in [type system overview](/book/types#optionals), all [primitive types](/book/types#primitive-types), [Structs](/book/structs-and-messages#structs) and [Messages](/book/structs-and-messages#messages) could be nullable. That is, they don't necessarily hold any value, aside from `null{:tact}` — a special value, which represents the intentional absence of any other value.
 
-[Variables](/book/statements#let) or fields of [Structs](/book/structs-and-messages#structs) and [Messages](/book/structs-and-messages#messages) that can hold `null{:tact}` are called "optionals". They're useful to reduce state size when the variable isn't necesserily used.
+[Variables](/book/statements#let) or fields of [Structs](/book/structs-and-messages#structs) and [Messages](/book/structs-and-messages#messages) that can hold `null{:tact}` are called "optionals". They're useful to reduce state size when the variable isn't necessarily used.
 
 You can make any variable or a field an optional by adding a question mark (`?{:tact}`) after its type declaration. The only exceptions are [`map<k, v>{:tact}`](/book/maps) and [`bounced<Msg>{:tact}`](/book/bounced#bounced-messages-in-tact), where you can't make them, inner key/value type (in case of a map) or the inner [Message](/book/structs-and-messages#messages) (in case of a bounced) optional.
 
