@@ -7,11 +7,12 @@ export default {
     title: 'API Reference',
   },
   'api-base': 'Base trait',
+  'api-common': 'Common',
   'api-comptime': 'Compile-time',
-  'api-common': 'Common', // what does it mean???
-  'api-strings': 'Strings', // text.tact + ...
+  'api-debug': 'Debug',
   'api-random': 'Random',
   'api-math': 'Math',
+  'api-strings': 'Strings and StringBuilders',
   'api-cells': 'Cells, Builders and Slices',
   'api-advanced': 'Advanced',
   '-- Stdlib': {

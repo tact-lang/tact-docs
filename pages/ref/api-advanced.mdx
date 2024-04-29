@@ -1,4 +1,4 @@
-# Miscellaneous
+# Advanced
 
 import { Callout } from 'nextra/components'
 
@@ -17,30 +17,6 @@ extends fun readForwardFee(self: Context): Int
 ```
 
 Read and compute forward fee from the `Context{:tact}` and return it as `Int{:tact}` value in nanoToncoins (nano-tons).
-
-## throw
-
-```tact
-fun throw(code: Int);
-```
-
-Throw an exception with error code equal `code`.
-
-## nativeThrowWhen
-
-```tact
-fun nativeThrowWhen(code: Int, condition: Bool);
-```
-
-Throw an exception with error code equal to `code` when `condition` is equal to `true{:tact}`.
-
-## nativeThrowUnless
-
-```tact
-fun nativeThrowUnless(code: Int, condition: Bool);
-```
-
-Throw an exception with error code equal to `code` when `condition` is equal to `false{:tact}`.
 
 ## getConfigParam
 
@@ -125,3 +101,19 @@ Function `raw_reserve` is roughly equivalent to creating an outbound message car
 <Callout type="warning" emoji="⚠️">
   Currently, `amount` must be a non-negative integer, and `mode` must be in the range 0..15, inclusive.
 </Callout>
+
+---
+
+TODO: remove
+
+```tact
+@name(raw_reserve)
+native nativeReserve(amount: Int, mode: Int);
+
+const ReserveExact: Int = 0;
+const ReserveAllExcept: Int = 1;
+const ReserveAtMost: Int = 2;
+const ReserveAddOriginalBalance: Int = 4;
+const ReserveInvertSign: Int = 8;
+const ReserveBounceIfActionFail: Int = 16;
+```

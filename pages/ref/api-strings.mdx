@@ -1,62 +1,161 @@
-# Strings
+# Strings and StringBuilders
 
-Strings are a sequence of a characters. Strings are immutable, which means that once a string is created, it cannot be changed. Tact have a limitied support for strings, but you can use them to store text. Strings are also useful as comment messages body.
+import { Callout } from 'nextra-theme-docs'
+
+Strings are immutable sequences of characters, which means that once a [`String{:tact}`][p] is created, it cannot be changed. Strings are useful to store text, and so they can be converted to [`Cell{:tact}`][p] type to be used as message bodies.
+
+To be able to concatenate strings in a gas-efficient way, use a [`StringBuilder{:tact}`][p].
+
+<Callout>
+
+  Note, that the current support of strings in Tact is very limited as the main focus goes towards other data types, such as [`Cell{:tact}`][p] and [`Int{:tact}`][int].
+
+  {/* TODO: improve description */}
+
+</Callout>
 
 ## beginString
+
 ```tact
 fun beginString(): StringBuilder;
 ```
-Creates new empty StringBuilder.
+
+Creates and returns an empty [`StringBuilder{:tact}`][p].
+
+Usage example:
+
+```tact
+let fizz: StringBuilder = beginString();
+```
 
 ## beginComment
+
 ```tact
 fun beginComment(): StringBuilder;
 ```
-Creates new empty StringBuilder for comment.
+
+{/* TODO: showcase the differences of beginString, beginComment and beginTailString
+    All of them use a single Cell for encoding, so up to 127 bytes and 7 bits are the limits on storage
+ */}
+
+Creates and returns an empty [`StringBuilder{:tact}`][p] for comment.
 
 ## beginTailString
+
 ```tact
 fun beginTailString(): StringBuilder;
 ```
-Creates new empty StringBuilder for a tailstring. This format is used in various standards like NFT or Jetton.
+
+Creates new empty [`StringBuilder{:tact}`][p] for a tailstring. This format is used in various standards like NFT or Jetton.
 
 ## beginStringFromBuilder
+
 ```tact
 fun beginStringFromBuilder(builder: Builder): StringBuilder;
 ```
-Creates new StringBuilder from existing builder. Useful if you need to serialize string to a cell with some other data.
+
+`b` in source
+
+Creates new [`StringBuilder{:tact}`][p] from existing builder. Useful if you need to serialize string to a cell with some other data.
 
 ## StringBuilder.append
+
 ```tact
 extends mutates fun append(self: StringBuilder, s: String);
 ```
-Append to StringBuilder `self` String `s` and updates it.
+
+Appends to [`StringBuilder{:tact}`][p] `self` String `s` and updates it.
+
+## StringBuilder.concat
+
+```tact
+extends fun concat(self: StringBuilder, s: String): StringBuilder;
+```
+
+Extension function.
+
+Like `StringBuilder.append(){:tact}`, but can be chained. Doesn't mutate the original StringBuilder, but returns the new one.
 
 ## StringBuilder.toString
+
 ```tact
 extends fun toString(self: StringBuilder): String;
 ```
+
 Assembles a string from a builder's content.
 
 ## StringBuilder.toCell
+
 ```tact
 extends fun toCell(self: StringBuilder): Cell
 ```
+
 Assembles a cell from a builder's content.
 
 ## StringBuilder.toSlice
+
 ```tact
 extends fun toSlice(self: StringBuilder): Slice;
 ```
+
 Assembles a cell from builder's content into a slice. Alias to `self.toCell().asSlice()`.
 
+## String.asSlice
+
+```tact
+extends fun asSlice(self: String): Slice;
+```
+
+**Dangerously** casts string as slice for future parsing. Use it only if you know what you are doing.
+
+## String.asComment
+
+```tact
+extends fun asComment(self: String): Cell
+```
+
+Converts String `self` to comment message body Cell.
+
+{/* TODO: is it? Alias to beginComment().concat(self).toCell(); */}
+
+## String.fromBase64
+
+```tact
+extends fun fromBase64(self: String): Slice;
+```
+
+Decodes base64 string to a slice. NOTE: This method is very limited and can be used only for small strings that fit in a single cell.
+
+{/* TODO: Alias for asSlice.fromBase64 */}
+
+## Slice.asString
+
+```tact
+extends fun asString(self: Slice): String;
+```
+
+**Dangerously** casts slice as string. Use it only if you know what you are doing.
+
+{/* TODO: describe what's actually going on using the Cookbook example (type conversions page). */}
+
+## Slice.fromBase64
+
+```tact
+extends fun fromBase64(self: Slice): Slice;
+```
+
+Decodes base64 slice to a slice.
+
 ## Int.toString
+
 ```tact
 extends fun toString(self: Int): String;
 ```
+
 Converts Int value to String
 
 ## Int.toFloatString
+
 ```tact
 extends fun toFloatString(self: Int, digits: Int): String
 ```
@@ -68,43 +167,25 @@ Where,
 * `digits` is a exponentiation parameter of expression `10^(-digits)` that will be used for computing float number. `digits` required to be `0 <= digits < 77`.
 
 ## Int.toCoinsString
+
 ```tact
 extends fun toCoinsString(self: Int): String
 ```
+
 Converts nanoToncoin Int value `self` to String float number of Toncoins and returns it as a result.
 
-## String.asComment
-```tact
-extends fun asComment(self: String): Cell
-```
-Converts String `self` to comment message body Cell.
+{/* TODO: What does it mean??? Make note that it uses toFloatString(9) */}
 
-## String.asSlice
-```tact
-extends fun asSlice(self: String): Slice;
-```
-**Dangerously** casts string as slice for future parsing. Use it only if you know what you are doing.
-
-## Slice.asString
+## Address.toString
 
 ```tact
-extends fun asString(self: Slice): String;
+extends fun toString(self: Address): String;
 ```
 
-**Dangerously** casts slice as string. Use it only if you know what you are doing.
+Extension function for the [`Address{:tact}`][p].
 
-## String.fromBase64
+Converts an [`Address{:tact}`][p] to a String.
 
-```tact
-extends fun fromBase64(self: String): Slice;
-```
-
-Decodes base64 string to a slice. NOTE: This method is very limited and can be used only for small strings that fits a single cell.
-
-## Slice.fromBase64
-
-```tact
-extends fun fromBase64(self: Slice): Slice;
-```
-
-Decodes base64 slice to a slice. Alias for `self.asString().fromBase64()`
+[p]: /book/types#primitive-types
+[bool]: /book/types#booleans
+[int]: /book/integers

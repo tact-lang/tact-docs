@@ -2,10 +2,124 @@
 
 import { Callout } from 'nextra-theme-docs'
 
-Every [contract](/book/contracts) and [trait](/book/types#traits) in Tact implicitly inherits the `Base{:tact}` trait, which contains a number of the most useful [internal functions (methods)](/book/contracts#internal-functions) for any kind of contract.
+Every [contract](/book/contracts) and [trait](/book/types#traits) in Tact implicitly inherits the `Base{:tact}` trait, which contains a number of the most useful [internal functions](/book/contracts#internal-functions) for any kind of contract, and a constant `storageReserve` aimed at advanced users of Tact.
 
-<Callout emoji="🚨">
+## Constants
 
-  This page is a stub. [Contributions are welcome!](https://github.com/tact-lang/tact-docs/issues)
+### self.storageReserve [#self-storagereserve]
+
+```tact
+virtual const storageReserve: Int = 0;
+```
+
+Usage example:
+
+```tact
+contract AllYourStorageBelongsToUs {
+    // This would change the behaviour of self.reserve() function,
+    // causing it to try reserving this amount of nanoToncoins before
+    // forwarding a message with SendRemainingBalance mode
+    override const storageReserve = ton("0.1");
+}
+```
+
+## Functions
+
+### self.reply [#self-reply]
+
+```tact
+virtual fun reply(body: Cell?);
+```
+
+An alias to calling the [`forward(){:tact}`](#self-forward) function with the following arguments:
+
+```tact
+self.forward(sender(), body, true, null);
+//           ↑         ↑     ↑     ↑
+//           |         |     |     init: StateInit?
+//           |         |     bounce: Bool
+//           |         body: Cell?
+//           to: Address
+```
+
+Usage example:
+
+```tact
+// This message can bounce back to us!
+self.reply("Beware, this is my reply to you!".asComment());
+```
+
+### self.notify [#self-notify]
+
+```tact
+virtual fun notify(body: Cell?);
+```
+
+An alias to calling the [`forward(){:tact}`](#self-forward) function with the following arguments:
+
+```tact
+self.forward(sender(), body, false, null);
+//           ↑         ↑     ↑      ↑
+//           |         |     |      init: StateInit?
+//           |         |     bounce: Bool
+//           |         body: Cell?
+//           to: Address
+```
+
+Usage example:
+
+```tact
+// This message won't bounce!
+self.notify("Beware, this is my reply to you!".asComment());
+```
+
+### self.forward [#self-forward]
+
+```tact
+virtual fun forward(to: Address, body: Cell?, bounce: Bool, init: StateInit?);
+```
+
+Sends a bounceable or non-bounceable message to the specified address `to`. Optionally, you may provide a `body` of the message and the [`init` package](/book/expressions#initof).
+
+When [`storageReserve{:tact}`](#self-storagereserve) constant is overwritten to be $> 0$, before sending a message it also tries to reserve the `storageReserve{:tact}` amount of nanoToncoins from the remaining balance before making the send in the [`SendRemainingBalance{:tact}`](https://docs.tact-lang.org/book/message-mode#base-modes) ($128$) mode.
+
+In case reservation attempt fails and in the default case without the attempt, the message is sent with the [`SendRemainingValue{:tact}`](https://docs.tact-lang.org/book/message-mode#base-modes) ($64$) mode instead.
+
+<Callout>
+
+  Note, that `self.forward(){:tact}` never sends additional Toncoins on top of what's available on the balance.\
+  To be able to send more Toncoins with a single message, use the the [`send(){:tact}`](/ref/api-common#send) function.
 
 </Callout>
+
+Usage example:
+
+```tact
+import "@stdlib/ownable";
+
+message PayoutOk {
+    address: Address;
+    value: Int as coins;
+}
+
+contract Payout with Ownable {
+    completed: Bool;
+    owner: Address;
+
+    init(owner: Address) {
+        self.owner = owner;
+        self.completed = false;
+    }
+
+    // ... some actions there ...
+
+    // Bounced receiver function, which is called when the specified outgoing message bounces back
+    bounced(msg: bounced<PayoutOk>) {
+        // Reset completed flag if our message bounced
+        self.completed = false;
+
+        // Send a notification that the payout failed using the remaining funds for processing this send
+        self.forward(self.owner, "Payout failed".asComment(), false, null);
+    }
+}
+```

@@ -1,5 +1,7 @@
 # Cells, Builders and Slices
 
+import { Callout } from 'nextra-theme-docs'
+
 Cells is a low level primitive that represents data in TON blockchain. Cell consists of a 1023 bits of data with up to 4 references to another Cells. Cells are read-only and immutable. Builders are immutable structures that can be used to construct Cells. Slices are a way to parse cells.
 
 ## beginCell
@@ -8,7 +10,13 @@ Cells is a low level primitive that represents data in TON blockchain. Cell cons
 fun beginCell(): Builder
 ```
 
-Creates a new empty Builder.
+Creates a new empty [`Builder{:tact}`][p].
+
+Usage example:
+
+```tact
+let fizz: Builder = beginCell();
+```
 
 ## Builder.endCell
 
@@ -16,9 +24,16 @@ Creates a new empty Builder.
 extends fun endCell(self: Builder): Cell;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Converts a Builder into an ordinary Cell.
+Converts a [`Builder{:tact}`][p] into an ordinary [`Cell{:tact}`][p].
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let fizz: Cell = b.endCell();
+```
 
 ## Builder.storeUint
 
@@ -26,9 +41,16 @@ Converts a Builder into an ordinary Cell.
 extends fun storeUint(self: Builder, value: Int, bits: Int): Builder;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Stores an unsigned `bits`-bit Int `value` into the Builder for $0 ≤ bits ≤ 256$. Returns modified Builder.
+Stores an unsigned `bits`-bit `value` into the [`Builder{:tact}`][p] for $0 ≤ bits ≤ 256$. Returns modified [`Builder{:tact}`][p].
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let fizz: Builder = b.storeUint(42, 6);
+```
 
 ## Builder.storeInt
 
@@ -36,9 +58,16 @@ Stores an unsigned `bits`-bit Int `value` into the Builder for $0 ≤ bits ≤ 2
 extends fun storeInt(self: Builder, value: Int, bits: Int): Builder;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Stores a signed `bits`-bit Int `value` into the Builder for $0 ≤ bits ≤ 257$. Returns modified Builder.
+Stores a signed `bits`-bit `value` into the [`Builder{:tact}`][p] for $0 ≤ bits ≤ 257$. Returns modified [`Builder{:tact}`][p].
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let fizz: Builder = b.storeUint(42, 7);
+```
 
 ## Builder.storeBool
 
@@ -46,9 +75,17 @@ Stores a signed `bits`-bit Int `value` into the Builder for $0 ≤ bits ≤ 257$
 extends fun storeBool(self: Builder, value: Bool): Builder;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Stores a Bool `value` into the Builder. Writes `-1` if `value` is `true`, and writes `0` otherwise. Returns modified Builder.
+Stores a [`Bool{:tact}`][bool] `value` into the [`Builder{:tact}`][p]. Writes `-1` if `value` is `true{:tact}`, and writes `0` otherwise. Returns modified [`Builder{:tact}`][p].
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let fizz: Builder = b.storeBool(true);  // writes -1
+let buzz: Builder = b.storeBool(false); // writes 0
+```
 
 ## Builder.storeSlice
 
@@ -56,9 +93,17 @@ Stores a Bool `value` into the Builder. Writes `-1` if `value` is `true`, and wr
 extends fun storeSlice(self: Builder, cell: Slice): Builder;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Stores a Slice `cell` into the Builder. Returns modified Builder.
+Stores a [`Slice{:tact}`][p] `cell` into the [`Builder{:tact}`][p]. Returns modified [`Builder{:tact}`][p].
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let s: Slice = emptyCell().asSlice();
+let fizz: Builder = b.storeSlice(s);
+```
 
 ## Builder.storeCoins
 
@@ -66,11 +111,18 @@ Stores a Slice `cell` into the Builder. Returns modified Builder.
 extends fun storeCoins(self: Builder, value: Int): Builder;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Stores (serializes) an integer `value` in the range $0 .. 2^{120} − 1$ into the Builder. The serialization of `value` consists of a 4-bit unsigned big-endian integer $l$, which is the smallest integer $l ≥ 0$, such that `value` $< 2^{8 * l}$, followed by an $8 * l$-bit unsigned big-endian representation of `value`. If `value` does not belong to the supported range, a range check exception is thrown. Returns modified Builder.
+Stores (serializes) an integer `value` in the range $0 .. 2^{120} − 1$ into the [`Builder{:tact}`][p]. The serialization of `value` consists of a 4-bit unsigned big-endian integer $l$, which is the smallest integer $l ≥ 0$, such that `value` $< 2^{8 * l}$, followed by an $8 * l$-bit unsigned big-endian representation of `value`. If `value` does not belong to the supported range, a range check exception is thrown. Returns modified [`Builder{:tact}`][p].
 
 This is the most common way of storing Toncoins.
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let fizz: Builder = b.storeCoins(42);
+```
 
 ## Builder.storeAddress
 
@@ -78,9 +130,16 @@ This is the most common way of storing Toncoins.
 extends fun storeAddress(self: Builder, address: Address): Builder;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Stores Address `address` in the Builder. Returns modified Builder.
+Stores the `address` in the [`Builder{:tact}`][p]. Returns modified [`Builder{:tact}`][p].
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let fizz: Builder = b.storeAddress(myAddress());
+```
 
 ## Builder.storeRef
 
@@ -88,9 +147,16 @@ Stores Address `address` in the Builder. Returns modified Builder.
 extends fun storeRef(self: Builder, cell: Cell): Builder;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Stores a reference Cell `cell` into the Builder. Returns modified Builder.
+Stores a reference `cell` into the [`Builder{:tact}`][p]. Returns modified [`Builder{:tact}`][p].
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let fizz: Builder = b.storeRef(emptyCell());
+```
 
 ## Builder.refs
 
@@ -98,9 +164,16 @@ Stores a reference Cell `cell` into the Builder. Returns modified Builder.
 extends fun refs(self: Builder): Int;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Returns the number of cell references already stored in the Builder as an Int.
+Returns the number of cell references already stored in the [`Builder{:tact}`][p] as an [`Int{:tact}`][int].
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let fizz: Int = b.refs();
+```
 
 ## Builder.bits
 
@@ -108,9 +181,16 @@ Returns the number of cell references already stored in the Builder as an Int.
 extends fun bits(self: Builder): Int;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Returns the number of data bits already stored in the Builder as an Int.
+Returns the number of data bits already stored in the [`Builder{:tact}`][p] as an [`Int{:tact}`][int].
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let fizz: Int = b.bits();
+```
 
 ## Builder.asSlice
 
@@ -118,9 +198,16 @@ Returns the number of data bits already stored in the Builder as an Int.
 extends fun asSlice(self: Builder): Slice;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Converts the Builder to a Slice. Alias to `self.endCell().beginParse()`.
+Converts the [`Builder{:tact}`][p] to a [`Slice{:tact}`][p]. Alias to `self.endCell().beginParse(){:tact}`.
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let fizz: Slice = b.asSlice();
+```
 
 ## Builder.asCell
 
@@ -128,9 +215,16 @@ Converts the Builder to a Slice. Alias to `self.endCell().beginParse()`.
 extends fun asCell(self: Builder): Cell;
 ```
 
-Extension function for the Builder.
+Extension function for the [`Builder{:tact}`][p].
 
-Converts the Builder to a Cell. Alias to `self.endCell()`.
+Converts the [`Builder{:tact}`][p] to a [`Cell{:tact}`][p]. Alias to `self.endCell(){:tact}`.
+
+Usage example:
+
+```tact
+let b: Builder = beginCell();
+let fizz: Cell = b.asCell();
+```
 
 ## Cell.beginParse
 
@@ -138,9 +232,16 @@ Converts the Builder to a Cell. Alias to `self.endCell()`.
 extends fun beginParse(self: Cell): Slice;
 ```
 
-Extension function for the Cell.
+Extension function for the [`Cell{:tact}`][p].
 
-Opens the Cell for parsing and returns it as a Slice.
+Opens the [`Cell{:tact}`][p] for parsing and returns it as a [`Slice{:tact}`][p].
+
+Usage example:
+
+```tact
+let c: Cell = emptyCell();
+let fizz: Slice = c.beginParse();
+```
 
 ## Cell.hash
 
@@ -148,9 +249,16 @@ Opens the Cell for parsing and returns it as a Slice.
 extends fun hash(self: Cell): Int;
 ```
 
-Extension function for the Cell.
+Extension function for the [`Cell{:tact}`][p].
 
-Calculates hash of the Cell as an Int.
+Calculates hash of the [`Cell{:tact}`][p] as an [`Int{:tact}`][int].
+
+Usage example:
+
+```tact
+let c: Cell = emptyCell();
+let fizz: Int = c.hash();
+```
 
 ## Cell.asSlice
 
@@ -158,29 +266,16 @@ Calculates hash of the Cell as an Int.
 extends fun asSlice(self: Cell): Slice;
 ```
 
-Extension function for the Cell.
+Extension function for the [`Cell{:tact}`][p].
 
-Converts the Cell to a Slice. Alias to `self.beginParse()`.
+Converts the Cell to a [`Slice{:tact}`][p]. Alias to `self.beginParse(){:tact}`.
 
-## Slice.loadInt
-
-```tact
-extends mutates fun loadInt(self: Slice, l: Int): Int;
-```
-
-Extension mutation function for the Slice.
-
-Loads a signed `l`-bit Int from the Slice.
-
-## Slice.preloadInt
+Usage example:
 
 ```tact
-extends mutates fun preloadInt(self: Slice, l: Int): Int;
+let c: Cell = emptyCell();
+let fizz: Slice = c.asSlice();
 ```
-
-Extension mutation function for the Slice.
-
-Preloads a signed `len`-bit Int from the Slice.
 
 ## Slice.loadUint
 
@@ -188,9 +283,16 @@ Preloads a signed `len`-bit Int from the Slice.
 extends mutates fun loadUint(self: Slice, l: Int): Int;
 ```
 
-Extension mutation function for the Slice.
+Extension mutation function for the [`Slice{:tact}`][p].
 
-Loads an unsigned `l`-bit Int from the Slice.
+Loads an unsigned `l`-bit [`Int{:tact}`][int] from the [`Slice{:tact}`][p].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeInt(42, 7).asSlice();
+let fizz: Int = s.loadUint(7);
+```
 
 ## Slice.preloadUint
 
@@ -198,9 +300,50 @@ Loads an unsigned `l`-bit Int from the Slice.
 extends mutates fun preloadUint(self: Slice, l: Int): Int;
 ```
 
-Extension mutation function for the Slice.
+Extension mutation function for the [`Slice{:tact}`][p].
 
-Preloads an unsigned `l`-bit Int from the Slice.
+Preloads an unsigned `l`-bit [`Int{:tact}`][int] from the [`Slice{:tact}`][p].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeInt(42, 7).asSlice();
+let fizz: Int = s.preloadUint(7);
+```
+
+## Slice.loadInt
+
+```tact
+extends mutates fun loadInt(self: Slice, l: Int): Int;
+```
+
+Extension mutation function for the [`Slice{:tact}`][p].
+
+Loads a signed `l`-bit [`Int{:tact}`][int] from the [`Slice{:tact}`][p].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeInt(42, 7).asSlice();
+let fizz: Int = s.loadInt(7);
+```
+
+## Slice.preloadInt
+
+```tact
+extends mutates fun preloadInt(self: Slice, l: Int): Int;
+```
+
+Extension mutation function for the [`Slice{:tact}`][p].
+
+Preloads a signed `len`-bit [`Int{:tact}`][int] from the [`Slice{:tact}`][p].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeInt(42, 7).asSlice();
+let fizz: Int = s.preloadInt(7);
+```
 
 ## Slice.loadBits
 
@@ -208,9 +351,16 @@ Preloads an unsigned `l`-bit Int from the Slice.
 extends mutates fun loadBits(self: Slice, l: Int): Slice;
 ```
 
-Extension mutation function for the Slice.
+Extension mutation function for the [`Slice{:tact}`][p].
 
-Loads the first $0 ≤ l ≤ 1023$ bits from the Slice, and returns it as a separate Slice.
+Loads the first $0 ≤ l ≤ 1023$ bits from the [`Slice{:tact}`][p], and returns it as a separate [`Slice{:tact}`][p].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeInt(42, 7).asSlice();
+let fizz: Slice = s.loadBits(7);
+```
 
 ## Slice.preloadBits
 
@@ -218,9 +368,16 @@ Loads the first $0 ≤ l ≤ 1023$ bits from the Slice, and returns it as a sepa
 extends mutates fun preloadBits(self: Slice, l: Int): Slice;
 ```
 
-Extension mutation function for the Slice.
+Extension mutation function for the [`Slice{:tact}`][p].
 
-Preloads the first $0 ≤ l ≤ 1023$ bits from the Slice, and returns it as a separate Slice.
+Preloads the first $0 ≤ l ≤ 1023$ bits from the Slice, and returns it as a separate [`Slice{:tact}`][p].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeInt(42, 7).asSlice();
+let fizz: Slice = s.preloadBits(7);
+```
 
 ## Slice.loadCoins
 
@@ -228,9 +385,16 @@ Preloads the first $0 ≤ l ≤ 1023$ bits from the Slice, and returns it as a s
 extends mutates fun loadCoins(self: Slice): Int;
 ```
 
-Extension mutation function for the Slice.
+Extension mutation function for the [`Slice{:tact}`][p].
 
-Loads serialized amount of nanoToncoins (any unsigned integer up to $2^{120} - 1$) as an Int.
+Loads serialized amount of nanoToncoins (any unsigned integer up to $2^{120} - 1$) as an [`Int{:tact}`][int].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeCoins(42).asSlice();
+let fizz: Int = s.loadCoins();
+```
 
 ## Slice.loadAddress
 
@@ -238,9 +402,16 @@ Loads serialized amount of nanoToncoins (any unsigned integer up to $2^{120} - 1
 extends mutates fun loadAddress(self: Slice): Address;
 ```
 
-Extension mutation function for the Slice.
+Extension mutation function for the [`Slice{:tact}`][p].
 
-Loads an Address from the Slice.
+Loads an [`Address{:tact}`][p] from the [`Slice{:tact}`][p].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeAddress(myAddress()).asSlice();
+let fizz: Address = s.loadAddress();
+```
 
 ## Slice.loadRef
 
@@ -248,9 +419,16 @@ Loads an Address from the Slice.
 extends mutates fun loadRef(self: Slice): Cell;
 ```
 
-Extension mutation function for the Slice.
+Extension mutation function for the [`Slice{:tact}`][p].
 
-Loads the first reference from the Slice as a Cell.
+Loads the first reference from the [`Slice{:tact}`][p] as a [`Cell{:tact}`][p].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeRef(emptyCell()).asSlice();
+let fizz: Cell = s.loadRef();
+```
 
 ## Slice.refs
 
@@ -258,9 +436,16 @@ Loads the first reference from the Slice as a Cell.
 extends fun refs(self: Slice): Int;
 ```
 
-Extension function for the Slice.
+Extension function for the [`Slice{:tact}`][p].
 
-Returns the number of references in the Slice as an Int.
+Returns the number of references in the [`Slice{:tact}`][p] as an [`Int{:tact}`][int].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeRef(emptyCell()).asSlice();
+let fizz: Int = s.refs();
+```
 
 ## Slice.bits
 
@@ -268,9 +453,16 @@ Returns the number of references in the Slice as an Int.
 extends fun bits(self: Slice): Int;
 ```
 
-Extension function for the Slice.
+Extension function for the [`Slice{:tact}`][p].
 
-Returns the number of data bits in the Slice as an Int.
+Returns the number of data bits in the [`Slice{:tact}`][p] as an [`Int{:tact}`][int].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeRef(emptyCell()).asSlice();
+let fizz: Int = s.bits();
+```
 
 ## Slice.empty
 
@@ -278,9 +470,17 @@ Returns the number of data bits in the Slice as an Int.
 extends fun empty(self: Slice): Bool;
 ```
 
-Extension function for the Slice.
+Extension function for the [`Slice{:tact}`][p].
 
-Checks whether the Slice is empty (i.e., contains no bits of data and no cell references). Returns `true` if it's empty, `false` otherwise.
+Checks whether the [`Slice{:tact}`][p] is empty (i.e., contains no bits of data and no cell references). Returns `true{:tact}` if it's empty, `false{:tact}` otherwise.
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeRef(emptyCell()).asSlice();
+let fizz: Bool = s.empty();                     // false
+let buzz: Bool = beginCell().asSlice().empty(); // true
+```
 
 ## Slice.dataEmpty
 
@@ -288,9 +488,19 @@ Checks whether the Slice is empty (i.e., contains no bits of data and no cell re
 extends fun dataEmpty(slice: Slice): Bool;
 ```
 
-Extension function for the Slice.
+Extension function for the [`Slice{:tact}`][p].
 
-Checks whether the Slice has no bits of data. Returns `true` if it has no data, `false` otherwise.
+Checks whether the [`Slice{:tact}`][p] has no bits of data. Returns `true{:tact}` if it has no data, `false{:tact}` otherwise.
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeRef(emptyCell()).asSlice();
+let fizz: Bool = s.dataEmpty();  // true
+
+let s2: Slice = beginCell().storeInt(42, 7).asSlice();
+let buzz: Bool = s2.dataEmpty(); // false
+```
 
 ## Slice.refsEmpty
 
@@ -298,9 +508,17 @@ Checks whether the Slice has no bits of data. Returns `true` if it has no data, 
 extends fun refsEmpty(slice: Slice): Bool;
 ```
 
-Extension function for the Slice.
+Extension function for the [`Slice{:tact}`][p].
 
-Checks whether the Slice has no references. Returns `true` if it has no references, `false` otherwise.
+Checks whether the [`Slice{:tact}`][p] has no references. Returns `true{:tact}` if it has no references, `false{:tact}` otherwise.
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().storeRef(emptyCell()).asSlice();
+let fizz: Bool = s.refsEmpty();                     // false
+let buzz: Bool = beginCell().asSlice().refsEmpty(); // true
+```
 
 ## Slice.hash
 
@@ -308,9 +526,16 @@ Checks whether the Slice has no references. Returns `true` if it has no referenc
 extends fun hash(self: Slice): Int;
 ```
 
-Extension function for the Slice.
+Extension function for the [`Slice{:tact}`][p].
 
-Calculates hash of the Slice as an Int.
+Calculates hash of the [`Slice{:tact}`][p] as an [`Int{:tact}`][int].
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().asSlice();
+let fizz: Int = s.hash();
+```
 
 ## Slice.asCell
 
@@ -318,9 +543,65 @@ Calculates hash of the Slice as an Int.
 extends fun asCell(self: Slice): Cell;
 ```
 
-Extension function for the Slice.
+Extension function for the [`Slice{:tact}`][p].
 
-Converts the Slice to a Cell. Alias to `beginCell().storeSlice(self).endCell()`.
+Converts the [`Slice{:tact}`][p] to a [`Cell{:tact}`][p]. Alias to `beginCell().storeSlice(self).endCell(){:tact}`.
+
+Usage example:
+
+```tact
+let s: Slice = beginCell().asSlice();
+let fizz: Cell = s.asCell();
+let buzz: Cell = beginCell().storeSlice(s).endCell();
+
+fizz == buzz; // true
+```
+
+## Address.asSlice
+
+```tact
+extends fun asSlice(self: Address): Slice;
+```
+
+Extension function for the [`Address{:tact}`][p].
+
+Converts the [`Address{:tact}`][p] to a [`Slice{:tact}`][p]. Alias to `beginCell().storeAddress(self).asSlice(){:tact}`.
+
+Usage example:
+
+```tact
+let a: Address = myAddress();
+let fizz: Slice = a.asSlice();
+let buzz: Slice = beginCell().storeAddress(a).asSlice();
+
+fizz == buzz; // true
+```
+
+## Struct.toCell
+
+```tact
+extends fun toCell(self: Struct): Cell;
+```
+
+Extension function for any [Struct][struct].
+
+Converts the [Struct][struct] to a [`Cell{:tact}`][p].
+
+Usage example:
+
+```tact
+struct GuessCoin {
+    probably: Int as coins;
+    nothing: Int as coins;
+}
+
+fun coinCell(): Cell {
+    let s: GuessCoin = GuessCoin{ probably: 42, nothing: 27 };
+    let fizz: Cell = s.toCell();
+
+    return fizz; // "x{12A11B}"
+}
+```
 
 ## emptyCell
 
@@ -328,4 +609,19 @@ Converts the Slice to a Cell. Alias to `beginCell().storeSlice(self).endCell()`.
 fun emptyCell(): Cell;
 ```
 
-Creates and returns an empty Cell (without data and references). Alias to `beginCell().endCell()`.
+Creates and returns an empty [`Cell{:tact}`][p] (without data and references). Alias to `beginCell().endCell(){:tact}`.
+
+Usage example:
+
+```tact
+let fizz: Cell = emptyCell();
+let buzz: Cell = beginCell().endCell();
+
+fizz == buzz; // true
+```
+
+[p]: /book/types#primitive-types
+[bool]: /book/types#booleans
+[int]: /book/integers
+[map]: /book/maps
+[struct]: /book/structs-and-messages#structs

@@ -2,7 +2,7 @@
 
 import { Callout } from 'nextra-theme-docs'
 
-This page lists all the built-in [global static functions](/book/functions#global-static-functions), which are evaluated at the time of building the Tact project (compile-time).
+This page lists all the built-in [global static functions](/book/functions#global-static-functions), which are evaluated at the time of building the Tact project. These functions are commonly referred to as "compile-time functions".
 
 ## address
 
@@ -10,7 +10,7 @@ This page lists all the built-in [global static functions](/book/functions#globa
 fun address(s: String): Address;
 ```
 
-A compile-time function that converts a [`String{:tact}`][p] with an address into the Address type.
+A compile-time function that converts a [`String{:tact}`][p] with an address into the [`Address{:tact}`][p] type.
 
 Usage example:
 
@@ -33,8 +33,12 @@ A compile-time function that embeds a base64-encoded [BoC](https://docs.ton.org/
 Usage example:
 
 ```tact
-// Init package for Wallet V3R1 as a base64-encoded BoC:
-cell("te6cckEBAQEAYgAAwP8AIN0gggFMl7qXMO1E0NcLH+Ck8mCDCNcYINMf0x/TH/gjE7vyY+1E0NMf0x/T/9FRMrryoVFEuvKiBPkBVBBV+RDyo/gAkyDXSpbTB9QC+wDo0QGkyMsfyx/L/8ntVD++buA=");
+contract Example {
+    // Persistent state variables
+    storedCell: Cell =
+        // Init package for Wallet V3R1 as a base64-encoded BoC
+        cell("te6cckEBAQEAYgAAwP8AIN0gggFMl7qXMO1E0NcLH+Ck8mCDCNcYINMf0x/TH/gjE7vyY+1E0NMf0x/T/9FRMrryoVFEuvKiBPkBVBBV+RDyo/gAkyDXSpbTB9QC+wDo0QGkyMsfyx/L/8ntVD++buA="); // works at compile-time!
+}
 ```
 
 <Callout>
@@ -55,9 +59,13 @@ A compile-time function that converts the given Toncoins `value` from a human-re
 Usage example:
 
 ```tact
-ton("1");           // 10^9 nanoToncoins, which is equal to one Toncoin
-ton("0.1");         // 10^8 nanoToncoins, which is equal to 0.1 Toncoin
-ton("0.000000001"); // 1 nanoToncoin, which is equal to 10^-9 Toncoins
+contract Example {
+    // Persistent state variables
+    one: Int = ton("1");            // 10^9 nanoToncoins, which is equal to one Toncoin
+    pointOne: Int = ton("0.1");     // 10^8 nanoToncoins, which is equal to 0.1 Toncoin
+    nano: Int = ton("0.000000001"); // 1 nanoToncoin, which is equal to 10^-9 Toncoins
+                                    // works at compile-time!
+}
 ```
 
 ## pow
@@ -68,11 +76,17 @@ fun pow(a: Int, b: Int): Int;
 
 A compile-time function that computes the exponent `b` of value `a`. Exponent `b` must be non-negative.
 
+{/* TODO: a note, that pow can be used for resolving constant values in runtime too! */}
+
 Usage example:
 
 ```tact
-pow(2, 3); // raises 2 to the 3rd power, which is 8
-pow(5, 0); // raises 5 to the power 0, which always produces 1
+contract Example {
+    // Persistent state variables
+    p23: Int = pow(2, 3); // raises 2 to the 3rd power, which is 8
+    one: Int = pow(5, 0); // raises 5 to the power 0, which always produces 1
+                          // works at compile-time!
+}
 ```
 
 [p]: /book/types#primitive-types

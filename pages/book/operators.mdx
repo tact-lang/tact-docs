@@ -8,7 +8,7 @@ This page lists all the operators in Tact in decreasing order of their [preceden
 
 <Callout>
 
-  Note, that there are no implicit type conversions in Tact, so operators can't be used to, say, add values of different type or compare them in terms of equality without explicitly casting to the same type. That's done with certain functions from the standard library. See [`Int.toString(){:tact}`](/language/ref/strings#inttostring) for an example of such function.
+  Note, that there are no implicit type conversions in Tact, so operators can't be used to, say, add values of different type or compare them in terms of equality without explicitly casting to the same type. That's done with certain functions from the standard library. See [`Int.toString(){:tact}`](/ref/api-strings#inttostring) for an example of such function.
 
 </Callout>
 
@@ -135,7 +135,7 @@ two % 1; // 1
 -1 % -5; // -1
 ```
 
-The simplest way to avoid confusion between the two is to prefer using positive values via [`abs(x: Int){:tact}`](/language/ref/math#abs):
+The simplest way to avoid confusion between the two is to prefer using positive values via [`abs(x: Int){:tact}`](/ref/api-math#abs):
 
 ```tact
 abs(-1) % abs(-5); // 1

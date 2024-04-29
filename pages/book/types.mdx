@@ -140,7 +140,7 @@ Read more about them on the dedicated page: [Contracts](/book/contracts).
 
 Tact doesn't support classical class inheritance, but instead introduces the concept of _traits_, which can be viewed as abstract contracts (like abstract classes in popular object-oriented languages). They have the same structure as [contracts](#contracts), but can't [initialize persistent state variables](/book/contracts#init-function), while allowing to override some of their behaviors.
 
-Example of a trait [`Ownable`](/language/libs/ownable#ownable) from [`@stdlib/ownable`](/language/libs/ownable):
+Example of a trait [`Ownable{:tact}`](/ref/stdlib-ownable#ownable) from [`@stdlib/ownable`](/ref/stdlib-ownable):
 
 ```tact
 trait Ownable {
@@ -159,14 +159,14 @@ trait Ownable {
 }
 ```
 
-And the [contract](#contracts) that uses trait [`Ownable`](/language/libs/ownable#ownable):
+And the [contract](#contracts) that uses trait [`Ownable{:tact}`](/ref/stdlib-ownable#ownable):
 
 ```tact
 contract Treasure with Ownable {
-    // persistent state variable, which MUST be defined in the contract
+    // Persistent state variable, which MUST be defined in the contract
     owner: Address;
 
-    // constructor function init(), where all the variables are initialized
+    // Constructor function init(), where all the variables are initialized
     init(owner: Address) {
         self.owner = owner;
     }

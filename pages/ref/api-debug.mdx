@@ -2,6 +2,9 @@
 
 import { Callout } from 'nextra-theme-docs'
 
+{/* TODO: a better description */}
+{/* TODO: usage examples for all functions here */}
+
 ## require
 
 ```tact
@@ -26,6 +29,8 @@ fun dump(arg);
 Prints the argument `arg` to the contract's debug console. Evaluated only if `debug` option is set in the [configuration file](/book/config), otherwise does nothing.
 
 Can be applied to the following list of types and values:
+
+{/* TODO: dump also handles Addresses now */}
 
 * [`Int{:tact}`][int]
 * [`Bool{:tact}`][bool]
@@ -69,7 +74,41 @@ dump(emit("msg".asComment())); // As emit() function doesn't return a value, dum
 [int]: /book/integers
 
 ## dumpStack
+
+```tact
+fun dumpStack();
+```
+
+{/* TODO: a better description */}
+
 ## throw
+
+```tact
+fun throw(code: Int);
+```
+
+Throw an exception with error code equal `code`.
+
 ## nativeThrow
+
+```tact
+fun nativeThrow(code: Int);
+````
+
+{/* TODO: a better description */}
+
 ## nativeThrowWhen
+
+```tact
+fun nativeThrowWhen(code: Int, condition: Bool);
+```
+
+Throw an exception with error code equal to `code` when `condition` is equal to `true{:tact}`.
+
 ## nativeThrowUnless
+
+```tact
+fun nativeThrowUnless(code: Int, condition: Bool);
+```
+
+Throw an exception with error code equal to `code` when `condition` is equal to `false{:tact}`.
