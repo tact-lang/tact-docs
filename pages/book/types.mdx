@@ -138,7 +138,9 @@ Read more about them on the dedicated page: [Contracts](/book/contracts).
 
 ### Traits
 
-Tact doesn't support classical class inheritance, but instead introduces the concept of _traits_, which can be viewed as abstract contracts (like abstract classes in popular object-oriented languages). They have the same structure as [contracts](#contracts), but can't [initialize persistent state variables](/book/contracts#init-function), while allowing to override some of their behaviors.
+Tact doesn't support classical class inheritance, but instead introduces the concept of _traits_, which can be viewed as abstract contracts (like abstract classes in popular object-oriented languages). They have the same structure as [contracts](#contracts), but can't [initialize persistent state variables](/book/contracts#init-function).
+
+A trait can also let the contract inheriting it to override the behavior of its [functions](/book/functions#virtual-and-abstract-functions) and the value of its [constants](/book/constants#virtual-and-abstract-constants).
 
 Example of a trait [`Ownable`](/language/libs/ownable#ownable) from [`@stdlib/ownable`](/language/libs/ownable):
 

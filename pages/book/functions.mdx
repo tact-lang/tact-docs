@@ -23,6 +23,34 @@ fun pow(a: Int, c: Int): Int {
 }
 ```
 
+## Virtual and abstract functions
+
+You can allow the contract inheriting a [traits](/book/types#traits) to modify an internal function, if it has the `virtual` keyword, using `override`. The function can be also marked as `abstract`, in which case the inheriting contract has to define its implementation:
+
+```tact
+trait FilterTrait with Ownable {
+    virtual fun filterMessage(): Bool { // virtual functions can be overridden by users of this trait
+        if (sender() == self.owner) {
+            return false;
+        }
+        return true;
+    }
+
+    abstract fun specialFilter(): Bool;
+}
+
+contract Filter with FilterTrait {
+    // the trait allows us to override the default behavior
+    override fun filterMessage(): Bool {
+        return true;
+    }
+
+    override fun specialFilter(): Bool {
+      return true;
+    }
+}
+````
+
 ## Extension function
 
 Extension functions allow you to implement extensions for any possible type.

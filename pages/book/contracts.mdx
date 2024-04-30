@@ -194,7 +194,7 @@ contract HelloWorld {
 
 These functions behave similarly to private methods in popular object-oriented languages — they're internal to contracts and can be called by prefixing them with a special [identifier `self{:tact}`](#field-access). That's why internal functions can sometimes be referred to as "contract methods".
 
-Internal functions can access the contract's [persistent state variables](#variables) and [constants](#constants).
+Internal functions can access the contract's [persistent state variables](#variables) and [constants](#constants). If declared in a [traits](/book/types#traits), they can be declared as [virtual or abstract](/book/functions#virtual-and-abstract-functions) and overriden in the contract inheriting it.
 
 They can only be called from [receivers](#receiver-functions), [getters](#getter-functions) and other internal functions, but not from other contracts or [`init(){:tact}`](#init-function).
 
