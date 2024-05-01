@@ -84,14 +84,6 @@ Consider the following code:
 
 Even though this example may be simple, neglection of precedence rules can often lead to confusing situations with operators. The correct order of operations can be ensured by wrapping every operation in [parentheses](#parentheses), since parentheses have the highest precedence of all expressions and operators there is.
 
-That said, Tact's precedence levels are carefully crafted with predictability and convenience in mind, such that the following expression will always hold `true{:tact}`:
-
-```tact
-a / b * b + a % b == a; // true for any Int values of `a` and `b`,
-                        //   except when `b` is equal to 0 and we divide `a` by 0,
-                        //   which is not allowed
-```
-
 ## Parentheses, `()` [#parentheses]
 
 Parentheses (also can be called round brackets, `(){:tact}`) are more of a punctuation symbols than actual operators, but their [precedence](#precedence) is higher than precedence of any other operator. Use parentheses to override order of operations:
@@ -172,7 +164,9 @@ pow(2, 255) * pow(2, 255); // build error: integer overflow!
 
 #### Divide, `/` [#binary-divide]
 
-Binary slash (_division_) operator `/{:tact}` is used for integer division of two values, which truncates towards zero if result is positive, and away from zero if result is negative. An attempt to divide by zero would result in an error with [exit code 4](/book/exit-codes#4): `Integer overflow`.
+Binary slash (_division_) operator `/{:tact}` is used for integer division of two values, which truncates towards zero if result is positive, and away from zero if result is negative. This is also called [rounding down](https://en.wikipedia.org/wiki/Rounding#Rounding_down) (or rounding towards $-∞$), where, for example, result value of $23.7$ gets rounded to $23$, and $−23.2$ gets rounded to $−24$.
+
+An attempt to divide by zero would result in an error with [exit code 4](/book/exit-codes#4): `Integer overflow`.
 
 Can only be applied to values of type [`Int{:tact}`][int]:
 
@@ -184,7 +178,21 @@ two / 1; // 0
 -1 / -5; // 0
 1 / -5;  // -1
 1 / 5;   // 0
+6 / 5;   // 1, rounding down
+-6 / 5;  // -2, rounding down (towards -∞)
 ```
+
+<Callout>
+
+  Because division operator `/{:tact}` in Tact rounds down, the following expression always holds `true{:tact}`:
+
+  ```tact
+  a / b * b + a % b == a; // true for any Int values of `a` and `b`,
+                          //   except when `b` is equal to 0 and we divide `a` by 0,
+                          //   which is an attempt to divide by zero resulting in an error
+  ```
+
+</Callout>
 
 #### Modulo, `%` [#binary-modulo]
 
@@ -462,6 +470,8 @@ two ^ 3; // 1
 ### Bitwise OR, `|` [#binary-bitwise-or]
 
 Binary bar (_bitwise OR_) operator `|{:tact}` applies a [bitwise OR](https://en.wikipedia.org/wiki/Bitwise_operation#OR), which performs the [logical OR](#binary-logical-or) operation on each pair of the corresponding bits of operands. This is useful when we want to apply a specific [bitmask](https://en.wikipedia.org/wiki/Mask_(computing)).
+
+For example, _bitwise OR_ is commonly used in Tact to [combine base modes with optional flags](http://localhost:3000/book/message-mode#combining-modes-with-flags) by masking specific bits to $1$ in order to construct a target [message `mode`](/book/message-mode).
 
 Can only be applied to values of type [`Int{:tact}`][int]:
 
