@@ -163,9 +163,9 @@ Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
-two * two;           // 4
- 0  * 1_000_000_000; // 0
--1  * 5;             // -5
+two * two;         // 4
+0 * 1_000_000_000; // 0
+-1 * 5;            // -5
 
 pow(2, 255) * pow(2, 255); // build error: integer overflow!
 ```
@@ -178,12 +178,12 @@ Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
-two / 2;  // 1
-two / 1;  // 0
--1  / 5;  // -1
--1  / -5; // 0
- 1  / -5; // -1
- 1  / 5;  // 0
+two / 2; // 1
+two / 1; // 0
+-1 / 5;  // -1
+-1 / -5; // 0
+1 / -5;  // -1
+1 / 5;   // 0
 ```
 
 #### Modulo, `%` [#binary-modulo]
@@ -197,9 +197,9 @@ let two: Int = 2;
 two % 2; // 0
 two % 1; // 1
 
-1  % 5;  // 1
+1 % 5;   // 1
 -1 % 5;  // 4
-1  % -5; // -4
+1 % -5;  // -4
 -1 % -5; // -1
 ```
 
@@ -230,7 +230,7 @@ Can only be applied to values of type [`Int{:tact}`][int]:
 ```tact
 let two: Int = 2;
 two + 2; // 4
--1  + 1; // 0
+-1 + 1;  // 0
 
 pow(2, 254) + pow(2, 254);     // 2 * 2^254
 pow(2, 255) + pow(2, 255);     // build error: integer overflow!
@@ -246,7 +246,7 @@ Can only be applied to values of type [`Int{:tact}`][int]:
 ```tact
 let two: Int = 2;
 two - 2; // 0
--1  - 1; // -2
+-1 - 1;  // -2
 
 pow(2, 254) - pow(2, 254); // 0
 pow(2, 255) - pow(2, 255); // 0
@@ -266,8 +266,8 @@ Can only be applied to values of type [`Int{:tact}`][int]:
 ```tact
 let two: Int = 2;
 two >> 1; // 1
- 4  >> 1; // 2
- 5  >> 1; // 2, due to flooring of integer values
+4 >> 1;   // 2
+5 >> 1;   // 2, due to flooring of integer values
 
 pow(2, 254) >> 254; // 1
 ```
@@ -288,8 +288,8 @@ Can only be applied to values of type [`Int{:tact}`][int]:
 ```tact
 let two: Int = 2;
 two << 1; // 4
- 1  << 5; // 1 * 2^5, which is 32
- 2  << 5; // 2 * 2^5, which is 64
+1 << 5;   // 1 * 2^5, which is 32
+2 << 5;   // 2 * 2^5, which is 64
 
 pow(2, 254) == (1 << 254); // true
 pow(2, 254) == 1 << 254; // true, no parentheses needed due to higher precedence of >> over ==
@@ -313,8 +313,8 @@ Binary _greater than_ operator `>{:tact}` returns `true{:tact}` if the left oper
 
 ```tact
 let two: Int = 2;
-two > 2;  // false
--1  > -3; // true
+two > 2; // false
+-1 > -3; // true
 ```
 
 #### Greater than or equal to, `>=` [#binary-greater-equal]
@@ -323,8 +323,8 @@ Binary _greater than or equal to_ operator `>={:tact}` returns `true{:tact}` if 
 
 ```tact
 let two: Int = 2;
-two >= 2;  // true
--1  >= -3; // true
+two >= 2; // true
+-1 >= -3; // true
 ```
 
 #### Less than, `<` [#binary-less]
@@ -333,8 +333,8 @@ Binary _less than_ operator `<{:tact}` returns `true{:tact}` if the left operand
 
 ```tact
 let two: Int = 2;
-two < 2;  // false
--1  < -3; // false
+two < 2; // false
+-1 < -3; // false
 ```
 
 #### Less than or equal to, `<=` [#binary-less-equal]
@@ -417,12 +417,12 @@ Can only be applied to values of type [`Int{:tact}`][int]:
 
 ```tact
 let two: Int = 2;
-two & 1;          // 0
- 4  & 1;          // 0
- 3  & 1;          // 1
- 1  & 1;          // 1
+two & 1; // 0
+4 & 1;   // 0
+3 & 1;   // 1
+1 & 1;   // 1
 
-255        & 0b00001111; // 15
+255 & 0b00001111;        // 15
 0b11110000 & 0b00001111; // 15
 ```
 
@@ -444,11 +444,11 @@ Can only be applied to values of type [`Int{:tact}`][int]:
 ```tact
 let two: Int = 2;
 two ^ 3; // 1
- 4  ^ 1; // 0
- 3  ^ 1; // 3
- 1  ^ 1; // 0
+4 ^ 1;   // 0
+3 ^ 1;   // 3
+1 ^ 1;   // 0
 
-255        ^ 0b00001111; // 240
+255 ^ 0b00001111;        // 240
 0b11110000 ^ 0b00001111; // 240
 ```
 
@@ -468,11 +468,11 @@ Can only be applied to values of type [`Int{:tact}`][int]:
 ```tact
 let two: Int = 2;
 two | 1; // 3
- 4  | 1; // 5
- 3  | 1; // 3
- 1  | 1; // 1
+4 | 1;   // 5
+3 | 1;   // 3
+1 | 1;   // 1
 
-255        | 0b00001111; // 255
+255 | 0b00001111;        // 255
 0b11110000 | 0b00001111; // 255
 ```
 
@@ -491,9 +491,9 @@ Can only be applied to values of type [`Bool{:tact}`][bool]:
 
 ```tact
 let iLikeTact: Bool = true;
-iLikeTact && true;      // true, evaluated both operands
-iLikeTact && false;     // false, evaluated both operands
-false     && iLikeTact; // false, didn't evaluate iLikeTact
+iLikeTact && true;  // true, evaluated both operands
+iLikeTact && false; // false, evaluated both operands
+false && iLikeTact; // false, didn't evaluate iLikeTact
 ```
 
 ### Logical OR, `||` [#binary-logical-or]
