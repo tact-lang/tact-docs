@@ -56,11 +56,6 @@ export default withNextra({
   images: {
     unoptimized: true
   },
-  i18n: {
-    locales: ['default', 'en', 'zh'],
-    defaultLocale: 'default',
-    // localeDetection: false,
-  },
   webpack(config) {
     const allowedSvgRegex = /components\/icons\/.+\.svg$/
 

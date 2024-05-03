@@ -35,10 +35,6 @@ const config = {
     link: 'https://github.com/tact-lang/tact-docs',
   },
   docsRepositoryBase: 'https://github.com/tact-lang/tact-docs/edit/main/',
-  i18n: [
-    { locale: 'en', text: 'English' },
-    { locale: 'zh', text: '中文' },
-  ],
   sidebar: {
     autoCollapse: true,
     defaultMenuCollapseLevel: 1,
