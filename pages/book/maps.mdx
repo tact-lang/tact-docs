@@ -30,7 +30,7 @@ Allowed value types:
 
 ## Operations
 
-### Declare
+### Declare, `emptyMap()` [#emptymap]
 
 As a [local variable](/book/statements#let), using `emptyMap(){:tact}` function of standard library:
 
@@ -126,7 +126,25 @@ fizz = null; // identical to the previous line, but less descriptive
 
 With this approach all previous entries of the map are completely discarded from the contract even if the map was declared as its persistent state variable. As a result, assigning maps to `emptyMap(){:tact}` **does not** inflict any hidden or sudden [storage fees](https://docs.ton.org/develop/smart-contracts/fees#storage-fee).
 
-### Convert to a `Cell`, `.asCell()` [#convert]
+### Check if empty, `.isEmpty()` [#isempty]
+
+The `.isEmpty(){:tact}` [method](/book/functions#extension-function) on maps returns `true{:tact}` if the map is empty and `false{:tact}` otherwise:
+
+```tact
+let fizz: map<Int, Int> = emptyMap();
+
+if (fizz.isEmpty()) {
+    dump("Empty maps are empty, duh!");
+}
+
+// Note, that comparing the map to `null` behaves the same as `.isEmpty()` method,
+// although such direct comparison is much less descriptive and is generally discouraged:
+if (fizz == null) {
+    dump("Empty maps are null, which isn't obvious");
+}
+```
+
+### Convert to a `Cell`, `.asCell()` [#ascell]
 
 Use `.asCell(){:tact}` [method](/book/functions#extension-function) on maps to convert all their values to a [`Cell{:tact}`][p] type. Be mindful, that [`Cell{:tact}`][p] type is able to store up to 1023 bits, so converting larger maps to the Cell will result in error.
 
