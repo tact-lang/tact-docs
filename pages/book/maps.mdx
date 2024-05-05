@@ -93,9 +93,9 @@ if (gotButUnsure != null) {
 }
 ```
 
-### Delete entries [#del]
+### Delete entries, `.del()` [#del]
 
-To delete a single key-value pair (single entry), simply assign the `null{:tact}` value to the key when using the [`.set(){:tact}`](#set) [method](/book/functions#extension-function).
+To delete a single key-value pair (single entry), use the `.del(){:tact}` [method](/book/functions#extension-function). It returns `true{:tact}` in the case of successful deletion and `false{:tact}` otherwise.
 
 ```tact
 // Empty map
@@ -106,7 +106,13 @@ fizz.set(7, 123);
 fizz.set(42, 321);
 
 // Deleting one of the keys
-fizz.set(7, null); // the entry under key 7 is now deleted
+let deletionSuccess: Bool = fizz.del(7); // true, because map contained the entry under key 7
+fizz.del(7);                             // false, because map no longer has an entry under key 7
+
+// Note, that assigning the `null` value to the key when using the `.set()` method
+//   is equivalent to calling `.del()`, although such approach is much less descriptive
+//   and is generally discouraged:
+fizz.set(42, null); // the entry under key 42 is now deleted
 ```
 
 To delete all the entries from the map, re-assign the map using the `emptyMap(){:tact}` function:
