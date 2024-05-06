@@ -181,7 +181,25 @@ contract Example {
 
 ### Traverse over entries [#traverse]
 
-At the moment Tact doesn't have a special syntax for iterating over maps. However, it's possible to use maps as a simple arrays if you define a `map<Int, v>{:tact}` with an [`Int{:tact}`][int] type for the keys and keep track of the number of items in the separate variable:
+To iterate over map entries there is a [`foreach{:tact}`](/book/statements#foreach-loop) loop statement:
+
+```tact
+// Empty map
+let fizz: map<Int, Int> = emptyMap();
+
+// Setting a couple of values under different keys
+fizz.set(42, 321);
+fizz.set(7, 123);
+
+// Iterating over in a sequential order: from the smallest keys to the biggest ones
+foreach (key, value in fizz) {
+    dump(key); // will dump 7 on the first iteration, then 42 on the second
+}
+```
+
+Read more about it: [`foreach{:tact}` loop in Book→Statements](/book/statements#foreach-loop).
+
+Note, that it's also possible to use maps as simple arrays if you define a `map<Int, V>{:tact}` with an [`Int{:tact}`][int] type for the keys, any allowed `V` type for values and keep track of the number of items in the separate variable:
 
 ```tact
 contract Iteration {

@@ -149,7 +149,7 @@ repeat (10) {  // repeat exactly 10 times
 
 ### `while` [#while-loop]
 
-While loop continues executing the block of code as long as the given condition is `true{:tact}`.
+The `while{:tact}` loop continues executing the block of code as long as the given condition is `true{:tact}`.
 
 In the following example, the value of `x` is decremented by $1$ on each iteration, so the loop will run $10$ times:
 
@@ -173,8 +173,52 @@ do {
 } until (x <= 0);
 ```
 
+### `foreach` [#foreach-loop]
+
+The `foreach{:tact}` loop operates on key-value pairs (entries) of [`map<K, V>{:tact}`](/book/maps) type in sequential order: from the smallest keys of the map to the biggest ones.
+
+This loop executes a block of code for each entry in the given map, capturing the key and value on each iteration. This is handy when you don't know in advance how many items there is in the map or don't want to explicitly look for each of the entry using [`.set(){:tact}`](/book/maps#set) [method](/book/functions#extension-function) of maps.
+
+Note, that the names of captured key and value pair on each iteration are arbitrary and can be any valid Tact identifier, provided that they're new to the current scope. The most common options are: `k` and `v`, or `key` and `value`.
+
+In the following example, map `cells` has $4$ entries, so the loop will run $4$ times:
+
+```tact
+// Empty map
+let cells: map<Int, Cell> = emptyMap();
+
+// Setting four values
+cells.set(1, beginCell().storeUint(100, 16).endCell());
+cells.set(2, beginCell().storeUint(200, 16).endCell());
+cells.set(3, beginCell().storeUint(300, 16).endCell());
+cells.set(4, beginCell().storeUint(400, 16).endCell());
+
+// A variable for summing up the values
+let sum: Int = 0;
+
+// For each key and value pair in cells map, do:
+foreach (key, value in cells) { // or just k, v
+    let s: Slice = value.beginParse(); // convert Cell to Slice
+    sum += s.loadUint(16);             // sum the Slice values
+}
+dump(sum); // 1000
+```
+
+<Callout type="warning" emoji="⚠️">
+
+  Note, that at the moment `foreach{:tact}` works only with explicitly provided map identifiers. That is, returning a map from a function and trying to iterate over its entries won't work:
+
+  ```tact
+  foreach (k, v in emptyMap()) {
+  //               ^ this will give a rather cryptic error message:
+  //                 Syntax error: expected ")"
+  }
+  ```
+
+</Callout>
+
 <Callout>
 
-  For more loop examples see: [Loops in Tact-By-Example](https://tact-by-example.org/04-loops).
+  For additional loop examples see: [Loops in Tact-By-Example](https://tact-by-example.org/04-loops).
 
 </Callout>
