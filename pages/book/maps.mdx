@@ -307,9 +307,6 @@ contract Example {
     arr: map<Int, Int>; // "array" of String values as a map
     arrLength: Int = 0;    // length of the "array", defaults to 0
 
-    // Constructor (initialization) function of the contract
-    init() {}
-
     // Internal function for pushing an item to the end of the "array"
     fun arrPush(item: String) {
         if (self.arrLength >= self.MaxMapSize) {
