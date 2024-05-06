@@ -103,3 +103,90 @@ This is useful for cases where you want to handle certain opcodes (operation cod
   [Jetton Standard in Tact on Tact-by-Example](https://tact-by-example.org/07-jetton-standard)
 
 </Callout>
+
+## Operations
+
+### Instantiate
+
+Creation of [Struct](#structs) and [Message](#messages) instances resembles [function calls](/book/expressions#static-function-call), but instead of paretheses `(){:tact}` one needs to specify arguments in braces `{}{:tact}` (curly brackets):
+
+```tact
+struct StA {
+    field1: Int;
+    field2: Int;
+}
+
+message MsgB {
+    field1: String;
+    field2: String;
+}
+
+fun example() {
+    // Instance of a Struct StA
+    StA{field1: 42, field2: 68 + 1, }; // trailing comma is allowed
+
+    // Instance of a Message MsgB
+    MsgB{field1: "May the 4th", field2: "be with you!", }; // trailing comma is allowed
+}
+```
+
+When the name of a variable or constant assigned to a field coincides with the name of such field, Tact provides a handy syntactic shortcut sometimes called field punning. With it, you don't have to type more than it's necessary:
+
+```tact
+struct PopQuiz {
+    vogonsCount: Int;
+    nicestNumber: Int;
+}
+
+fun example() {
+    // Let's introduce a couple of variables
+    let vogonsCount: Int = 42;
+    let nicestNumber: Int = 68 + 1;
+    
+    // You may instantiate the Struct as usual and assign variables to fields,
+    // but that is a bit repetetive and tedious at times
+    PopQuiz{vogonsCount: vogonsCount, nicestNumber: nicestNumber, };
+
+    // Let's use field punning and type less,
+    // because our variable names happen to be the same as field names
+    PopQuiz{vogonsCount, nicestNumber, }; // trailing comma is allowed here too!
+}
+```
+
+<Callout>
+
+  Because instantiation is an expression in Tact, it's also described on the related page: [Instantiation expression](/book/expressions#instantiation).
+
+</Callout>
+
+### Convert to a `Cell`, `.toCell()` [#tocell]
+
+It's possible to convert an arbitrary [Struct](#structs) or [Message](#messages) to the [`Cell{:tact}`][p] type by using the `.toCell(){:tact}` [extension function](/book/functions#extension-function):
+
+```tact
+struct Big {
+    f1: Int;
+    f2: Int;
+    f3: Int;
+    f4: Int;
+    f5: Int;
+    f6: Int;
+}
+
+fun convertationFun() {
+    dump(Big{
+        f1: 10000000000, f2: 10000000000, f3: 10000000000,
+        f4: 10000000000, f5: 10000000000, f6: 10000000000,
+    }.toCell()); // x{...cell with references...}
+}
+```
+
+<Callout>
+
+  See those extension functions in the Reference:\
+  [`Struct.toCell(){:tact}`](/book/api-cells#structtocell)\
+  [`Message.toCell(){:tact}`](/book/api-cells#messagetocell)
+
+</Callout>
+
+[p]: /book/types#primitive-types
