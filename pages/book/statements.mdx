@@ -79,9 +79,9 @@ Control the flow of the code.
 
 </Callout>
 
-When executing an `if...else{:tact}` statement, first, the specified condition gets evaluated. If the resulting value is `true{:tact}`, the `then{:tact}` statement block gets executed. Otherwise, if the condition evaluates to `false{:tact}`, the optional `else{:tact}` statement block will be executed. If the `else{:tact}` block is missing, nothing happens and execution continues further.
+When executing an `if...else{:tact}` statement, first, the specified condition gets evaluated. If the resulting value is `true{:tact}`, the following statement block gets executed. Otherwise, if the condition evaluates to `false{:tact}`, the optional `else{:tact}` block will be executed. If the `else{:tact}` block is missing, nothing happens and execution continues further.
 
-Regular `if{:tact}`-statement:
+Regular `if{:tact}` statement:
 
 ```tact
 // condition
@@ -91,7 +91,7 @@ if (true) { // consequence, when condition is true
 }
 ```
 
-With `else{:tact}` clause:
+With `else{:tact}` block:
 
 ```tact
 // condition
@@ -130,13 +130,78 @@ if (2 + 2 == 3) {
 
 </Callout>
 
+### `try...catch` [#try-catch]
+
+The `try...catch{:tact}` statement is comprised of a `try{:tact}` block and an optional `catch{:tact}` block, which receives an [`Int{:tact}`][int] [exit code](/book/exit-codes) as its only argument. The code in the `try{:tact}` block is executed first, and if it fails, the code in the `catch{:tact}` block will be executed and changes made in `try{:tact}` block will be rolled back, if possible.
+
+<Callout>
+
+  Note, that some TVM state parameters, such as codepage and gas counters, will not be rolled back. That is, all gas usage in the `try{:tact}` block will be taken into account and the effects of opcodes that change the gas limit will be preserved.
+
+</Callout>
+
+Regular `try{:tact}` statement:
+
+```tact
+fun braveAndTrue() {
+    // Lets try and do something erroneous
+    try {
+        nativeThrow(42); // throwing with exit code 42
+    }
+
+    // The following will be executed as the erroneous code above was wrapped in a try block
+    dump(42);
+}
+```
+
+With `catch (e){:tact}` block:
+
+```tact
+fun niceCatch() {
+    // Lets try and do something erroneous
+    try {
+        nativeThrow(42); // throwing with exit code 42
+    } catch (err) {
+        dump(err);       // this will dump the exit code catched, which is 42
+    }
+}
+```
+
+With nested `try...catch{:tact}`:
+
+```tact
+try {
+    // Preparing an x equal to 0, in such a way that Tact compiler won't realize it (yet!)
+    let xs: Slice = beginCell().storeUint(0, 1).endCell().beginParse();
+    let x: Int = xs.loadUint(1); // 0
+
+    try {
+        throw(101);     // 1. throws with exit code 101
+    } catch (err) {     // 2. catches the error and captures its exit code (101) as err
+        return err / x; // 3. divides err by x, which is zero, throwing with exit code 4
+    }
+
+} catch (err) {         // 4. catches the new error and captures its exit code (4) as err
+    //   ^^^ this works without name collisions because the previous err
+    //       has a different scope and is only visible inside the previous catch block
+
+    dump(err);          // 5. dumps the last caught exit code (4)
+}
+```
+
+<Callout>
+
+  Read more about exit codes on the dedicated page: [Exit codes in the Book](/book/exit-codes).
+
+</Callout>
+
 ## Loops
 
 Conditionally repeat certain blocks of code multiple times.
 
 ### `repeat` [#repeat-loop]
 
-The `repeat{:tact}` loop executes a block of code a specified number of times. Number of repetitions must be a non-negative $32$-bit [`Int{:tact}`](/book/integers). Otherwise an error with the [exit code 5](/book/exit-codes#5), `Integer out of the expected range` would be thrown.
+The `repeat{:tact}` loop executes a block of code a specified number of times. Number of repetitions must be a non-negative $32$-bit [`Int{:tact}`][int]. Otherwise an error with the [exit code 5](/book/exit-codes#5), `Integer out of the expected range` would be thrown.
 
 In the following example, code inside the loop will be executed $10$ times:
 
@@ -222,3 +287,5 @@ dump(sum); // 1000
   For additional loop examples see: [Loops in Tact-By-Example](https://tact-by-example.org/04-loops).
 
 </Callout>
+
+[int]: /book/integers
