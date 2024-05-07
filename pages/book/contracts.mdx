@@ -80,9 +80,6 @@ contract Example {
     const StateDelivered: Int = 2;
     const StateDisputed: Int = 3;
 
-    // no need to init constants
-    init() {}
-
     get fun sum(): Int {
         // access constants from anywhere
         return GlobalConst1 + self.ContractConst1 + self.StatePaid;
@@ -109,6 +106,14 @@ contract Example {
         self.var2 = 42;
     }
 }
+```
+
+If a contract doesn't have any persistent state variables, or they all have their default value specified, it may omit the `init(){:tact}` function declaration altogether. That's because unless explicitly declared, the empty `init(){:tact}` function is present by default in all contracts.
+
+The following is an example of a valid empty contract:
+
+```tact
+contract IamEmptyAndIknowIt {}
 ```
 
 <Callout>
@@ -201,7 +206,6 @@ They can only be called from [receivers](#receiver-functions), [getters](#getter
 ```tact
 contract Functions {
     val: Int = 0;
-    init() {}
 
     // this contract method can only be called from within this contract and access its variables
     fun onlyZeros() {
