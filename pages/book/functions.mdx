@@ -30,10 +30,7 @@ You can allow the contract inheriting a [traits](/book/types#traits) to modify a
 ```tact
 trait FilterTrait with Ownable {
     virtual fun filterMessage(): Bool { // virtual functions can be overridden by users of this trait
-        if (sender() == self.owner) {
-            return false;
-        }
-        return true;
+        return sender() != self.owner;
     }
 
     abstract fun specialFilter(): Bool;
