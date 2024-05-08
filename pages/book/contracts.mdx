@@ -120,9 +120,11 @@ For your convenience, parameter list of `init(){:tact}` can have a trailing comm
 
 ```tact
 contract TheySeeMeTrailing {
-    init(param1: Int, param2: Int,) {
-    //                           ↑
-    //                           trailing comma is allowed here
+    init(
+        param1: Int,
+        param2: Int, // trailing comma is allowed
+    ) {
+        // ...
     }
 }
 ```

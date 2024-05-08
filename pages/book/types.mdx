@@ -162,7 +162,7 @@ trait Ownable {
 And the [contract](#contracts) that uses trait [`Ownable`](/language/libs/ownable#ownable):
 
 ```tact
-contract Treasure with Ownable, { // notice, that the trailing comma is allowed
+contract Treasure with Ownable {
     // Persistent state variable, which MUST be defined in the contract
     owner: Address;
 

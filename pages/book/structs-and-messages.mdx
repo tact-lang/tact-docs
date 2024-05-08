@@ -55,7 +55,12 @@ contract StructsShowcase {
     params: Params; // Struct as a Contract persistent state variable
 
     init() {
-        self.params = Params{ point: Point{x: 4, y: 2, }, };
+        self.params = Params{
+            point: Point{
+                x: 4,
+                y: 2,
+            },
+        };
     }
 
     get fun params(): Params {
@@ -123,10 +128,16 @@ message MsgB {
 
 fun example() {
     // Instance of a Struct StA
-    StA{ field1: 42, field2: 68 + 1, }; // trailing comma is allowed
+    StA{
+        field1: 42,
+        field2: 68 + 1, // trailing comma is allowed
+    };
 
     // Instance of a Message MsgB
-    MsgB{ field1: "May the 4th", field2: "be with you!", }; // trailing comma is allowed
+    MsgB{
+        field1: "May the 4th",
+        field2: "be with you!", // trailing comma is allowed
+    };
 }
 ```
 
@@ -142,14 +153,17 @@ fun example() {
     // Let's introduce a couple of variables
     let vogonsCount: Int = 42;
     let nicestNumber: Int = 68 + 1;
-    
+
     // You may instantiate the Struct as usual and assign variables to fields,
     // but that is a bit repetetive and tedious at times
-    PopQuiz{ vogonsCount: vogonsCount, nicestNumber: nicestNumber, };
+    PopQuiz{ vogonsCount: vogonsCount, nicestNumber: nicestNumber };
 
     // Let's use field punning and type less,
     // because our variable names happen to be the same as field names
-    PopQuiz{ vogonsCount, nicestNumber, }; // trailing comma is allowed here too!
+    PopQuiz{
+        vogonsCount,
+        nicestNumber, // trailing comma is allowed here too!
+    };
 }
 ```
 

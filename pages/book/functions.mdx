@@ -12,15 +12,14 @@ Functions in Tact could be defined in different ways:
 All functions, except for [receiver functions](#receiver-functions) can have a trailing comma in their definitions (parameter lists) and calls (argument lists):
 
 ```tact
-fun doesSmth(a: Int,) {
-//                 ↑
-//                 trailing comma in parameter lists is allowed
-}
+fun foo(
+    a: Int, // trailing comma in parameter lists is allowed
+) {}
 
-fun doesSmthToo() {
-    doesSmth(5,);
-    //        ↑
-    //        trailing comma in argument lists is allowed too!
+fun bar() {
+    foo(
+        5, // trailing comma in argument lists is allowed too!
+    );
 }
 ```
 
@@ -29,7 +28,7 @@ fun doesSmthToo() {
 You can define global function anywhere in your program:
 
 ```tact
-fun customPow(a: Int, c: Int,): Int {
+fun customPow(a: Int, c: Int): Int {
   let res: Int = 1;
   repeat(c) {
     res *= a;
@@ -43,7 +42,7 @@ fun customPow(a: Int, c: Int,): Int {
 You can allow the contract inheriting a [traits](/book/types#traits) to modify an internal function, if it has the `virtual{:tact}` keyword, using `override{:tact}`. The function can be also marked as `abstract{:tact}`, in which case the inheriting contract has to define its implementation:
 
 ```tact
-trait FilterTrait with Ownable, {
+trait FilterTrait with Ownable {
     // Virtual functions can be overridden by users of this trait
     virtual fun filterMessage(): Bool {
         return sender() != self.owner;
@@ -52,7 +51,7 @@ trait FilterTrait with Ownable, {
     abstract fun specialFilter(): Bool;
 }
 
-contract Filter with FilterTrait, {
+contract Filter with FilterTrait {
     // Overriding default behavior of the FilterTrait
     override fun filterMessage(): Bool {
         return true;
@@ -72,7 +71,7 @@ Extension functions allow you to implement extensions for any possible type.
 > The name of the first argument MUST be named `self` and the type of this argument is the type you are extending.
 
 ```tact
-extends fun customPow(self: Int, c: Int,): Int {
+extends fun customPow(self: Int, c: Int): Int {
     let res: Int = 1;
     repeat(c) {
         res *= self;
@@ -86,7 +85,7 @@ extends fun customPow(self: Int, c: Int,): Int {
 Mutable functions are performing mutation of a value replacing it with an execution result. To perform mutation, the function must change the `self` value.
 
 ```tact
-extends mutates fun customPow(self: Int, c: Int,) {
+extends mutates fun customPow(self: Int, c: Int) {
     let res: Int = 1;
     repeat(c) {
         res *= self;

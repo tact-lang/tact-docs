@@ -149,7 +149,7 @@ Read more about working with `null{:tact}` on the dedicated page: [Optionals](/b
 
 An identifier is a sequence of characters in the code that _identifies_ a [variable](/book/statements#let), [constant](/book/constants), [map](/book/maps) and a [function](/book/functions), as well as a [Struct][s], [Message][m], [contract](/book/contracts), [trait](/book/types#traits), or their fields and methods. Identifiers are case-sensitive and not quoted.
 
-In Tact, identifiers can contain latin lowercase letters (`a-z`), latin uppercase letters (`A-Z`), underscores (`_`) and digits ($\mathrm{0 - 9}$), but may not start with a digit. An identifier differs from a [string](#string-literals) in that a string is data, while an identifier is part of the code. 
+In Tact, identifiers can contain latin lowercase letters (`a-z`), latin uppercase letters (`A-Z`), underscores (`_`) and digits ($\mathrm{0 - 9}$), but may not start with a digit. An identifier differs from a [string](#string-literals) in that a string is data, while an identifier is part of the code.
 
 Note, that when identifiers for [primitive types][p] start with an uppercase letter. Used-defined [composite types](/book/types#composite-types), such as [Structs][s] and [Messages][m] also must be capitalized.
 
@@ -167,11 +167,14 @@ struct StExample {
 }
 
 fun example() {
-    StExample{ fieldUninit: 2, };               // instance with default value of fieldInit
-    //                       ↑
-    //                       trailing comma is allowed
+    // Instance with default value of fieldInit
+    StExample{ fieldUninit: 2 };
 
-    StExample{ fieldInit: 0, fieldUninit: 2, }; // instance with both fields set
+    // Instance with both fields set
+    StExample{
+        fieldInit: 0,
+        fieldUninit: 2, // trailing comma is allowed
+    };
 }
 ```
 
@@ -189,7 +192,7 @@ struct StExample {
 }
 
 fun example(): Int {
-    let struct: StExample = StExample{ fieldUninit: 2, }; // instantiation
+    let struct: StExample = StExample{ fieldUninit: 2 }; // instantiation
 
     struct.fieldInit;          // access a field
     return struct.fieldUninit; // return field value from the function
@@ -228,11 +231,16 @@ Expression `initOf{:tact}` computes initial state (`StateInit{:tact}`) of a [con
 ```tact
 //                     argument values for the init() function of the contract
 //                     ↓   ↓
-initOf ExampleContract(42, 100,); // returns a Struct StateInit{}
-//     ---------------        -
-//     ↑                      ↑
-//     |                      trailing comma is allowed
+initOf ExampleContract(42, 100); // returns a Struct StateInit{}
+//     ---------------
+//     ↑
 //     name of the contract
+//     ↓
+//     ---------------
+initOf ExampleContract(
+    42,  // first argument
+    100, // second argument, trailing comma is allowed
+);
 ```
 
 Where `StateInit{:tact}` is a built-in [Struct][s], that consists of:
