@@ -39,7 +39,7 @@ receive() {
         to: sender(), // sending message back to the sender
         value: 0, // don't add Toncoins to the message...
         mode: SendRemainingValue | SendIgnoreErrors, // ...except for ones received from the sender due to SendRemainingValue
-        body: "Hello, World".asComment(); // asComment converts a String to a Cell with a comment
+        body: "Hello, World".asComment(), // asComment converts a String to a Cell with a comment
     });
 }
 ```
@@ -54,7 +54,7 @@ send(SendParameters{
     to: recipient,
     value: value,
     mode: SendIgnoreErrors, // will send the message despite any errors
-    body: "Hello, World!".asComment()
+    body: "Hello, World!".asComment(),
 });
 ```
 
@@ -72,7 +72,7 @@ send(SendParameters{
     to: recipient,
     value: value,
     mode: SendIgnoreErrors, // don't stop in case of errors
-    body: SomeMessage{arg1: 123, arg2: 1234}.toCell()
+    body: SomeMessage{arg1: 123, arg2: 1234}.toCell(),
 });
 ```
 
@@ -91,7 +91,7 @@ send(SendParameters{
     mode: SendIgnoreErrors, // don't stop in case of errors
     code: init.code,
     data: init.data,
-    body: "Hello, World!".asComment()  // not necessary, can be omitted
+    body: "Hello, World!".asComment(), // not necessary, can be omitted
 });
 ```
 
