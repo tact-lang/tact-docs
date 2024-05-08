@@ -9,12 +9,26 @@ Functions in Tact could be defined in different ways:
 * Receiver functions
 * Getter functions
 
+All functions, except for [receiver functions](#receiver-functions) can have a trailing comma in their definitions (parameter lists) and calls (argument lists):
+
+```tact
+fun foo(
+    a: Int, // trailing comma in parameter lists is allowed
+) {}
+
+fun bar() {
+    foo(
+        5, // trailing comma in argument lists is allowed too!
+    );
+}
+```
+
 ## Global static functions
 
 You can define global function anywhere in your program:
 
 ```tact
-fun pow(a: Int, c: Int): Int {
+fun customPow(a: Int, c: Int): Int {
   let res: Int = 1;
   repeat(c) {
     res *= a;
@@ -25,11 +39,12 @@ fun pow(a: Int, c: Int): Int {
 
 ## Virtual and abstract functions
 
-You can allow the contract inheriting a [traits](/book/types#traits) to modify an internal function, if it has the `virtual` keyword, using `override`. The function can be also marked as `abstract`, in which case the inheriting contract has to define its implementation:
+You can allow the contract inheriting a [traits](/book/types#traits) to modify an internal function, if it has the `virtual{:tact}` keyword, using `override{:tact}`. The function can be also marked as `abstract{:tact}`, in which case the inheriting contract has to define its implementation:
 
 ```tact
 trait FilterTrait with Ownable {
-    virtual fun filterMessage(): Bool { // virtual functions can be overridden by users of this trait
+    // Virtual functions can be overridden by users of this trait
+    virtual fun filterMessage(): Bool {
         return sender() != self.owner;
     }
 
@@ -37,13 +52,13 @@ trait FilterTrait with Ownable {
 }
 
 contract Filter with FilterTrait {
-    // the trait allows us to override the default behavior
+    // Overriding default behavior of the FilterTrait
     override fun filterMessage(): Bool {
         return true;
     }
 
     override fun specialFilter(): Bool {
-      return true;
+        return true;
     }
 }
 ````
@@ -56,12 +71,12 @@ Extension functions allow you to implement extensions for any possible type.
 > The name of the first argument MUST be named `self` and the type of this argument is the type you are extending.
 
 ```tact
-extends fun pow(self: Int, c: Int): Int {
-  let res: Int = 1;
-  repeat(c) {
-    res *= self;
-  }
-  return res;
+extends fun customPow(self: Int, c: Int): Int {
+    let res: Int = 1;
+    repeat(c) {
+        res *= self;
+    }
+    return res;
 }
 ```
 
@@ -70,12 +85,12 @@ extends fun pow(self: Int, c: Int): Int {
 Mutable functions are performing mutation of a value replacing it with an execution result. To perform mutation, the function must change the `self` value.
 
 ```tact
-extends mutates fun pow(self: Int, c: Int) {
-  let res: Int = 1;
-  repeat(c) {
-    res *= self;
-  }
-  self = res;
+extends mutates fun customPow(self: Int, c: Int) {
+    let res: Int = 1;
+    repeat(c) {
+        res *= self;
+    }
+    self = res;
 }
 ```
 
@@ -100,13 +115,10 @@ Receiver functions are special functions that are responsible for receiving mess
 
 ```tact
 contract Treasure {
-
-  // ...
-  
-  // This means that this contract can receive the comment "Increment" and this function would be called for such messages
-  receive("Increment") {
-    self.counter += 1;
-  }
+    // This means that this contract can receive the comment "Increment" and this function would be called for such messages
+    receive("Increment") {
+        self.counter += 1;
+    }
 }
 ```
 
@@ -116,11 +128,8 @@ Getter functions define getters on smart contracts and can be defined only withi
 
 ```tact
 contract Treasure {
-
-  // ...
-  
-  get fun counter(): Int {
-    return self.counter;
-  }
+    get fun counter(): Int {
+        return self.counter;
+    }
 }
 ```
