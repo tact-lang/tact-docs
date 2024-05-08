@@ -116,6 +116,17 @@ The following is an example of a valid empty contract:
 contract IamEmptyAndIknowIt {}
 ```
 
+For your convenience, parameter list of `init(){:tact}` can have a trailing comma:
+
+```tact
+contract TheySeeMeTrailing {
+    init(param1: Int, param2: Int,) {
+    //                           ↑
+    //                           trailing comma is allowed here
+    }
+}
+```
+
 <Callout>
 
   To obtain initial state of the target contract in [internal functions](#internal-functions), [receivers](#receiver-functions) or [getters](#getter-functions) use [`initOf{:tact}`](/book/expressions#initof) expression.
@@ -178,7 +189,7 @@ contract HelloWorld {
             to: sender(),
             value: 0,
             mode: SendRemainingValue | SendIgnoreErrors,
-            body: CanBounce{counter: self.counter}.toCell()
+            body: CanBounce{counter: self.counter}.toCell(),
         });
     }
 

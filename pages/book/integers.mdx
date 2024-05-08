@@ -118,7 +118,7 @@ However, this can still lead to **errors** in the [compute phase](https://docs.t
 ```tact
 import "@stdlib/deploy";
 
-contract ComputeErrorsOhNo with Deployable {
+contract ComputeErrorsOhNo with Deployable, {
     oneByte: Int as uint8; // persistent state variable, max value is 255
 
     init() {

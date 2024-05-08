@@ -11,7 +11,7 @@ This page shows examples of converting between [primitive types][p] and obtainin
 ```tact
 // Defining a new extension function for type String that returns value of type Int
 // Caution: produces unexpected results when String contains non-numeric characters!
-extends fun toInt(self: String): Int {
+extends fun toInt(self: String,): Int {
     // Cast the String as a Slice for parsing
     let string: Slice = self.asSlice();
 

@@ -131,7 +131,6 @@ Tact strings support a range of [escape sequences](https://en.wikipedia.org/wiki
 
 </Callout>
 
-
 ### `null` literal
 
 The `null{:tact}` value is written with a `null{:tact}` literal. It's **not** an [identifier](#identifiers) and doesn't refer to any object. It's also **not** an instance of a [primitive type][p]. Instead, `null{:tact}` represents a lack of identification and the intentional absence of any value.
@@ -168,8 +167,11 @@ struct StExample {
 }
 
 fun example() {
-    StExample{ fieldUninit: 2 };               // instance with default value of fieldInit
-    StExample{ fieldInit: 0, fieldUninit: 2 }; // instance with both fields set
+    StExample{ fieldUninit: 2, };               // instance with default value of fieldInit
+    //                       ↑
+    //                       trailing comma is allowed
+
+    StExample{ fieldInit: 0, fieldUninit: 2, }; // instance with both fields set
 }
 ```
 
@@ -187,7 +189,7 @@ struct StExample {
 }
 
 fun example(): Int {
-    let struct: StExample = StExample{ fieldUninit: 2 }; // instantiation
+    let struct: StExample = StExample{ fieldUninit: 2, }; // instantiation
 
     struct.fieldInit;          // access a field
     return struct.fieldUninit; // return field value from the function
@@ -226,9 +228,10 @@ Expression `initOf{:tact}` computes initial state (`StateInit{:tact}`) of a [con
 ```tact
 //                     argument values for the init() function of the contract
 //                     ↓   ↓
-initOf ExampleContract(42, 100); // returns a Struct StateInit{}
-//     ---------------
-//     ↑
+initOf ExampleContract(42, 100,); // returns a Struct StateInit{}
+//     ---------------        -
+//     ↑                      ↑
+//     |                      trailing comma is allowed
 //     name of the contract
 ```
 

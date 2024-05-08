@@ -27,7 +27,7 @@ struct Array {
 const MaxArraySize: Int = 5_000; // 5,000 entries max, to stay reasonably far from limits
 
 // Extension mutation function for adding new entries to the end of the array
-extends mutates fun append(self: Array, item: Int) {
+extends mutates fun append(self: Array, item: Int,) {
     require(self.length + 1 <= MaxArraySize, "No space in the array left for new items!");
 
     self.map.set(self.length, item); // set the entry (key-value pair)
@@ -35,7 +35,7 @@ extends mutates fun append(self: Array, item: Int) {
 }
 
 // Extension mutation function for inserting new entries at the given index
-extends mutates fun insert(self: Array, item: Int, idx: Int) {
+extends mutates fun insert(self: Array, item: Int, idx: Int,) {
     require(self.length + 1 <= MaxArraySize, "No space in the array left for new items!");
     require(idx >= 0, "Index of the item cannot be negative!");
     require(idx < self.length, "Index is out of array bounds!");
@@ -54,7 +54,7 @@ extends mutates fun insert(self: Array, item: Int, idx: Int) {
 }
 
 // Extension function for getting the value at the given index
-extends fun getIdx(self: Array, idx: Int): Int {
+extends fun getIdx(self: Array, idx: Int,): Int {
     require(self.length > 0, "No items in the array!");
     require(idx >= 0, "Index of the item cannot be negative!");
     require(idx < self.length, "Index is out of array bounds!");
@@ -64,7 +64,7 @@ extends fun getIdx(self: Array, idx: Int): Int {
 }
 
 // Extension function for returning the last value
-extends fun getLast(self: Array): Int {
+extends fun getLast(self: Array,): Int {
     require(self.length > 0, "No items in the array!");
 
     // Note, that we use !! operator as we know for sure that the value would be there
@@ -72,7 +72,7 @@ extends fun getLast(self: Array): Int {
 }
 
 // Extension mutation function for deleting and entry at the given index and returning its value
-extends mutates fun deleteIdx(self: Array, idx: Int): Int {
+extends mutates fun deleteIdx(self: Array, idx: Int,): Int {
     require(self.length > 0, "No items in the array to delete!");
     require(idx >= 0, "Index of the item cannot be negative!");
     require(idx < self.length, "Index is out of array bounds!");
@@ -95,7 +95,7 @@ extends mutates fun deleteIdx(self: Array, idx: Int): Int {
 }
 
 // Extension mutation function for deleting the last entry and returning its value
-extends fun deleteLast(self: Array): Int {
+extends fun deleteLast(self: Array,): Int {
     require(self.length > 0, "No items in the array!");
 
     // Note, that we use !! operator as we know for sure that the value would be there
@@ -107,7 +107,7 @@ extends fun deleteLast(self: Array): Int {
 }
 
 // Extension function for deleting all items in the Array
-extends mutates fun deleteAll(self: Array) {
+extends mutates fun deleteAll(self: Array,) {
     self.map = emptyMap();
     self.length = 0;
 }
@@ -180,7 +180,7 @@ struct Stack {
 const MaxStackSize: Int = 5_000; // 5,000 entries max, to stay reasonably far from limits
 
 // Extension mutation function for adding new entries to the end of the stack
-extends mutates fun push(self: Stack, item: Int) {
+extends mutates fun push(self: Stack, item: Int,) {
     require(self.length + 1 <= MaxStackSize, "No space in the stack left for new items!");
 
     self.map.set(self.length, item); // set the entry (key-value pair)
@@ -188,7 +188,7 @@ extends mutates fun push(self: Stack, item: Int) {
 }
 
 // Extension mutation function for deleting the last entry and returning its value
-extends mutates fun pop(self: Stack): Int {
+extends mutates fun pop(self: Stack,): Int {
     require(self.length > 0, "No items in the stack to delete!");
 
     // Note, that we use !! operator as we know for sure that the value would be there
@@ -200,7 +200,7 @@ extends mutates fun pop(self: Stack): Int {
 }
 
 // Extension function for returning the last value
-extends fun peek(self: Stack): Int {
+extends fun peek(self: Stack,): Int {
     require(self.length > 0, "No items in the stack!");
 
     // Note, that we use !! operator as we know for sure that the value would be there
@@ -208,7 +208,7 @@ extends fun peek(self: Stack): Int {
 }
 
 // Extension function for deleting all items in the Stack
-extends mutates fun deleteAll(self: Stack) {
+extends mutates fun deleteAll(self: Stack,) {
     self.map = emptyMap();
     self.length = 0;
 }
@@ -282,7 +282,7 @@ struct CircularBuffer {
 const MaxCircularBufferSize: Int = 5;
 
 // Extension mutation function for putting new items to the circular buffer
-extends mutates fun put(self: CircularBuffer, item: Int) {
+extends mutates fun put(self: CircularBuffer, item: Int,) {
     if (self.length < MaxCircularBufferSize) {
         self.map.set(self.length, item); // store the item
         self.length += 1;                // increase the length field
@@ -293,7 +293,7 @@ extends mutates fun put(self: CircularBuffer, item: Int) {
 }
 
 // Extension mutation function for getting an item from the circular buffer
-extends mutates fun getIdx(self: CircularBuffer, idx: Int): Int {
+extends mutates fun getIdx(self: CircularBuffer, idx: Int,): Int {
     require(self.length > 0, "No items in the circular buffer!");
     require(idx >= 0, "Index of the item cannot be negative!");
 
@@ -307,7 +307,7 @@ extends mutates fun getIdx(self: CircularBuffer, idx: Int): Int {
 }
 
 // Extension function for iterating over all items in the circular buffer and dumping them to the console
-extends fun printAll(self: CircularBuffer) {
+extends fun printAll(self: CircularBuffer,) {
     let i: Int = self.start;
     repeat (self.length) {
         dump(self.map.get(i)!!); // !! tells the compiler this can't be null
@@ -316,7 +316,7 @@ extends fun printAll(self: CircularBuffer) {
 }
 
 // Extension function for deleting all items in the CircularBuffer
-extends mutates fun deleteAll(self: CircularBuffer) {
+extends mutates fun deleteAll(self: CircularBuffer,) {
     self.map = emptyMap();
     self.length = 0;
     self.start = 0;

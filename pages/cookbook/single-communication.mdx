@@ -21,7 +21,7 @@ send(SendParameters{
     bounce: true, // default
     to: destinationAddress,
     value: ton("0.01"), // attached amount of Tons to send
-    body: "Hello from Tact!".asComment() // comment (optional)
+    body: "Hello from Tact!".asComment(), // comment (optional)
 });
 ```
 
@@ -35,7 +35,7 @@ send(SendParameters{
     to: sender(), // send the message back to the original sender
     value: 0,
     mode: SendRemainingBalance, // or mode: 128
-    body: "Hello from Tact!".asComment() // comment (optional)
+    body: "Hello from Tact!".asComment(), // comment (optional)
 });
 ```
 
@@ -49,7 +49,7 @@ send(SendParameters{
     to: sender(), // send the message back to the original sender
     value: 0,
     mode: SendRemainingValue,
-    body: "Hello from Tact!".asComment() // comment (optional)
+    body: "Hello from Tact!".asComment(), // comment (optional)
 });
 ```
 
@@ -61,7 +61,7 @@ send(SendParameters{
     to: sender(), // send the message back to the original sender
     value: 0,
     mode: SendRemainingValue | SendIgnoreErrors, // prefer using | over + for the mode
-    body: "Hello from Tact!".asComment()         // comment (optional)
+    body: "Hello from Tact!".asComment(), // comment (optional)
 });
 ```
 
@@ -74,14 +74,14 @@ If we need to send a message with a lengthy text comment, we should create a [`S
 ```tact
 let comment: StringBuilder = beginComment();
 let longString = "..."; // Some string with more than 127 characters.
-str_builder.append(longString);
+comment.append(longString);
 
 send(SendParameters{
     // bounce = true by default
     to: sender(),
     value: 0,
     mode: SendIgnoreErrors,
-    body: longString.toCell(),
+    body: comment.toCell(),
 });
 ```
 

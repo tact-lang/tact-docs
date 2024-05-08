@@ -162,11 +162,11 @@ trait Ownable {
 And the [contract](#contracts) that uses trait [`Ownable`](/language/libs/ownable#ownable):
 
 ```tact
-contract Treasure with Ownable {
-    // persistent state variable, which MUST be defined in the contract
+contract Treasure with Ownable, { // notice, that the trailing comma is allowed
+    // Persistent state variable, which MUST be defined in the contract
     owner: Address;
 
-    // constructor function init(), where all the variables are initialized
+    // Constructor function init(), where all the variables are initialized
     init(owner: Address) {
         self.owner = owner;
     }

@@ -39,7 +39,7 @@ trait MyAbstractTrait {
 Now you can overwrite defaults in the contract:
 
 ```tact
-contract MyContract with MyTrait, MyAbstractTrait {
+contract MyContract with MyTrait, MyAbstractTrait, {
     override const MY_FEE: Int = ton("0.5");
     override const MY_DEVFEE: Int = ton("1000");
 }
@@ -60,8 +60,7 @@ trait Treasure {
     }
 }
 
-contract MyContract with Treasure {
+contract MyContract with Treasure, {
     override const ENABLE_TIMELOCK: Bool = false;
 }
-
 ```

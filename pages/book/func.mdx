@@ -296,8 +296,8 @@ contract StatefulContract {
             valueA: arg1,
             valueB: ContractStateInner{
                 valueA: arg2.valueA,
-                valueB: arg2.valueB
-            }
+                valueB: arg2.valueB, // trailing comma in instantiation
+            }, // trailing comma in instantiation
         };
     }
 }

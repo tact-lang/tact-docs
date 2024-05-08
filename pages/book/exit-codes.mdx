@@ -195,7 +195,7 @@ message FakeLaunch {
 
 }
 
-contract Fireworks with Deployable, Ownable {
+contract Fireworks with Deployable, Ownable, {
     owner: Address;
 
     init(){
@@ -227,7 +227,7 @@ import "@stdlib/stoppable";
 
 message FakeLaunch {}
 
-contract Fireworks with Deployable, Ownable, Stoppable {
+contract Fireworks with Deployable, Ownable, Stoppable, {
     owner: Address;
     stopped: Bool;
 
