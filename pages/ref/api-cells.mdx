@@ -603,6 +603,32 @@ fun coinCell(): Cell {
 }
 ```
 
+## Message.toCell
+
+```tact
+extends fun toCell(self: Message): Cell;
+```
+
+Extension function for any [Message][message].
+
+Converts the [Message][message] to a [`Cell{:tact}`][p].
+
+Usage example:
+
+```tact
+message GuessCoin {
+    probably: Int as coins;
+    nothing: Int as coins;
+}
+
+fun coinCell(): Cell {
+    let s: GuessCoin = GuessCoin{ probably: 42, nothing: 27 };
+    let fizz: Cell = s.toCell();
+
+    return fizz; // "x{AB37107712A11B}"
+}
+```
+
 ## emptyCell
 
 ```tact
@@ -625,3 +651,4 @@ fizz == buzz; // true
 [int]: /book/integers
 [map]: /book/maps
 [struct]: /book/structs-and-messages#structs
+[message]: /book/structs-and-messages#messages

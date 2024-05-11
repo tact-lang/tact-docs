@@ -6,13 +6,7 @@ Strings are immutable sequences of characters, which means that once a [`String{
 
 To be able to concatenate strings in a gas-efficient way, use a [`StringBuilder{:tact}`][p].
 
-<Callout>
-
-  Note, that the current support of strings in Tact is very limited as the main focus goes towards other data types, such as [`Cell{:tact}`][p] and [`Int{:tact}`][int].
-
-  {/* TODO: improve description */}
-
-</Callout>
+To use [`String{:tact}`][p] literals directly, see: [String literals](/book/expressions#string-literals).
 
 ## beginString
 
@@ -34,11 +28,13 @@ let fizz: StringBuilder = beginString();
 fun beginComment(): StringBuilder;
 ```
 
-{/* TODO: showcase the differences of beginString, beginComment and beginTailString
-    All of them use a single Cell for encoding, so up to 127 bytes and 7 bits are the limits on storage
- */}
+Creates and returns an empty [`StringBuilder{:tact}`][p] for building a comment string, which prefixes the resulting [`String{:tact}`][p] with four null bytes. This format is used for passing text comments for message bodies.
 
-Creates and returns an empty [`StringBuilder{:tact}`][p] for comment.
+Usage example:
+
+```tact
+let fizz: StringBuilder = beginComment();
+```
 
 ## beginTailString
 
@@ -46,17 +42,27 @@ Creates and returns an empty [`StringBuilder{:tact}`][p] for comment.
 fun beginTailString(): StringBuilder;
 ```
 
-Creates new empty [`StringBuilder{:tact}`][p] for a tailstring. This format is used in various standards like NFT or Jetton.
+Creates and returns an empty [`StringBuilder{:tact}`][p] for building a tail string, which prefixes the resulting [`String{:tact}`][p] with a single null byte. This format is used in various standards like NFT or Jetton.
+
+Usage example:
+
+```tact
+let fizz: StringBuilder = beginTailString();
+```
 
 ## beginStringFromBuilder
 
 ```tact
-fun beginStringFromBuilder(builder: Builder): StringBuilder;
+fun beginStringFromBuilder(b: StringBuilder): StringBuilder;
 ```
 
-`b` in source
+Creates and returns a new [`StringBuilder{:tact}`][p] from existing [`StringBuilder{:tact}`][p] `b`. Useful when you need to serialize an existing [`String{:tact}`][p] to a [`Cell{:tact}`][p] with some other data.
 
-Creates new [`StringBuilder{:tact}`][p] from existing builder. Useful if you need to serialize string to a cell with some other data.
+Usage example:
+
+```tact
+let fizz: StringBuilder = beginStringFromBuilder(beginString());
+```
 
 ## StringBuilder.append
 
@@ -64,7 +70,18 @@ Creates new [`StringBuilder{:tact}`][p] from existing builder. Useful if you nee
 extends mutates fun append(self: StringBuilder, s: String);
 ```
 
-Appends to [`StringBuilder{:tact}`][p] `self` String `s` and updates it.
+Extension mutation function for the [`StringBuilder{:tact}`][p].
+
+Appends a [`String{:tact}`][p] `s` to the [`StringBuilder{:tact}`][p].
+
+Usage example:
+
+```tact
+let fizz: StringBuilder = beginString();
+fizz.append("oh");
+fizz.append("my");
+fizz.append("Tact!");
+```
 
 ## StringBuilder.concat
 
@@ -72,9 +89,18 @@ Appends to [`StringBuilder{:tact}`][p] `self` String `s` and updates it.
 extends fun concat(self: StringBuilder, s: String): StringBuilder;
 ```
 
-Extension function.
+Extension function for the [`StringBuilder{:tact}`][p].
 
-Like `StringBuilder.append(){:tact}`, but can be chained. Doesn't mutate the original StringBuilder, but returns the new one.
+Returns a new [`StringBuilder{:tact}`][p] after concatinating it with a [`String{:tact}`][p] `s`. Can be chained, unlike [`StringBuilder.append(){:tact}`](#stringbuilderappend).
+
+Usage example:
+
+```tact
+let fizz: StringBuilder = beginString()
+    .concat("oh")
+    .concat("my")
+    .concat("Tact!");
+```
 
 ## StringBuilder.toString
 
@@ -82,15 +108,33 @@ Like `StringBuilder.append(){:tact}`, but can be chained. Doesn't mutate the ori
 extends fun toString(self: StringBuilder): String;
 ```
 
-Assembles a string from a builder's content.
+Extension function for the [`StringBuilder{:tact}`][p].
+
+Returns a built [`String{:tact}`][p] from a [`StringBuilder{:tact}`][p].
+
+Usage example:
+
+```tact
+let fizz: StringBuilder = beginString();
+let buzz: String = fizz.toString();
+```
 
 ## StringBuilder.toCell
 
 ```tact
-extends fun toCell(self: StringBuilder): Cell
+extends fun toCell(self: StringBuilder): Cell;
 ```
 
-Assembles a cell from a builder's content.
+Extension function for the [`StringBuilder{:tact}`][p].
+
+Returns an assembled [`Cell{:tact}`][p] from a [`StringBuilder{:tact}`][p].
+
+Usage example:
+
+```tact
+let fizz: StringBuilder = beginString();
+let buzz: Cell = fizz.toCell();
+```
 
 ## StringBuilder.toSlice
 
@@ -98,7 +142,19 @@ Assembles a cell from a builder's content.
 extends fun toSlice(self: StringBuilder): Slice;
 ```
 
-Assembles a cell from builder's content into a slice. Alias to `self.toCell().asSlice()`.
+Extension function for the [`StringBuilder{:tact}`][p].
+
+Returns an assembled [`Cell{:tact}`][p] as a [`Slice{:tact}`][p] from a [`StringBuilder{:tact}`][p]. Alias to [`self.toCell().asSlice(){:tact}`](/ref/api-cells#cellasslice).
+
+Usage example:
+
+```tact
+let s: StringBuilder = beginString();
+let fizz: Slice = s.toSlice();
+let buzz: Slice = s.toCell().asSlice();
+
+fizz == buzz; // true
+```
 
 ## String.asSlice
 
@@ -106,7 +162,27 @@ Assembles a cell from builder's content into a slice. Alias to `self.toCell().as
 extends fun asSlice(self: String): Slice;
 ```
 
-**Dangerously** casts string as slice for future parsing. Use it only if you know what you are doing.
+Extension function for the [`String{:tact}`][p].
+
+Returns a [`Slice{:tact}`][p] from a [`String{:tact}`][p] by trying to pack all of its bytes into a continuous list of [Cells][p], each referencing the next one and opening them all for future parsing.
+
+Note, that there's no indication of how many bytes a particular character could take in the [`Slice{:tact}`][p] or how deep the list of references is going to be, so use this function only if you know what you're doing.
+
+Usage example:
+
+```tact
+let s: String = "123";
+let fizz: Slice = s.toSlice();
+let buzz: Slice = s.toCell().asSlice();
+
+fizz == buzz; // true
+```
+
+<Callout>
+
+  See the enhanced version of this example in the Cookbook: [How to convert a `String` to an `Int`](/cookbook/type-conversion#how-to-convert-a-string-to-an-int).
+
+</Callout>
 
 ## String.asComment
 
