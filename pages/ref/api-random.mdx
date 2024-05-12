@@ -4,17 +4,19 @@ import { Callout } from 'nextra-theme-docs'
 
 Random number generation for Tact smart contracts.
 
-{/* TODO: usage examples */}
-
 ## randomInt
 
 ```tact
 fun randomInt(): Int;
 ```
 
-Generates a new pseudo-random unsigned $256$-bit [`Int{:tact}`][int] value `x`.
+Generates and returns a new pseudo-random unsigned $256$-bit [`Int{:tact}`][int] value `x`.
 
-The algorithm is as follows: if `r` is the old value of the random seed considered a $32$-byte array (by constructing the big-endian representation of an unsigned $256$-bit [`Int{:tact}`][int]), then its `sha512(r){:tact}` is computed. The first $32$ bytes of this hash are stored as the new value `r'` of the random seed, and the remaining $32$ bytes are returned as the next random value `x`.
+The algorithm works as follows: if `r` is the old value of the random seed considered a $32$-byte array (by constructing the big-endian representation of an unsigned $256$-bit [`Int{:tact}`][int]), then its `sha512(r){:tact}` is computed. The first $32$ bytes of this hash are stored as the new value `r'` of the random seed, and the remaining $32$ bytes are returned as the next random value `x`.
+
+```tact
+let allYourRandomBelongsToUs: Int = randomInt();
+```
 
 ## random
 
@@ -22,7 +24,13 @@ The algorithm is as follows: if `r` is the old value of the random seed consider
 fun random(from: Int, to: Int): Int;
 ```
 
-Generates a new pseudo-random unsigned [`Int{:tact}`][int] value `x` in the provided semi-closed interval: `from` $≤$ `x` $<$ `to` or `from` $≥$ `x` $>$ `to`, if both `from` and `to` are negative.
+Generates and returns a new pseudo-random unsigned [`Int{:tact}`][int] value `x` in the provided semi-closed interval: `from` $≤$ `x` $<$ `to` or `from` $≥$ `x` $>$ `to`, if both `from` and `to` are negative.
+
+Usage example:
+
+```tact
+let itsAlways42: Int = random(42, 43);
+```
 
 <Callout type="warning" emoji="⚠️">
 
