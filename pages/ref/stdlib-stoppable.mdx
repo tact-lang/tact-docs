@@ -21,18 +21,22 @@ Source code:
 trait Stoppable with Ownable {
     stopped: Bool;
     owner: Address;
+
     fun requireNotStopped() {
         require(!self.stopped, "Contract stopped");
     }
+
     fun requireStopped() {
         require(self.stopped, "Contract not stopped");
     }
+
     receive("Stop") {
         self.requireOwner();
         self.requireNotStopped();
         self.stopped = true;
         self.reply("Stopped".asComment());
     }
+
     get fun stopped(): Bool {
         return self.stopped;
     }
@@ -41,13 +45,14 @@ trait Stoppable with Ownable {
 
 Usage example:
 
-```tact
+```tact /Stoppable/
 import "@stdlib/ownable";
 import "@stdlib/stoppable";
 
 contract MyContract with Stoppable {
     owner: Address;
     stopped: Bool;
+
     init(owner: Address) {
         self.owner = owner;
         self.stopped = false;
@@ -66,6 +71,7 @@ Source code:
 trait Resumable with Stoppable {
     stopped: Bool;
     owner: Address;
+
     receive("Resume") {
         self.requireOwner();
         self.requireStopped();
@@ -77,13 +83,14 @@ trait Resumable with Stoppable {
 
 Usage example:
 
-```tact
+```tact /Resumable/
 import "@stdlib/ownable";
 import "@stdlib/stoppable";
 
 contract MyContract with Resumable {
     owner: Address;
     stopped: Bool;
+
     init(owner: Address) {
         self.owner = owner;
         self.stopped = false;

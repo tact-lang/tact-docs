@@ -1,9 +1,8 @@
 # Math
 
-Various math helper functions.
+import { Callout } from 'nextra-theme-docs'
 
-{/* TODO: better descriptions */}
-{/* TODO: usage examples */}
+Various math helper functions.
 
 ## checkSignature
 
@@ -11,9 +10,40 @@ Various math helper functions.
 fun checkSignature(hash: Int, signature: Slice, public_key: Int): Bool;
 ```
 
-Checks the Ed25519 `signature` of `hash` (a 256-bit unsigned integer, usually computed as the hash of some data) using `public_key` (also represented by a 256-bit unsigned integer). The signature must contain at least 512 data bits; only the first 512 bits are used. If the signature is valid, the result is true; otherwise, it is false.
+Checks the [Ed25519][ed] `signature` of the $256$-bit unsigned [`Int{:tact}`][int] `hash` using a `public_key`, represented by a $256$-bit unsigned [`Int{:tact}`][int] too. The signature must contain at least $512$ bits of data, but only the first $512$ bits are used.
 
-Note that `CHKSIGNU` creates a 256-bit slice with the `hash` and calls `CHKSIGNS`. That is, if hash is computed as the hash of some data, this data is hashed twice, the second hashing occurring inside `CHKSIGNS`.
+Returns `true{:tact}` if the signature is valid, `false{:tact}` otherwise.
+
+Usage example:
+
+```tact {19-24}
+message ExtMsg {
+    signature: Slice;
+    data: Cell;
+}
+
+contract Showcase {
+    // Persistent state variables
+    pub: Int as uint256; // public key as an 256-bit unsigned Int
+
+    // Constructor function init(), where all the variables are initialized
+    init(pub: Int) {
+        self.pub = pub; // storing the public key upon contract initialization
+    }
+
+    // External message receiver, which accepts message ExtMsg
+    external(msg: ExtMsg) {
+        let hash: Int = beginCell().storeRef(msg.data).endCell().hash();
+        let check: Bool = checkSignature(hash, msg.signature, self.pub);
+        //                               ----  -------------  --------
+        //                               ↑     ↑              ↑
+        //                               |     |              public_key, stored in our contract
+        //                               |     signature, obtained from the received message
+        //                               hash, calculated using the data from the received message
+        // ... follow-up logic ...
+    }
+}
+```
 
 ## checkDataSignature
 
@@ -21,7 +51,19 @@ Note that `CHKSIGNU` creates a 256-bit slice with the `hash` and calls `CHKSIGNS
 fun checkDataSignature(data: Slice, signature: Slice, public_key: Int): Bool;
 ```
 
-Checks whether `signature` is a valid Ed25519 signature of the data portion of `data` using `public_key`, similarly to `checkSignature`. If the bit length of `data` is not divisible by eight, it throws a cell underflow exception. The verification of Ed25519 signatures is a standard one, with sha256 used to reduce `data` to the 256-bit number that is actually signed. If the signature is valid, the result is true; otherwise, it is false.
+Checks the [Ed25519][ed] `signature` of the `data` using a `public_key`, similar to [`checkSignature(){:tact}`](#checksignature). If the bit length of `data` is not divisible by $8$, this functions throws an error with [exit code 9](/book/exit-codes#9): `Cell underflow`. Verification itself is being done indirectly: on a [SHA-256][sha2] hash of the `data`.
+
+Returns `true{:tact}` if the signature is valid, `false{:tact}` otherwise.
+
+Usage example:
+
+```tact
+let data: Slice = ...;
+let signature: Slice = ...;
+let publicKey: Int = ...;
+
+let check: Bool = checkSignature(data, signature, publicKey);
+```
 
 ## sha256
 
@@ -30,7 +72,20 @@ fun sha256(data: Slice): Int;
 fun sha256(data: String): Int;
 ```
 
-Computes SHA-256 hash of a byte-string. The result is a 256-bit unsigned integer. Slice or string must have no refs and have number of bits divisible by 8. Passing constant string computes hash in compile time that could be useful for some optimizations.
+Computes and returns the [SHA-256](https://en.wikipedia.org/wiki/SHA-2#Hash_standard) hash as an $256$-bit unsigned [`Int{:tact}`][int] from a passed [`Slice{:tact}`][p] or [`String{:tact}`][p] `data`.
+
+In case `data` is a [`String{:tact}`][p] it should have a number of bits divisible by $8$, and in case it's a [`Slice{:tact}`][p] it must **also** have no references (i.e. only up to 1023 bits of data in total).
+
+This function tries to resolve constant string values in [compile-time](/ref/api-comptime) whenever possible.
+
+Usage examples:
+
+```tact
+sha256(beginCell().asSlice());
+sha256("Hello, world!"); // will be resolved in compile-time
+sha256(someVariableElsewhere); // will try to resolve at compile-time,
+                               // and fallback to run-time evaluation
+```
 
 ## min
 
@@ -38,7 +93,18 @@ Computes SHA-256 hash of a byte-string. The result is a 256-bit unsigned integer
 fun min(x: Int, y: Int): Int;
 ```
 
-Computes the minimum of two integers `x` and `y`.
+Computes and returns the [minimum](https://en.wikipedia.org/wiki/Maximum_and_minimum) of two [`Int{:tact}`][int] values `x` and `y`.
+
+Usage examples:
+
+```tact
+min(1, 2);        // 1
+min(2, 2);        // 2
+min(007, 3);      // 3
+min(0x45, 3_0_0); // 69, nice
+//  ↑     ↑
+//  69    300
+```
 
 ## max
 
@@ -46,7 +112,18 @@ Computes the minimum of two integers `x` and `y`.
 fun max(x: Int, y: Int): Int;
 ```
 
-Computes the maximum of two integers `x` and `y`.
+Computes and returns the [maximum](https://en.wikipedia.org/wiki/Maximum_and_minimum) of two [`Int{:tact}`][int] values `x` and `y`.
+
+Usage examples:
+
+```tact
+max(1, 2);        // 2
+max(2, 2);        // 2
+max(007, 3);      // 7
+max(0x45, 3_0_0); // 300
+//  ↑     ↑
+//  69    300
+```
 
 ## abs
 
@@ -54,7 +131,15 @@ Computes the maximum of two integers `x` and `y`.
 fun abs(x: Int): Int
 ```
 
-Computes the absolute value of the integer `x`.
+Computes and returns the [absolute value](https://en.wikipedia.org/wiki/Absolute_value) of the [`Int{:tact}`][int] value `x`.
+
+Usage examples:
+
+```tact
+abs(42);        // 42
+abs(-42);       // 42
+abs(-(-(-42))); // 42
+```
 
 ## log
 
@@ -62,7 +147,15 @@ Computes the absolute value of the integer `x`.
 fun log(num: Int, base: Int): Int;
 ```
 
-Computes the logarithm on the `num` of `base`.
+Computes and returns the [logarithm](https://en.wikipedia.org/wiki/Logarithm) of a number `num` to the base `base`.
+
+Usage example:
+
+```tact
+log(1000, 10); // 3, as 10^3 is 1000
+//  ↑     ↑             ↑       ↑
+//  num   base          base    num
+```
 
 ## log2
 
@@ -70,53 +163,83 @@ Computes the logarithm on the `num` of `base`.
 fun log2(num: Int): Int;
 ```
 
-Computes the logarithm on the `num` of base 2.
+Similar to `log(){:tact}`, but sets the `base` to $2$.
 
-{/* TODO: check, that all of those are covered:
+Usage example:
 
 ```tact
-// Prepare random
-
-@name(randomize)
-native nativeRandomize(x: Int);
-
-@name(randomize_lt)
-native nativeRandomizeLt();
-
-@name(__tact_prepare_random)
-native nativePrepareRandom();
-
-// Random
-
-@name(random)
-native nativeRandom(): Int;
-
-@name(rand)
-native nativeRandomInterval(max: Int): Int;
-
-inline fun randomInt(): Int {
-    nativePrepareRandom();
-    return nativeRandom();
-}
-
-inline fun random(min: Int, max: Int): Int {
-    nativePrepareRandom();
-    return min + nativeRandomInterval(max - min);
-}
-
-// Math
-
-@name(min)
-native min(x: Int, y: Int): Int;
-
-@name(max)
-native max(x: Int, y: Int): Int;
-
-@name(abs)
-native abs(x: Int): Int;
-
-@name(now)
-native now(): Int;
+log2(1024); // 10, as 2^10 is 1024
+//   ↑                ↑       ↑
+//   num              base₂   num
 ```
 
-*/}
+## pow
+
+```tact
+fun pow(base: Int, exp: Int): Int;
+```
+
+Computes and returns the [exponentiation](https://en.wikipedia.org/wiki/Exponentiation) involving two numbers: the `base` and the exponent (or _power_) `exp`. Exponent `exp` must be non-negative, otherwise an error with [exit code 5](/book/exit-codes#5) will be thrown: `Integer out of expected range`.
+
+Note, that this function works both at run-time and at [compile-time](/ref/api-comptime).
+
+Usage example:
+
+```tact
+contract Example {
+    // Persistent state variables
+    p23: Int = pow(2, 3); // raises 2 to the 3rd power, which is 8
+    one: Int = pow(5, 0); // raises 5 to the power 0, which always produces 1
+                          // works at compile-time!
+
+    // Internal message receiver, which accepts message ExtMsg
+    receive() {
+        pow(self.p23, self.one + 1); // 64, works at run-time too!
+        pow(0, -1);                  // ERROR! Exit code 5: Integer out of expected range
+    }
+}
+```
+
+<Callout>
+
+  List of functions, that only work at compile-time: [API Comptime](/ref/api-comptime).
+
+</Callout>
+
+## pow2
+
+```tact
+fun pow2(exp: Int): Int;
+```
+
+Similar to `pow(){:tact}`, but sets the `base` to $2$. Works both at run-time and at [compile-time](/ref/api-comptime).
+
+Usage examples:
+
+```tact
+contract Example {
+    // Persistent state variables
+    p23: Int = pow2(3); // raises 2 to the 3rd power, which is 8
+    one: Int = pow2(0); // raises 2 to the power 0, which always produces 1
+                        // works at compile-time!
+
+    // Internal message receiver, which accepts message ExtMsg
+    receive() {
+        pow2(self.one + 1); // 4, works at run-time too!
+        pow2(-1);           // ERROR! Exit code 5: Integer out of expected range
+    }
+}
+```
+
+<Callout>
+
+  List of functions, that only work at compile-time: [API Comptime](/ref/api-comptime).
+
+</Callout>
+
+[p]: /book/types#primitive-types
+[bool]: /book/types#booleans
+[int]: /book/integers
+
+[ed]: https://en.wikipedia.org/wiki/EdDSA#Ed25519
+[sha-2]: https://en.wikipedia.org/wiki/SHA-2#Hash_standard

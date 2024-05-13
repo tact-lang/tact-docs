@@ -296,7 +296,7 @@ Extension function for the [`Int{:tact}`][int].
 
 Returns a [`String{:tact}`][p] from an [`Int{:tact}`][int] value using a [fixed-point representation](https://en.wikipedia.org/wiki/Fixed-point_arithmetic) of a fractional number, where `self` is a significant part of the number and `digits` is a number of digits in the fractional part.
 
-More precisely, `digits` is an exponentiation parameter of $10^{-\mathrm{digits}}$ expression, which constitutes the represented number. Parameter `digits` is required to be in the range $0 <=$ `digits` $< 77$.
+More precisely, `digits` is an exponentiation parameter of $10^{-\mathrm{digits}}$ expression, which gives the represented fractional number when multiplied by the actual [`Int{:tact}`][int] value. Parameter `digits` is required to be in the semi-closed interval: $0 <=$ `digits` $< 77$.
 
 Usage example:
 

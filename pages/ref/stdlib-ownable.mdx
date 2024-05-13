@@ -42,9 +42,11 @@ Source code:
 @interface("org.ton.ownable")
 trait Ownable {
     owner: Address;
+
     fun requireOwner() {
         nativeThrowUnless(132, sender() == self.owner);
     }
+
     get fun owner(): Address {
         return self.owner;
     }
@@ -53,11 +55,12 @@ trait Ownable {
 
 Usage example:
 
-```tact
+```tact /Ownable/
 import "@stdlib/ownable";
 
 contract ExampleContract with Ownable {
     owner: Address;
+
     init(owner: Address) {
         self.owner = owner;
     }
@@ -76,6 +79,7 @@ Source code:
 @interface("org.ton.ownable.transferable.v2")
 trait OwnableTransferable with Ownable {
     owner: Address;
+
     receive(msg: ChangeOwner) {
         // Check if the sender is the owner
         self.requireOwner();
@@ -91,11 +95,12 @@ trait OwnableTransferable with Ownable {
 
 Usage example:
 
-```tact
+```tact /OwnableTransferable/
 import "@stdlib/ownable";
 
 contract ExampleContract with OwnableTransferable {
     owner: Address;
+
     init(owner: Address) {
         self.owner = owner;
     }

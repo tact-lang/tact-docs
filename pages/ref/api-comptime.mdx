@@ -2,7 +2,7 @@
 
 import { Callout } from 'nextra-theme-docs'
 
-This page lists all the built-in [global static functions](/book/functions#global-static-functions), which are evaluated at the time of building the Tact project. These functions are commonly referred to as "compile-time functions".
+This page lists all the built-in [global static functions](/book/functions#global-static-functions), which are evaluated at the time of building the Tact project and cannot work with non-constant, run-time data. These functions are commonly referred to as "compile-time functions".
 
 ## address
 
@@ -65,27 +65,6 @@ contract Example {
     pointOne: Int = ton("0.1");     // 10^8 nanoToncoins, which is equal to 0.1 Toncoin
     nano: Int = ton("0.000000001"); // 1 nanoToncoin, which is equal to 10^-9 Toncoins
                                     // works at compile-time!
-}
-```
-
-## pow
-
-```tact
-fun pow(a: Int, b: Int): Int;
-```
-
-A compile-time function that computes the exponent `b` of value `a`. Exponent `b` must be non-negative.
-
-{/* TODO: a note, that pow can be used for resolving constant values in runtime too! */}
-
-Usage example:
-
-```tact
-contract Example {
-    // Persistent state variables
-    p23: Int = pow(2, 3); // raises 2 to the 3rd power, which is 8
-    one: Int = pow(5, 0); // raises 5 to the power 0, which always produces 1
-                          // works at compile-time!
 }
 ```
 
