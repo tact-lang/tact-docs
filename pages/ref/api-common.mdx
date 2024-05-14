@@ -4,9 +4,9 @@ import { Callout } from 'nextra-theme-docs'
 
 List of the most commonly used built-in [global static functions](/book/functions#global-static-functions).
 
-{/* TODO: are they truly most common? Otherwise, they may be called Miscellaneous or Basic */}
+## Contextual
 
-## now
+### now
 
 ```tact
 fun now(): Int
@@ -20,7 +20,7 @@ Usage example:
 let timeOffset: Int = now() + 1000; // thousand seconds from now()
 ```
 
-## myBalance
+### myBalance
 
 ```tact
 fun myBalance(): Int;
@@ -36,11 +36,11 @@ let iNeedADolla: Int = myBalance();
 
 <Callout type="warning" emoji="⚠️">
 
-  Note, that [`send(){:tact}` function](/book/send) does not update the contract's balance.
+  Note, that [`send(){:tact}` function](#send) does not update the contract's balance.
 
 </Callout>
 
-## myAddress
+### myAddress
 
 ```tact
 fun myAddress(): Address;
@@ -54,98 +54,7 @@ Usage example:
 let meMyselfAndI: Address = myAddress();
 ```
 
-## newAddress
-
-```tact
-fun newAddress(chain: Int, hash: Int): Address;
-```
-
-Creates a new [`Address{:tact}`][p] based on the [`chain` id](https://ton-blockchain.github.io/docs/#/overviews/TON_blockchain_overview) and the [SHA-256](/ref/stdlib-math#sha256) encoded [`hash` value](https://docs.ton.org/learn/overviews/addresses#account-id).
-
-{/* TODO: a note, that newAddress can try to resolve constant values in compile-time */}
-
-Usage example:
-
-```tact
-let oldTonFoundationAddr: Address =
-    newAddress(0, 0x83dfd552e63729b472fcbcc8c45ebcc6691702558b68ec7527e1ba403a0f31a8);
-    //         ↑  ------------------------------------------------------------------
-    //         |  ↑
-    //         |  sha-256 hash of contract's init package (StateInit)
-    //         chain id: 0 is a workchain, -1 is a masterchain
-```
-
-<Callout type="warning" emoji="⚠️">
-
-  This method throws an error with [exit code 136](/book/exit-codes#136) if `chain` is invalid or with [exit code 137](/book/exit-codes#137) if `chain` points to the masterchain ($-1$) without [masterchain support](/book/masterchain) enabled.
-
-</Callout>
-
-<Callout>
-
-  **Useful links:**\
-  [`chain` (Workchain ID) in TON Docs](https://docs.ton.org/learn/overviews/addresses#workchain-id)\
-  [`hash` (Account ID) in TON Docs](https://docs.ton.org/learn/overviews/addresses#account-id)\
-  [Contract's init package (`StateInit{:tact}`)](/book/expressions#initof)
-
-</Callout>
-
-## contractAddress
-
-```tact
-fun contractAddress(s: StateInit): Address;
-```
-
-Computes smart contract's [`Address{:tact}`][p] in a workchain $0$ based on its [`StateInit{:tact}`](/book/expressions#initof).
-
-Usage example:
-
-```tact
-let foundMeSome: Address = contractAddress(initOf SomeContract());
-```
-
-## contractAddressExt
-
-```tact
-fun contractAddressExt(chain: Int, code: Cell, data: Cell): Address;
-```
-
-Computes smart contract's [`Address{:tact}`][p] based on the `chain` id, contract's `code` and contract's initial state `data`. Use [`initOf{:tact}`](/book/expressions#initof) expression to obtain initial `code` and initial `data` of a given contract.
-
-Usage example:
-
-```tact
-let initPkg: StateInit = initOf SomeContract();
-let hereBeDragons: Address = contractAddressExt(0, initPkg.code, initPkg.data);
-```
-
-<Callout type="warning" emoji="⚠️">
-
-  This method throws an error with [exit code 136](/book/exit-codes#136) if `chain` is invalid or with [exit code 137](/book/exit-codes#137) if `chain` points to the masterchain ($-1$) without [masterchain support](/book/masterchain) enabled.
-
-</Callout>
-
-<Callout>
-
-  For this function to work, the compiler option `debug` has to be set to `true{:tact}` for the current project in the [configuration file](/book/config). Read more about debugging on the dedicated page: [Debugging](/book/debug).
-
-</Callout>
-
-## emit
-
-```tact
-fun emit(body: Cell);
-```
-
-Sends a message `body` to the outer world with the purpose of logging and analyzing it later off-chain. The message does not have a recipient and is gas-efficient compared to alternatives.
-
-Usage example:
-
-```tact
-emit("Catch me if you can".asComment()); // asComment() converts a String to a Cell
-```
-
-## sender
+### sender
 
 ```tact
 fun sender(): Address;
@@ -173,7 +82,7 @@ receive() {
 
 </Callout>
 
-## context
+### context
 
 ```tact
 fun context(): Context;
@@ -201,123 +110,129 @@ require(ctx.value != 68 + 1, "Invalid amount of nanoToncoins, bye!");
 
 </Callout>
 
+## Addressing
+
+### newAddress
+
+```tact
+fun newAddress(chain: Int, hash: Int): Address;
+```
+
+Creates a new [`Address{:tact}`][p] based on the [`chain` id](https://ton-blockchain.github.io/docs/#/overviews/TON_blockchain_overview) and the [SHA-256](/ref/stdlib-math#sha256) encoded [`hash` value](https://docs.ton.org/learn/overviews/addresses#account-id).
+
+This function tries to resolve constant values in [compile-time](/ref/api-comptime) whenever possible.
+
+Usage example:
+
+```tact
+let oldTonFoundationAddr: Address =
+    newAddress(0, 0x83dfd552e63729b472fcbcc8c45ebcc6691702558b68ec7527e1ba403a0f31a8);
+    //         ↑  ------------------------------------------------------------------
+    //         |  ↑
+    //         |  sha-256 hash of contract's init package (StateInit)
+    //         chain id: 0 is a workchain, -1 is a masterchain
+```
+
+<Callout type="warning" emoji="⚠️">
+
+  This method throws an error with [exit code 136](/book/exit-codes#136) if `chain` is invalid or with [exit code 137](/book/exit-codes#137) if `chain` points to the masterchain ($-1$) without [masterchain support](/book/masterchain) enabled.
+
+</Callout>
+
+<Callout>
+
+  **Useful links:**\
+  [`chain` (Workchain ID) in TON Docs](https://docs.ton.org/learn/overviews/addresses#workchain-id)\
+  [`hash` (Account ID) in TON Docs](https://docs.ton.org/learn/overviews/addresses#account-id)\
+  [Contract's init package (`StateInit{:tact}`)](/book/expressions#initof)
+
+</Callout>
+
+### contractAddress
+
+```tact
+fun contractAddress(s: StateInit): Address;
+```
+
+Computes smart contract's [`Address{:tact}`][p] in a workchain $0$ based on its [`StateInit{:tact}`](/book/expressions#initof).
+
+Usage example:
+
+```tact
+let foundMeSome: Address = contractAddress(initOf SomeContract());
+```
+
+### contractAddressExt
+
+```tact
+fun contractAddressExt(chain: Int, code: Cell, data: Cell): Address;
+```
+
+Computes smart contract's [`Address{:tact}`][p] based on the `chain` id, contract's `code` and contract's initial state `data`. Use [`initOf{:tact}`](/book/expressions#initof) expression to obtain initial `code` and initial `data` of a given contract.
+
+Usage example:
+
+```tact
+let initPkg: StateInit = initOf SomeContract();
+let hereBeDragons: Address = contractAddressExt(0, initPkg.code, initPkg.data);
+```
+
+<Callout type="warning" emoji="⚠️">
+
+  This method throws an error with [exit code 136](/book/exit-codes#136) if `chain` is invalid or with [exit code 137](/book/exit-codes#137) if `chain` points to the masterchain ($-1$) without [masterchain support](/book/masterchain) enabled.
+
+</Callout>
+
+<Callout>
+
+  For this function to work, the compiler option `debug` has to be set to `true{:tact}` for the current project in the [configuration file](/book/config).\
+  Read more about debugging on the dedicated page: [Debugging](/book/debug).
+
+</Callout>
+
+## Communication
+
+### send
+
+```tact
+fun send(params: SendParameters);
+```
+
+Sends a message using a [`SendParameters{:tact}`](/book/send) [Struct](/book/structs-and-messages#structs).
+
+Usage example:
+
+```tact
+send(SendParameters{
+    to: sender(), // back to the sender
+    value: 1,     // with 1 toncoin
+                  // and no message body
+});
+```
+
+<Callout>
+
+  **Useful links:**\
+  [Sending messages in the Book](/book/send)\
+  [Message `mode` in the Book](/book/message-mode)\
+  [Single-contract communication in the Cookbook](/cookbook/single-communication)
+
+</Callout>
+
+### emit
+
+```tact
+fun emit(body: Cell);
+```
+
+Sends a message `body` to the outer world with the purpose of logging and analyzing it later off-chain. The message does not have a recipient and is gas-efficient compared to using any other message sending function in Tact.
+
+Usage example:
+
+```tact
+emit("Catch me if you can, Mr. Holmes".asComment()); // asComment() converts a String to a Cell
+```
+
 [p]: /book/types#primitive-types
 [bool]: /book/types#booleans
 [int]: /book/integers
-
-{/* TODO: check and assign proper places
-
-```tact
-@name(send_raw_message)
-native nativeSendMessage(cell: Cell, mode: Int);
-
-const SendRemainingBalance: Int = 128;
-const SendRemainingValue: Int = 64;
-const SendIgnoreErrors: Int = 2;
-const SendPayGasSeparately: Int = 1;
-const SendDestroyIfZero: Int = 32;
-const SendBounceIfActionFail: Int = 16;
-
-struct SendParameters {
-    bounce: Bool = true;
-    to: Address;
-    value: Int;
-    mode: Int = 0;
-    body: Cell? = null;
-    code: Cell? = null;
-    data: Cell? = null;
-}
-
-fun send(params: SendParameters) {
-    let b: Builder = beginCell();
-    b = b.storeInt(1, 2); // internal_message + ihd_disabled
-    b = b.storeBool(params.bounce); // bounce
-    b = b.storeInt(0, 3); // bounced + from
-    b = b.storeAddress(params.to); // To
-    b = b.storeCoins(params.value); // Value
-    b = b.storeInt(0, 1 + 4 + 4 + 64 + 32); // currency_collection + IHR fees + Fwd fees + CreatedLT + CreatedAt
-
-    // Stateinit
-    if (params.code != null || params.data != null) {
-        b = b.storeBool(true); // State init
-
-        // Assemble state init cell
-        let bc: Builder = beginCell();
-        bc = bc.storeBool(false); // SplitDepth
-        bc = bc.storeBool(false); // TickTock
-        if (params.code != null) {
-            bc = bc.storeBool(true); // Code presence
-            bc = bc.storeRef(params.code!!);
-        } else {
-            bc = bc.storeBool(false); // Code presence
-        }
-        if (params.data != null) {
-            bc = bc.storeBool(true); // Data presence
-            bc = bc.storeRef(params.data!!);
-        } else {
-            bc = bc.storeBool(false); // Data presence
-        }
-        bc = bc.storeBool(false); // Library
-
-        b = b.storeBool(true); // Store as ref
-        b = b.storeRef(bc.endCell());
-    } else {
-        b = b.storeBool(false); // No state init
-    }
-
-    // Body
-    let body: Cell? = params.body;
-    if (body != null) {
-        b = b.storeBool(true);
-        b = b.storeRef(body!!);
-    } else {
-        b = b.storeBool(false); // No body
-    }
-
-    // Send
-    let c: Cell = b.endCell();
-    nativeSendMessage(c, params.mode);
-}
-
-inline fun emit(body: Cell) {
-    // ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt created_lt:uint64 created_at:uint32
-    //                     maybe: stateInit (false) bodyRef: bool (true)
-    let c: Cell = beginCell()
-        .storeUint(15211807202738752817960438464513, 104)
-        .storeRef(body)
-        .endCell();
-    nativeSendMessage(c, 0);
-}
-
-@name(accept_message)
-native acceptMessage();
-
-@name(commit)
-native commit();
-```
-
-```tact
-struct Context {
-    bounced: Bool;
-    sender: Address;
-    value: Int;
-    raw: Slice;
-}
-
-@name(__tact_context_get)
-native context(): Context;
-
-@name(__tact_context_get_sender)
-native sender(): Address;
-
-extends fun readForwardFee(self: Context): Int {
-    let sc: Slice = self.raw;
-    sc.loadAddress(); // Skip destination
-    sc.loadCoins(); // Skip value
-    sc.skipBits(1); // Skip extracurrency collection
-    sc.loadCoins(); // Skip ihr_fee
-    return (sc.loadCoins() * 3) / 2;
-}
-```
-
-*/}
