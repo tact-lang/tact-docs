@@ -2,9 +2,6 @@
 
 import { Callout } from 'nextra-theme-docs'
 
-{/* TODO: a better description */}
-{/* TODO: usage examples for all functions here */}
-
 ## require
 
 ```tact
@@ -30,10 +27,9 @@ Prints the argument `arg` to the contract's debug console. Evaluated only if `de
 
 Can be applied to the following list of types and values:
 
-{/* TODO: dump also handles Addresses now */}
-
 * [`Int{:tact}`][int]
 * [`Bool{:tact}`][bool]
+* [`Address{:tact}`][p]
 * [`Builder{:tact}`][p], [`Cell{:tact}`][p] or [`Slice{:tact}`][p]
 * [`String{:tact}`][p] or [`StringBuilder{:tact}`][p]
 * [`map<K, V>{:tact}`](/book/maps)
@@ -49,6 +45,9 @@ dump(42);
 // Bool
 dump(true);
 dump(false);
+
+// Address
+dump(myAddress());
 
 // Builder, Cell or Slice
 dump(beginCell());           // Builder
@@ -69,17 +68,26 @@ dump(null);
 dump(emit("msg".asComment())); // As emit() function doesn't return a value, dump() would print #DEBUG#: void.
 ```
 
-[p]: /book/types#primitive-types
-[bool]: /book/types#booleans
-[int]: /book/integers
-
 ## dumpStack
 
 ```tact
 fun dumpStack();
 ```
 
-{/* TODO: a better description */}
+Prints all the values of [persistent state variables](/book/contracts#variables) to the contract's debug console. Evaluated only if `debug` option is set in the [configuration file](/book/config), otherwise does nothing.
+
+Usage example:
+
+```tact
+contract DumpsterFire {
+    var1: Int = 0;
+    var2: Int = 5;
+
+    receive() {
+        dumpStack(); // would print 0 5
+    }
+}
+```
 
 ## throw
 
@@ -87,7 +95,7 @@ fun dumpStack();
 fun throw(code: Int);
 ```
 
-Throw an exception with error code equal `code`.
+An alias to [`nativeThrow(){:tact}`](#nativethrow).
 
 ## nativeThrow
 
@@ -95,7 +103,29 @@ Throw an exception with error code equal `code`.
 fun nativeThrow(code: Int);
 ````
 
-{/* TODO: a better description */}
+Throws an exception with an error code equal to `code`. Execution of the current context stops (the statements after `nativeThrow` won't be executed) and control will be passed to the first [`try...catch{:tact}` block](/book/statements#try-catch) in the call stack. If no `try{:tact}` or `try...catch{:tact}` block exists among caller functions, [TVM](https://docs.ton.org/learn/tvm-instructions/tvm-overview) will terminate the transaction.
+
+Usage examples:
+
+```tact {2,7}
+fun thisWillTerminate() {
+    nativeThrow(42); // throwing with exit code 42
+}
+
+fun butThisDoesnt() {
+    try {
+        nativeThrow(42); // throwing with exit code 42
+    }
+
+    // ... follow-up logic ...
+}
+```
+
+<Callout>
+
+  Prefer to use `require(){:tact}` over this function as the former comes with more [compile-time](/ref/api-comptime) optimizations and is generally more user-friendly.
+
+</Callout>
 
 ## nativeThrowWhen
 
@@ -103,7 +133,28 @@ fun nativeThrow(code: Int);
 fun nativeThrowWhen(code: Int, condition: Bool);
 ```
 
-Throw an exception with error code equal to `code` when `condition` is equal to `true{:tact}`.
+Similar to [`nativeThrow(){:tact}`](#nativethrow), but with throw an exception conditionally, when `condition` is equal to `true{:tact}`. Won't throw otherwise.
+
+Usage examples:
+
+```tact {2,7}
+fun thisWillTerminate() {
+    nativeThrowWhen(42, true); // throwing with exit code 42
+}
+
+fun butThisDoesnt() {
+    try {
+        nativeThrow(42, true); // throwing with exit code 42
+    }
+    // ... follow-up logic ...
+}
+```
+
+<Callout>
+
+  Prefer to use `require(){:tact}` over this function as the former comes with more [compile-time](/ref/api-comptime) optimizations and is generally more user-friendly.
+
+</Callout>
 
 ## nativeThrowUnless
 
@@ -111,4 +162,29 @@ Throw an exception with error code equal to `code` when `condition` is equal to 
 fun nativeThrowUnless(code: Int, condition: Bool);
 ```
 
-Throw an exception with error code equal to `code` when `condition` is equal to `false{:tact}`.
+Similar to [`nativeThrow(){:tact}`](#nativethrow), but with throw an exception conditionally, when `condition` is equal to `false{:tact}`. Won't throw otherwise.
+
+Usage examples:
+
+```tact {2,7}
+fun thisWillTerminate() {
+    nativeThrowUnless(42, false); // throwing with exit code 42
+}
+
+fun butThisDoesnt() {
+    try {
+        nativeThrowUnless(42, false); // throwing with exit code 42
+    }
+    // ... follow-up logic ...
+}
+```
+
+<Callout>
+
+  Prefer to use `require(){:tact}` over this function as the former comes with more [compile-time](/ref/api-comptime) optimizations and is generally more user-friendly.
+
+</Callout>
+
+[p]: /book/types#primitive-types
+[bool]: /book/types#booleans
+[int]: /book/integers
