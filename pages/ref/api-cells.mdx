@@ -297,10 +297,10 @@ let fizz: Int = s.loadUint(7);
 ## Slice.preloadUint
 
 ```tact
-extends mutates fun preloadUint(self: Slice, l: Int): Int;
+extends fun preloadUint(self: Slice, l: Int): Int;
 ```
 
-Extension mutation function for the [`Slice{:tact}`][p].
+Extension function for the [`Slice{:tact}`][p].
 
 Preloads an unsigned `l`-bit [`Int{:tact}`][int] from the [`Slice{:tact}`][p].
 
@@ -331,10 +331,10 @@ let fizz: Int = s.loadInt(7);
 ## Slice.preloadInt
 
 ```tact
-extends mutates fun preloadInt(self: Slice, l: Int): Int;
+extends fun preloadInt(self: Slice, l: Int): Int;
 ```
 
-Extension mutation function for the [`Slice{:tact}`][p].
+Extension function for the [`Slice{:tact}`][p].
 
 Preloads a signed `len`-bit [`Int{:tact}`][int] from the [`Slice{:tact}`][p].
 
@@ -365,10 +365,10 @@ let fizz: Slice = s.loadBits(7);
 ## Slice.preloadBits
 
 ```tact
-extends mutates fun preloadBits(self: Slice, l: Int): Slice;
+extends fun preloadBits(self: Slice, l: Int): Slice;
 ```
 
-Extension mutation function for the [`Slice{:tact}`][p].
+Extension function for the [`Slice{:tact}`][p].
 
 Preloads the first $0 ≤ l ≤ 1023$ bits from the Slice, and returns it as a separate [`Slice{:tact}`][p].
 
