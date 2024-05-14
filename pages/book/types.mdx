@@ -116,8 +116,6 @@ contract HelloWorld {
     counter: Int;
 
     // Constructor function init(), where all the variables are initialized
-    // Note, that an empty init function won't be needed starting with Tact 1.3.0,
-    // see: https://github.com/tact-lang/tact/pull/167
     init() {
         self.counter = 0;
     }
@@ -138,7 +136,9 @@ Read more about them on the dedicated page: [Contracts](/book/contracts).
 
 ### Traits
 
-Tact doesn't support classical class inheritance, but instead introduces the concept of _traits_, which can be viewed as abstract contracts (like abstract classes in popular object-oriented languages). They have the same structure as [contracts](#contracts), but can't [initialize persistent state variables](/book/contracts#init-function), while allowing to override some of their behaviors.
+Tact doesn't support classical class inheritance, but instead introduces the concept of _traits_, which can be viewed as abstract contracts (like abstract classes in popular object-oriented languages). They have the same structure as [contracts](#contracts), but can't [initialize persistent state variables](/book/contracts#init-function).
+
+A trait can also let the contract inheriting it to override the behavior of its [functions](/book/functions#virtual-and-abstract-functions) and the value of its [constants](/book/constants#virtual-and-abstract-constants).
 
 Example of a trait [`Ownable{:tact}`](/ref/stdlib-ownable#ownable) from [`@stdlib/ownable`](/ref/stdlib-ownable):
 

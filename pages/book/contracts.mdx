@@ -30,7 +30,7 @@ Each contract can contain:
 * [Receiver functions](#receiver-functions)
 * [Internal functions](#internal-functions)
 
-Furthermore, contracts can inherit all the declarations from [traits](/book/types#traits) and override some of their default behaviours.
+Furthermore, contracts can inherit all the declarations and definitions from [traits](/book/types#traits) and override some of their default behaviours. If declared or defined in a trait, internal functions and constants can be marked as [virtual or abstract](/book/functions#virtual-and-abstract-functions) and overriden in contracts inheriting from the trait.
 
 ### Persistent state variables [#variables]
 
@@ -80,9 +80,6 @@ contract Example {
     const StateDelivered: Int = 2;
     const StateDisputed: Int = 3;
 
-    // no need to init constants
-    init() {}
-
     get fun sum(): Int {
         // access constants from anywhere
         return GlobalConst1 + self.ContractConst1 + self.StatePaid;
@@ -107,6 +104,27 @@ contract Example {
     // constructor function
     init() {
         self.var2 = 42;
+    }
+}
+```
+
+If a contract doesn't have any persistent state variables, or they all have their default value specified, it may omit the `init(){:tact}` function declaration altogether. That's because unless explicitly declared, the empty `init(){:tact}` function is present by default in all contracts.
+
+The following is an example of a valid empty contract:
+
+```tact
+contract IamEmptyAndIknowIt {}
+```
+
+For your convenience, parameter list of `init(){:tact}` can have a trailing comma:
+
+```tact
+contract TheySeeMeTrailing {
+    init(
+        param1: Int,
+        param2: Int, // trailing comma is allowed
+    ) {
+        // ...
     }
 }
 ```
@@ -173,7 +191,7 @@ contract HelloWorld {
             to: sender(),
             value: 0,
             mode: SendRemainingValue | SendIgnoreErrors,
-            body: CanBounce{counter: self.counter}.toCell()
+            body: CanBounce{counter: self.counter}.toCell(),
         });
     }
 
@@ -201,7 +219,6 @@ They can only be called from [receivers](#receiver-functions), [getters](#getter
 ```tact
 contract Functions {
     val: Int = 0;
-    init() {}
 
     // this contract method can only be called from within this contract and access its variables
     fun onlyZeros() {
