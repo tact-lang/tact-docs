@@ -136,7 +136,9 @@ Randomizes the random number generator with the current [logical time](https://d
 Usage example:
 
 ```tact
-nativeRandomizeLt();        // now, random numbers are impredictable!
+nativeRandomizeLt();        // now, random numbers are unpredictable for users,
+                            // but still may be affected by validators or collators
+                            // as they determine the seed of the current block.
 let idk: Int = randomInt(); // ???, it's random!
 ```
 

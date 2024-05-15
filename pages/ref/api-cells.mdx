@@ -172,7 +172,7 @@ Usage example:
 
 ```tact
 let b: Builder = beginCell();
-let fizz: Int = b.refs();
+let fizz: Int = b.refs(); // 0
 ```
 
 ## Builder.bits
@@ -189,7 +189,7 @@ Usage example:
 
 ```tact
 let b: Builder = beginCell();
-let fizz: Int = b.bits();
+let fizz: Int = b.bits(); // 0
 ```
 
 ## Builder.asSlice
@@ -302,7 +302,7 @@ extends fun preloadUint(self: Slice, l: Int): Int;
 
 Extension function for the [`Slice{:tact}`][p].
 
-Preloads an unsigned `l`-bit [`Int{:tact}`][int] from the [`Slice{:tact}`][p].
+Preloads an unsigned `l`-bit [`Int{:tact}`][int] from the [`Slice{:tact}`][p] without changing its data.
 
 Usage example:
 
@@ -336,7 +336,7 @@ extends fun preloadInt(self: Slice, l: Int): Int;
 
 Extension function for the [`Slice{:tact}`][p].
 
-Preloads a signed `len`-bit [`Int{:tact}`][int] from the [`Slice{:tact}`][p].
+Preloads a signed `len`-bit [`Int{:tact}`][int] from the [`Slice{:tact}`][p] without changing its data.
 
 Usage example:
 
@@ -370,7 +370,7 @@ extends fun preloadBits(self: Slice, l: Int): Slice;
 
 Extension function for the [`Slice{:tact}`][p].
 
-Preloads the first $0 ≤ l ≤ 1023$ bits from the Slice, and returns it as a separate [`Slice{:tact}`][p].
+Preloads the first $0 ≤ l ≤ 1023$ bits from the Slice, and returns it as a separate [`Slice{:tact}`][p] without changing its data.
 
 Usage example:
 
