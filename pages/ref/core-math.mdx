@@ -147,15 +147,27 @@ abs(-(-(-42))); // 42
 fun log(num: Int, base: Int): Int;
 ```
 
-Computes and returns the [logarithm](https://en.wikipedia.org/wiki/Logarithm) of a number `num` to the base `base`.
+Computes and returns the [logarithm](https://en.wikipedia.org/wiki/Logarithm) of a number `num` to the base `base`. Results are [rounded down](https://en.wikipedia.org/wiki/Rounding#Rounding_down). Passing negative `num` always gives $0$ as the result, while passing negative `base` gives $-1$ when it is close enough to zero and there's enough gas for calculations, otherwise throws an error with [exit code -14](/book/exit-codes): `Out of gas`.
 
-Usage example:
+Usage examples:
 
 ```tact
 log(1000, 10); // 3, as 10^3 is 1000
 //  ↑     ↑             ↑       ↑
 //  num   base          base    num
+
+log(1001, 10);  // 3
+log(999, 10);   // 2
+log(-1000, 10); // 0, because of the negative num
+log(1024, 2);   // 10
+log(1024, -2);  // -1, because of the negative base
 ```
+
+<Callout>
+
+  Note, that if you only need to obtain logarithms to the base $2$, use the [`log2(){:tact}`](#log2) function, as it's less gas-consuming.
+
+</Callout>
 
 ## log2
 
@@ -172,6 +184,12 @@ log2(1024); // 10, as 2^10 is 1024
 //   ↑                ↑       ↑
 //   num              base₂   num
 ```
+
+<Callout>
+
+  In order to reduce gas usage, prefer using this function over calling [`log(){:tact}`](#log) when you only need to obtain logarithms to the base $2$.
+
+</Callout>
 
 ## pow
 
@@ -199,6 +217,12 @@ contract Example {
     }
 }
 ```
+
+<Callout>
+
+  Note, that if you only need to obtain powers of $2$, use the [`pow2(){:tact}`](#pow2) function, as it's less gas-consuming.
+
+</Callout>
 
 <Callout>
 
@@ -230,6 +254,12 @@ contract Example {
     }
 }
 ```
+
+<Callout>
+
+  In order to reduce gas usage, prefer using this function over calling [`pow(){:tact}`](#pow) when you only need to obtain powers of $2$.
+
+</Callout>
 
 <Callout>
 
