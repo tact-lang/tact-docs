@@ -2,6 +2,14 @@
 
 import { Callout } from 'nextra-theme-docs'
 
+List of functions commonly used for debugging smart contracts in Tact.
+
+<Callout>
+
+  Read more about debugging on the dedicated page: [Debugging](/book/debug).
+
+</Callout>
+
 ## require
 
 ```tact
@@ -10,11 +18,25 @@ fun require(condition: Bool, error: String);
 
 Checks the `condition` and throws an exception with `error` message if the `condition` is `false{:tact}`. Does nothing otherwise.
 
-Usage example:
+<Callout>
+
+  Note, that as of this moment, `require(){:tact}` generates its own non-standard exit codes. However, they're all outside of the common range $0 - 255$ reserved for TVM and Tact contract errors, which makes it possible to distinguish errors from `require(){:tact}` and any other standard [exit codes](/book/exit-codes).
+
+</Callout>
+
+Usage examples:
 
 ```tact
 // now() has to return a value greater than 1000, otherwise an error message will be thrown
 require(now() > 1000, "We're in the first 1000 seconds of 1 January 1970!");
+
+try {
+    // The following will never be true, so this require would always throw
+    require(now() < -1, "Time is an illusion. Lunchtime doubly so.");
+} catch (e) {
+    // e will be outside of range 0-255
+    dump(e);
+}
 ```
 
 ## dump
@@ -78,7 +100,7 @@ Prints all the values of [persistent state variables](/book/contracts#variables)
 
 Usage example:
 
-```tact
+```tact {6}
 contract DumpsterFire {
     var1: Int = 0;
     var2: Int = 5;
@@ -121,19 +143,13 @@ fun butThisDoesnt() {
 }
 ```
 
-<Callout>
-
-  Prefer to use `require(){:tact}` over this function as the former comes with more [compile-time](/ref/api-comptime) optimizations and is generally more user-friendly.
-
-</Callout>
-
 ## nativeThrowWhen
 
 ```tact
 fun nativeThrowWhen(code: Int, condition: Bool);
 ```
 
-Similar to [`nativeThrow(){:tact}`](#nativethrow), but with throw an exception conditionally, when `condition` is equal to `true{:tact}`. Won't throw otherwise.
+Similar to [`nativeThrow(){:tact}`](#nativethrow), but throws an exception conditionally, when `condition` is equal to `true{:tact}`. Doesn't throw otherwise.
 
 Usage examples:
 
@@ -150,19 +166,13 @@ fun butThisDoesnt() {
 }
 ```
 
-<Callout>
-
-  Prefer to use `require(){:tact}` over this function as the former comes with more [compile-time](/ref/api-comptime) optimizations and is generally more user-friendly.
-
-</Callout>
-
 ## nativeThrowUnless
 
 ```tact
 fun nativeThrowUnless(code: Int, condition: Bool);
 ```
 
-Similar to [`nativeThrow(){:tact}`](#nativethrow), but with throw an exception conditionally, when `condition` is equal to `false{:tact}`. Won't throw otherwise.
+Similar to [`nativeThrow(){:tact}`](#nativethrow), but throws an exception conditionally, when `condition` is equal to `false{:tact}`. Doesn't throw otherwise.
 
 Usage examples:
 
@@ -178,12 +188,6 @@ fun butThisDoesnt() {
     // ... follow-up logic ...
 }
 ```
-
-<Callout>
-
-  Prefer to use `require(){:tact}` over this function as the former comes with more [compile-time](/ref/api-comptime) optimizations and is generally more user-friendly.
-
-</Callout>
 
 [p]: /book/types#primitive-types
 [bool]: /book/types#booleans
