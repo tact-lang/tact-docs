@@ -147,7 +147,7 @@ abs(-(-(-42))); // 42
 fun log(num: Int, base: Int): Int;
 ```
 
-Computes and returns the [logarithm](https://en.wikipedia.org/wiki/Logarithm) of a number `num` to the base `base`. Results are [rounded down](https://en.wikipedia.org/wiki/Rounding#Rounding_down). Passing negative `num` always gives $0$ as the result, while passing negative `base` gives $-1$ when it is close enough to zero and there's enough gas for calculations, otherwise throws an error with [exit code -14](/book/exit-codes): `Out of gas`.
+Computes and returns the [logarithm](https://en.wikipedia.org/wiki/Logarithm) of a number `num` $> 0$ to the base `base` $≥ 1$. Results are [rounded down](https://en.wikipedia.org/wiki/Rounding#Rounding_down). Passing a non-positive `num` value or a `base` less than $1$ throws an error with [exit code 5](/book/exit-codes#5): `Integer out of expected range`.
 
 Usage examples:
 
@@ -158,9 +158,13 @@ log(1000, 10); // 3, as 10^3 is 1000
 
 log(1001, 10);  // 3
 log(999, 10);   // 2
-log(-1000, 10); // 0, because of the negative num
+try {
+  log(-1000, 10); // throws exit code 5 because of the non-positive num
+}
 log(1024, 2);   // 10
-log(1024, -2);  // -1, because of the negative base
+try {
+  log(1024, -2);  // throws exit code 5 because of the base less than 1
+}
 ```
 
 <Callout>
@@ -175,7 +179,7 @@ log(1024, -2);  // -1, because of the negative base
 fun log2(num: Int): Int;
 ```
 
-Similar to `log(){:tact}`, but sets the `base` to $2$.
+Similar to [`log(){:tact}`](#log), but sets the `base` to $2$.
 
 Usage example:
 
@@ -236,7 +240,7 @@ contract Example {
 fun pow2(exp: Int): Int;
 ```
 
-Similar to `pow(){:tact}`, but sets the `base` to $2$. Works both at run-time and at [compile-time](/ref/api-comptime).
+Similar to [`pow(){:tact}`](#pow), but sets the `base` to $2$. Works both at run-time and at [compile-time](/ref/api-comptime).
 
 Usage examples:
 
