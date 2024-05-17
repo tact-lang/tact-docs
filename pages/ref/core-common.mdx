@@ -90,12 +90,12 @@ fun context(): Context;
 
 Returns `Context{:tact}` [Struct](/book/structs-and-messages#structs), that consists of:
 
-Field   | Type                  | Description
-:------ | :-------------------- | :----------
-bounced | [`Bool{:tact}`][bool] | [Bounced](https://ton.org/docs/learn/overviews/addresses#bounceable-vs-non-bounceable-addresses) flag of the incoming message.
-sender  | [`Address{:tact}`][p] | Internal address of the sender on the TON blockchain.
-value   | [`Int{:tact}`][int]   | Amount of nanoToncoins in a message.
-raw     | [`Slice{:tact}`][p]   | The reminder of the message as a [`Slice{:tact}`][p].
+Field     | Type                  | Description
+:-------- | :-------------------- | :----------
+`bounced` | [`Bool{:tact}`][bool] | [Bounced](https://ton.org/docs/learn/overviews/addresses#bounceable-vs-non-bounceable-addresses) flag of the incoming message.
+`sender`  | [`Address{:tact}`][p] | Internal address of the sender on the TON blockchain.
+`value`   | [`Int{:tact}`][int]   | Amount of nanoToncoins in a message.
+`raw`     | [`Slice{:tact}`][p]   | The remainder of the message as a [`Slice{:tact}`][p]. It follows [internal message layout](https://docs.ton.org/develop/smart-contracts/messages#message-layout) of TON starting from the destination [`Address{:tact}`][p] (`dest:MsgAddressInt ` in [TL-B notation](https://docs.ton.org/develop/data-formats/tl-b-language)).
 
 Usage example:
 
@@ -106,7 +106,7 @@ require(ctx.value != 68 + 1, "Invalid amount of nanoToncoins, bye!");
 
 <Callout>
 
-  Note, that if you only need to know who sent the message, use the [`sender(){:tact}`](#sender) function, as it's less gas-expensive.
+  Note, that if you only need to know who sent the message, use the [`sender(){:tact}`](#sender) function, as it's less gas-consuming.
 
 </Callout>
 
@@ -204,9 +204,9 @@ Usage example:
 
 ```tact
 send(SendParameters{
-    to: sender(), // back to the sender
-    value: 1,     // with 1 toncoin
-                  // and no message body
+    to: sender(),    // back to the sender,
+    value: ton("1"), // with 1 toncoin,
+                     // and no message body
 });
 ```
 
@@ -225,13 +225,33 @@ send(SendParameters{
 fun emit(body: Cell);
 ```
 
-Sends a message `body` to the outer world with the purpose of logging and analyzing it later off-chain. The message does not have a recipient and is gas-efficient compared to using any other message sending function in Tact.
+Sends a message `body` to the outer world with the purpose of logging and analyzing it later off-chain. The message does not have a recipient and is gas-efficient compared to using any other message sending functions of Tact.
 
 Usage example:
 
 ```tact
 emit("Catch me if you can, Mr. Holmes".asComment()); // asComment() converts a String to a Cell
 ```
+
+<Callout>
+
+  To analyze `emit(){:tact}` calls, one has to look at [external messages](http://localhost:3000/book/external) produced by the contract. For example, when deploying in [Sandbox](https://github.com/ton-org/sandbox), you may call `emit(){:tact}` from a [receiver function](/book/contracts#receiver-functions) and then observe the list of sent external messages:
+
+  ```typescript {9-10}
+  it('emits', async () => {
+    const res = await simpleCounter.send(
+      deployer.getSender(),
+      { value: toNano('0.05') },
+      'emit_receiver',
+    );
+
+    console.log("Address of our contract: " + simpleCounter.address);
+    console.log(res.externals); // ← here one would see results of emit() calls,
+                                //   and all external messages in general
+  });
+  ```
+
+</Callout>
 
 [p]: /book/types#primitive-types
 [bool]: /book/types#booleans
