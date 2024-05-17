@@ -217,7 +217,7 @@ Extension function for the [`String{:tact}`][p].
 
 Returns a [`Slice{:tact}`][p] out of the decoded [Base64](https://en.wikipedia.org/wiki/Base64) [`String{:tact}`][p]. Alias to `self.asSlice().fromBase64(){:tact}`.
 
-Note, that this function is very limited and can be used only for small strings that fit in a single [`Cell{:tact}`][p] (i.e., strings that contain no more than 1023 bits of data).
+Note, that this function is limited and only takes the first $1023$ bits of data from the given [`String{:tact}`][p], without throwing an exception when the [`String{:tact}`][p] is larger (i.e. contains more than $1023$ bits of data).
 
 Usage example:
 
@@ -239,7 +239,7 @@ Extension function for the [`Slice{:tact}`][p].
 
 Returns a [`String{:tact}`][p] from a [`Slice{:tact}`][p] by trying to load all of its bits without looking for its references, if any.
 
-Note, that this function doesn't look at the references at all and is truncates its output to 1023 bits, so use it only if you know what you're doing.
+Note, that this function doesn't look at the references at all and is truncates its output to $1023$ bits, so use it only if you know what you're doing.
 
 Usage example:
 
@@ -259,9 +259,9 @@ extends fun fromBase64(self: Slice): Slice;
 
 Extension function for the [`Slice{:tact}`][p].
 
-Returns a [`Slice{:tact}`][p] out of the decoded [Base64](https://en.wikipedia.org/wiki/Base64) [`Slice{:tact}`][p].
+Returns a new [`Slice{:tact}`][p] out of the decoded [Base64](https://en.wikipedia.org/wiki/Base64) [`Slice{:tact}`][p].
 
-Note, that this function doesn't load [`Cell{:tact}`][p] references, which makes it limited to only 1023 bits of data.
+Note, that this function is limited and only takes the first $1023$ bits of data from the given [`Slice{:tact}`][p], without throwing an exception if the [`Slice{:tact}`][p] has more data (i.e., when it has any references).
 
 Usage example:
 
@@ -296,7 +296,7 @@ Extension function for the [`Int{:tact}`][int].
 
 Returns a [`String{:tact}`][p] from an [`Int{:tact}`][int] value using a [fixed-point representation](https://en.wikipedia.org/wiki/Fixed-point_arithmetic) of a fractional number, where `self` is a significant part of the number and `digits` is a number of digits in the fractional part.
 
-More precisely, `digits` is an exponentiation parameter of $10^{-\mathrm{digits}}$ expression, which gives the represented fractional number when multiplied by the actual [`Int{:tact}`][int] value. Parameter `digits` is required to be in the semi-closed interval: $0 <=$ `digits` $< 77$.
+More precisely, `digits` is an exponentiation parameter of $10^{-\mathrm{digits}}$ expression, which gives the represented fractional number when multiplied by the actual [`Int{:tact}`][int] value. Parameter `digits` is required to be in the semi-closed interval: $0 <=$ `digits` $< 78$, otherwise an exception with [exit code 134](/book/exit-codes#134) will be thrown: `Invalid argument`.
 
 Usage example:
 
