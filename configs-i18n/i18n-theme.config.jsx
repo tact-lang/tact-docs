@@ -1,8 +1,3 @@
-/**
-*  WARNING: This is an auto-generated file! Please, don't edit it directly.
-*
-*  Instead, go to configs-i18n/ directory and modify files there.
-*/
 import { useRouter } from 'next/router'
 import { DocsThemeConfig } from 'nextra-theme-docs'
 

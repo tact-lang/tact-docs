@@ -43,15 +43,6 @@ const config = {
   feedback: {
     content: null
   },
-  // editLink: {
-  //   text: function useText() {
-  //     const { locale } = useRouter()
-  //     return {
-  //       'en': 'Edit this page on GitHub',
-  //       // 'zh': '在 GitHub 上编辑此页',
-  //     }[locale ?? "en"]
-  //   }
-  // },
   footer: {
     text: <span>
       CC BY 4.0, Tact Software Foundation

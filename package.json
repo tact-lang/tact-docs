@@ -17,10 +17,10 @@
     "check-spell": "echo 'spell checking'",
     "check-format": "echo 'format checking'",
     "check-all": "yarn check-links && yarn check-spell && yarn check-format",
-    "pre-build": "cp next.config.js .github/bckp.next.config.js && cp .github/i18n/next.config.js .",
+    "pre-build": "node ./scripts/pre-build.js",
     "build": "yarn deps && yarn clean && next build",
     "post-processing": "node ./scripts/redirects-generate.js",
-    "post-build": "mv .github/bckp.next.config.js next.config.js && yarn check-all",
+    "post-build": "node ./scripts/post-build.js && yarn check-all",
     "build-pages": "yarn pre-build && yarn build && yarn post-processing && yarn post-build"
   },
   "devDependencies": {

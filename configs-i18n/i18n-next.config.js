@@ -1,8 +1,3 @@
-/**
-*  WARNING: This is an auto-generated file! Please, don't edit it directly.
-*
-*  Instead, go to configs-i18n/ directory and modify files there.
-*/
 import { getHighlighter, BUNDLED_LANGUAGES } from 'shiki';
 import nextra from 'nextra';
 import fs from 'fs';
