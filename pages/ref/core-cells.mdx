@@ -427,7 +427,7 @@ extends mutates fun skipBits(self: Slice, l: Int): Slice;
 
 Extension mutation function for the [`Slice{:tact}`][p].
 
-Loads all but the first $0 ≤$ `l` $≤ 1023$ bits from the [`Slice{:tact}`][p], and returns them as a separate [`Slice{:tact}`][p].
+Loads all but the first $0 ≤$ `l` $≤ 1023$ bits from the [`Slice{:tact}`][p], and returns skipped bits in a separate [`Slice{:tact}`][p].
 
 Attempts to specify an out-of-bounds `l` value throw an exception with [exit code 5](/book/exit-codes#5): `Integer out of expected range`.
 
