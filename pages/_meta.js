@@ -15,8 +15,8 @@ export default {
     title: "Cookbook",
     type: 'page',
   },
-  language: {
-    title: "Language",
+  ref: {
+    title: "Reference",
     type: 'page',
   },
   ecosystem: {
