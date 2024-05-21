@@ -46,7 +46,7 @@ Use underscores (`_`) to improve readability: $\mathrm{0b111\_111\_111}$ is equa
 
 For example, arithmetic with dollars requires two decimal places after the dot — those are used for the cents value. But how would we represent the number \$$1.25$ if we're only able to work with integers? The solution is to work with _cents_ directly. This way, \$$1.25$ becomes $125$ cents. We simply memorize that the two rightmost digits represent the numbers after the decimal point.
 
-Similarly, working with Toncoins requires nine decimal places instead of the two. Therefore, the amount of $1.25$ TON, which can be represented in Tact as [`ton("1.25"){:tact}`](/language/ref/common#ton), is actually the number $1250000000$. We refer to such numbers as _nano-tons_ (or _nanoToncoins_) rather than _cents_.
+Similarly, working with Toncoins requires nine decimal places instead of the two. Therefore, the amount of $1.25$ TON, which can be represented in Tact as [`ton("1.25"){:tact}`](/ref/api-comptime#ton), is actually the number $1250000000$. We refer to such numbers as _nano-tons_ (or _nanoToncoins_) rather than _cents_.
 
 ## Serialization
 

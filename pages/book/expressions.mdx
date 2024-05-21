@@ -68,17 +68,68 @@ Read more about booleans and [`Bool{:tact}`](/book/types#booleans) type in the d
 A string literal is zero or more characters enclosed in double (`"`) quotation marks. All string literals are objects of [`String{:tact}`][p] type.
 
 ```tact
-"foo"
-"1234"
-
-// Note, that at the moment Tact strings can't have escape characters in them:
-"line \n another"; // SYNTAX ERROR!, see: https://github.com/tact-lang/tact/issues/25
-
-// This means, that double quotes inside strings are also prohibited:
-"this \"can't be!\""; // SYNTAX ERROR!
+"foo";
+"1234";
 ```
 
-Read more about strings and [`String{:tact}`][p] type there: [Primitive types][p].
+Tact strings support a range of [escape sequences](https://en.wikipedia.org/wiki/Escape_sequence) starting with a backslash `\\` character:
+
+* `\\{:tact}` — literal backslash
+* `\"{:tact}` — double quote
+* `\n{:tact}` — newline
+* `\r{:tact}` — carriage return
+* `\t{:tact}` — tab
+* `\v{:tact}` — vertical tab
+* `\b{:tact}` — backspace
+* `\f{:tact}` — form feed
+* `\x00{:tact}` through `\xFF{:tact}` — [code point](https://en.wikipedia.org/wiki/Code_point), must be exactly two hex digits long
+* `\u0000{:tact}` through `\uFFFF{:tact}` — [Unicode code point][unicode], must be exactly four hex digits long
+* `\u{0}{:tact}` through `\u{FFFFFF}{:tact}` — [Unicode code point][unicode], can be from $1$ to $6$ hex digits long
+
+[unicode]: https://en.wikipedia.org/wiki/Unicode#Codespace_and_code_points
+
+```tact
+// \\
+"escape \\ if \\ you \\ can \\";
+
+// \"
+"this \"literally\" works";
+
+// \n
+"line \n another line";
+
+// \r
+"Shutters \r Like \r This \r One";
+
+// \t
+"spacing \t granted!";
+
+// \v
+"those \v words \v are \v aligned";
+
+// \b
+"rm\b\bcreate!";
+
+// \f
+"form \f feed";
+
+// \x00 - \xFF
+"this \x22literally\x22 works"; // \x22 represents a double quote
+
+// \u0000 - \uFFFF
+"danger, \u26A1 high voltage \u26A1"; // \u26A1 represents the ⚡ emoji
+
+// \u{0} - \u{FFFFFF}
+"\u{1F602} LOL \u{1F602}"; // \u{1F602} represents the 😂 emoji
+```
+
+<Callout>
+
+  Read more about strings and [`String{:tact}`][p] type:\
+  [Primitive types in the Book][p]\
+  [Strings and StringBuilders in the Reference](/ref/api-strings)
+
+</Callout>
 
 ### `null` literal
 
@@ -98,7 +149,7 @@ Read more about working with `null{:tact}` on the dedicated page: [Optionals](/b
 
 An identifier is a sequence of characters in the code that _identifies_ a [variable](/book/statements#let), [constant](/book/constants), [map](/book/maps) and a [function](/book/functions), as well as a [Struct][s], [Message][m], [contract](/book/contracts), [trait](/book/types#traits), or their fields and methods. Identifiers are case-sensitive and not quoted.
 
-In Tact, identifiers can contain latin lowercase letters (`a-z`), latin uppercase letters (`A-Z`), underscores (`_`) and digits ($\mathrm{0 - 9}$), but may not start with a digit. An identifier differs from a [string](#string-literals) in that a string is data, while an identifier is part of the code. 
+In Tact, identifiers can contain latin lowercase letters (`a-z`), latin uppercase letters (`A-Z`), underscores (`_`) and digits ($\mathrm{0 - 9}$), but may not start with a digit. An identifier differs from a [string](#string-literals) in that a string is data, while an identifier is part of the code.
 
 Note, that when identifiers for [primitive types][p] start with an uppercase letter. Used-defined [composite types](/book/types#composite-types), such as [Structs][s] and [Messages][m] also must be capitalized.
 
@@ -116,8 +167,14 @@ struct StExample {
 }
 
 fun example() {
-    StExample{ fieldUninit: 2 };               // instance with default value of fieldInit
-    StExample{ fieldInit: 0, fieldUninit: 2 }; // instance with both fields set
+    // Instance with default value of fieldInit
+    StExample{ fieldUninit: 2 };
+
+    // Instance with both fields set
+    StExample{
+        fieldInit: 0,
+        fieldUninit: 2, // trailing comma is allowed
+    };
 }
 ```
 
@@ -156,7 +213,6 @@ Anywhere in the function body, a global [static function](/book/functions#global
 
 ```tact
 contract ExampleContract {
-    init() {}
     receive() {
         now(); // now() is a static function of stdlib
         let expiration: Int = now() + 1000; // operation and variable declaration
@@ -179,6 +235,12 @@ initOf ExampleContract(42, 100); // returns a Struct StateInit{}
 //     ---------------
 //     ↑
 //     name of the contract
+//     ↓
+//     ---------------
+initOf ExampleContract(
+    42,  // first argument
+    100, // second argument, trailing comma is allowed
+);
 ```
 
 Where `StateInit{:tact}` is a built-in [Struct][s], that consists of:
