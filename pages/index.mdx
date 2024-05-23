@@ -50,6 +50,11 @@ message Add {
     amount: Int as uint32;
 }
 
+message AddOk {
+    queryId: Int as uint64;
+    amount: Int as uint32;
+}
+
 contract SimpleCounter with Deployable {
     id: Int as uint32;
     counter: Int as uint32;
@@ -61,6 +66,7 @@ contract SimpleCounter with Deployable {
 
     receive(msg: Add) {
         self.counter += msg.amount;
+        self.notify(AddOk{queryId: msg.queryId, amount: msg.amount}.toCell());
     }
 
     get fun counter(): Int {
