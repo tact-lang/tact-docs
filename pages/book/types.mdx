@@ -140,7 +140,7 @@ Tact doesn't support classical class inheritance, but instead introduces the con
 
 A trait can also let the contract inheriting it to override the behavior of its [functions](/book/functions#virtual-and-abstract-functions) and the value of its [constants](/book/constants#virtual-and-abstract-constants).
 
-Example of a trait [`Ownable`](/language/libs/ownable#ownable) from [`@stdlib/ownable`](/language/libs/ownable):
+Example of a trait [`Ownable{:tact}`](/ref/stdlib-ownable#ownable) from [`@stdlib/ownable`](/ref/stdlib-ownable):
 
 ```tact
 trait Ownable {
@@ -159,7 +159,7 @@ trait Ownable {
 }
 ```
 
-And the [contract](#contracts) that uses trait [`Ownable`](/language/libs/ownable#ownable):
+And the [contract](#contracts) that uses trait [`Ownable{:tact}`](/ref/stdlib-ownable#ownable):
 
 ```tact
 contract Treasure with Ownable {
