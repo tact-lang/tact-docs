@@ -40,17 +40,12 @@ It will create a new project with the simple counter contract:
 
 Your first contract project is written and compiled already! Go check it out by moving into the relevant directory — `cd simple-counter/contracts{:shell}`.
 
-It would look something like that:
+Here's how it would look like:
 
 ```tact
 import "@stdlib/deploy";
 
 message Add {
-    queryId: Int as uint64;
-    amount: Int as uint32;
-}
-
-message AddOk {
     queryId: Int as uint64;
     amount: Int as uint32;
 }
@@ -66,7 +61,9 @@ contract SimpleCounter with Deployable {
 
     receive(msg: Add) {
         self.counter += msg.amount;
-        self.notify(AddOk{queryId: msg.queryId, amount: msg.amount}.toCell());
+
+        // Notify the caller that the receiver was executed and forward remaining value back
+        self.notify("Cashback".asComment());
     }
 
     get fun counter(): Int {
