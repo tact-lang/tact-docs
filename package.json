@@ -21,7 +21,7 @@
     "build": "yarn deps && yarn clean && next build",
     "post-processing": "node ./scripts/redirects-generate.js",
     "post-build": "node ./scripts/post-build.js && yarn check-all",
-    "build-pages": "yarn pre-build && yarn build && yarn post-processing && yarn post-build"
+    "build-pages": "yarn pre-build; yarn build && yarn post-processing; yarn post-build"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

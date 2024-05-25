@@ -27,10 +27,20 @@ Join our community chats to stay updated and collaborate:
 
 Contributing is not just encouraged; it's easy!
 
+### Suggestions and new ideas
+
 If you've solved a challenging problem or found a better way to explain a complex topic, share it:
 
 — Got an idea? [Open an Issue](https://github.com/tact-lang/tact-docs/issues/new/choose).  
 — Ready to contribute? [Set up your Development Environment](#set-up-your-development-environment).
+
+## Translations
+
+At the moment, only Chinese translations are accepted.
+
+To add a new page, copy the existing one in English and add a `.zh` postfix after its name. For example, if the page is called `types.mdx`, copy it into the `types.zh.mdx` . Then, add the relevant info into the `_meta.zh.js` file (navigation on the left), which should be in the same folder as the modified page.
+
+Note, that you should **not** modify the folder structure or copy-paste folders.
 
 ## Set Up Your Development Environment
 
