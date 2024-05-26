@@ -44,6 +44,8 @@ Using individual means of storage often becomes cumbersome, so there are ways to
 * [Structs and Messages](#structs-and-messages) — data structures with typed fields.
 * [Optionals](#optionals) — `null{:tact}` values for variables or fields of [Structs and Messages](#structs-and-messages).
 
+In addition to the composite types above, Tact provides a special type constructor [`bounced<T>{:tact}`](/book/bounced), which can only be specified in [bounced message receivers](/book/bounced).
+
 Note, while [contracts](#contracts) and [traits](#traits) are also considered a part of the Tacts type system, one can't pass them around like [Structs and Messages](#structs-and-messages). Instead, it's possible to obtain the initial state of the given contract by using the [`initOf{:tact}`](/book/expressions#initof) expression.
 
 ### Maps
