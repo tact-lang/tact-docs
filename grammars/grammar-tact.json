@@ -18,10 +18,13 @@
       "include": "#literal"
     },
     {
-      "include": "#type"
+      "include": "#invalid"
     },
     {
       "include": "#constant"
+    },
+    {
+      "include": "#type"
     },
     {
       "include": "#expression"
@@ -234,6 +237,53 @@
         }
       },
 
+      "invalid": {
+        "patterns": [
+          {
+            "comment": "Anything starting with __gen or __tact",
+            "match": "\\b__(?:gen|tact)[a-zA-Z0-9_]*\\b",
+            "name": "invalid.illegal.identifier.tact"
+          }
+        ]
+      },
+
+      "constant": {
+        "patterns": [
+          {
+            "comment": "self.storageReserve",
+            "match": "(?<=self\\.)(storageReserve)\\b",
+            "name": "constant.other.builtin.tact"
+          },
+          {
+            "comment": "Other constants from the core library",
+            "match": "(?<!\\.)\\b(SendRemainingValue|SendRemainingBalance|SendPayGasSeparately|SendIgnoreErrors|SendBounceIfActionFail|SendDestroyIfZero|ReserveExact|ReserveAllExcept|ReserveAtMost|ReserveAddOriginalBalance|ReserveInvertSign|ReserveBounceIfActionFail)\\b",
+            "name": "constant.other.builtin.tact"
+          },
+          {
+            "comment": "ALL CAPS constants",
+            "match": "\\b([A-Z]{2}[A-Z0-9_]*)\\b",
+            "name": "constant.other.caps.tact"
+          },
+          {
+            "comment": "Constant declaration or definition",
+            "match": "^\\s*(const)\\s+([a-zA-Z_][A-Za-z0-9_]*)\\b",
+            "captures": {
+              "1": {
+                "name": "keyword.other.tact"
+              },
+              "2": {
+                "name": "constant.other.declaration.tact"
+              }
+            }
+          },
+          {
+            "comment": "null",
+            "match": "(?<!\\.)\\b(null)\\b",
+            "name": "constant.language.null.tact"
+          }
+        ]
+      },
+
       "type": {
         "patterns": [
           {
@@ -324,33 +374,6 @@
                 "name": "entity.name.type.tact"
               }
             }
-          }
-        ]
-      },
-
-      "constant": {
-        "patterns": [
-          {
-            "comment": "ALL CAPS constants",
-            "match": "\\b([A-Z]{2}[A-Z0-9_]*)\\b",
-            "name": "constant.other.caps.tact"
-          },
-          {
-            "comment": "Constant declaration or definition",
-            "match": "^\\s*(const)\\s+([A-Z][A-Za-z0-9_]*)\\b",
-            "captures": {
-              "1": {
-                "name": "keyword.other.tact"
-              },
-              "2": {
-                "name": "constant.other.caps.tact"
-              }
-            }
-          },
-          {
-            "comment": "null",
-            "match": "(?<!\\.)\\b(null)\\b",
-            "name": "constant.language.null.tact"
           }
         ]
       },
@@ -451,6 +474,11 @@
             "name": "keyword.control.import.tact"
           },
           {
+            "comment": "Control flow keywords, prefixed by more than one dot",
+            "match": "(?<=\\.\\.)\\b(else|catch|until|in)\\b",
+            "name": "keyword.control.tact"
+          },
+          {
             "comment": "Control flow keywords",
             "match": "(?<!\\.)\\b(if|else|try|catch|repeat|do|until|while|foreach|in|return)\\b",
             "name": "keyword.control.tact"
@@ -493,7 +521,12 @@
           },
           {
             "comment": "Function declaration/definition keywords",
-            "match": "(?<!\\.)\\b(fun|native|init|receive|bounced|external)\\b",
+            "match": "(?<!\\.)\\b(fun|native)\\b",
+            "name": "keyword.other.function.tact"
+          },
+          {
+            "comment": "Special functions",
+            "match": "(?<!\\.)\\b(init|receive|bounced|external)(?=\\s*\\()",
             "name": "keyword.other.function.tact"
           },
           {
