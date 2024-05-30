@@ -2,7 +2,7 @@
 
 import { Callout } from 'nextra/components'
 
-The [composite type](/book/types#composite-types) `map<k, v>{:tact}` is used as a way to associate keys of type `k` with corresponding values of type `v`.
+The [composite type](/book/types#composite-types) `map<K, V>{:tact}` is used as a way to associate keys of type `K{:tact}` with corresponding values of type `V{:tact}`.
 
 For example, `map<Int, Int>{:tact}` uses [`Int{:tact}`][int] type for its keys and values:
 
@@ -50,7 +50,7 @@ contract Example {
 }
 ```
 
-Note, that [persistent state variables](/book/contracts#variables) of type `map<k, v>{:tact}` are initialized empty by default and don't need default values or an initialization in the [`init(){:tact}` function](/book/contracts#init-function).
+Note, that [persistent state variables](/book/contracts#variables) of type `map<K, V>{:tact}` are initialized empty by default and don't need default values or an initialization in the [`init(){:tact}` function](/book/contracts#init-function).
 
 ### Set values, `.set()` [#set]
 
@@ -199,7 +199,7 @@ foreach (key, value in fizz) {
 
 Read more about it: [`foreach{:tact}` loop in Book→Statements](/book/statements#foreach-loop).
 
-Note, that it's also possible to use maps as simple arrays if you define a `map<Int, V>{:tact}` with an [`Int{:tact}`][int] type for the keys, any allowed `V` type for values and keep track of the number of items in the separate variable:
+Note, that it's also possible to use maps as simple arrays if you define a `map<Int, V>{:tact}` with an [`Int{:tact}`][int] type for the keys, any allowed `V{:tact}` type for values and keep track of the number of items in the separate variable:
 
 ```tact
 contract Iteration {

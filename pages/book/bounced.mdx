@@ -16,7 +16,7 @@ Currently, bounced messages in TON have only 224 usable data bits in the message
 
 </Callout>
 
-To receive a bounced message, define a `bounced` [receiver function](/book/contracts#receiver-functions) in your [contract](/book/contracts) or a [trait](/book/types#traits):
+To receive a bounced message, define a `bounced(){:tact}` [receiver function](/book/contracts#receiver-functions) in your [contract](/book/contracts) or a [trait](/book/types#traits):
 
 ```tact {2-4}
 contract MyContract {
