@@ -234,7 +234,7 @@ $+16$      | `ReserveBounceIfActionFail{:tact}` | Bounces the transaction if res
 
 ### Combining modes with flags [#nativereserve-combining-modes-with-flags]
 
-To make the [`Int{:tact}`][int] value for `mode` parameter, you just have to combine base modes with optional flags by applying the [`bitwise OR{:tact}`](/book/operators#binary-bitwise-or) operation:
+To make the [`Int{:tact}`][int] value for `mode` parameter, you just have to combine base modes with optional flags by applying the [bitwise OR](/book/operators#binary-bitwise-or) operation:
 
 ```tact
 nativeReserve(ton("0.1"), ReserveExact | ReserveBounceIfActionFail);

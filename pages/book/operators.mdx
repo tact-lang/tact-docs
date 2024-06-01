@@ -371,7 +371,7 @@ Both operators can be applied to the following list of types and values:
 * [`Cell{:tact}`][p], implicitly compares via `.hash(){:tact}`
 * [`Slice{:tact}`][p], implicitly compares via `.hash(){:tact}`
 * [`String{:tact}`][p]
-* [`map<k, v>{:tact}`](/book/maps), but only if their key and value types are identical
+* [`map<K, V>{:tact}`](/book/maps), but only if their key and value types are identical
 * [Optionals and `null{:tact}` value](/book/optionals)
 
 ```tact
@@ -399,7 +399,7 @@ emptyCell() != emptyCell(); // false
 "A" == "A"; // true
 "A" != "A"; // false
 
-// map<k, v>:
+// map<K, V>:
 let map1: map<Int, Int> = emptyMap();
 let map2: map<Int, Int> = emptyMap();
 map1 == map2; // true
