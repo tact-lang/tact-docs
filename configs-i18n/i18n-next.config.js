@@ -1,8 +1,3 @@
-/**
-*  WARNING: This is an auto-generated file! Please, don't edit it directly.
-*
-*  Instead, go to configs-i18n/ directory and modify files there.
-*/
 import { getHighlighter, BUNDLED_LANGUAGES } from 'shiki';
 import nextra from 'nextra';
 import fs from 'fs';
@@ -15,9 +10,6 @@ const rehypePrettyCodeOptions = {
   getHighlighter: options => {
     return getHighlighter({
       ...options,
-      // NOTE: current version of Nextra doesn't support having dual themes,
-      //       but this version of One Dark looks good enough in the light mode too.
-      theme: 'one-dark-pro',
       langs: [
         ...BUNDLED_LANGUAGES,
         {

@@ -1,8 +1,3 @@
-/**
-*  WARNING: This is an auto-generated file! Please, don't edit it directly.
-*
-*  Instead, go to configs-i18n/ directory and modify files there.
-*/
 import { useRouter } from 'next/router'
 import { DocsThemeConfig } from 'nextra-theme-docs'
 
@@ -40,10 +35,6 @@ const config = {
     link: 'https://github.com/tact-lang/tact-docs',
   },
   docsRepositoryBase: 'https://github.com/tact-lang/tact-docs/edit/main/',
-  i18n: [
-    { locale: 'en', text: 'English' },
-    { locale: 'zh', text: '中文' },
-  ],
   sidebar: {
     autoCollapse: true,
     defaultMenuCollapseLevel: 1,
@@ -52,15 +43,6 @@ const config = {
   feedback: {
     content: null
   },
-  // editLink: {
-  //   text: function useText() {
-  //     const { locale } = useRouter()
-  //     return {
-  //       'en': 'Edit this page on GitHub',
-  //       // 'zh': '在 GitHub 上编辑此页',
-  //     }[locale ?? "en"]
-  //   }
-  // },
   footer: {
     text: <span>
       CC BY 4.0, Tact Software Foundation
