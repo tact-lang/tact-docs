@@ -10,13 +10,13 @@ Various niche, dangerous or unstable features which can produce unexpected resul
 
 </Callout>
 
-## readForwardFee
+## Context.readForwardFee
 
 ```tact
 extends fun readForwardFee(self: Context): Int
 ```
 
-Extension function for the [`Context{:tact}`](/ref/api-common#context).
+Extension function for the [`Context{:tact}`](/ref/core-common#context).
 
 Reads [forward fee](https://docs.ton.org/develop/smart-contracts/guidelines/processing) and returns it as [`Int{:tact}`][int] value in nanoToncoins (nano-tons).
 
@@ -101,7 +101,7 @@ throw(42); // and this won't fail it
 fun nativePrepareRandom();
 ```
 
-Prepares a random number generator by using [`nativeRandomizeLt(){:tact}`](#nativerandomizelt). Automatically called by [`randomInt(){:tact}`](/ref/api-random#randomint) and [`random(){:tact}`](/ref/api-random#random) functions.
+Prepares a random number generator by using [`nativeRandomizeLt(){:tact}`](#nativerandomizelt). Automatically called by [`randomInt(){:tact}`](/ref/core-random#randomint) and [`random(){:tact}`](/ref/core-random#random) functions.
 
 Usage example:
 
@@ -148,11 +148,11 @@ let idk: Int = randomInt(); // ???, it's random!
 fun nativeRandom(): Int;
 ```
 
-Generates and returns an $256$-bit random number just like [`randomInt(){:tact}`](/ref/api-random#randomint), but doesn't initialize the random generator with [`nativePrepareRandom(){:tact}`](#nativepreparerandom) beforehand.
+Generates and returns an $256$-bit random number just like [`randomInt(){:tact}`](/ref/core-random#randomint), but doesn't initialize the random generator with [`nativePrepareRandom(){:tact}`](#nativepreparerandom) beforehand.
 
 <Callout>
 
-  Don't use this function directly, and prefer using [`randomInt(){:tact}`](/ref/api-random#randomint) instead.
+  Don't use this function directly, and prefer using [`randomInt(){:tact}`](/ref/core-random#randomint) instead.
 
 </Callout>
 
@@ -162,11 +162,11 @@ Generates and returns an $256$-bit random number just like [`randomInt(){:tact}`
 fun nativeRandomInterval(max: Int): Int;
 ```
 
-Generates and returns a $256$-bit random number in the range from $0$ to `max` similar to [`random(){:tact}`](/ref/api-random#random), but doesn't initialize the random generator with [`nativePrepareRandom(){:tact}`](#nativepreparerandom) beforehand.
+Generates and returns a $256$-bit random number in the range from $0$ to `max` similar to [`random(){:tact}`](/ref/core-random#random), but doesn't initialize the random generator with [`nativePrepareRandom(){:tact}`](#nativepreparerandom) beforehand.
 
 <Callout>
 
-  Don't use this function directly, and prefer using [`random(){:tact}`](/ref/api-random#random) instead.
+  Don't use this function directly, and prefer using [`random(){:tact}`](/ref/core-random#random) instead.
 
 </Callout>
 
@@ -180,7 +180,7 @@ Sends the message by specifying the complete `cell` and the [message `mode`](/bo
 
 <Callout>
 
-  Prefer using a much more common and user-friendly [`send(){:tact}`](/ref/api-common#send) function unless you have a complex logic that can't be expressed otherwise.
+  Prefer using a much more common and user-friendly [`send(){:tact}`](/ref/core-common#send) function unless you have a complex logic that can't be expressed otherwise.
 
 </Callout>
 

@@ -66,7 +66,7 @@ Usage example:
 
 ```tact
 receive() {
-  let whoSentMeMessage: Address = sender();
+    let whoSentMeMessage: Address = sender();
 }
 ```
 
@@ -120,7 +120,7 @@ fun newAddress(chain: Int, hash: Int): Address;
 
 Creates a new [`Address{:tact}`][p] based on the [`chain` id](https://ton-blockchain.github.io/docs/#/overviews/TON_blockchain_overview) and the [SHA-256](/ref/stdlib-math#sha256) encoded [`hash` value](https://docs.ton.org/learn/overviews/addresses#account-id).
 
-This function tries to resolve constant values in [compile-time](/ref/api-comptime) whenever possible.
+This function tries to resolve constant values in [compile-time](/ref/core-comptime) whenever possible.
 
 Usage example:
 
