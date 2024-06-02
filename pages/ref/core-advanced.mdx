@@ -32,19 +32,25 @@ let fwdFee: Int = context().readForwardFee();
 fun getConfigParam(id: Int): Cell?;
 ```
 
-Loads network configuration parameter from the blockchain.
+Loads a [configuration parameter](https://docs.ton.org/develop/howto/blockchain-configs) of TON Blockchain by its `id` number.
 
-Usage example:
+Usage examples:
 
 ```tact
-let iDemand: Cell = getConfigParam(0)!!;
+// Parameter 0, address of a special smart contract that stores the blockchain's configuration
+let configAddrAsCell: Cell = getConfigParam(0)!!;
+
+// Parameter 18, configuration for determining the prices for data storage
+let dataStorageFeeConfig: Cell = getConfigParam(18)!!;
 ```
 
 <Callout>
 
-  A standard library [`@stdlib/config`](/ref/stdlib-config) provides two related helper functions:\
+  Standard library [`@stdlib/config`](/ref/stdlib-config) provides two related helper functions:\
   [`getConfigAddress(){:tact}`](/ref/stdlib-config#getconfigaddress) for retrieving config [`Address{:tact}`][p]\
   [`getElectorAddress(){:tact}`](/ref/stdlib-config#getconfigaddress) for retrieving elector [`Address{:tact}`][p]
+
+  Read more about other parameters: [Config Parameters in TON Docs](https://docs.ton.org/develop/howto/blockchain-configs).
 
 </Callout>
 
