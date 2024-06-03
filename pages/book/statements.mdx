@@ -280,6 +280,15 @@ dump(sum); // 1000
   }
   ```
 
+In a similar way, trying to iterate over a member of a struct won't work:
+
+  ```tact
+  foreach (k, v in myStruct.myMap) {
+  //               ^ this will give a rather cryptic error message:
+  //                 Syntax error: expected ")"
+  }
+  ```
+
 </Callout>
 
 <Callout>
