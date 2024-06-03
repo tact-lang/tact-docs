@@ -280,7 +280,7 @@ dump(sum); // 1000
   }
   ```
 
-  Trying to iterate over a member of a [Struct](/book/structs-and-messages#structs) also won't work:
+  Trying to iterate over a member of a [Struct](/book/structs-and-messages#structs) also won't work, because struct field access is a compound expression and not an identifier:
 
   ```tact
   foreach (k, v in myStruct.myMap) {
