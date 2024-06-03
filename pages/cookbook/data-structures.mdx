@@ -12,7 +12,7 @@ All of the data structures listed here are made using the built-in [`map<K, V>{:
 
 An [array](https://en.wikipedia.org/wiki/Array_(data_structure)) is a data structure consisting of a continuous block of memory, which represents a collection of elements of same memory size, each identified by at least one array key or _index_.
 
-Following example emulates an array using a [`map<Int, v>{:tact}`][map] wrapped in a [Struct](/book/structs-and-messages#structs), where `v` can be any of the [allowed value types](/book/maps#allowed-types) of the map:
+Following example emulates an array using a [`map<Int, V>{:tact}`][map] wrapped in a [Struct](/book/structs-and-messages#structs), where `V{:tact}` can be any of the [allowed value types](/book/maps#allowed-types) of the map:
 
 ```tact
 import "@stdlib/deploy"; // for Deployable trait
@@ -165,7 +165,7 @@ A [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)) is a data st
 * push, which adds an element to the end of the collection
 * pop, which removes the most recently added element
 
-Following example emulates a stack using a [`map<Int, v>{:tact}`][map] wrapped in a [Struct](/book/structs-and-messages#structs), where `v` can be any of the [allowed value types](/book/maps#allowed-types) of the map:
+Following example emulates a stack using a [`map<Int, V>{:tact}`][map] wrapped in a [Struct](/book/structs-and-messages#structs), where `V{:tact}` can be any of the [allowed value types](/book/maps#allowed-types) of the map:
 
 ```tact
 import "@stdlib/deploy"; // for Deployable trait
@@ -266,7 +266,7 @@ contract MapAsStack with Deployable {
 
 A [circular buffer](https://en.wikipedia.org/wiki/Circular_buffer) (circular queue, cyclic buffer or ring buffer) is a data structure, which uses a single, fixed-size [buffer](https://en.wikipedia.org/wiki/Data_buffer) as it were connected end-to-end.
 
-Following example emulates a circular buffer using a [`map<Int, v>{:tact}`][map] wrapped in a [Struct](/book/structs-and-messages#structs), where `v` can be any of the [allowed value types](/book/maps#allowed-types) of the map:
+Following example emulates a circular buffer using a [`map<Int, V>{:tact}`][map] wrapped in a [Struct](/book/structs-and-messages#structs), where `V{:tact}` can be any of the [allowed value types](/book/maps#allowed-types) of the map:
 
 ```tact
 import "@stdlib/deploy"; // for Deployable trait
