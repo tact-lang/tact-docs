@@ -135,7 +135,7 @@ contract MapAsArray with Deployable {
 
     // Internal message receiver, which responds to a String message "delete_5h"
     receive("delete_5th") {
-        // Remove the 5th item if it exists and reply back with its value, or raise an erroor
+        // Remove the 5th item if it exists and reply back with its value, or raise an error
         self.reply(self.array.deleteIdx(4).toCoinsString().asComment()); // index offset 0 + 4 gives the 5th item
     }
 

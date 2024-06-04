@@ -134,7 +134,7 @@ fun thisWillTerminate() {
     nativeThrow(42); // throwing with exit code 42
 }
 
-fun butThisDoesnt() {
+fun butThisDoesNot() {
     try {
         nativeThrow(42); // throwing with exit code 42
     }
@@ -158,7 +158,7 @@ fun thisWillTerminate() {
     nativeThrowWhen(42, true); // throwing with exit code 42
 }
 
-fun butThisDoesnt() {
+fun butThisDoesNot() {
     try {
         nativeThrow(42, true); // throwing with exit code 42
     }
@@ -181,7 +181,7 @@ fun thisWillTerminate() {
     nativeThrowUnless(42, false); // throwing with exit code 42
 }
 
-fun butThisDoesnt() {
+fun butThisDoesNot() {
     try {
         nativeThrowUnless(42, false); // throwing with exit code 42
     }

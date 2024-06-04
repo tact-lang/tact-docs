@@ -61,3 +61,6 @@ jobs:
 
       - name: Build documentation
         run: yarn build-pages
+
+      - name: Spell check documentation
+        run: yarn spell

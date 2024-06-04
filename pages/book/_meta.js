@@ -26,7 +26,7 @@ export default {
     title: 'Communication',
   },
   // <- NOTE
-  //    potential place for a rather short overview page describing asyncronous & actor-model nature
+  //    potential place for a rather short overview page describing asynchronous & actor-model nature
   //    of TON Blockchain with respect to Tact and exchanging messages with it
   receive: 'Receive messages',
   bounced: 'Bounced messages',
