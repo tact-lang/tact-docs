@@ -65,6 +65,7 @@
     "grammars/grammar-tact.json",
     "next.config.js",
     "node_modules",
+    "out",
     "package.json",
     "pages/cookbook/dexes/_meta.js",
     "pages/ref/spec.mdx"
