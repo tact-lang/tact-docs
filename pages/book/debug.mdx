@@ -98,7 +98,17 @@ Note, that `tact.config.json` may still be used in [Blueprint][bp] projects. In 
 
 ## Handling bounced messages [#bounced]
 
-{/* TODO: Refine local text */}
+When [sent](/book/send) with `bounce: true{:tact}`, messages can bounce back in case of errors. Make sure to write relevant [`bounced(){:tact}`](/book/bounced) message receivers and handle bounced messages gracefully:
+
+```tact
+bounced(msg: YourMessage) {
+    // ...alright squad, let's bounce!...
+}
+```
+
+Keep in mind that bounced messages in TON have only $224$ usable data bits in their message body and don't have any references, so one cannot recover much data from it. However, you still get to see whether the message has bounced or not, allowing you to create more robust contracts.
+
+Read more about bounced messages and receivers: [Bounced messages](/book/bounced).
 
 ## Experimental lab setup [#lab]
 
