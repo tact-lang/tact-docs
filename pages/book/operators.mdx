@@ -8,7 +8,7 @@ This page lists all the operators in Tact in decreasing order of their [preceden
 
 <Callout>
 
-  Note, that there are no implicit type conversions in Tact, so operators can't be used to, say, add values of different type or compare them in terms of equality without explicitly casting to the same type. That's done with certain functions from the standard library. See [`Int.toString(){:tact}`](/ref/api-strings#inttostring) for an example of such function.
+  Note, that there are no implicit type conversions in Tact, so operators can't be used to, say, add values of different type or compare them in terms of equality without explicitly casting to the same type. That's done with certain functions from the standard library. See [`Int.toString(){:tact}`](/ref/core-strings#inttostring) for an example of such function.
 
 </Callout>
 
@@ -82,7 +82,7 @@ Consider the following code:
 5 -5;   // while here it would be viewed as a subtraction operator, despite formatting
 ```
 
-Even though this example may be simple, neglection of precedence rules can often lead to confusing situations with operators. The correct order of operations can be ensured by wrapping every operation in [parentheses](#parentheses), since parentheses have the highest precedence of all expressions and operators there is.
+Even though this example may be simple, neglecting of precedence rules can often lead to confusing situations with operators. The correct order of operations can be ensured by wrapping every operation in [parentheses](#parentheses), since parentheses have the highest precedence of all expressions and operators there is.
 
 ## Parentheses, `()` [#parentheses]
 
@@ -211,7 +211,7 @@ two % 1; // 1
 -1 % -5; // -1
 ```
 
-The simplest way to avoid confusion between the two is to prefer using positive values via [`abs(x: Int){:tact}`](/ref/api-math#abs):
+The simplest way to avoid confusion between the two is to prefer using positive values via [`abs(x: Int){:tact}`](/ref/core-math#abs):
 
 ```tact
 abs(-1) % abs(-5); // 1
@@ -371,7 +371,7 @@ Both operators can be applied to the following list of types and values:
 * [`Cell{:tact}`][p], implicitly compares via `.hash(){:tact}`
 * [`Slice{:tact}`][p], implicitly compares via `.hash(){:tact}`
 * [`String{:tact}`][p]
-* [`map<k, v>{:tact}`](/book/maps), but only if their key and value types are identical
+* [`map<K, V>{:tact}`](/book/maps), but only if their key and value types are identical
 * [Optionals and `null{:tact}` value](/book/optionals)
 
 ```tact
@@ -399,7 +399,7 @@ emptyCell() != emptyCell(); // false
 "A" == "A"; // true
 "A" != "A"; // false
 
-// map<k, v>:
+// map<K, V>:
 let map1: map<Int, Int> = emptyMap();
 let map2: map<Int, Int> = emptyMap();
 map1 == map2; // true

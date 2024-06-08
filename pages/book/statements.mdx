@@ -162,7 +162,7 @@ fun niceCatch() {
     try {
         nativeThrow(42); // throwing with exit code 42
     } catch (err) {
-        dump(err);       // this will dump the exit code catched, which is 42
+        dump(err);       // this will dump the exit code caught, which is 42
     }
 }
 ```
@@ -275,6 +275,15 @@ dump(sum); // 1000
 
   ```tact
   foreach (k, v in emptyMap()) {
+  //               ^ this will give a rather cryptic error message:
+  //                 Syntax error: expected ")"
+  }
+  ```
+
+  Trying to iterate over a member of a [Struct](/book/structs-and-messages#structs) also won't work, because struct field access is a compound expression and not an identifier:
+
+  ```tact
+  foreach (k, v in myStruct.myMap) {
   //               ^ this will give a rather cryptic error message:
   //                 Syntax error: expected ")"
   }

@@ -10,13 +10,13 @@ Various niche, dangerous or unstable features which can produce unexpected resul
 
 </Callout>
 
-## readForwardFee
+## Context.readForwardFee
 
 ```tact
 extends fun readForwardFee(self: Context): Int
 ```
 
-Extension function for the [`Context{:tact}`](/ref/api-common#context).
+Extension function for the [`Context{:tact}`](/ref/core-common#context).
 
 Reads [forward fee](https://docs.ton.org/develop/smart-contracts/guidelines/processing) and returns it as [`Int{:tact}`][int] value in nanoToncoins (nano-tons).
 
@@ -32,19 +32,25 @@ let fwdFee: Int = context().readForwardFee();
 fun getConfigParam(id: Int): Cell?;
 ```
 
-Loads network configuration parameter from the blockchain.
+Loads a [configuration parameter](https://docs.ton.org/develop/howto/blockchain-configs) of TON Blockchain by its `id` number.
 
-Usage example:
+Usage examples:
 
 ```tact
-let iDemand: Cell = getConfigParam(0)!!;
+// Parameter 0, address of a special smart contract that stores the blockchain's configuration
+let configAddrAsCell: Cell = getConfigParam(0)!!;
+
+// Parameter 18, configuration for determining the prices for data storage
+let dataStorageFeeConfig: Cell = getConfigParam(18)!!;
 ```
 
 <Callout>
 
-  A standard library [`@stdlib/config`](/ref/stdlib-config) provides two related helper functions:\
+  Standard library [`@stdlib/config`](/ref/stdlib-config) provides two related helper functions:\
   [`getConfigAddress(){:tact}`](/ref/stdlib-config#getconfigaddress) for retrieving config [`Address{:tact}`][p]\
   [`getElectorAddress(){:tact}`](/ref/stdlib-config#getconfigaddress) for retrieving elector [`Address{:tact}`][p]
+
+  Read more about other parameters: [Config Parameters in TON Docs](https://docs.ton.org/develop/howto/blockchain-configs).
 
 </Callout>
 
@@ -101,7 +107,7 @@ throw(42); // and this won't fail it
 fun nativePrepareRandom();
 ```
 
-Prepares a random number generator by using [`nativeRandomizeLt(){:tact}`](#nativerandomizelt). Automatically called by [`randomInt(){:tact}`](/ref/api-random#randomint) and [`random(){:tact}`](/ref/api-random#random) functions.
+Prepares a random number generator by using [`nativeRandomizeLt(){:tact}`](#nativerandomizelt). Automatically called by [`randomInt(){:tact}`](/ref/core-random#randomint) and [`random(){:tact}`](/ref/core-random#random) functions.
 
 Usage example:
 
@@ -148,11 +154,11 @@ let idk: Int = randomInt(); // ???, it's random!
 fun nativeRandom(): Int;
 ```
 
-Generates and returns an $256$-bit random number just like [`randomInt(){:tact}`](/ref/api-random#randomint), but doesn't initialize the random generator with [`nativePrepareRandom(){:tact}`](#nativepreparerandom) beforehand.
+Generates and returns an $256$-bit random number just like [`randomInt(){:tact}`](/ref/core-random#randomint), but doesn't initialize the random generator with [`nativePrepareRandom(){:tact}`](#nativepreparerandom) beforehand.
 
 <Callout>
 
-  Don't use this function directly, and prefer using [`randomInt(){:tact}`](/ref/api-random#randomint) instead.
+  Don't use this function directly, and prefer using [`randomInt(){:tact}`](/ref/core-random#randomint) instead.
 
 </Callout>
 
@@ -162,11 +168,11 @@ Generates and returns an $256$-bit random number just like [`randomInt(){:tact}`
 fun nativeRandomInterval(max: Int): Int;
 ```
 
-Generates and returns a $256$-bit random number in the range from $0$ to `max` similar to [`random(){:tact}`](/ref/api-random#random), but doesn't initialize the random generator with [`nativePrepareRandom(){:tact}`](#nativepreparerandom) beforehand.
+Generates and returns a $256$-bit random number in the range from $0$ to `max` similar to [`random(){:tact}`](/ref/core-random#random), but doesn't initialize the random generator with [`nativePrepareRandom(){:tact}`](#nativepreparerandom) beforehand.
 
 <Callout>
 
-  Don't use this function directly, and prefer using [`random(){:tact}`](/ref/api-random#random) instead.
+  Don't use this function directly, and prefer using [`random(){:tact}`](/ref/core-random#random) instead.
 
 </Callout>
 
@@ -180,7 +186,7 @@ Sends the message by specifying the complete `cell` and the [message `mode`](/bo
 
 <Callout>
 
-  Prefer using a much more common and user-friendly [`send(){:tact}`](/ref/api-common#send) function unless you have a complex logic that can't be expressed otherwise.
+  Prefer using a much more common and user-friendly [`send(){:tact}`](/ref/core-common#send) function unless you have a complex logic that can't be expressed otherwise.
 
 </Callout>
 
@@ -234,7 +240,7 @@ $+16$      | `ReserveBounceIfActionFail{:tact}` | Bounces the transaction if res
 
 ### Combining modes with flags [#nativereserve-combining-modes-with-flags]
 
-To make the [`Int{:tact}`][int] value for `mode` parameter, you just have to combine base modes with optional flags by applying the [`bitwise OR{:tact}`](/book/operators#binary-bitwise-or) operation:
+To make the [`Int{:tact}`][int] value for `mode` parameter, you just have to combine base modes with optional flags by applying the [bitwise OR](/book/operators#binary-bitwise-or) operation:
 
 ```tact
 nativeReserve(ton("0.1"), ReserveExact | ReserveBounceIfActionFail);

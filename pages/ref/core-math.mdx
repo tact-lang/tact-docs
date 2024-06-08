@@ -120,7 +120,7 @@ fun pow(base: Int, exp: Int): Int;
 
 Computes and returns the [exponentiation](https://en.wikipedia.org/wiki/Exponentiation) involving two numbers: the `base` and the exponent (or _power_) `exp`. Exponent `exp` must be non-negative, otherwise an error with [exit code 5](/book/exit-codes#5) will be thrown: `Integer out of expected range`.
 
-Note, that this function works both at run-time and at [compile-time](/ref/api-comptime).
+Note, that this function works both at run-time and at [compile-time](/ref/core-comptime).
 
 Usage example:
 
@@ -147,7 +147,7 @@ contract Example {
 
 <Callout>
 
-  List of functions, that only work at compile-time: [API Comptime](/ref/api-comptime).
+  List of functions, that only work at compile-time: [API Comptime](/ref/core-comptime).
 
 </Callout>
 
@@ -157,7 +157,7 @@ contract Example {
 fun pow2(exp: Int): Int;
 ```
 
-Similar to [`pow(){:tact}`](#pow), but sets the `base` to $2$. Works both at run-time and at [compile-time](/ref/api-comptime).
+Similar to [`pow(){:tact}`](#pow), but sets the `base` to $2$. Works both at run-time and at [compile-time](/ref/core-comptime).
 
 Usage examples:
 
@@ -184,7 +184,7 @@ contract Example {
 
 <Callout>
 
-  List of functions, that only work at compile-time: [API Comptime](/ref/api-comptime).
+  List of functions, that only work at compile-time: [API Comptime](/ref/core-comptime).
 
 </Callout>
 
@@ -260,7 +260,7 @@ Computes and returns the [SHA-256](https://en.wikipedia.org/wiki/SHA-2#Hash_stan
 
 In case `data` is a [`String{:tact}`][p] it should have a number of bits divisible by $8$, and in case it's a [`Slice{:tact}`][p] it must **also** have no references (i.e. only up to 1023 bits of data in total).
 
-This function tries to resolve constant string values in [compile-time](/ref/api-comptime) whenever possible.
+This function tries to resolve constant string values in [compile-time](/ref/core-comptime) whenever possible.
 
 Usage examples:
 

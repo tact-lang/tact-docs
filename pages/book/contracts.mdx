@@ -30,7 +30,7 @@ Each contract can contain:
 * [Receiver functions](#receiver-functions)
 * [Internal functions](#internal-functions)
 
-Furthermore, contracts can inherit all the declarations and definitions from [traits](/book/types#traits) and override some of their default behaviours. If declared or defined in a trait, internal functions and constants can be marked as [virtual or abstract](/book/functions#virtual-and-abstract-functions) and overriden in contracts inheriting from the trait.
+Furthermore, contracts can inherit all the declarations and definitions from [traits](/book/types#traits) and override some of their default behaviours. If declared or defined in a trait, internal functions and constants can be marked as [virtual or abstract](/book/functions#virtual-and-abstract-functions) and overridden in contracts inheriting from the trait.
 
 ### Persistent state variables [#variables]
 
@@ -46,7 +46,7 @@ contract Example {
 }
 ```
 
-State variables must have a default value or initialized in [`init(){:tact}`](#init-function) function, that runs on deployment of the contract. The only exception is persistent state variables of type [`map<k, v>{:tact}`](/book/maps) since they are initialized empty by default.
+State variables must have a default value or initialized in [`init(){:tact}`](#init-function) function, that runs on deployment of the contract. The only exception is persistent state variables of type [`map<K, V>{:tact}`](/book/maps) since they are initialized empty by default.
 
 <Callout>
 
@@ -67,12 +67,12 @@ You can read constants both in [receivers](#receiver-functions) and in [getters]
 Unlike [contract variables](#variables), **contract constants don't consume space in persistent state**. Their values are stored directly in the code [`Cell{:tact}`](/book/types#primitive-types) of the contract.
 
 ```tact
-// global constants are calculared in compile-time and cannot change
+// global constants are calculated in compile-time and cannot change
 const GlobalConst1: Int = 1000 + ton("42") + pow(10, 9);
 
 contract Example {
     // contract constants are also calculated in compile-time and cannot change
-    const ContractConst1: Int = 2000 + ton("43") pow(10, 9);
+    const ContractConst1: Int = 2000 + ton("43") + pow(10, 9);
 
     // contract constants can be an easy alternative to enums
     const StateUnpaid: Int = 0;
@@ -113,7 +113,7 @@ If a contract doesn't have any persistent state variables, or they all have thei
 The following is an example of a valid empty contract:
 
 ```tact
-contract IamEmptyAndIknowIt {}
+contract IamEmptyAndIKnowIt {}
 ```
 
 For your convenience, parameter list of `init(){:tact}` can have a trailing comma:
