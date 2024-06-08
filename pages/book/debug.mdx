@@ -106,26 +106,45 @@ If you're overwhelmed by the testing setup of [Blueprint][bp] or just want to te
 
 <Steps>
 
-### Generate a new contract [#lab-1]
+### Create a new Blueprint project [#lab-1]
 
-It can be named anything, but I'll name it `Playground` to convey the right intent. To create it, run the following in the root of your [Blueprint][bp] project and remember to make an empty Tact contract by selecting the proper version from the list:
+That will prevent pollution of your existing one with arbitrary code and tests.
 
-```shell
-npx blueprint create Playground
-```
+The new project can be named anything, but I'll name it `Playground` to convey the right intent.
 
-Versions of [Blueprint][bp] starting with 0.20.0 automatically enable debug mode in `wrappers/` for new contracts, so we only have to adjust the testing suite.
+To create it, run the following command:
+
+<Tabs items={['npm', 'yarn', 'pnpm']} defaultIndex="1">
+  <Tabs.Tab>
+    ```shell
+    npm create ton -- tact-playground --type tact-empty --contractName Playground
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```shell
+    # recommended
+    yarn create ton tact-playground --type tact-empty --contractName Playground
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```shell
+    pnpm create ton tact-playground --type tact-empty --contractName Playground
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+Versions of [Blueprint][bp] starting with 0.20.0 automatically enable debug mode in `wrappers/` for new contracts, so we only have to adjust the testing suite and prepare our `Playground` contract for testing.
 
 ### Update the test suite [#lab-2]
 
-In the `tests/Playground.spec.ts`, change the `"should deploy"` test closure to the following:
+Move into the newly created `tact-playground/` project and in the `tests/Playground.spec.ts`, change the `"should deploy"` test closure to the following:
 
 ```typescript filename="tests/Playground.spec.ts"
-it('_playground', async () => {
+it('plays', async () => {
   const res = await playground.send(
     deployer.getSender(),
-    { value: toNano('0.5') },
-    '_playground',
+    { value: toNano('0.5') }, // ← here you may increase the value in nanoToncoins sent
+    'plays',
   );
 
   console.log("Address of our contract: " + playground.address);
@@ -141,13 +160,13 @@ Replace the code in `contracts/playground.tact` with the following:
 import "@stdlib/deploy";
 
 contract Playground with Deployable {
-    receive("_playground") {
+    receive("plays") {
         // NOTE: write your test logic here!
     }
 }
 ```
 
-The basic idea of this setup is to place the code you want to test into the [receiver function](/book/contracts#receiver-functions) responding to the [string](/book/types#primitive-types) message `"_playground"{:tact}`.
+The basic idea of this setup is to place the code you want to test into the [receiver function](/book/contracts#receiver-functions) responding to the [string](/book/types#primitive-types) message `"plays"{:tact}`.
 
 Note, that you can still write any valid Tact code outside of that [receiver](/book/contracts#receiver-functions). But in order to test it you'll need to write related test logic inside of it.
 
@@ -156,7 +175,7 @@ Note, that you can still write any valid Tact code outside of that [receiver](/b
 With that, our experimental lab setup is complete. To execute that single test we've prepared for our `Playground` contract, run the following:
 
 ```shell
-yarn test -t _playground
+yarn test -t plays
 ```
 
 From now on, to test something you only need to modify the contents of the tested [receiver function](/book/contracts#receiver-functions) of your Tact contract file and re-run the command above. Rinse and repeat that process until you've tested what you wanted to test.
@@ -168,7 +187,7 @@ On Linux or macOS, it would look like:
 ```json filename="package.json" {3}
 {
   "scripts": {
-    "lab": "blueprint build 1>/dev/null && yarn test -t _playground"
+    "lab": "blueprint build 1>/dev/null && yarn test -t plays"
   }
 }
 ```
@@ -179,7 +198,7 @@ And here's how it may look on Windows:
 {
   "scripts": {
     "build": "blueprint build | out-null"
-    "lab": "yarn build && yarn test -t _playground"
+    "lab": "yarn build && yarn test -t plays"
   }
 }
 ```
