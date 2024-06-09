@@ -59,9 +59,10 @@
   ],
   "flagWords": [],
   "ignorePaths": [
+    ".github/temp-archive",
     "components/icons",
-    "grammars/grammar-ohm.json",
     "dist",
+    "grammars/grammar-ohm.json",
     "grammars/grammar-tact.json",
     "next.config.js",
     "node_modules",
