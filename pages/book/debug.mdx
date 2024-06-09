@@ -89,8 +89,38 @@ Note, that `tact.config.json` may still be used in [Blueprint][bp] projects. In 
 </Callout>
 
 ## Writing tests with `jest` and Blueprint [#tests]
+## Writing tests with Jest and Blueprint [#tests]
 
 {/* TODO: Refine local text */}
+### Test transactions with errors [#tests-errors]
+
+Sometimes it's useful to make negative tests, featuring intentional errors and throwing specific [exit codes](/book/exit-codes).
+
+Example of such test closure:
+
+```typescript filename="tests/YourTestFileHere.spec.ts" {9,15}
+it('throws specific exit code', async () => {
+  // Send a specific message to our contract and store the results
+  const res = await your_contract_name.send(
+    deployer.getSender(),
+    {
+      value: toNano('0.5'), // ← here you may modify the value in nanoToncoins sent
+      bounce: true,         // ← here you may make it non-bounceable
+    },
+    'the message your receiver expects', // ← change it to yours
+  );
+
+  // Expect the transaction to our contract fail with a certain exit code
+  expect(res.transactions).toHaveTransaction({
+    to: your_contract_name.address,
+    exitCode: 5, // ← change it to yours
+  });
+});
+```
+
+Note, that to track down transactions with a certain exit code, you only need to specify `exitCode` field in `toHaveTransaction(){:typescript}` method of `expect(){:typescript}`.
+
+However, it's useful to narrow the scope by specifying the recipient address `to`, such that Jest would look only at the transaction caused by our message to the contract.
 
 ## Logging via `emit` [#logging]
 
