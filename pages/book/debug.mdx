@@ -50,7 +50,7 @@ Here are a few questions to ask yourself to challenge your assumptions:
 
 At the moment, Tact doesn't have a step-through debugger. Despite that, it's still possible to use the [_printf debugging_](https://en.wikipedia.org/wiki/Debugging#printf_debugging) approach.
 
-It involves actively placing [`dump(){:tact}`][dump] and [`dumpStack(){:tact}`](/ref/core-debug#dumpstack) functions throughout your code and observing states of variables at a given point of time. Note, that those functions work only in a [debug mode](#debug-mode) and won't be executed otherwise.
+It involves actively placing [`dump(){:tact}`][dump] and [`dumpStack(){:tact}`](/ref/core-debug#dumpstack) function calls throughout your code and observing states of variables at a given point of time. Note, that those functions work only in a [debug mode](#debug-mode) and won't be executed otherwise.
 
 Once you found that some value isn't equal to what you've expected it to be, don't rush to fixing the issue on the spot. That's because what you're seeing may not be the root cause of it and merely a symptom, effect. Be very careful with cause-and-effect relationships and figure out which's which to resolve the cause and not introduce new mess for your future self.
 
@@ -63,6 +63,22 @@ And if you didn't find or cannot resolve the cause of your issues, try asking th
 ## Common debugging functions [#debug-functions]
 
 Tact provides a handful amount of various functions useful for debugging: [Core library → Debug](/ref/core-debug).
+
+The most commonly used debugging function is [`dump(){:tact}`][dump], which prints the passed argument to the contract's debug console. It only works in a [debug mode](#debug-mode) and does nothing otherwise.
+
+In practice, when you write:
+
+```tact {2}
+// ... somewhere appropriate in your contract ...
+dump("To infinity and beyond!");
+```
+
+You'll see the following in the logs whenever execution gets to that [`dump(){:tact}`][dump] call:
+
+```shell
+#DEBUG#: [DEBUG] File contracts/your_contract_name.tact:42:69
+#DEBUG#: To infinity and beyond!
+```
 
 ## Enabling debug mode in compilation options [#debug-mode]
 
@@ -139,6 +155,8 @@ it('should deploy', async () => {
   // The check is done inside beforeEach, so this can be empty
 });
 ```
+
+### State expectations with `expect()` [#tests-expect]
 
 The integral parts of writing tests is ensuring that your expectations match the observed reality. For that, [Jest][jest] provides a function `expect(){:tact}`, which is used as follows:
 
@@ -334,7 +352,7 @@ expect(
 
 </Callout>
 
-### Test transactions with intentional errors [#tests-errors]
+### Transactions with intentional errors [#tests-errors]
 
 Sometimes it's useful to make negative tests, featuring intentional errors and throwing specific [exit codes](/book/exit-codes).
 
@@ -364,7 +382,7 @@ Note, that to track down transactions with a certain exit code, you only need to
 
 However, it's useful to narrow the scope by specifying the recipient address `to`, such that Jest would look only at the transaction caused by our message to the contract.
 
-### Simulate passage of time in tests [#tests-time]
+### Simulate passage of time [#tests-time]
 
 The Unix time in local blockchain instances provided by [Sandbox][bp] starts at the moment of the creation of those in `beforeEach(){:typescript}` block.
 
