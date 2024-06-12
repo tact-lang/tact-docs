@@ -235,22 +235,10 @@ emit("Catch me if you can, Mr. Holmes".asComment()); // asComment() converts a S
 
 <Callout>
 
-  To analyze `emit(){:tact}` calls, one has to look at [external messages](http://localhost:3000/book/external) produced by the contract. For example, when deploying in [Sandbox](https://github.com/ton-org/sandbox), you may call `emit(){:tact}` from a [receiver function](/book/contracts#receiver-functions) and then observe the list of sent external messages:
+  To analyze `emit(){:tact}` calls, one has to look at [external messages](/book/external) produced by the contract.
 
-  ```typescript {9-10}
-  it('emits', async () => {
-    const res = await simpleCounter.send(
-      deployer.getSender(),
-      { value: toNano('0.05') },
-      'emit_receiver',
-    );
-
-    console.log("Address of our contract: " + simpleCounter.address);
-    console.log(res.externals); // ← here one would see results of emit() calls,
-                                //   and all external messages in general
-  });
-  ```
-
+  Read more: [Logging via `emit(){:tact}`](/book/debug#logging).
+  
 </Callout>
 
 [p]: /book/types#primitive-types
