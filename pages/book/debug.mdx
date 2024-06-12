@@ -46,13 +46,19 @@ Here are a few questions to ask yourself to challenge your assumptions:
 
 </Callout>
 
-### Go over your code and observe the values [#step-3]
+### Go over your code and observe the values [#approach-3]
 
-At the moment, Tact doesn't have a step-through debugger. Despite that, it's still possible to use the [_printf debugging_](https://en.wikipedia.org/wiki/Debugging#printf_debugging) approach.
+At the moment, Tact doesn't have a step-through debugger. Despite that, it's still possible to use the ["printf debugging"](https://en.wikipedia.org/wiki/Debugging#printf_debugging) approach.
 
 It involves actively placing [`dump(){:tact}`][dump] and [`dumpStack(){:tact}`](/ref/core-debug#dumpstack) function calls throughout your code and observing states of variables at a given point of time. Note, that those functions work only in a [debug mode](#debug-mode) and won't be executed otherwise.
 
 Once you found that some value isn't equal to what you've expected it to be, don't rush to fixing the issue on the spot. That's because what you're seeing may not be the root cause of it and merely a symptom, effect. Be very careful with cause-and-effect relationships and figure out which's which to resolve the cause and not introduce new mess for your future self.
+
+<Callout>
+
+  See how to use [`dump(){:tact}`][dump] for debugging: [Debug with `dump(){:tact}`](#tests-dump).
+
+</Callout>
 
 In addition to dumping values, it's often helpful to use assertive functions like [`require(){:tact}`](/ref/core-debug#require), [`nativeThrowWhen(){:tact}`](/ref/core-debug#nativethrowwhen) and [`nativeThrowUnless(){:tact}`](/ref/core-debug#nativethrowunless). They help stating your assumptions clear, and are handy for setting up "trip wires" for catching issues in the future.
 
@@ -63,22 +69,6 @@ And if you didn't find or cannot resolve the cause of your issues, try asking th
 ## Common debugging functions [#debug-functions]
 
 Tact provides a handful amount of various functions useful for debugging: [Core library → Debug](/ref/core-debug).
-
-The most commonly used debugging function is [`dump(){:tact}`][dump], which prints the passed argument to the contract's debug console. It only works in a [debug mode](#debug-mode) and does nothing otherwise.
-
-In practice, when you write:
-
-```tact {2}
-// ... somewhere appropriate in your contract ...
-dump("To infinity and beyond!");
-```
-
-You'll see the following in the [test logs](#tests) whenever execution gets to that [`dump(){:tact}`][dump] call:
-
-```shell
-#DEBUG#: [DEBUG] File contracts/your_contract_name.tact:42:69
-#DEBUG#: To infinity and beyond!
-```
 
 ## Enabling debug mode in compilation options [#debug-mode]
 
@@ -100,11 +90,14 @@ export const compile: CompilerConfig = {
 };
 ```
 
-Note, that `tact.config.json` may still be used in [Blueprint][bp] projects. In such cases values specified in `tact.config.json` act as default unless modified in the `wrappers/`.
+Note, that versions of [Blueprint][bp] starting with 0.20.0 automatically enable debug mode in `wrappers/` for new contracts.
+
+In addition to that, [`tact.config.json`](/book/config) may still be used in [Blueprint][bp] projects. In such cases values specified in [`tact.config.json`](/book/config) act as default unless modified in the `wrappers/`.
 
 <Callout>
 
-  Read more about configuration and `tact.config.json` file: [Configuration](/book/config).
+  Read more about configuration and [`tact.config.json`](/book/config) file: [Configuration](/book/config).\
+  See how to use [`dump(){:tact}`][dump] for debugging: [Debug with `dump(){:tact}`](#tests-dump).
 
 </Callout>
 
@@ -118,7 +111,7 @@ Whenever you create a new [Blueprint][bp] project or use `blueprint create` comm
 
 Those files are placed in `tests/` folder and executed with [Jest][jest]. By default, all tests run, unless you specify specific group or test closure. For other options, refer to the brief documentation in the Jest CLI: `jest --help`.
 
-### Test file structure [#tests-file]
+### Structure of test files [#tests-structure]
 
 Let's say that we have a contract named `Playground`, written in `contracts/playground.tact` file. If we've created that contract through [Blueprint][bp], then it also created a `tests/Playground.spec.ts` test suite file for us.
 
@@ -156,11 +149,63 @@ it('should deploy', async () => {
 });
 ```
 
+### Debug with `dump()` [#tests-dump]
+
+To see results of [`dump(){:tact}`][dump] function calls and use ["printf debugging"](#approach-3) approach, one has to:
+
+1. Put calls to [`dump(){:tact}`][dump] and other [common debugging functions](#debug-functions) in relevant places of the code.
+2. Run [Jest][jest] tests, which would call target functions and send messages to target receivers.
+
+Assuming you've created a [new counter contract project](/#start), let's see how it works in practice.
+
+First, let's place a call to [`dump(){:tact}`][dump] in `contracts/simple_counter.tact`, which would output the `amount` passed in `msg{:tact}` [Struct](/book/structs-and-messages#structs) to contract's debug console:
+
+```tact filename="contracts/simple_counter.tact" {3}
+// ...
+receive(msg: Add) {
+    dump(msg.amount);
+    // ...
+}
+// ...
+```
+
+Next, let's comment out all existing `it(){:typescript}` test closures in `tests/SimpleCounter.spec.ts` file. And then add the following one:
+
+```typescript filename="tests/SimpleCounter.spec.ts"
+it('should dump', async () => {
+  await playground.send(
+    deployer.getSender(),
+    { value: toNano('0.5') },
+    { $$type: 'Add', queryId: 1n, amount: 1n },
+  );
+});
+```
+
+It sends a message to our contract's `receive(msg: Add){:tact}` [receiver](/book/receive) without storing the [results of such send](#tests-send).
+
+Now, if we build our contract with `yarn build{:shell}` and run our test suite with `yarn test{:shell}`, we'll see the following in the test logs:
+
+```txt
+console.log
+  #DEBUG#: [DEBUG] File contracts/simple_counter.tact:17:9
+  #DEBUG#: 1
+
+    at SmartContract.runCommon (node_modules/@ton/sandbox/dist/blockchain/SmartContract.js:221:21)
+```
+
+Which is produced by of our [`dump(){:tact}`][dump] call above.
+
+<Callout>
+
+  Read more about sending messages to contracts in tests: [Send messages to contracts](#tests-send).
+
+</Callout>
+
 ### State expectations with `expect()` [#tests-expect]
 
 The integral parts of writing tests is ensuring that your expectations match the observed reality. For that, [Jest][jest] provides a function `expect(){:tact}`, which is used as follows:
 
-1. First, an observed variable is provided
+1. First, an observed variable is provided.
 2. Then, a specific method is called to check a certain property of that variable.
 
 Here's a more involved example, which uses `expect(){:tact}` function to check that counter contract actually properly increases the counter:
