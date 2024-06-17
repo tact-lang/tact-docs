@@ -10,7 +10,7 @@ Most of the contract developers don't need a masterchain. Masterchain is needed 
 
 ## How contract is protected from masterchain
 
-Most of the contracts written in `func` enforce all incoming addresses to be `basechain` ones. This is done to prevent masterchain addresses from being used in the contract. Tact does this **by default**.
+Most of the contracts written in `FunC` enforce all incoming addresses to be `basechain` ones. This is done to prevent masterchain addresses from being used in the contract. Tact does this **by default**.
 
 What is prohibited to do without masterchain support enabled:
 * Deploy contract to masterchain. The `init` function would throw a `Masterchain support is not enabled for this contract` error for every message.
