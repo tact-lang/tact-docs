@@ -274,11 +274,12 @@ If set to `true{:json}`, enables inlining of all functions in contracts. This ca
 
 Compilation mode of the project. Valid values are:
 
-Value                | Description
-:------------------- | :----------
-`"full"{:json}`      | (default) Runs the whole pipeline of the compilation and emits FunC code, BoC and various utility files, including wrappers for TypeScript.
-`"checkOnly"{:json}` | Only performs syntax and type checking, preventing further compilation.
-`"funcOnly"{:json}`  | Only outputs intermediate FunC code, preventing further compilation.
+Value                            | Description
+:------------------------------- | :----------
+`"full"{:json}`                  | (default) Runs the whole compilation pipeline and emits FunC code, BoC, and various utility files, including wrappers for TypeScript.
+`"fullWithDecompilation"{:json}` | Runs the whole compilation pipeline like `"full"{:json}`, and also decompiles produced binary code in the BoC format.
+`"funcOnly"{:json}`              | Only outputs intermediate FunC code, preventing further compilation.
+`"checkOnly"{:json}`             | Only performs syntax and type checking, preventing further compilation.
 
 In [Blueprint][bp], `mode` is always set to `"full"{:json}` and cannot be overwritten.
 
