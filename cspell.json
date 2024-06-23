@@ -11,6 +11,9 @@
     "Cheatsheets",
     "comptime",
     "Comptime",
+    "Decompilation",
+    "decompilation",
+    "decompiles",
     "decompiling",
     "dnsresolve",
     "Epva",        // part of a base64 string

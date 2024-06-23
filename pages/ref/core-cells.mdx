@@ -422,12 +422,12 @@ let fizz: Slice = s.preloadBits(7);
 ## Slice.skipBits
 
 ```tact
-extends mutates fun skipBits(self: Slice, l: Int): Slice;
+extends mutates fun skipBits(self: Slice, l: Int);
 ```
 
 Extension mutation function for the [`Slice{:tact}`][p].
 
-Loads all but the first $0 ≤$ `l` $≤ 1023$ bits from the [`Slice{:tact}`][p], and returns skipped bits in a separate [`Slice{:tact}`][p].
+Loads all but the first $0 ≤$ `l` $≤ 1023$ bits from the [`Slice{:tact}`][p].
 
 Attempts to specify an out-of-bounds `l` value throw an exception with [exit code 5](/book/exit-codes#5): `Integer out of expected range`.
 
@@ -440,12 +440,6 @@ let s: Slice = beginCell().storeInt(42, 7).asSlice();
 s.skipBits(5);                   // all but first 5 bits
 let fizz: Slice = s.loadBits(1); // load only 1 bit
 ```
-
-<Callout type="warning" emoji="⚠️">
-
-  At the moment, one cannot store the results of this function in a variable, because its a wrapper over native FunC function and its return type isn't compatible with Tact yet.
-
-</Callout>
 
 ## Slice.loadCoins
 
