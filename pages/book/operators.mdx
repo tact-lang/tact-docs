@@ -20,7 +20,7 @@ Brief description | Operators
 :---------------- | :--------------------------------------------------------------------
 Parentheses       | [`(){:tact}`][paren]
 Unary postfix     | [`!!{:tact}`][nna]
-Unary prefix      | [`+{:tact}`][plus] &nbsp; [`-{:tact}`][neg] &nbsp; [`!{:tact}`][inv]
+Unary prefix      | [`+{:tact}`][plus] &nbsp; [`-{:tact}`][neg] &nbsp; [`!{:tact}`][inv] &nbsp; [`~{:tact}`][b-not]
 Multiplicative    | [`*{:tact}`][mul] &nbsp; [`/{:tact}`][div] &nbsp; [`%{:tact}`][mod]
 Additive          | [`+{:tact}`][add] &nbsp; [`-{:tact}`][sub]
 Shift             | [`>>{:tact}`][shr] &nbsp; [`<<{:tact}`][shl]
@@ -32,7 +32,7 @@ Bitwise OR        | [`\|{:tact}`][b-or]
 Logical AND       | [`&&{:tact}`][l-and]
 Logical OR        | [`\|\|{:tact}`][l-or]
 Ternary           | [`?:{:tact}`][ternary]
-Assignment        | [`={:tact}`][assign]
+Assignment        | [`={:tact}`][assign] and [all augmented assignment operators](#augmented-assignment)
 
 [paren]: #parentheses
 
@@ -40,6 +40,7 @@ Assignment        | [`={:tact}`][assign]
 [plus]: #unary-plus
 [neg]: #unary-negate
 [inv]: #unary-inverse
+[b-not]: #unary-bitwise-not
 
 [mul]: #binary-multiply
 [div]: #binary-divide
@@ -124,7 +125,7 @@ Unary minus sign (_negation_) operator `-{:tact}` is a prefix operator, which re
 let five: Int = 5;
 five + -five; // here, the minus sign is a negation operator, not a subtraction operator
 -(-1);        // double application gives back the original value, which is 1
---1;          // SYNTAX ERROR!
+--1;          // 1
 ```
 
 ### Inverse, `!` [#unary-inverse]
@@ -135,8 +136,20 @@ Unary exclamation mark (_inversion_) operator `!{:tact}` is a prefix operator, w
 let iLikeTact: Bool = true;
 !iLikeTact; // false
 !false;     // true
-!!true;     // SYNTAX ERROR!
-!(!true);   // true
+!(!false);  // false
+!!false;    // false
+```
+
+### Bitwise NOT, `~` [#unary-bitwise-not]
+
+Unary tilde (_bitwise not_) operator `~{:tact}` is a prefix operator, which inverts or _flips_ each bit in the binary representation of the expression — changes each $1$ to $0$, and vice versa. Can only be applied to values of type [`Int{:tact}`][int]:
+
+```tact
+let answer: Int = 42;
+~answer;    // -43
+~(~answer); // 42
+~(~0);      // 0
+~~0;        // 0
 ```
 
 ## Binary
@@ -584,6 +597,9 @@ List of augmented assignment operators:
 * `*={:tact}`, which uses [multiplication operator `*{:tact}`](#binary-multiply). Can only be applied to values of type [`Int{:tact}`][int].
 * `/={:tact}`, which uses [division operator `/{:tact}`](#binary-divide). Can only be applied to values of type [`Int{:tact}`][int].
 * `%={:tact}`, which uses [modulo operator `%{:tact}`](#binary-modulo). Can only be applied to values of type [`Int{:tact}`][int].
+* `&={:tact}`, which uses [bitwise AND operator `&{:tact}`](#binary-bitwise-and). Can only be applied to values of type [`Int{:tact}`][int].
+* `^={:tact}`, which uses [bitwise XOR operator `^{:tact}`](#binary-bitwise-xor). Can only be applied to values of type [`Int{:tact}`][int].
+* `|={:tact}`, which uses [bitwise OR operator `|{:tact}`](#binary-bitwise-or). Can only be applied to values of type [`Int{:tact}`][int].
 
 ```tact
 let value: Int = 5;
@@ -612,6 +628,21 @@ value /= value;    // also divides by 5 and assigns result back
 value % 5;         // gets modulo by 5
 value = value % 5; // gets modulo by 5 and assigns result back
 value %= value;    // also gets modulo by 5 and assigns result back
+
+// &=
+value & 5;         // bitwise ANDs 5
+value = value & 5; // bitwise ANDs 5 and assigns result back
+value &= value;    // also bitwise ANDs 5 and assigns result back
+
+// ^=
+value ^ 5;         // bitwise XORs 5
+value = value ^ 5; // bitwise XORs 5 and assigns result back
+value ^= value;    // also bitwise XORs 5 and assigns result back
+
+// |=
+value | 5;         // bitwise ORs 5
+value = value | 5; // bitwise ORs 5 and assigns result back
+value |= value;    // also bitwise ORs 5 and assigns result back
 ```
 
 [p]: /book/types#primitive-types
