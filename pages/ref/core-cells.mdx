@@ -754,6 +754,76 @@ fun coinCell(): Cell {
 }
 ```
 
+## Struct.fromCell
+
+```tact
+extends fun fromCell(self: Struct, cell: Cell): Struct;
+```
+
+Extension function for any [Struct][struct].
+
+Converts a [`Cell{:tact}`][p] into the specified [Struct][struct] and returns that [Struct][struct].
+
+Attempts to pass a [`Cell{:tact}`][p] with layout different from the specified [Struct][struct] or to load more data than a [`Cell{:tact}`][p] contains throw an exception with [exit code 9](/book/exit-codes#9): `Cell underflow`.
+
+Usage examples:
+
+```tact
+struct GuessCoin {
+    probably: Int as coins;
+    nothing: Int as coins;
+}
+
+fun directParse(payload: Cell): GuessCoin {
+    return GuessCoin.fromCell(payload);
+}
+
+fun cautiousParse(payload: Cell): GuessCoin? {
+    let coin: GuessCoin? = null;
+    try {
+        coin = GuessCoin.fromCell(payload);
+    } catch (e) {
+        dump("Cell payload doesn't match GuessCoin Struct!");
+    }
+    return coin;
+}
+```
+
+## Struct.fromSlice
+
+```tact
+extends fun fromSlice(self: Struct, cell: Slice): Struct;
+```
+
+Extension function for any [Struct][struct].
+
+Converts a [`Slice{:tact}`][p] into the specified [Struct][struct] and returns that [Struct][struct].
+
+Attempts to pass a [`Slice{:tact}`][p] with layout different from the specified [Struct][struct] or to load more data than a [`Slice{:tact}`][p] contains throw an exception with [exit code 9](/book/exit-codes#9): `Cell underflow`.
+
+Usage examples:
+
+```tact
+struct GuessCoin {
+    probably: Int as coins;
+    nothing: Int as coins;
+}
+
+fun directParse(payload: Slice): GuessCoin {
+    return GuessCoin.fromSlice(payload);
+}
+
+fun cautiousParse(payload: Slice): GuessCoin? {
+    let coin: GuessCoin? = null;
+    try {
+        coin = GuessCoin.fromSlice(payload);
+    } catch (e) {
+        dump("Slice payload doesn't match GuessCoin Struct!");
+    }
+    return coin;
+}
+```
+
 ## Message.toCell
 
 ```tact
@@ -777,6 +847,75 @@ fun coinCell(): Cell {
     let fizz: Cell = s.toCell();
 
     return fizz; // "x{AB37107712A11B}"
+}
+```
+
+## Message.fromCell
+
+```tact
+extends fun fromCell(self: Message, cell: Cell): Message;
+```
+
+Extension function for any [Message][message].
+
+Converts a [`Cell{:tact}`][p] into the specified [Message][message] and returns that [Message][message].
+
+Attempts to pass a [`Cell{:tact}`][p] with layout different from the specified [Message][message] or to load more data than a [`Cell{:tact}`][p] contains throw an exception with [exit code 9](/book/exit-codes#9): `Cell underflow`.
+
+Usage examples:
+
+```tact
+message(0x777) TripleAxe {
+    prize: Int as uint32;
+}
+
+fun directParse(payload: Cell): TripleAxe {
+    return TripleAxe.fromCell(payload);
+}
+
+fun cautiousParse(payload: Cell): TripleAxe? {
+    let coin: TripleAxe? = null;
+    try {
+        coin = TripleAxe.fromCell(payload);
+    } catch (e) {
+        dump("Cell payload doesn't match TripleAxe Message!");
+    }
+    return coin;
+}
+```
+
+## Message.fromSlice
+
+
+```tact
+extends fun fromSlice(self: Message, cell: Slice): Message;
+```
+
+Extension function for any [Message][message].
+
+Converts a [`Slice{:tact}`][p] into the specified [Message][message] and returns that [Message][message].
+
+Attempts to pass a [`Slice{:tact}`][p] with layout different from the specified [Message][message] or to load more data than a [`Slice{:tact}`][p] contains throw an exception with [exit code 9](/book/exit-codes#9): `Cell underflow`.
+
+Usage examples:
+
+```tact
+message(0x777) TripleAxe {
+    prize: Int as uint32;
+}
+
+fun directParse(payload: Slice): TripleAxe {
+    return TripleAxe.fromSlice(payload);
+}
+
+fun cautiousParse(payload: Slice): TripleAxe? {
+    let coin: TripleAxe? = null;
+    try {
+        coin = TripleAxe.fromSlice(payload);
+    } catch (e) {
+        dump("Slice payload doesn't match TripleAxe Message!");
+    }
+    return coin;
 }
 ```
 
