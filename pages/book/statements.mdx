@@ -33,6 +33,8 @@ fun getTimeFromNow(offset: Int): Int {
 
 A block statement is used to group zero or more statements. The block is delimited by a pair of braces ("curly braces", `{}{:tact}`) and contains a list of zero or more statements and declarations.
 
+Some statements, such as [`let{:tact}`](#let) or [`return{:tact}`](#return), must end with a terminating semicolon `;{:tact}`. However, the semicolon of the last statement in the block is optional and may be omitted.
+
 ```tact
 { // <- start of the block
     // arbitrary statements:
@@ -40,7 +42,13 @@ A block statement is used to group zero or more statements. The block is delimit
     dump(value);
 } // <- end of the block
 
-{ dump(2 + 2); } // a block with only one statement
+{ dump(2 + 2) } // a block with only one statement,
+                // omitted the last and only semicolon
+
+{
+    let nah = 3 * 3 * 3; // a block with two statements,
+    let yay = nah + 42   // but without the last semicolon
+}
 ```
 
 ## Expression
