@@ -214,4 +214,38 @@ fun conversionFun() {
 
 </Callout>
 
+### Obtain from a `Cell` or `Slice`, `.fromCell()` and `.fromSlice()` [#fromcellslice]
+
+Instead of manually parsing a [`Cell{:tact}`][p] or [`Slice{:tact}`][p] via the series of relevant `.loadSomething(){:tact}` function calls, one can use `.fromCell(){:tact}` and `.fromSlice(){:tact}` [extension functions](/book/functions#extension-function) for converting the provided [`Cell{:tact}`][p] or [`Slice{:tact}`][p] into the needed [Struct](#structs) or [Message](#messages).
+
+Those extension functions only attempt to parse a [`Cell{:tact}`][p] or [`Slice{:tact}`][p] according to the structure of your [Struct](#structs) or [Message](#messages). In case layouts don't match, various exceptions may be thrown — make sure to wrap your code in [`try...catch{:tact}`](/book/statements#try-catch) blocks to prevent unexpected results.
+
+```tact
+struct Fizz { foo: Int }
+message(100) Buzz { bar: Int }
+
+fun constructThenParse() {
+    let fizzCell = Fizz{foo: 42}.toCell();
+    let buzzCell = Buzz{bar: 27}.toCell();
+
+    let parsedFizz: Fizz = Fizz.fromCell(fizzCell);
+    let parsedBuzz: Buzz = Buzz.fromCell(buzzCell);
+}
+```
+
+<Callout>
+
+  See those extension functions in the Reference:\
+  [`Struct.fromCell(){:tact}`][st-fc]\
+  [`Struct.fromSlice(){:tact}`][st-fs]\
+  [`Message.fromCell(){:tact}`][msg-fc]\
+  [`Message.fromSlice(){:tact}`][msg-fs]
+
+</Callout>
+
+[st-fc]: /ref/core-cells#structfromcell
+[st-fs]: /ref/core-cells#structfromslice
+[msg-fc]: /ref/core-cells#messagefromcell
+[msg-fs]: /ref/core-cells#messagefromslice
+
 [p]: /book/types#primitive-types
