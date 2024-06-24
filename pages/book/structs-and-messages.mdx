@@ -48,6 +48,17 @@ struct Params {
 }
 ```
 
+Note, that the last semicolon `;` in Struct declaration is optional and may be omitted:
+
+```tact
+struct Mad { ness: Bool }
+
+struct MoviesToWatch {
+    wolverine: String;
+    redFunnyGuy: String
+}
+```
+
 Structs are also useful as return values from getters or other internal functions. They effectively allow a single getter to return multiple return values.
 
 ```tact
