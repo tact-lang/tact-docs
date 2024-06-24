@@ -131,7 +131,7 @@ const getRedirects = () => [
       'common', 'strings', 'random', 'math', 'cells', 'advanced'
     ],
     destination: '/ref',
-    destPrefix: 'api-', // /ref/api-common, etc.
+    destPrefix: 'core-', // /ref/core-common, etc.
   },
   {
     source: '/language/libs/overview',
