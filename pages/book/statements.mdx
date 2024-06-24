@@ -11,13 +11,15 @@ The `let{:tact}` statement allows local and [block](#block)-scoped variable decl
 In Tact, declaring a local variable always requires an initial value. However, the type ascription can be omitted and Tact will try to infer it from the initial value:
 
 ```tact
-let value: Int = 123;           // full declaration
-let valueInferred = 123;        // inferred type Int
-let valueOptional: Int? = null; // explicit type Int or null
-let valueCtx = context();       // inferred type Context, a built-in Struct
+let value: Int = 123; // full declaration with type and value
+let vInferred = 123;  // inferred type Int
 
-let valueMap: map<Int, Int> = emptyMap();
-let valueMapWithSerialization: map<Int as uint8, Int as uint8> = emptyMap();
+let vOptional: Int? = null;           // explicit type Int or null
+let vMap: map<Int, Int> = emptyMap(); // explicit type map<Int, Int>
+let vMapWithSerialization: map<Int as uint8, Int as uint8> = emptyMap();
+
+let vExplicitCtx: Context = context(); // explicit type Context, a built-in Struct
+let vCtx = context();                  // inferred type Context
 ```
 
 ## `return` statement [#return]
