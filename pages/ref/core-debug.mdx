@@ -143,10 +143,10 @@ fun butThisDoesNot() {
 }
 ```
 
-## nativeThrowWhen
+## nativeThrowIf
 
 ```tact
-fun nativeThrowWhen(code: Int, condition: Bool);
+fun nativeThrowIf(code: Int, condition: Bool);
 ```
 
 Similar to [`nativeThrow(){:tact}`](#nativethrow), but throws an exception conditionally, when `condition` is equal to `true{:tact}`. Doesn't throw otherwise.
@@ -155,12 +155,12 @@ Usage examples:
 
 ```tact {2,7}
 fun thisWillTerminate() {
-    nativeThrowWhen(42, true); // throwing with exit code 42
+    nativeThrowIf(42, true); // throwing with exit code 42
 }
 
 fun butThisDoesNot() {
     try {
-        nativeThrow(42, true); // throwing with exit code 42
+        nativeThrowIf(42, true); // throwing with exit code 42
     }
     // ... follow-up logic ...
 }

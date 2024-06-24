@@ -17,7 +17,7 @@ let number: Int = 198;
 throw(36);
 
 // the error will be triggered only if the number is greater than 50
-nativeThrowWhen(35, number > 50);
+nativeThrowIf(35, number > 50);
 
 // the error will be triggered only if the number is NOT EQUAL to 198
 nativeThrowUnless(39, number == 198);

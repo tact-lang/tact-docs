@@ -266,7 +266,7 @@
           },
           {
             "comment": "Constant declaration or definition",
-            "match": "^\\s*(const)\\s+([a-zA-Z_][A-Za-z0-9_]*)\\b",
+            "match": "(?<!\\.)\\b(const)\\s+([a-zA-Z_][A-Za-z0-9_]*)\\b",
             "captures": {
               "1": {
                 "name": "keyword.other.tact"
@@ -475,12 +475,12 @@
           },
           {
             "comment": "Control flow keywords, prefixed by more than one dot",
-            "match": "(?<=\\.\\.)\\b(else|catch|until|in)\\b",
+            "match": "(?<=\\.\\.)\\b(else|catch|until|in(?!\\s*\\())\\b",
             "name": "keyword.control.tact"
           },
           {
             "comment": "Control flow keywords",
-            "match": "(?<!\\.)\\b(if|else|try|catch|repeat|do|until|while|foreach|in|return)\\b",
+            "match": "(?<!\\.)\\b(if|else|try|catch|repeat|do|until|while|foreach|in(?!\\s*\\()|return)\\b",
             "name": "keyword.control.tact"
           },
           {
@@ -556,9 +556,18 @@
       },
 
       "variable": {
-        "comment": "Any valid Tact identifier",
-        "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
-        "name": "variable.other.tact"
+        "patterns": [
+          {
+            "comment": "Any valid Tact identifier",
+            "match": "(?<!\\.)\\b(_)\\b",
+            "name": "comment.unused-identifier.tact"
+          },
+          {
+            "comment": "Any valid Tact identifier",
+            "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+            "name": "variable.other.tact"
+          }
+        ]
       }
     }
   }
