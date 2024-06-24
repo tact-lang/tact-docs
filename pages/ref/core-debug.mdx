@@ -54,7 +54,7 @@ Can be applied to the following list of types and values:
 * [`Int{:tact}`][int]
 * [`Bool{:tact}`][bool]
 * [`Address{:tact}`][p]
-* [`Builder{:tact}`][p], [`Cell{:tact}`][p] or [`Slice{:tact}`][p]
+* [`Cell{:tact}`][cell], [`Builder{:tact}`][builder] or [`Slice{:tact}`][slice]
 * [`String{:tact}`][p] or [`StringBuilder{:tact}`][p]
 * [`map<K, V>{:tact}`](/book/maps)
 * [Optionals and `null{:tact}` value](/book/optionals)
@@ -73,10 +73,10 @@ dump(false);
 // Address
 dump(myAddress());
 
-// Builder, Cell or Slice
-dump(beginCell());           // Builder
-dump(emptyCell());           // Cell
-dump(emptyCell().asSlice()); // Slice
+// Cell, Builder or Slice
+dump(emptyCell());  // Cell
+dump(beginCell());  // Builder
+dump(emptySlice()); // Slice
 
 // String or StringBuilder
 dump("Hello, my name is..."); // String
@@ -194,3 +194,6 @@ fun butThisDoesNot() {
 [p]: /book/types#primitive-types
 [bool]: /book/types#booleans
 [int]: /book/integers
+[cell]: /book/cells#cells
+[builder]: /book/cells#builders
+[slice]: /book/cells#slices

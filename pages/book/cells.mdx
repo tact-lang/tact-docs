@@ -1,0 +1,103 @@
+# Cells, Builders and Slices
+
+import { Callout } from 'nextra/components'
+
+{/*
+TODO:
+* Refine drafts (quickly!) and remove all TODOs from this page
+* (Optional?) How to parse emitted messages (in TS and/or other languages with bindings)
+*/}
+
+[Cells](#cells), [Builders](#builders) and [Slices](#slices) are low-level [primitives](/book/types#primitive-types) of TON Blockchain. The virtual machine of TON Blockchain, [TVM][tvm], uses cells to represent all data structures in memory and persistent storage.
+
+## Cells
+
+{/*
+TODO: (move from drafts)
+* Don't describe everything, write from the Tact POV. Everything else can be linked to TON Docs.
+ */}
+
+## Builders
+
+{/*
+TODO: (move from drafts)
+* Construction of Cells with Builders.
+* Recommend using structs :)
+  "I strongly recommend you to use structs in Tact instead of manually composing and parsing cells"
+*/}
+
+## Slices
+
+{/*
+TODO: (move from drafts)
+* Parsing of Cells with Slices.
+* Recommend using structs :)
+  "I strongly recommend you to use structs in Tact instead of manually composing and parsing cells"
+*/}
+
+## Serialization
+
+{/*
+  TODO: (move drafts over)
+  Similar to [`Int{:tact}`](/book/integers), some serialization options of `Cell{:tact}`, `Builder{:tact}` and `Slice{:tact}` types ..........
+*/}
+
+### `remaining` [#serialization-bytes64]
+
+<Callout>
+
+  To be written as per [#26](https://github.com/tact-lang/tact-docs/issues/26).
+
+</Callout>
+
+### `bytes32` [#serialization-bytes64]
+
+<Callout>
+
+  To be written as per [#94](https://github.com/tact-lang/tact-docs/issues/94).
+
+</Callout>
+
+### `bytes64` [#serialization-bytes64]
+
+<Callout>
+
+  To be written as per [#94](https://github.com/tact-lang/tact-docs/issues/94).
+
+</Callout>
+
+<Callout>
+
+  Advanced information on [`Cell{:tact}`](#cells) serialization: [Canonical `Cell{:tact}` Serialization](https://docs.ton.org/develop/research-and-development/boc).
+
+</Callout>
+
+## Operations
+
+### Manual construction and parsing [#operations-manual]
+
+{<table>
+  <thead>
+    <tr>
+      <th>Construction</th>
+      <th>Construction</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>}
+
+{/*
+TODO: (move over from drafts)
+* showcase the construction and parsing side by side, using the Builder and a Slice
+Pick one (2nd?):
+marshalling/demarshalling
+composition(or construction)/parsing
+store/load
+*/}
+
+### Using Structs for automatic construction and parsing [#operations-structs]
+
+{/* TODO: add a simplified parsing version via .toCell() and .fromCell() references */}
+
+[tvm]: https://docs.ton.org/learn/tvm-instructions/tvm-overview

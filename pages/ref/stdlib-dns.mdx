@@ -28,7 +28,7 @@ struct DNSResolveResult {
 native dnsStringToInternal(str: String): Slice?;
 ```
 
-Converts a DNS string to a [`Slice{:tact}`][p] or [`null{:tact}`](/book/optionals), if it's impossible.
+Converts a DNS string to a [`Slice{:tact}`][slice] or [`null{:tact}`](/book/optionals), if it's impossible.
 
 Source code (FunC): [dns.fc#L1](https://github.com/tact-lang/tact/blob/61541b7783098e1af669faccd7d2334c10981c72/stdlib/libs/dns.fc#L1)
 
@@ -39,7 +39,7 @@ Source code (FunC): [dns.fc#L1](https://github.com/tact-lang/tact/blob/61541b778
 native dnsInternalNormalize(src: Slice): Slice;
 ```
 
-Normalizes the internal DNS representation of the [`Slice{:tact}`][p].
+Normalizes the internal DNS representation of the [`Slice{:tact}`][slice].
 
 Source code (FunC): [dns.fc#L125](https://github.com/tact-lang/tact/blob/61541b7783098e1af669faccd7d2334c10981c72/stdlib/libs/dns.fc#L125)
 
@@ -50,7 +50,7 @@ Source code (FunC): [dns.fc#L125](https://github.com/tact-lang/tact/blob/61541b7
 native dnsInternalVerify(subdomain: Slice): Bool;
 ```
 
-Verifies the internal DNS representation of the subdomain [`Slice{:tact}`][p].
+Verifies the internal DNS representation of the subdomain [`Slice{:tact}`][slice].
 
 Source code (FunC): [dns.fc#L81](https://github.com/tact-lang/tact/blob/61541b7783098e1af669faccd7d2334c10981c72/stdlib/libs/dns.fc#L81)
 
@@ -60,7 +60,7 @@ Source code (FunC): [dns.fc#L81](https://github.com/tact-lang/tact/blob/61541b77
 fun dnsExtractTopDomainLength(subdomain: Slice): Int;
 ```
 
-Calculates length of a top domain in the `subdomain` [`Slice{:tact}`][p].
+Calculates length of a top domain in the `subdomain` [`Slice{:tact}`][slice].
 
 Source code:
 
@@ -86,7 +86,7 @@ fun dnsExtractTopDomainLength(subdomain: Slice): Int {
 fun dnsExtractTopDomain(subdomain: Slice): Slice;
 ```
 
-Extracts top domain from a `subdomain` [`Slice{:tact}`][p].
+Extracts top domain from a `subdomain` [`Slice{:tact}`][slice].
 
 Source code:
 
@@ -103,7 +103,7 @@ fun dnsExtractTopDomain(subdomain: Slice): Slice {
 fun dnsResolveNext(address: Address): Cell;
 ```
 
-Resolves an `address` [`Address{:tact}`][p] into a [`Cell{:tact}`][p].
+Resolves an `address` [`Address{:tact}`][p] into a [`Cell{:tact}`][cell].
 
 Source code:
 
@@ -122,7 +122,7 @@ fun dnsResolveNext(address: Address): Cell {
 fun dnsResolveWallet(address: Address): Cell;
 ```
 
-Resolves a wallet `address` [`Address{:tact}`][p] into a [`Cell{:tact}`][p].
+Resolves a wallet `address` [`Address{:tact}`][p] into a [`Cell{:tact}`][cell].
 
 Source code:
 
@@ -143,7 +143,7 @@ fun dnsResolveWallet(address: Address): Cell {
 Trait `DNSResolver` provides two helper functions for DNS resolution:
 
 1. [getter function](/book/functions#getter-functions) `dnsresolve(){:tact}`, which corresponds to its [FunC variant](https://docs.ton.org/develop/howto/subresolvers#dnsresolve-code).
-2. virtual function `doResolveDNS(){:tact}`, which creates a struct [DNSResolveResult](#dnsresolveresult) out of subdomain [`Slice{:tact}`][p] bits.
+2. virtual function `doResolveDNS(){:tact}`, which creates a struct [DNSResolveResult](#dnsresolveresult) out of subdomain [`Slice{:tact}`][slice] bits.
 
 Source code:
 
@@ -188,3 +188,5 @@ contract ExampleContract with DNSResolver {
 * [dns.fc](https://github.com/tact-lang/tact/blob/61541b7783098e1af669faccd7d2334c10981c72/stdlib/libs/dns.fc)
 
 [p]: /book/types#primitive-types
+[cell]: /book/cells#cells
+[slice]: /book/cells#slices

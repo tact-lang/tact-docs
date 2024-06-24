@@ -16,7 +16,7 @@ import "@stdlib/deploy";
 Library                  | Description                                                      | Commonly used APIs
 :----------------------- | :--------------------------------------------------------------- | :-----------------
 [`@stdlib/config`][1]    | Config and elector address retrieval.                            | [`getConfigAddress(){:tact}`][gca], [`getElectorAddress(){:tact}`][gea]
-[`@stdlib/content`][2]   | Encoding off-chain link [strings][p] to a [`Cell{:tact}`][p].    | [`createOffchainContent(){:tact}`][coff]
+[`@stdlib/content`][2]   | Encoding off-chain link [strings][p] to a [`Cell{:tact}`][cell]. | [`createOffchainContent(){:tact}`][coff]
 [`@stdlib/deploy`][3]    | Unified mechanism for deployments.                               | [`Deployable{:tact}`][dep], [`FactoryDeployable{:tact}`][fcd]
 [`@stdlib/dns`][4]       | Resolution of [DNS][dns] names.                                  | [`DNSResolver{:tact}`][dnsr], [`dnsInternalVerify(){:tact}`][dnsi]
 [`@stdlib/ownable`][5]   | Traits for ownership management.                                 | [`Ownable{:tact}`][own], [`OwnableTransferable{:tact}`][ownt]
@@ -46,4 +46,5 @@ Library                  | Description                                          
 [res]: /ref/stdlib-stoppable#resumable
 
 [p]: /book/types#primitive-types
+[cell]: /book/cells#cells
 [dns]: https://docs.ton.org/participate/web3/dns
