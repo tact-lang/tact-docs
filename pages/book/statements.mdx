@@ -282,33 +282,33 @@ It's also possible to iterate over a map in contract storage, and over maps as m
 ```tact
 import "@stdlib/deploy";
 
-struct Fizz { ohmy: map<Int, Int> }
-message Buzz { ohmy: map<Int, Int> }
+struct Fizz { oh_my: map<Int, Int> }
+message Buzz { oh_my: map<Int, Int> }
 
 contract Iterated {
-    ohmy: map<Int, Int>;
+    oh_my: map<Int, Int>;
 
     receive("call to iterate!") {
-        let ohmy: map<Int, Int> = emptyMap();
-        ohmy.set(0, 42);
-        ohmy.set(1, 27);
+        let oh_my: map<Int, Int> = emptyMap();
+        oh_my.set(0, 42);
+        oh_my.set(1, 27);
 
-        self.ohmy = ohmy; // assigning local map to the storage one
-        let fizz = Fizz{ ohmy }; // field punning
-        let buzz = Buzz{ ohmy }; // field punning
+        self.oh_my = oh_my; // assigning local map to the storage one
+        let fizz = Fizz{ oh_my }; // field punning
+        let buzz = Buzz{ oh_my }; // field punning
 
         // Iterating over map in contract storage
-        foreach (key, value in self.ohmy) {
+        foreach (key, value in self.oh_my) {
             // ...
         }
 
         // Iterating over map member of a Struct Fizz instance
-        foreach (key, value in fizz.ohmy) {
+        foreach (key, value in fizz.oh_my) {
             // ...
         }
 
         // Iterating over map member of a Message Buzz instance
-        foreach (key, value in buzz.ohmy) {
+        foreach (key, value in buzz.oh_my) {
             // ...
         }
     }
