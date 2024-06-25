@@ -317,10 +317,19 @@ contract Iterated {
 
 <Callout type="warning" emoji="⚠️">
 
-  Note, that at the moment `foreach{:tact}` works only with explicitly provided map identifiers or compound expressions, such as field access. That is, returning a map from a function and trying to iterate over its entries won't work:
+  Note, that at the moment `foreach{:tact}` works only with explicitly provided map identifiers and nested identifier constructions, like `foo.bar.targetMap{:tact}` or `self.baz.targetMap{:tact}`. That is, returning a map from a function and trying to iterate over its entries won't work:
 
   ```tact
   foreach (k, v in emptyMap()) {
+  //               ^ this will give a rather cryptic error message:
+  //                 Syntax error: expected ")"
+  }
+  ```
+
+  Trying to iterate over a map member of a [Struct](/book/structs-and-messages#structs) returned from a function also won't work, because function call is an expression and not an identifier nor a nested identifier access:
+
+  ```tact
+  foreach (k, v in genCoolStruct().map) {
   //               ^ this will give a rather cryptic error message:
   //                 Syntax error: expected ")"
   }
