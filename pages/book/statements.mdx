@@ -14,12 +14,19 @@ In Tact, declaring a local variable always requires an initial value. However, t
 let value: Int = 123; // full declaration with type and value
 let vInferred = 123;  // inferred type Int
 
-let vOptional: Int? = null;           // explicit type Int or null
-let vMap: map<Int, Int> = emptyMap(); // explicit type map<Int, Int>
-let vMapWithSerialization: map<Int as uint8, Int as uint8> = emptyMap();
-
 let vExplicitCtx: Context = context(); // explicit type Context, a built-in Struct
 let vCtx = context();                  // inferred type Context
+```
+
+Note, that initial value of `null{:tact}` can mean both an empty [`map<K, V>{:tact}`](/book/maps) with arbitrary `K{:tact}` and `V{:tact}` types, and the intentional absence of any other value for the [optional](/book/optionals) type. That's why whenever you're declaring an [optional](/book/optionals) or a [`map<K, V>{:tact}`](/book/maps), you'll need to explicitly specify the type as it cannot be inferred:
+
+```tact
+let vOptional: Int? = null; // explicit type Int or null
+let vOptInt = 42;           // implicit type Int
+vOptInt = null;             // COMPILATION ERROR!
+
+let vMap: map<Int, Int> = emptyMap(); // explicit type map<Int, Int>
+let vMapWithSerialization: map<Int as uint8, Int as uint8> = emptyMap();
 ```
 
 ## `return` statement [#return]
