@@ -277,9 +277,47 @@ foreach (key, value in cells) { // or just k, v
 dump(sum); // 1000
 ```
 
+It's also possible to iterate over a map in contract storage, and over maps as members of instances of [Struct](/book/structs-and-messages#structs) or [Message](/book/structs-and-messages#messages) types:
+
+```tact
+import "@stdlib/deploy";
+
+struct Fizz { oh_my: map<Int, Int> }
+message Buzz { oh_my: map<Int, Int> }
+
+contract Iterated {
+    oh_my: map<Int, Int>;
+
+    receive("call to iterate!") {
+        let oh_my: map<Int, Int> = emptyMap();
+        oh_my.set(0, 42);
+        oh_my.set(1, 27);
+
+        self.oh_my = oh_my; // assigning local map to the storage one
+        let fizz = Fizz{ oh_my }; // field punning
+        let buzz = Buzz{ oh_my }; // field punning
+
+        // Iterating over map in contract storage
+        foreach (key, value in self.oh_my) {
+            // ...
+        }
+
+        // Iterating over map member of a Struct Fizz instance
+        foreach (key, value in fizz.oh_my) {
+            // ...
+        }
+
+        // Iterating over map member of a Message Buzz instance
+        foreach (key, value in buzz.oh_my) {
+            // ...
+        }
+    }
+}
+```
+
 <Callout type="warning" emoji="⚠️">
 
-  Note, that at the moment `foreach{:tact}` works only with explicitly provided map identifiers. That is, returning a map from a function and trying to iterate over its entries won't work:
+  Note, that at the moment `foreach{:tact}` works only with explicitly provided map identifiers and nested identifier constructions, like `foo.bar.targetMap{:tact}` or `self.baz.targetMap{:tact}`. That is, returning a map from a function and trying to iterate over its entries won't work:
 
   ```tact
   foreach (k, v in emptyMap()) {
@@ -288,10 +326,10 @@ dump(sum); // 1000
   }
   ```
 
-  Trying to iterate over a member of a [Struct](/book/structs-and-messages#structs) also won't work, because struct field access is a compound expression and not an identifier:
+  Trying to iterate over a map member of a [Struct](/book/structs-and-messages#structs) returned from a function also won't work, because function call is an expression and not an identifier nor a nested identifier access:
 
   ```tact
-  foreach (k, v in myStruct.myMap) {
+  foreach (k, v in genCoolStruct().map) {
   //               ^ this will give a rather cryptic error message:
   //                 Syntax error: expected ")"
   }
