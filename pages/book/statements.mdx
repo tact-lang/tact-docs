@@ -321,8 +321,10 @@ contract Iterated {
 
   ```tact
   foreach (k, v in emptyMap()) {
-  //               ^ this will give a rather cryptic error message:
-  //                 Syntax error: expected ")"
+  //               ^ this will give the following error message:
+  //                 foreach is only allowed over maps that are path expressions,
+  //                 i.e. identifiers, or sequences of direct contract/struct/message accesses,
+  //                 like "self.foo" or "self.structure.field"
   }
   ```
 
@@ -330,8 +332,10 @@ contract Iterated {
 
   ```tact
   foreach (k, v in genCoolStruct().map) {
-  //               ^ this will give a rather cryptic error message:
-  //                 Syntax error: expected ")"
+  //               ^ this will give the following error message:
+  //                 foreach is only allowed over maps that are path expressions,
+  //                 i.e. identifiers, or sequences of direct contract/struct/message accesses,
+  //                 like "self.foo" or "self.structure.field"
   }
   ```
 
