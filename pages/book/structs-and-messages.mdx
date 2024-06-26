@@ -243,6 +243,52 @@ fun constructThenParse() {
 
 </Callout>
 
+### Conversion laws
+
+Whenever one converts between [`Cell{:tact}`][p]/[`Slice{:tact}`][p] and [Struct](#structs)/[Message](#messages) via `.toCell(){:tact}` and `.fromCell(){:tact}` functions, the following laws hold:
+
+* For any instance of type [Struct](#structs)/[Message](#messages), calling `.toCell(){:tact}` on it, then applying `Struct.fromCell(){:tact}` (or `Message.fromCell(){:tact}`) to the result gives back the copy of the original instance:
+
+```tact {8-9,13-14}
+struct ArbitraryStruct {}
+message(0x2A) ArbitraryMessage {}
+
+fun lawOne() {
+    let structInst = ArbitraryStruct{};
+    let messageInst = ArbitraryMessage{};
+
+    ArbitraryStruct.fromCell(structInst.toCell());   // = structInst
+    ArbitraryMessage.fromCell(messageInst.toCell()); // = messageInst
+
+    // Same goes for Slices, with .toCell().asSlice() and .fromSlice()
+
+    ArbitraryStruct.fromSlice(structInst.toCell().asSlice());   // = structInst
+    ArbitraryMessage.fromSlice(messageInst.toCell().asSlice()); // = messageInst
+}
+```
+
+* For any [`Cell{:tact}`][p] with the same [TL-B](https://docs.ton.org/develop/data-formats/tl-b-language) layout as a given [Struct](#structs)/[Message](#messages), calling `Struct.fromCell(){:tact}` (or `Message.fromCell(){:tact}`) on it, and then converting the result to a [`Cell{:tact}`][p] via `.toCell(){:tact}` would give the copy of the original [`Cell{:tact}`][p]:
+
+```tact {9-10,15-16}
+struct ArbitraryStruct { val: Int as uint32 }
+message(0x2A) ArbitraryMessage {}
+
+fun lawOne() {
+    // Using 32 bits to store 42 just so this cellInst can be
+    // re-used for working with both ArbitraryStruct and ArbitraryMessage
+    let cellInst = beginCell().storeUint(42, 32).endCell();
+
+    ArbitraryStruct.fromCell(cellInst).toCell();  // = cellInst
+    ArbitraryMessage.fromCell(cellInst).toCell(); // = cellInst
+
+    // Same goes for Slices, with .fromSlice() and .toCell().asSlice()
+    let sliceInst = cellInst.asSlice();
+
+    ArbitraryStruct.fromSlice(sliceInst).toCell().asSlice();  // = sliceInst
+    ArbitraryMessage.fromSlice(sliceInst).toCell().asSlice(); // = sliceInst
+}
+```
+
 [st-fc]: /ref/core-cells#structfromcell
 [st-fs]: /ref/core-cells#structfromslice
 [msg-fc]: /ref/core-cells#messagefromcell
