@@ -66,6 +66,84 @@ dump(coinsString);  // "0.261119911"
 
 </Callout>
 
+## `Struct` or `Message` ↔ `Cell` or `Slice` [#structmessage-cellslice]
+
+### How to convert an arbitrary `Struct` or `Message` to a `Cell` or a `Slice`
+
+```tact {19-20, 22-23}
+struct Profit {
+    big: String?;
+    dict: map<Int, Int as uint64>;
+    energy: Int;
+}
+
+message(0x45) Nice {
+    maybeStr: String?;
+}
+
+fun convert() {
+    let st = Profit{
+        big: null,
+        dict: null,
+        energy: 42,
+    };
+    let msg = Nice{ maybeStr: "Message of the day!" };
+
+    st.toCell();
+    msg.toCell();
+
+    st.toCell().asSlice();
+    msg.toCell().asSlice();
+}
+```
+
+<Callout>
+
+  **Useful links:**\
+  [`Struct.toCell(){:tact}` in Core library](/ref/core-cells#structtocell)\
+  [`Message.toCell(){:tact}` in Core library](/ref/core-cells#messagetocell)
+
+</Callout>
+
+### How to convert a `Cell` or a `Slice` to an arbitrary `Struct` or `Message`
+
+```tact {19-20, 22-23}
+struct Profit {
+    big: String?;
+    dict: map<Int, Int as uint64>;
+    energy: Int;
+}
+
+message(0x45) Nice {
+    maybeStr: String?;
+}
+
+fun convert() {
+    let stCell = Profit{
+        big: null,
+        dict: null,
+        energy: 42,
+    }.toCell();
+    let msgCell = Nice{ maybeStr: "Message of the day!" }.toCell();
+
+    Profit.fromCell(stCell);
+    Nice.fromCell(msgCell);
+
+    Profit.fromSlice(stCell.asSlice());
+    Nice.fromSlice(msgCell.asSlice());
+}
+```
+
+<Callout>
+
+  **Useful links:**\
+  [`Struct.fromCell(){:tact}` in Core library](/ref/core-cells#structfromcell)\
+  [`Struct.fromSlice(){:tact}` in Core library](/ref/core-cells#structfromslice)\
+  [`Message.fromCell(){:tact}` in Core library](/ref/core-cells#messagefromcell)\
+  [`Message.fromSlice(){:tact}` in Core library](/ref/core-cells#messagefromslice)
+
+</Callout>
+
 <Callout type="info" emoji="🤔">
 
   Didn't find your favorite example of type conversion? Have cool implementations in mind? [Contributions are welcome!](https://github.com/tact-lang/tact-docs/issues)
