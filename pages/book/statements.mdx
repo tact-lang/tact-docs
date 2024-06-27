@@ -29,6 +29,15 @@ let vMap: map<Int, Int> = emptyMap(); // explicit type map<Int, Int>
 let vMapWithSerialization: map<Int as uint8, Int as uint8> = emptyMap();
 ```
 
+Naming a local variable with underscore `_{:tact}` makes its value considered unused and discarded. This is useful when you don't need a return value of some function with side effects, and want to explicitly mark the variable as unused. Note, that such wildcard variable name `_{:tact}` cannot be accessed:
+
+```tact
+let _ = someFunctionWithSideEffects(); // with type inference
+let _: map<Int, Int> = emptyMap();     // with explicit type
+
+dump(_); // COMPILATION ERROR! Cannot access _
+```
+
 ## `return` statement [#return]
 
 The `return{:tact}` statement ends [function](/book/functions) execution and specifies a value to be returned to the [function](/book/functions) caller.
@@ -208,6 +217,16 @@ try {
 }
 ```
 
+Note, that similar to [`let{:tact}` statement](#let), captured [exit code](/book/exit-codes) in the `catch (){:tact}` clause can be discarded by specifying an underscore `_{:tact}` in its place:
+
+```tact
+try {
+    throw(42);
+} catch (_) {
+    dump("I don't know the exit code anymore");
+}
+```
+
 <Callout>
 
   Read more about exit codes on the dedicated page: [Exit codes in the Book](/book/exit-codes).
@@ -271,7 +290,7 @@ In the following example, map `cells` has $4$ entries, so the loop will run $4$ 
 // Empty map
 let cells: map<Int, Cell> = emptyMap();
 
-// Setting four values
+// Setting four entries
 cells.set(1, beginCell().storeUint(100, 16).endCell());
 cells.set(2, beginCell().storeUint(200, 16).endCell());
 cells.set(3, beginCell().storeUint(300, 16).endCell());
@@ -323,6 +342,33 @@ contract Iterated {
             // ...
         }
     }
+}
+```
+
+Note, that similar to [`let{:tact}` statement](#let), either of captured key or value (or both) can be discarded by specifying an underscore `_{:tact}` in their place:
+
+```tact
+// Empty map
+let quartiles: map<Int, Int> = emptyMap();
+
+// Setting some entries
+quartiles.set(1, 25);
+quartiles.set(2, 50);
+quartiles.set(3, 75);
+
+// Discarding captured keys
+// without modifying them in the map itself
+foreach (_, value in quartiles) {}
+
+// Discarding captured values
+// without modifying them in the map itself
+foreach (key, _ in quartiles) {}
+
+// Discarding both keys and values
+// without modifying them in the map itself
+foreach (_, _ in quartiles) {
+    // Can't access via _, but can do desired operations
+    // n times, where n is the current length of the map
 }
 ```
 
