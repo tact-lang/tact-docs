@@ -273,7 +273,7 @@ fun lawOne() {
 struct ArbitraryStruct { val: Int as uint32 }
 message(0x2A) ArbitraryMessage {}
 
-fun lawOne() {
+fun lawTwo() {
     // Using 32 bits to store 42 just so this cellInst can be
     // re-used for working with both ArbitraryStruct and ArbitraryMessage
     let cellInst = beginCell().storeUint(42, 32).endCell();
