@@ -10,20 +10,157 @@ For examples of communication between multiple deployed contracts see: [Multi-co
 
 ```tact
 receive() {
-    self.reply("Hello, World!".asComment()); // asComment converts a String to a Cell with a comment
+    self.reply("Hello, World!".asComment());
 }
 ```
 
-## How to send a simple message
+<Callout>
+
+  **Useful links:**\
+  [`self.reply(){:tact}` in Core library](/ref/core-base#self-reply)\
+  [`String.asComment(){:tact}` in Core library](/ref/core-strings#stringascomment)
+
+</Callout>
+
+## How to send a regular message
+
+### With a default mode and no optional flags [#regular-default]
 
 ```tact
 send(SendParameters{
     bounce: true, // default
-    to: destinationAddress,
-    value: ton("0.01"), // attached amount of Tons to send
-    body: "Hello from Tact!".asComment(), // comment (optional)
+    to: someDestinationAddress,
+    value: ton("0.1"), // attached amount of Tons to send
+    body: "Hello from Tact!".asComment(), // comment as a body (optional)
 });
 ```
+
+### With `SendPayGasSeparately` [#regular-paygasseparately]
+
+Paying [forward fees](https://docs.ton.org/develop/smart-contracts/guidelines/processing) separately from the message value.
+
+```tact
+send(SendParameters{
+    // bounce: true by default
+    to: groundControl,
+    value: ton("0.1"), // attached amount of Tons to send
+    mode: SendPayGasSeparately,
+});
+```
+
+### With `SendIgnoreErrors` [#regular-sendignoreerrors]
+
+Ignoring any errors arising while processing this message during the [action phase](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases).
+
+```tact
+send(SendParameters{
+    // bounce: true by default
+    to: majorTom,
+    value: ton("0.1"), // attached amount of Tons to send
+    mode: SendIgnoreErrors,
+});
+```
+
+### With `SendBounceIfActionFail` [#regular-sendbounceifactionfail]
+
+Bouncing the transaction in case of any errors during action phase. Has no effect if flag [`SendIgnoreErrors{:tact}`](#regular-sendignoreerrors) is used.
+
+```tact
+send(SendParameters{
+    // bounce: true by default
+    to: deepThought,
+    value: ton("0.1"), // attached amount of Tons to send
+    mode: SendBounceIfActionFail,
+});
+```
+
+### With `SendDestroyIfZero` [#regular-senddestroyifzero]
+
+Destroing current contract if its resulting balance is zero (often used with mode [`SendRemainingBalance{:tact}`](#remainingbalance-default)).
+
+```tact
+send(SendParameters{
+    // bounce: true by default
+    to: zaphodBeeblebrox,
+    value: ton("0.1"), // attached amount of Tons to send
+    mode: SendDestroyIfZero,
+});
+```
+
+## How to send a message carrying all the remaining value
+
+### Without optional flags, `SendRemainingValue` [#remainingvalue-default]
+
+Carrying all the remaining value of the inbound message (the one we've just received) in addition to the value initially indicated in the message (the one we're about to send).
+
+```tact
+send(SendParameters{
+    // bounce: true by default
+    to: jamesBond,
+    value: ton("0.1"), // attached amount of Tons to send
+    mode: SendRemainingValue,
+});
+```
+
+### With `SendPayGasSeparately` [#remainingvalue-paygasseparately]
+
+```tact
+send(SendParameters{
+    // bounce: true by default
+    to: groundControl,
+    value: ton("0.1"), // attached amount of Tons to send
+    mode: SendRemainingValue | SendPayGasSeparately,
+});
+```
+
+### With `SendIgnoreErrors` [#remainingvalue-sendignoreerrors]
+
+```tact
+send(SendParameters{
+    // bounce: true by default
+    to: majorTom,
+    value: ton("0.1"), // attached amount of Tons to send
+    mode: SendRemainingValue | SendIgnoreErrors,
+});
+```
+
+### With `SendBounceIfActionFail` [#remainingvalue-sendbounceifactionfail]
+
+```tact
+send(SendParameters{
+    // bounce: true by default
+    to: deepThought,
+    value: ton("0.1"), // attached amount of Tons to send
+    mode: SendRemainingValue | SendBounceIfActionFail,
+});
+```
+
+### With `SendDestroyIfZero` [#remainingvalue-senddestroyifzero]
+
+```tact
+send(SendParameters{
+    // bounce: true by default
+    to: zaphodBeeblebrox,
+    value: ton("0.1"), // attached amount of Tons to send
+    mode: SendRemainingValue | SendDestroyIfZero,
+});
+```
+
+## How to send a message carrying all the remaining balance
+
+### Without optional flags, `SendRemainingBalance` [#remainingbalance-default]
+
+TODO
+
+and x4 from prev thing
+
+"X"
+"Like X, but also"
+"Like X, but also"
+"Like X, but also"
+"Like X, but also"
+
+TODO: re-do other things below
 
 ## How to send a message with the entire balance
 
@@ -89,7 +226,7 @@ send(SendParameters{
 
   **Useful links:**\
   ["Sending messages" in the Book](/book/send#send-message)\
-  ["Message `mode`" in the Book](/book/message-mode)
+  ["Message `mode`" in the Book](/book/message-mode)\
   [`StringBuilder{:tact}` in the Book](/book/types#primitive-types)\
   [`Cell{:tact}` in Core library](/ref/core-cells)
 
