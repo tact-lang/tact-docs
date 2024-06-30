@@ -6,7 +6,7 @@ Contracts in Tact are similar to classes in popular object-oriented languages, e
 
 ## Self-references [#self]
 
-Contracts and [traits](/book/types#traits) have a built-in [identifier](/book/expressions#identifiers) `self{:tact}`, which is used for referring to their fields (persistent state [variables](#variables) and [constants](#variables)) and methods ([internal functions](#internal-functions)):
+Contracts and [traits][trait] have a built-in [identifier](/book/expressions#identifiers) `self{:tact}`, which is used for referring to their fields (persistent state [variables](#variables) and [constants](#variables)) and methods ([internal functions](#internal-functions)):
 
 ```tact
 contract Example {
@@ -23,14 +23,60 @@ contract Example {
 
 Each contract can contain:
 
+* [Supported interfaces](#interfaces)
 * [Persistent state variables](#variables)
 * [Constructor function `init(){:tact}`](#init-function)
 * [Contract constants](#constants)
-* [Getter functions](#get-functions)
+* [Getter functions](#getter-functions)
 * [Receiver functions](#receiver-functions)
 * [Internal functions](#internal-functions)
 
-Furthermore, contracts can inherit all the declarations and definitions from [traits](/book/types#traits) and override some of their default behaviours. If declared or defined in a trait, internal functions and constants can be marked as [virtual or abstract](/book/functions#virtual-and-abstract-functions) and overridden in contracts inheriting from the trait.
+Furthermore, contracts can inherit all the declarations and definitions from [traits][trait] and override some of their default behaviours. If declared or defined in a trait, internal functions and constants can be marked as [virtual or abstract](/book/functions#virtual-and-abstract-functions) and overridden in contracts inheriting from the trait.
+
+### Supported interfaces, `@interface(…)` [#interfaces]
+
+It's hard to figure out what a contract does and what [receivers](#receiver-functions) and [getters](#getter-functions) it has without looking at its source code. Sometimes the source is unavailable or inaccessible, and all that's left is to try to disassemble the contract and introspect it that way, which is a very messy and error-prone approach with diminishing returns and no real reproducibility.
+
+In order to resolve this issue, an [OTP-001: Supported Interfaces](/ref/evolution/OTP-001) was created. In accordance to it, every Tact contract reports the list of supported interfaces as a return value of a special `supported_interfaces` [getter](#get-functions). That [getter](#getter-functions) is accessible off-chain using any TON Blockchain explorer — one just needs to specify `supported_interfaces` as a method to execute and get a list of hexadecimal values in return.
+
+These hexadecimal values are truncated to the first 128 bit of [SHA-256](https://en.wikipedia.org/wiki/SHA-2#Hash_standard) hashes of the original [`String{:tact}`][p] values of the supported interfaces. The first value in this list **must** be equal to $\mathrm{0x5cec3d5d2cae7b1e84ec39d64a851b66}$ in [hexadecimal notation](/book/integers#hexadecimal), which is the first half of the SHA-256 hash for `"org.ton.introspection.v0"{:tact}`. If the first value is wrong, you must stop trying to introspect the contract, as it doesn't conform to the [Supported Interfaces](/ref/evolution/OTP-001) proposal.
+
+To declare support of a certain interface, add one or more `@interface("…"){:tact}` attributes right before contract and [trait][trait] declarations:
+
+```tact
+@interface("His name is")
+@interface("John")
+contract SeeNah with Misc {
+    // ...
+}
+
+@interface("name_of_your_org - miscellaneous")
+trait Misc {
+    // ...
+}
+```
+
+Tact has a small set of interfaces specified for all contracts under specific conditions:
+
+* `"org.ton.abi.ipfs.v0"{:tact}`, in accordance to [OTP-003: Self-ABI Reporting](/ref/evolution/OTP-003)
+* `"org.ton.deploy.lazy.v0"{:tact}`, in accordance to [OTP-005: Argument-addressable contracts](/ref/evolution/OTP-005)
+* `"org.ton.debug.v0"{:tact}`, but only if [debug mode](/book/debug#debug-mode) is enabled
+* `"org.ton.chain.any.v0"{:tact}` if [masterchain](/book/masterchain) support is enabled, and `"org.ton.chain.workchain.v0"{:tact}` otherwise
+
+Some [traits][trait] in [standard libraries](/ref/standard-libraries) define their interfaces too:
+
+* [`Ownable{:tact}`](/ref/stdlib-ownable#ownable) trait specifies `"org.ton.ownable"{:tact}`
+* [`OwnableTransferable{:tact}`](/ref/stdlib-ownable#ownabletransferable) trait specifies `"org.ton.ownable.transferable.v2"{:tact}`
+* [`Stoppable{:tact}`](/ref/stdlib-stoppable#stoppable) trait specifies `"org.ton.stoppable"{:tact}`
+* [`Resumable{:tact}`](/ref/stdlib-stoppable#resumable) trait specifies `"org.ton.resumable"{:tact}`
+
+<Callout type="warning" emoji="⚠️">
+
+  Be aware that adding an interface does not guarantee that the contract actually implements any particular functionality, or that it implements it in any particular way. It's just an off-chain, verifiable promise that a contract _might_ have some specific code in it. It's up to you to trust, but verify, such claims.
+
+  In addition, there is no guarantee that there won't be name clashes between different interfaces, although they are unlikely because even the first 128 bits of SHA-256 provide sufficient [collision resistance](https://en.wikipedia.org/wiki/Collision_resistance).
+
+</Callout>
 
 ### Persistent state variables [#variables]
 
@@ -237,3 +283,6 @@ contract Functions {
   Note, that Tact supports other kinds of functions too, see: [Functions](/book/functions).
 
 </Callout>
+
+[p]: /book/types#primitive-types
+[trait]: /book/types#traits
