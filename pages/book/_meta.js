@@ -43,7 +43,7 @@ export default {
   upgrades: 'Contract upgrades',
   import: 'Importing code',
   config: 'Configuration',
-  masterchain: 'Using masterchain',
+  masterchain: 'Masterchain',
   func: 'Compatibility with FunC',
   'exit-codes': 'Exit codes',
   programmatic: 'Programmatic API',

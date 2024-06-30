@@ -36,6 +36,7 @@
     "seamus",
     "Seamus",
     "seqno",
+    "shardchains",
     "stdlibs",
     "STON.fi",
     "TIMELOCK",
@@ -46,6 +47,7 @@
     "Uninit",
     "vogons",     // 42 vogons
     "workchain",
+    "workchains",
     "xtwitter"
   ],
   "ignoreRegExpList": [

@@ -1,31 +1,49 @@
-import { Callout } from 'nextra-theme-docs'
-
 # Masterchain
 
+import { Callout } from 'nextra-theme-docs'
+
 <Callout type="warning" emoji="⚠️">
-Masterchain support must be enabled explicitly in the project configuration. Without enabling it all masterchain addresses will be treated as invalid.
+
+  Masterchain addresses are treated as invalid unless the `masterchain` option in the [configuration file](/book/config) is set to `true{:json}`.
+
 </Callout>
 
-Most of the contract developers don't need a masterchain. Masterchain is needed only for participating in elections or storing libraries. If you don't need to participate in elections or store libraries, you don't need a masterchain.
+In TON Blockchain, a special chain called ["masterchain"](https://docs.ton.org/learn/overviews/ton-blockchain#masterchain-blockchain-of-blockchains) is used to synchronize message routing and transaction execution, so that nodes in the network can fix a particular point in a multi-chain state and reach a consensus about that state.
 
-## How contract is protected from masterchain
+Masterchain stores the [network configuration](/ref/core-advanced#getconfigparam) and the final state of all [workchains](https://docs.ton.org/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules). It carries fundamental protocol information, including current settings, a list of active validators and their stakes, active workchains, and associated [shardchains](https://docs.ton.org/develop/blockchain/shards). Most importantly, it maintains a record of the latest block hashes for all workchains and shardchains, enforcing consensus across the network.
 
-Most of the contracts written in FunC enforce all incoming addresses to be `basechain` ones. This is done to prevent masterchain addresses from being used in the contract. Tact does this **by default**.
+## How contract is protected from masterchain [#protection]
 
-What is prohibited to do without masterchain support enabled:
-* Deploy contract to masterchain. The `init` function would throw a `Masterchain support is not enabled for this contract` error for every message.
-* Receive messages from masterchain accounts.
-* Receive structs that have masterchain addresses in them.
-* Send messages to masterchain accounts.
-* Use masterchain addresses in arguments of get methods.
+Tact enforces all contracts to use the [basechain](https://docs.ton.org/develop/blockchain/shards), which is the default workchain with ID $0$. This is done to prevent masterchain addresses from being used in the contract.
 
-## Enable masterchain support
+Any attempts to point to masterchain or otherwise interact with it without [enabling masterchain support](#enable-support) throw an exception with [exit code 137](/book/exit-codes#137): `Masterchain support is not enabled for this contract`.
 
-To enable masterchain support, please enable it in the project configuration file:
-```json
-{
-    "options": {
-        "masterchain": true
-    }
-}
+That is, accidental deployments to the masterchain, receiving messages from masterchain accounts, sending messages to such accounts, and using masterchain addresses or its chain ID ($-1$) are all prohibited by default.
+
+## Enabling masterchain support in compilation options [#support]
+
+<Callout type="warning" emoji="⚠️">
+
+Most contracts don't need to be deployed on a masterchain or have any interactions on a masterchain. That's because the masterchain is primarily used for voting or storing libraries. If you don't need to partake in those things, you don't need to enable masterchain support.
+
+</Callout>
+
+If you really do need masterchain support, the simplest and recommended approach is to modify a [`tact.config.json`](/book/config) file in the root of your project (or create it if it didn't exist yet), and [set the `masterchain` property to `true{:json}`](/book/config#options-masterchain).
+
+If you're working on a [Blueprint][bp]-based project, you can enable masterchain support in the compilation configs of your contracts, which are located in a directory named `wrappers/`:
+
+```typescript filename="wrappers/YourContractName.compile.ts" {7}
+import { CompilerConfig } from '@ton/blueprint';
+
+export const compile: CompilerConfig = {
+  lang: 'tact',
+  target: 'contracts/your_contract_name.tact',
+  options: {
+    masterchain: true, // ← that's the stuff!
+  }
+};
 ```
+
+However, [`tact.config.json`](/book/config) may still be used in [Blueprint][bp] projects. In such cases values specified in [`tact.config.json`](/book/config) act as default unless modified in the `wrappers/`.
+
+[bp]: https://github.com/ton-org/blueprint
