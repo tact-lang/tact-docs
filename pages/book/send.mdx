@@ -1,5 +1,7 @@
 # Sending messages
 
+import { Callout } from 'nextra/components'
+
 TON blockchain is message-based — to communicate with other contracts and to deploy new ones you need to send messages.
 
 Messages in Tact are composed using a built-in [Struct](/book/structs-and-messages#structs) `SendParameters{:tact}`, which consists of:
@@ -94,6 +96,12 @@ send(SendParameters{
     body: "Hello, World!".asComment(), // not necessary, can be omitted
 });
 ```
+
+<Callout>
+
+  See more examples of sending messages: [Single-contract communication in the Cookbook](/cookbook/single-communication).
+
+</Callout>
 
 [p]: /book/types#primitive-types
 [int]: /book/integers
