@@ -1,8 +1,10 @@
 # Sending messages
 
+import { Callout } from 'nextra-theme-docs'
+
 TON blockchain is message-based — to communicate with other contracts and to deploy new ones you need to send messages.
 
-Messages in Tact are composed using a built-in [Struct](/book/structs-and-messages#structs) `SendParameters{:tact}`, which consists of:
+Messages in Tact are commonly composed using a built-in [Struct](/book/structs-and-messages#structs) `SendParameters{:tact}`, which consists of:
 
 Field    | Type                  | Description
 :------- | :-------------------- | :----------
@@ -15,6 +17,18 @@ Field    | Type                  | Description
 `data`   | [`Cell?{:tact}`][p]   | [Optional][opt] initial data of the contract (arguments of [`init(){:tact}` function](/book/contracts#init-function) of the contract)
 
 Fields `code` and `data` are what's called an [init package](/book/expressions#initof), which is used in deployments of new contracts.
+
+<Callout>
+
+  Read more about all message sending functions in the Reference:
+  * [`send(){:tact}`](/ref/core-common#send)
+  * [`emit(){:tact}`](/ref/core-common#emit)
+  * [`self.notify(){:tact}`](/ref/core-base#self-notify)
+  * [`self.reply(){:tact}`](/ref/core-base#self-reply)
+  * [`self.forward(){:tact}`](/ref/core-base#self-forward)
+  * [`nativeSendMessage(){:tact}`](/ref/core-advanced#nativesendmessage)
+
+</Callout>
 
 ## Send simple reply
 

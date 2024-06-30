@@ -42,11 +42,13 @@ Use underscores (`_`) to improve readability: $\mathrm{0o777\_777\_777}$ is equa
 Represent numbers using [binary numeral system](https://en.wikipedia.org/wiki/Binary_number), denoted by the $\mathrm{0b}$ (or $\mathrm{0B}$) prefix: $\mathrm{0b111111111.}$\
 Use underscores (`_`) to improve readability: $\mathrm{0b111\_111\_111}$ is equal to $\mathrm{0b111111111}.$
 
-### Nano-tons
+### NanoToncoin
 
-For example, arithmetic with dollars requires two decimal places after the dot — those are used for the cents value. But how would we represent the number \$$1.25$ if we're only able to work with integers? The solution is to work with _cents_ directly. This way, \$$1.25$ becomes $125$ cents. We simply memorize that the two rightmost digits represent the numbers after the decimal point.
+Arithmetic with dollars requires two decimal places after the dot — those are used for the cents value. But how would we represent the number \$$1.25$ if we're only able to work with integers? The solution is to work with _cents_ directly. This way, \$$1.25$ becomes $125$ cents. We simply memorize that the two rightmost digits represent the numbers after the decimal point.
 
-Similarly, working with Toncoins requires nine decimal places instead of the two. Therefore, the amount of $1.25$ TON, which can be represented in Tact as [`ton("1.25"){:tact}`](/ref/core-comptime#ton), is actually the number $1250000000$. We refer to such numbers as _nano-tons_ (or _nanoToncoins_) rather than _cents_.
+Similarly, working with Toncoin, the main currency of TON Blockchain, requires nine decimal places instead of the two. One can say that nanoToncoin is the $\frac{1}{10^{9}}\mathrm{th}$ of the Toncoin.
+
+Therefore, the amount of $1.25$ Toncoin, which can be represented in Tact as [`ton("1.25"){:tact}`](/ref/core-comptime#ton), is actually the number $1250000000$. We refer to such numbers as _nanoToncoin(s)_ (or _nano-ton(s)_) rather than _cents_.
 
 ## Serialization
 

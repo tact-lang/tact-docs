@@ -129,7 +129,7 @@ Stores (serializes) an unsigned [`Int{:tact}`][int] `value` in the range $0 .. 2
 
 Attempts to store an out-of-bounds `value` throw an exception with [exit code 5](/book/exit-codes#5): `Integer out of expected range`.
 
-This is the most common way of storing nanoToncoins.
+This is the most common way of storing [nanoToncoins](/book/integers#nanotoncoin).
 
 Usage example:
 
@@ -470,7 +470,7 @@ extends mutates fun loadCoins(self: Slice): Int;
 
 Extension mutation function for the [`Slice{:tact}`][p].
 
-Loads and returns [serialized](#builderstorecoins) an unsigned [`Int{:tact}`][int] value in the range $0 .. 2^{120} - 1$ from the [`Slice{:tact}`][p]. This values usually represents the amount in nanoToncoins.
+Loads and returns [serialized](#builderstorecoins) an unsigned [`Int{:tact}`][int] value in the range $0 .. 2^{120} - 1$ from the [`Slice{:tact}`][p]. This values usually represents the amount in [nanoToncoins](/book/integers#nanotoncoin).
 
 Attempts to load such [`Int{:tact}`][int] when [`Slice{:tact}`][p] doesn't contain it throw an exception with [exit code 8](/book/exit-codes#8): `Cell overflow`.
 
