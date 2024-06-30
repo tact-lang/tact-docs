@@ -26,7 +26,7 @@ let timeOffset: Int = now() + 1000; // thousand seconds from now()
 fun myBalance(): Int;
 ```
 
-Returns the remaining balance of the smart contract as an integer value in nanoToncoins, where nanoToncoin is the $\frac{1}{10^{9}}\mathrm{th}$ of the Toncoin.
+Returns the [nanoToncoin](/book/integers#nanotoncoin) balance of the smart contract as it was at the start of the [compute phase](https://docs.ton.org/learn/tvm-instructions/tvm-overview#compute-phase) of the current transaction.
 
 Usage example:
 
@@ -36,7 +36,7 @@ let iNeedADolla: Int = myBalance();
 
 <Callout type="warning" emoji="⚠️">
 
-  Note, that [`send(){:tact}` function](#send) does not update the contract's balance.
+  Beware, that [all message sending functions](/book/send) of Tact can change the _actual_ contract's balance, but they _won't_ update the value returned by this function.
 
 </Callout>
 
@@ -94,7 +94,7 @@ Field     | Type                  | Description
 :-------- | :-------------------- | :----------
 `bounced` | [`Bool{:tact}`][bool] | [Bounced](https://ton.org/docs/learn/overviews/addresses#bounceable-vs-non-bounceable-addresses) flag of the incoming message.
 `sender`  | [`Address{:tact}`][p] | Internal address of the sender on the TON blockchain.
-`value`   | [`Int{:tact}`][int]   | Amount of nanoToncoins in a message.
+`value`   | [`Int{:tact}`][int]   | Amount of [nanoToncoins](/book/integers#nanotoncoin) in a message.
 `raw`     | [`Slice{:tact}`][p]   | The remainder of the message as a [`Slice{:tact}`][p]. It follows [internal message layout](https://docs.ton.org/develop/smart-contracts/messages#message-layout) of TON starting from the destination [`Address{:tact}`][p] (`dest:MsgAddressInt ` in [TL-B notation](https://docs.ton.org/develop/data-formats/tl-b-language)).
 
 Usage example:
@@ -205,7 +205,7 @@ Usage example:
 ```tact
 send(SendParameters{
     to: sender(),    // back to the sender,
-    value: ton("1"), // with 1 toncoin,
+    value: ton("1"), // with 1 Toncoin (1_000_000_000 nanoToncoin),
                      // and no message body
 });
 ```

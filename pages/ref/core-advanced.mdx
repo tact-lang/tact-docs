@@ -18,7 +18,7 @@ extends fun readForwardFee(self: Context): Int
 
 Extension function for the [`Context{:tact}`](/ref/core-common#context).
 
-Reads [forward fee](https://docs.ton.org/develop/smart-contracts/guidelines/processing) and returns it as [`Int{:tact}`][int] value in nanoToncoins (nano-tons).
+Reads [forward fee](https://docs.ton.org/develop/smart-contracts/guidelines/processing) and returns it as [`Int{:tact}`][int] amount of [nanoToncoins](book/integers#nanotoncoin).
 
 Usage example:
 
@@ -196,7 +196,7 @@ Sends the message by specifying the complete `cell` and the [message `mode`](/bo
 fun nativeReserve(amount: Int, mode: Int);
 ```
 
-Calls native `raw_reserve` function with specified amount and mode. The `raw_reserve` is a function that creates an output action to reserve a specific amount of nanoToncoins (nano-tons) from the remaining balance of the account.
+Calls native `raw_reserve` function with specified amount and mode. The `raw_reserve` is a function that creates an output action to reserve a specific amount of [nanoToncoins](book/integers#nanotoncoin) from the remaining balance of the account.
 
 It has the following signature in FunC:
 
@@ -205,10 +205,10 @@ raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
 ```
 
 The function takes two arguments:
-* `amount`: The number of nanoToncoins to reserve.
+* `amount`: The number of [nanoToncoins](book/integers#nanotoncoin) to reserve.
 * `mode`: Determines the reservation behavior.
 
-Function `raw_reserve` is roughly equivalent to creating an outbound message carrying the specified `amount` of nanoToncoins (or `b` $-$ `amount` nanoToncoins, where `b` is the remaining balance) to oneself. This ensures that subsequent output actions cannot spend more money than the remainder.
+Function `raw_reserve` is roughly equivalent to creating an outbound message carrying the specified `amount` of [nanoToncoins](book/integers#nanotoncoin) (or `b` $-$ `amount` [nanoToncoins](book/integers#nanotoncoin), where `b` is the remaining balance) to oneself. This ensures that subsequent output actions cannot spend more money than the remainder.
 
 It's possible to use raw [`Int{:tact}`][int] values and manually provide them for the `mode`, but for your convenience there's a set of constants which you may use to construct the compound `mode` with ease. Take a look at the following tables for more information on base modes and optional flags.
 
@@ -224,9 +224,9 @@ The resulting `mode` value can have the following base modes:
 
 Mode value | Constant name                 | Description
 ---------: | :---------------------------- | -----------
-$0$        | `ReserveExact{:tact}`         | Reserves exactly the specified `amount` of nanoToncoins.
-$1$        | `ReserveAllExcept{:tact}`     | Reserves all, but the specified `amount` of nanoToncoins.
-$2$        | `ReserveAtMost{:tact}`        | Reserves at most the specified `amount` of nanoToncoins.
+$0$        | `ReserveExact{:tact}`         | Reserves exactly the specified `amount` of [nanoToncoins](book/integers#nanotoncoin).
+$1$        | `ReserveAllExcept{:tact}`     | Reserves all, but the specified `amount` of [nanoToncoins](book/integers#nanotoncoin).
+$2$        | `ReserveAtMost{:tact}`        | Reserves at most the specified `amount` of [nanoToncoins](book/integers#nanotoncoin).
 
 ### Optional flags [#nativereserve-optional-flags]
 
