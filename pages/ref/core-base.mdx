@@ -19,7 +19,7 @@ contract AllYourStorageBelongsToUs {
     // This would change the behavior of self.forward() function,
     // causing it to try reserving this amount of nanoToncoins before
     // forwarding a message with SendRemainingBalance mode
-    override const storageReserve = ton("0.1");
+    override const storageReserve: Int = ton("0.1");
 }
 ```
 
