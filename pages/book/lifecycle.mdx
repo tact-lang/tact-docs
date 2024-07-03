@@ -6,7 +6,7 @@ There are several stages of message processing by a contract, there are more of 
 
 This phase combines multiple low-level phases. 
 
-It starts by adding a **message value to the contract balance**. The value of an incoming message is the maximum price that a contract can pay for gas to process this message. The contract can overwrite this limit, but it is not recommended and is suitable only for advanced developers since it could lead to a contract being drained. 1 million of gas is the maximum amount that a contract can spend in a single contract which equals 1 TON (currently). If the message value is zero then execution is aborted.
+It starts by adding a **message value to the contract balance**. The value of an incoming message is the maximum price that a contract can pay for gas to process this message. The contract can overwrite this limit, but it is not recommended and is suitable only for advanced developers since it could lead to a contract being drained. 1 million of gas is the maximum amount that a contract can spend in a single contract which equals 10 TON (currently). If the message value is zero then execution is aborted.
 
 Then some (usually small) amount of nanotons gets subtracted from the contract balance for storage. This means that you can't perfectly predict balance changes and have to adjust your code to this instability.
 
