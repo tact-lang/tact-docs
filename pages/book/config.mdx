@@ -214,6 +214,72 @@ If set to `true{:json}`, enables support of [external](/book/external) message r
 
 </Callout>
 
+#### `ipfsAbiGetter` [#options-ipfsabigetter]
+
+`false{:json}` by default.
+
+If set to `true{:json}`, enables generation of a [getter](/book/contracts#getter-functions) with IPFS links describing the contract's ABI.
+
+```json filename="tact.config.json" {8,14}
+{
+  "projects": [
+    {
+      "name": "some_prefix",
+      "path": "./contract.tact",
+      "output": "./contract_output",
+      "options": {
+        "ipfsAbiGetter": true
+      }
+    },
+    {
+      "name": "ContractUnderBlueprint",
+      "options": {
+        "ipfsAbiGetter": true
+      }
+    }
+  ]
+}
+```
+
+<Callout>
+
+  Read more on the dedicated page: [OTP-003: Self-ABI reporting](/ref/evolution/OTP-003).
+
+</Callout>
+
+#### `interfacesGetter` [#options-interfacesgetter]
+
+`false{:json}` by default.
+
+If set to `true{:json}`, enables generation of a [getter](/book/contracts#getter-functions) with a list of interfaces provided by the contract.
+
+```json filename="tact.config.json" {8,14}
+{
+  "projects": [
+    {
+      "name": "some_prefix",
+      "path": "./contract.tact",
+      "output": "./contract_output",
+      "options": {
+        "interfacesGetter": true
+      }
+    },
+    {
+      "name": "ContractUnderBlueprint",
+      "options": {
+        "interfacesGetter": true
+      }
+    }
+  ]
+}
+```
+
+<Callout>
+
+  Read more: [Supported interfaces](/book/contracts#interfaces).
+
+</Callout>
+
 #### `experimental` [#options-experimental]
 
 Experimental options that might be removed in the future. Use with caution!
@@ -334,6 +400,8 @@ In [Blueprint][bp], `mode` is always set to `"full"{:json}` and cannot be overwr
         "debug": false,
         "masterchain": false,
         "external": false,
+        "ipfsAbiGetter": true,
+        "interfacesGetter": true,
         "experimental": {
           "inline": false
         }
