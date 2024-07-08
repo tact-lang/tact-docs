@@ -125,7 +125,7 @@ extends fun storeCoins(self: Builder, value: Int): Builder;
 
 Extension function for the [`Builder{:tact}`][p].
 
-Stores (serializes) an unsigned [`Int{:tact}`][int] `value` in the range $0 .. 2^{120} − 1$ into the copy of the [`Builder{:tact}`][p]. The serialization of `value` consists of a 4-bit unsigned big-endian integer $l$, which is the smallest integer $l ≥ 0$, such that `value` $< 2^{8 * l}$, followed by an $8 * l$-bit unsigned big-endian representation of `value`. If `value` does not belong to the supported range, a range check exception is thrown. Returns that copy of the [`Builder{:tact}`][p].
+Stores (serializes) an unsigned [`Int{:tact}`][int] `value` in the range $0 .. 2^{120} − 1$ into the copy of the [`Builder{:tact}`][p]. The serialization of `value` consists of a $4$-bit unsigned big-endian integer $l$, which is the smallest integer $l ≥ 0$, such that `value` $< 2^{8 * l}$, followed by an $8 * l$-bit unsigned big-endian representation of `value`. If `value` does not belong to the supported range, a range check exception is thrown. Returns that copy of the [`Builder{:tact}`][p].
 
 Attempts to store an out-of-bounds `value` throw an exception with [exit code 5](/book/exit-codes#5): `Integer out of expected range`.
 
@@ -137,6 +137,13 @@ Usage example:
 let b: Builder = beginCell();
 let fizz: Builder = b.storeCoins(42);
 ```
+
+<Callout>
+
+  **Useful links:**\
+  [Special `coins` serialization type](/book/integers#serialization-coins)
+
+</Callout>
 
 ## Builder.storeAddress
 
@@ -470,7 +477,7 @@ extends mutates fun loadCoins(self: Slice): Int;
 
 Extension mutation function for the [`Slice{:tact}`][p].
 
-Loads and returns [serialized](#builderstorecoins) an unsigned [`Int{:tact}`][int] value in the range $0 .. 2^{120} - 1$ from the [`Slice{:tact}`][p]. This values usually represents the amount in [nanoToncoins](/book/integers#nanotoncoin).
+Loads and returns [serialized](#builderstorecoins) an unsigned [`Int{:tact}`][int] value in the range $0 .. 2^{120} - 1$ from the [`Slice{:tact}`][p]. This value usually represents the amount in [nanoToncoins](/book/integers#nanotoncoin).
 
 Attempts to load such [`Int{:tact}`][int] when [`Slice{:tact}`][p] doesn't contain it throw an exception with [exit code 8](/book/exit-codes#8): `Cell overflow`.
 
@@ -482,6 +489,13 @@ Usage example:
 let s: Slice = beginCell().storeCoins(42).asSlice();
 let fizz: Int = s.loadCoins();
 ```
+
+<Callout>
+
+  **Useful links:**\
+  [Special `coins` serialization type](/book/integers#serialization-coins)
+
+</Callout>
 
 ## Slice.loadAddress
 
