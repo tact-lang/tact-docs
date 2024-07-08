@@ -111,7 +111,7 @@ In Tact, `coins{:tact}` is an alias to [`VarUInteger 16`][varuint] in [TL-B][tlb
 
 This serialization format consists of two [TL-B fields](https://docs.ton.org/develop/data-formats/tl-b-language#field-definitions):
 
-* `len`, a $4$-bit unsigned big-engian integer storing the byte length of the value provided
+* `len`, a $4$-bit unsigned big-endian integer storing the byte length of the value provided
 * `value`, a $8 * len$-bit unsigned big-endian representation of the value provided
 
 That is, integers serialized as `coins{:tact}` occupy between $4$ and $124$ bits ($4$ bits for `len` and $0$ to $15$ bytes for `value`) and have values in the inclusive range from $0$ to $2^{120} - 1$.
