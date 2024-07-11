@@ -38,13 +38,16 @@ struct Line {
 }
 ```
 
-Structs can also include both default fields and optional fields. This can be quite useful when you have many fields but don't want to keep respecifying them.
+Structs can also contain default fields and define fields of [optional types](/book/optionals). This can be useful if you have a lot of fields, but don't want to keep having to specify common values for them in [new instances](#instantiate).
 
 ```tact
 struct Params {
-    name: String = "Satoshi";  // default value
-    age: Int?;                 // optional field
-    point: Point;              // nested Structs
+    name: String = "Satoshi"; // default value
+
+    age: Int?; // field with an optional type Int?
+               // and default value of null
+
+    point: Point; // nested Structs
 }
 ```
 
@@ -52,7 +55,7 @@ Structs are also useful as return values from getters or other internal function
 
 ```tact
 contract StructsShowcase {
-    params: Params; // Struct as a Contract persistent state variable
+    params: Params; // Struct as a contract's persistent state variable
 
     init() {
         self.params = Params{
