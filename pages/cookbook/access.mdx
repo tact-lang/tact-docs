@@ -28,12 +28,14 @@ contract SenderChecker with Deployable, Ownable {
     }
 
     receive("inc") {
-        require(self.owner == sender(), "Only the owner can increase the value!");
+        self.requireOwner(); // Pretty much the same as:
+        //require(self.owner == sender(), "Only the owner can increase the value!");
         self.val += 1;
     }
 
     receive(msg: FooBarMsg) {
-        require(self.owner == sender(), "Only the owner can set the value!");
+        self.requireOwner(); // Pretty much the same as:
+        // require(self.owner == sender(), "Only the owner can set the value!");
         self.val = msg.newVal;
     }
 }
