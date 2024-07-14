@@ -33,8 +33,7 @@ contract SenderChecker with Deployable, Ownable {
     }
 
     receive(msg: FooBarMsg) {
-        self.requireOwner(); // Pretty much the same as:
-        // require(self.owner == sender(), "Only the owner can set the value!");
+        self.requireOwner(); // throws exit code 132 if the sender isn't an owner
         self.val = msg.newVal;
     }
 }
