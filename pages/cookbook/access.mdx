@@ -28,16 +28,23 @@ contract SenderChecker with Deployable, Ownable {
     }
 
     receive("inc") {
-        require(self.owner == sender(), "Only the owner can increase the value!");
+        self.requireOwner(); // throws exit code 132 if the sender isn't an owner
         self.val += 1;
     }
 
     receive(msg: FooBarMsg) {
-        require(self.owner == sender(), "Only the owner can set the value!");
+        self.requireOwner(); // throws exit code 132 if the sender isn't an owner
         self.val = msg.newVal;
     }
 }
 ```
+
+<Callout>
+
+  **Useful link:**\
+  [`trait Ownable{:tact}` in Core library](/ref/stdlib-ownable#ownable)
+
+</Callout>
 
 <Callout type="info" emoji="🤔">
 
