@@ -41,7 +41,7 @@ export function locales(request: NextRequest) {
     return NextResponse.rewrite(url);
   }
 
-  const rootDirArray = ["/book", "/ecosystem", "/language"];
+  const rootDirArray = ["/book", "/ecosystem", "/cookbook", "/ref"];
 
   const shouldHandleLocale =
     !/^\/(api|_next)\//.test(nextUrl.pathname) &&
