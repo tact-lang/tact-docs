@@ -39,7 +39,7 @@ message FactoryDeploy {
 
 ### Deployable
 
-Simplest trait `Deployable` that provides a handy unified mechanism for deployments by implementing a simple receiver for the [Deploy](#deploy) message.
+Simplest trait `Deployable{:tact}` that provides a handy unified mechanism for deployments by implementing a simple receiver for the [Deploy](#deploy) message.
 
 All contracts are deployed by sending them a message. While any message can be used for this purpose, best practice is to use the special [Deploy](#deploy) message.
 
@@ -57,7 +57,7 @@ trait Deployable {
 
 Usage example:
 
-```tact
+```tact /Deployable/
 import "@stdlib/deploy";
 
 contract ExampleContract with Deployable {
@@ -67,7 +67,7 @@ contract ExampleContract with Deployable {
 
 ### FactoryDeployable
 
-Trait `FactoryDeployable` provides a handy unified mechanism for chained deployments.
+Trait `FactoryDeployable{:tact}` provides a handy unified mechanism for chained deployments.
 
 Source code:
 
@@ -81,7 +81,7 @@ trait FactoryDeployable  {
 
 Usage example:
 
-```tact
+```tact /FactoryDeployable/
 import "@stdlib/deploy";
 
 contract ExampleContract with FactoryDeployable {

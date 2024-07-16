@@ -6,7 +6,7 @@ Contracts in Tact are similar to classes in popular object-oriented languages, e
 
 ## Self-references [#self]
 
-Contracts and [traits](/book/types#traits) have a built-in [identifier](/book/expressions#identifiers) `self{:tact}`, which is used for referring to their fields (persistent state [variables](#variables) and [constants](#variables)) and methods ([internal functions](#internal-functions)):
+Contracts and [traits][trait] have a built-in [identifier](/book/expressions#identifiers) `self{:tact}`, which is used for referring to their fields (persistent state [variables](#variables) and [constants](#variables)) and methods ([internal functions](#internal-functions)):
 
 ```tact
 contract Example {
@@ -23,14 +23,78 @@ contract Example {
 
 Each contract can contain:
 
+* [Supported interfaces](#interfaces)
 * [Persistent state variables](#variables)
 * [Constructor function `init(){:tact}`](#init-function)
 * [Contract constants](#constants)
-* [Getter functions](#get-functions)
+* [Getter functions](#getter-functions)
 * [Receiver functions](#receiver-functions)
 * [Internal functions](#internal-functions)
 
-Furthermore, contracts can inherit all the declarations and definitions from [traits](/book/types#traits) and override some of their default behaviours. If declared or defined in a trait, internal functions and constants can be marked as [virtual or abstract](/book/functions#virtual-and-abstract-functions) and overriden in contracts inheriting from the trait.
+Furthermore, contracts can inherit all the declarations and definitions from [traits][trait] and override some of their default behaviours. If declared or defined in a trait, internal functions and constants can be marked as [virtual or abstract](/book/functions#virtual-and-abstract-functions) and overridden in contracts inheriting from the trait.
+
+### Supported interfaces, `@interface(…)` [#interfaces]
+
+It's hard to figure out what a contract does and what [receivers](#receiver-functions) and [getters](#getter-functions) it has without looking at its source code. Sometimes the source is unavailable or inaccessible, and all that's left is to try to disassemble the contract and introspect it that way, which is a very messy and error-prone approach with diminishing returns and no real reproducibility.
+
+In order to resolve this issue, an [OTP-001: Supported Interfaces](/ref/evolution/OTP-001) was created. In accordance to it, Tact contracts [can report](/book/config#options-interfacesgetter) the list of supported interfaces as a return value of a special `supported_interfaces` [getter](#get-functions). That [getter](#getter-functions) is accessible off-chain using any TON Blockchain explorer — one just needs to specify `supported_interfaces` as a method to execute and get a list of hexadecimal values in return.
+
+These hexadecimal values are truncated to the first 128 bit of [SHA-256](https://en.wikipedia.org/wiki/SHA-2#Hash_standard) hashes of the original [`String{:tact}`][p] values of the supported interfaces. The first value in this list **must** be equal to $\mathrm{0x5cec3d5d2cae7b1e84ec39d64a851b66}$ in [hexadecimal notation](/book/integers#hexadecimal), which is the first half of the SHA-256 hash for `"org.ton.introspection.v0"{:tact}`. If the first value is wrong, you must stop trying to introspect the contract, as it doesn't conform to the [Supported Interfaces](/ref/evolution/OTP-001) proposal.
+
+To declare support of a certain interface, add one or more `@interface("…"){:tact}` attributes right before contract and [trait][trait] declarations:
+
+```tact
+@interface("His name is")
+@interface("John")
+contract SeeNah with Misc {
+    // ...
+}
+
+@interface("name_of_your_org - miscellaneous")
+trait Misc {
+    // ...
+}
+```
+
+Tact has a small set of interfaces provided under specific conditions:
+
+* `"org.ton.abi.ipfs.v0"{:tact}`, in accordance to [OTP-003: Self-ABI Reporting](/ref/evolution/OTP-003) — opt-in via [`ipfsAbiGetter`](/book/config#options-ipfsabigetter) config property
+* `"org.ton.deploy.lazy.v0"{:tact}`, in accordance to [OTP-005: Argument-addressable contracts](/ref/evolution/OTP-005)
+* `"org.ton.debug.v0"{:tact}`, but only if [debug mode](/book/debug#debug-mode) is enabled
+* `"org.ton.chain.any.v0"{:tact}` if [masterchain](/book/masterchain) support is enabled, and `"org.ton.chain.workchain.v0"{:tact}` otherwise
+
+Some [traits][trait] in [standard libraries](/ref/standard-libraries) define their interfaces too:
+
+* [`Ownable{:tact}`](/ref/stdlib-ownable#ownable) trait specifies `"org.ton.ownable"{:tact}`
+* [`OwnableTransferable{:tact}`](/ref/stdlib-ownable#ownabletransferable) trait specifies `"org.ton.ownable.transferable.v2"{:tact}`
+* [`Stoppable{:tact}`](/ref/stdlib-stoppable#stoppable) trait specifies `"org.ton.stoppable"{:tact}`
+* [`Resumable{:tact}`](/ref/stdlib-stoppable#resumable) trait specifies `"org.ton.resumable"{:tact}`
+
+To enable `supported_interfaces` [getter](#getter-functions) generation and use `@interface(){:tact}` attribute in your Tact contracts, modify a [`tact.config.json`](/book/config) file in the root of your project (or create it if it didn't exist yet), and [set the `interfacesGetter` property to `true{:json}`](/book/config#options-interfacesgetter).
+
+If you're working on a [Blueprint][bp]-based project, you can enable `supported_interfaces` in the compilation configs of your contracts, which are located in a directory named `wrappers/`:
+
+```typescript filename="wrappers/YourContractName.compile.ts" {7}
+import { CompilerConfig } from '@ton/blueprint';
+
+export const compile: CompilerConfig = {
+  lang: 'tact',
+  target: 'contracts/your_contract_name.tact',
+  options: {
+    interfacesGetter: true, // ← that's the stuff!
+  }
+};
+```
+
+In addition to that, [`tact.config.json`](/book/config) may still be used in [Blueprint][bp] projects. In such cases values specified in [`tact.config.json`](/book/config) act as default unless modified in the `wrappers/`.
+
+<Callout type="warning" emoji="⚠️">
+
+  Be aware that adding an interface does not guarantee that the contract actually implements any particular functionality, or that it implements it in any particular way. It's just an off-chain, verifiable promise that a contract _might_ have some specific code in it. It's up to you to trust, but verify, such claims.
+
+  In addition, there is no guarantee that there won't be name clashes between different interfaces, although they are unlikely because even the first 128 bits of SHA-256 provide sufficient [collision resistance](https://en.wikipedia.org/wiki/Collision_resistance).
+
+</Callout>
 
 ### Persistent state variables [#variables]
 
@@ -46,7 +110,7 @@ contract Example {
 }
 ```
 
-State variables must have a default value or initialized in [`init(){:tact}`](#init-function) function, that runs on deployment of the contract. The only exception is persistent state variables of type [`map<k, v>{:tact}`](/book/maps) since they are initialized empty by default.
+State variables must have a default value or initialized in [`init(){:tact}`](#init-function) function, that runs on deployment of the contract. The only exception is persistent state variables of type [`map<K, V>{:tact}`](/book/maps) since they are initialized empty by default.
 
 <Callout>
 
@@ -67,12 +131,12 @@ You can read constants both in [receivers](#receiver-functions) and in [getters]
 Unlike [contract variables](#variables), **contract constants don't consume space in persistent state**. Their values are stored directly in the code [`Cell{:tact}`](/book/types#primitive-types) of the contract.
 
 ```tact
-// global constants are calculared in compile-time and cannot change
+// global constants are calculated in compile-time and cannot change
 const GlobalConst1: Int = 1000 + ton("42") + pow(10, 9);
 
 contract Example {
     // contract constants are also calculated in compile-time and cannot change
-    const ContractConst1: Int = 2000 + ton("43") pow(10, 9);
+    const ContractConst1: Int = 2000 + ton("43") + pow(10, 9);
 
     // contract constants can be an easy alternative to enums
     const StateUnpaid: Int = 0;
@@ -113,7 +177,7 @@ If a contract doesn't have any persistent state variables, or they all have thei
 The following is an example of a valid empty contract:
 
 ```tact
-contract IamEmptyAndIknowIt {}
+contract IamEmptyAndIKnowIt {}
 ```
 
 For your convenience, parameter list of `init(){:tact}` can have a trailing comma:
@@ -237,3 +301,6 @@ contract Functions {
   Note, that Tact supports other kinds of functions too, see: [Functions](/book/functions).
 
 </Callout>
+
+[p]: /book/types#primitive-types
+[trait]: /book/types#traits

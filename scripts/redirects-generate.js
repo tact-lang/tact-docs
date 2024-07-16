@@ -36,7 +36,7 @@ const constructRedirectPage = (href) =>
  * Those redirects are essentially a diff of the current structure and the previous one on this commit:
  * https://github.com/tact-lang/tact-docs/tree/17176cb5e8bac84163bfa4c7b1bd94c0dc917bea/pages
  *
- * @returns {{source: string, subSources: string[] | undefined, destination: string}[]}
+ * @returns {{source: string, subSources?: string[], destination: string, destPrefix?: string, destSuffix?: string}[]}
  */
 const getRedirects = () => [
   // Language→Guides pages are moved under Book section
@@ -52,7 +52,6 @@ const getRedirects = () => [
   // Getting Started is now a part of Book→Guides sub-section
   {
     source: '/start',
-    subSources: undefined,
     destination: '/book/guides/getting-started',
   },
   {
@@ -64,14 +63,12 @@ const getRedirects = () => [
   // Language→Guides→Grammar is now under Language section as a Specification page
   {
     source: '/book/grammar',
-    subSources: undefined,
     destination: '/language/spec',
   },
 
   // Evolution section is moved under Language section
   {
     source: '/evolution',
-    subSources: undefined,
     destination: '/language/evolution/overview',
   },
   {
@@ -83,7 +80,6 @@ const getRedirects = () => [
   // Language→Guides→Changelog is merged with the Evolution page
   {
     source: '/language/guides/changelog',
-    subSources: undefined,
     destination: '/language/evolution/overview',
   },
 
@@ -97,38 +93,68 @@ const getRedirects = () => [
   // Small updates in naming of pages or sub-sections
   {
     source: '/book/message-modes',
-    subSources: undefined,
     destination: '/book/message-mode',
   },
   {
     source: '/ecosystem/tools/vs',
-    subSources: undefined,
     destination: '/ecosystem/tools/vscode',
   },
   {
     source: '/book/ints',
-    subSources: undefined,
     destination: '/book/integers',
   },
   {
     source: '/book/numbers',
-    subSources: undefined,
     destination: '/book/integers',
   },
   {
     source: '/book/defining-types',
-    subSources: undefined,
     destination: '/book/types#composite-types',
   },
   {
     source: '/book/composite-types',
-    subSources: undefined,
     destination: '/book/types#composite-types',
   },
   {
     source: '/book/cookbook',
-    subSources: undefined,
     destination: '/cookbook',
+  },
+
+  // Language→Libs pages are moved under Reference section
+  {
+    source: '/language',
+    destination: '/ref',
+  },
+  {
+    source: '/language/ref',
+    subSources: [
+      'common', 'strings', 'random', 'math', 'cells', 'advanced'
+    ],
+    destination: '/ref',
+    destPrefix: 'core-', // /ref/core-common, etc.
+  },
+  {
+    source: '/language/libs/overview',
+    destination: '/ref/standard-libraries',
+  },
+  {
+    source: '/language/libs',
+    subSources: [
+      'config', 'content', 'deploy', 'dns', 'ownable', 'stoppable',
+    ],
+    destination: '/ref',
+    destPrefix: 'stdlib-', // /ref/stdlib-config, etc.
+  },
+  {
+    source: '/language/spec',
+    destination: '/ref/spec',
+  },
+  {
+    source: '/language/evolution',
+    subSources: [
+      'overview', 'OTP-001', 'OTP-002', 'OTP-003', 'OTP-004', 'OTP-005', 'OTP-006',
+    ],
+    destination: '/ref/evolution',
   },
 ];
 
@@ -139,48 +165,48 @@ const getRedirects = () => [
  * @returns bool
  */
 const isRegularFile = (filePathWithExt) => {
-    if (fs.existsSync(filePathWithExt)
-      && !(fs.readFileSync(filePathWithExt, 'utf8').includes('<title>Redirecting...</title>'))) {
-      return true;
-    }
+  if (fs.existsSync(filePathWithExt)
+    && !(fs.readFileSync(filePathWithExt, 'utf8').includes('<title>Redirecting...</title>'))) {
+    return true;
+  }
 
-    return false;
+  return false;
 };
 
 /**
  * Creates the redirect file, unless there exists a regular page/file under source path already.
  * Returns true if the redirect file was created and false otherwise.
  *
- * @param source {string}
- * @param destination {string}
+ * @param source {string} - path to the file
+ * @param destination {string} - link to the new page
  * @returns bool
  */
 const createRedirectFile = (source, destination) => {
-    // full path, minus the extension
-    const pathUntilExt = path.join(cwd, '/out', source);
+  // full path, minus the extension
+  const pathUntilExt = path.join(cwd, '/out', source);
 
-    // full path with extension
-    const pathWithExt = pathUntilExt + '.html';
+  // full path with extension
+  const pathWithExt = pathUntilExt + '.html';
 
-    // if file exists, but doesn't include the line from the redirect page
-    if (isRegularFile(pathWithExt)) {
-      console.log(`Warning: such path (${pathWithExt}) already exists in the docs, so redirect from it was NOT created`);
-      return false;
-    }
+  // if file exists, but doesn't include the line from the redirect page
+  if (isRegularFile(pathWithExt)) {
+    console.log(`Warning: such path (${pathWithExt}) already exists in the docs, so redirect from it was NOT created`);
+    return false;
+  }
 
-    // need to create additional dirs
-    if (source.split('/').length > 1) {
-      const nestedDir = path.dirname(pathUntilExt);
-      // NOTE: debug output
-      // console.log(nestedDir, redirect.source);
-      fs.mkdirSync(nestedDir, { recursive: true });
-    }
+  // need to create additional dirs
+  if (source.split('/').length > 1) {
+    const nestedDir = path.dirname(pathUntilExt);
+    // NOTE: debug output
+    // console.log(nestedDir, redirect.source);
+    fs.mkdirSync(nestedDir, { recursive: true });
+  }
 
-    // create the redirect file
-    fs.writeFileSync(pathWithExt, constructRedirectPage(destination));
+  // create the redirect file
+  fs.writeFileSync(pathWithExt, constructRedirectPage(destination));
 
-    // report success
-    return true;
+  // report success
+  return true;
 };
 
 /* ---------------- */
@@ -218,7 +244,10 @@ let count = 0;
 for (const redirect of redirects) {
   // 1. have no nested sub-sources
   if (redirect.subSources === undefined) {
-    if (createRedirectFile(redirect.source, redirect.destination) === true) {
+    if (createRedirectFile(
+      redirect.source,
+      (redirect.destPrefix ?? '') + redirect.destination + (redirect.destSuffix ?? ''),
+    )) {
       count += 1;
     }
     continue;
@@ -226,7 +255,10 @@ for (const redirect of redirects) {
 
   // 2. have some nested structure
   for (const subSource of redirect.subSources) {
-    if (createRedirectFile(redirect.source + '/' + subSource, redirect.destination + '/' + subSource)) {
+    if (createRedirectFile(
+      redirect.source + '/' + subSource,
+      redirect.destination + '/' + (redirect.destPrefix ?? '') + subSource + (redirect.destSuffix ?? ''),
+    )) {
       count += 1;
     }
   }

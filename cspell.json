@@ -1,0 +1,79 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "basechain",
+    "bounceable",
+    "cheatsheet",
+    "Cheatsheet",
+    "cheatsheets",
+    "Cheatsheets",
+    "comptime",
+    "Comptime",
+    "Decompilation",
+    "decompilation",
+    "decompiles",
+    "decompiling",
+    "dnsresolve",
+    "Epva",        // part of a base64 string
+    "Fift",
+    "ipfs",
+    "IPFS",
+    "jetton",
+    "Jetton",
+    "Jettons",
+    "jettons",
+    "masterchain",
+    "Masterchain",
+    "mathrm",
+    "nanotons",
+    "nextra",
+    "Offchain",
+    "RAWRESERVE",
+    "respecifying",
+    "Satoshi",
+    "seamus",
+    "Seamus",
+    "seqno",
+    "shardchains",
+    "stdlibs",
+    "STON.fi",
+    "TIMELOCK",
+    "timeouted",
+    "Timeouted",
+    "Toncoin",
+    "Toncoins",
+    "Uninit",
+    "vogons",     // 42 vogons
+    "workchain",
+    "workchains",
+    "xtwitter"
+  ],
+  "ignoreRegExpList": [
+    "\\(#.*\\)",
+    "^\\[.+\\]: .+",       // link declarations like [foo]: /ref/stdlib-ownable#bar
+    "\\[.+\\]\\[.+\\]",    // links like [`Resumable{:tact}`][res]
+    "\\[.+\\]\\(.+\\)",    // links like [`self.toCell().asSlice(){:tact}`](/ref/core-cells#cellasslice)
+    "address\\(\".+\"\\)", // Ton addresses
+    "mathrm\\{.+\\}",      // LaTeX subset
+    "\\[#.+\\]",           // [#nativereserve-combining-modes-with-flags]
+    "href=\".+\"",         // href="/cookbook/dexes/stonfi"
+    "\".+\": \".+\"",      // "from": "kQBrSAP2y7QIUw4_1q0qciHfqdFmOYR9CC1oinn7kyWWRuoV",
+    "Urls"
+  ],
+  "flagWords": [],
+  "ignorePaths": [
+    ".github/temp-archive",
+    "components/icons",
+    "dist",
+    "grammars/grammar-ohm.json",
+    "grammars/grammar-tact.json",
+    "next.config.js",
+    "node_modules",
+    "out",
+    "package.json",
+    "pages/cookbook/dexes/_meta.js",
+    "pages/ref/spec.mdx"
+  ]
+}

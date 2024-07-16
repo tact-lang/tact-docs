@@ -1,0 +1,194 @@
+# Debug
+
+import { Callout } from 'nextra-theme-docs'
+
+List of functions commonly used for debugging smart contracts in Tact.
+
+<Callout>
+
+  Read more about debugging on the dedicated page: [Debugging](/book/debug).
+
+</Callout>
+
+## require
+
+```tact
+fun require(condition: Bool, error: String);
+```
+
+Checks the `condition` and throws an exception with `error` message if the `condition` is `false{:tact}`. Does nothing otherwise.
+
+<Callout>
+
+  Note, that as of this moment, `require(){:tact}` generates its own non-standard exit codes. However, they're all outside of the common range $0 - 255$ reserved for TVM and Tact contract errors, which makes it possible to distinguish exit codes from `require(){:tact}` and any other [standard exit codes](/book/exit-codes).
+
+</Callout>
+
+Usage examples:
+
+```tact
+// now() has to return a value greater than 1000, otherwise an error message will be thrown
+require(now() > 1000, "We're in the first 1000 seconds of 1 January 1970!");
+
+try {
+    // The following will never be true, so this require would always throw
+    require(now() < -1, "Time is an illusion. Lunchtime doubly so.");
+} catch (e) {
+    // e will be outside of range 0-255
+    dump(e);
+}
+```
+
+## dump
+
+```tact
+fun dump(arg);
+```
+
+Prints the argument `arg` to the contract's debug console. Evaluated only if the `debug` option in the [configuration file](/book/config) is set to `true{:json}`, otherwise does nothing.
+
+Can be applied to the following list of types and values:
+
+* [`Int{:tact}`][int]
+* [`Bool{:tact}`][bool]
+* [`Address{:tact}`][p]
+* [`Builder{:tact}`][p], [`Cell{:tact}`][p] or [`Slice{:tact}`][p]
+* [`String{:tact}`][p] or [`StringBuilder{:tact}`][p]
+* [`map<K, V>{:tact}`](/book/maps)
+* [Optionals and `null{:tact}` value](/book/optionals)
+* `void`, which is implicitly returned when a function doesn't have return value defined
+
+Usage examples:
+
+```tact
+// Int
+dump(42);
+
+// Bool
+dump(true);
+dump(false);
+
+// Address
+dump(myAddress());
+
+// Builder, Cell or Slice
+dump(beginCell());           // Builder
+dump(emptyCell());           // Cell
+dump(emptyCell().asSlice()); // Slice
+
+// String or StringBuilder
+dump("Hello, my name is..."); // String
+dump(beginTailString());      // StringBuilder
+
+// Maps
+let m: map<Int, Int> = emptyMap();
+m.set(2 + 2, 4);
+dump(m);
+
+// Special values
+dump(null);
+dump(emit("msg".asComment())); // As emit() function doesn't return a value, dump() would print #DEBUG#: void.
+```
+
+## dumpStack
+
+```tact
+fun dumpStack();
+```
+
+Prints all the values of [persistent state variables](/book/contracts#variables) to the contract's debug console. Evaluated only if `debug` option is set in the [configuration file](/book/config), otherwise does nothing.
+
+Usage example:
+
+```tact {6}
+contract DumpsterFire {
+    var1: Int = 0;
+    var2: Int = 5;
+
+    receive() {
+        dumpStack(); // would print 0 5
+    }
+}
+```
+
+## throw
+
+```tact
+fun throw(code: Int);
+```
+
+An alias to [`nativeThrow(){:tact}`](#nativethrow).
+
+## nativeThrow
+
+```tact
+fun nativeThrow(code: Int);
+````
+
+Throws an exception with an error code equal to `code`. Execution of the current context stops (the statements after `nativeThrow` won't be executed) and control will be passed to the first [`try...catch{:tact}` block](/book/statements#try-catch) in the call stack. If no `try{:tact}` or `try...catch{:tact}` block exists among caller functions, [TVM](https://docs.ton.org/learn/tvm-instructions/tvm-overview) will terminate the transaction.
+
+Usage examples:
+
+```tact {2,7}
+fun thisWillTerminate() {
+    nativeThrow(42); // throwing with exit code 42
+}
+
+fun butThisDoesNot() {
+    try {
+        nativeThrow(42); // throwing with exit code 42
+    }
+
+    // ... follow-up logic ...
+}
+```
+
+## nativeThrowIf
+
+```tact
+fun nativeThrowIf(code: Int, condition: Bool);
+```
+
+Similar to [`nativeThrow(){:tact}`](#nativethrow), but throws an exception conditionally, when `condition` is equal to `true{:tact}`. Doesn't throw otherwise.
+
+Usage examples:
+
+```tact {2,7}
+fun thisWillTerminate() {
+    nativeThrowIf(42, true); // throwing with exit code 42
+}
+
+fun butThisDoesNot() {
+    try {
+        nativeThrowIf(42, true); // throwing with exit code 42
+    }
+    // ... follow-up logic ...
+}
+```
+
+## nativeThrowUnless
+
+```tact
+fun nativeThrowUnless(code: Int, condition: Bool);
+```
+
+Similar to [`nativeThrow(){:tact}`](#nativethrow), but throws an exception conditionally, when `condition` is equal to `false{:tact}`. Doesn't throw otherwise.
+
+Usage examples:
+
+```tact {2,7}
+fun thisWillTerminate() {
+    nativeThrowUnless(42, false); // throwing with exit code 42
+}
+
+fun butThisDoesNot() {
+    try {
+        nativeThrowUnless(42, false); // throwing with exit code 42
+    }
+    // ... follow-up logic ...
+}
+```
+
+[p]: /book/types#primitive-types
+[bool]: /book/types#booleans
+[int]: /book/integers
