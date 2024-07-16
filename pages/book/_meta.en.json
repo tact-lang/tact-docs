@@ -1,0 +1,60 @@
+{
+  "index": "Overview",
+  "guides": "Guides",
+  "cs": "Cheatsheets",
+  "-- 1": {
+    "type": "separator",
+    "title": "Fundamentals of Tact"
+  },
+  "types": "Type system overview",
+  "integers": "Integers",
+  "maps": "Maps",
+  "structs-and-messages": "Structs and Messages",
+  "optionals": "Optionals",
+  "contracts": "Contracts",
+  "-- 2": {
+    "type": "separator",
+    "title": "Expressiveness"
+  },
+  "operators": "Operators",
+  "expressions": "Expressions",
+  "statements": "Statements",
+  "constants": "Constants",
+  "functions": "Functions",
+  "-- 3": {
+    "type": "separator",
+    "title": "Communication"
+  },
+  "receive": "Receive messages",
+  "bounced": "Bounced messages",
+  "external": "External messages",
+  "lifecycle": "Message lifecycle",
+  "send": "Sending messages",
+  "message-mode": "Message mode",
+  "-- 4": {
+    "type": "separator",
+    "title": "Going places"
+  },
+  "deploy": "Deployment",
+  "debug": "Debugging",
+  "upgrades": "Contract upgrades",
+  "import": "Importing code",
+  "config": "Configuration",
+  "masterchain": "Masterchain",
+  "func": "Compatibility with FunC",
+  "exit-codes": "Exit codes",
+  "programmatic": "Programmatic API",
+  "-- Community": {
+    "type": "separator"
+  },
+  "telegram-link": {
+    "title": "✈️ Telegram",
+    "href": "https://t.me/tactlang",
+    "newWindow": true
+  },
+  "xtwitter-link": {
+    "title": "🐦 X/Twitter",
+    "href": "https://twitter.com/tact_language",
+    "newWindow": true
+  }
+}
