@@ -1,5 +1,12 @@
 import { useRouter } from 'next/router'
-import { DocsThemeConfig } from 'nextra-theme-docs'
+import { DocsThemeConfig, LocaleSwitch } from 'nextra-theme-docs'
+
+const PLACEHOLDER_LOCALES = {
+  "en-US": "Search documentation",
+  fr: "Rechercher documents",
+  ru: "Поиск документации",
+  "zh-CN": "搜索文档",
+};
 
 /**
  * @type {DocsThemeConfig}
@@ -56,6 +63,44 @@ const config = {
   //     }[locale ?? "en"]
   //   }
   // },
+  i18n: [
+    { locale: "en", text: "English" },
+    { locale: "zh-CN", text: "中文" },
+    // { locale: "ru", text: "Русский" },
+    // { locale: "ko", text: "한국어" },
+    // { locale: "pl", text: "Polski" },
+    // { locale: "uk", text: "Українська" },
+    {
+      locale: "HelpTranslate",
+      text: (
+        <a
+          href="https://ton-docs-git-mandarinlocalization-townsquarexyz.vercel.app/contribute/localization-program/overview"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          target='_blank'
+          style={{
+            borderTop: "1px solid #4c4c4c",
+            display: "inline-block",
+            borderRadius: "0",
+            paddingTop: "6px",
+          }}
+        >
+          Help Us Translate
+        </a>
+      ),
+    },
+  ],
+  search: {
+    placeholder: function usePlaceholder() {
+      const { locale, defaultLocale = DEFAULT_LOCALE } = useRouter();
+      const text =
+        (locale && PLACEHOLDER_LOCALES[locale]) ||
+        PLACEHOLDER_LOCALES[defaultLocale] ||
+        "Search documentation";
+      return `${text}…`;
+    },
+  },
   footer: {
     text: <span>
       CC BY 4.0, Tact Software Foundation
@@ -92,7 +137,16 @@ const config = {
         }}
       />;
     </>
-  )
+  ),
+  navbar: {
+    extraContent: (props) => {
+      return (
+        <div>
+          <LocaleSwitch {...props} />
+        </div>
+      );
+    },
+  },
 }
 
 export default config

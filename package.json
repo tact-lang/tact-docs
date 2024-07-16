@@ -11,10 +11,10 @@
   "scripts": {
     "clean": "rm -fr .next out",
     "deps": "yarn install --frozen-lockfile",
-    "dev": "yarn deps && yarn clean && next",
-    "build": "yarn deps && yarn clean && next build",
+    "dev": "node ./scripts/I18nPathJson-generate.js && yarn deps && yarn clean && next",
+    "build": "node ./scripts/I18nPathJson-generate.js && yarn deps && yarn clean && next build",
     "post-build": "echo 'spell checking, link checking, formatting'",
-    "build-pages": "yarn build && node ./scripts/redirects-generate.js",
+    "build-pages": "node ./scripts/I18nPathJson-generate.js && yarn build && next export && node ./scripts/redirects-generate.js",
     "next": "next",
     "spell": "cspell \"**\""
   },

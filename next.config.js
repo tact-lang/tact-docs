@@ -55,9 +55,13 @@ const withNextra = nextra({
  * @type {import('next').NextConfig}
  */
 export default withNextra({
-  output: 'export',
   images: {
     unoptimized: true
+  },
+  i18n: {
+    locales: ["en", "zh-CN", "ru", "ko", "pl", "uk"],
+    defaultLocale: "en",
+    localeDetection: false,
   },
   // i18n: {
   //   // locales: ['default', 'en', 'zh'],
