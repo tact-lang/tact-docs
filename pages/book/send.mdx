@@ -18,18 +18,6 @@ Field    | Type                  | Description
 
 Fields `code` and `data` are what's called an [init package](/book/expressions#initof), which is used in deployments of new contracts.
 
-<Callout>
-
-  Read more about all message sending functions in the Reference:
-  * [`send(){:tact}`](/ref/core-common#send)
-  * [`emit(){:tact}`](/ref/core-common#emit)
-  * [`self.notify(){:tact}`](/ref/core-base#self-notify)
-  * [`self.reply(){:tact}`](/ref/core-base#self-reply)
-  * [`self.forward(){:tact}`](/ref/core-base#self-forward)
-  * [`nativeSendMessage(){:tact}`](/ref/core-advanced#nativesendmessage)
-
-</Callout>
-
 ## Send simple reply
 
 The simplest message is a reply to the incoming message returning all excess value of a message:
@@ -108,6 +96,30 @@ send(SendParameters{
     body: "Hello, World!".asComment(), // not necessary, can be omitted
 });
 ```
+
+## Message processing
+
+Hmm, ..., let's figure it out ASAP.
+
+{/* While the va */}
+
+... reserve and sending messages are both executed in the action phase ...
+
+And the case with send remaining functions...
+
+Also, link all functions from the reference to this explanation
+
+<Callout>
+
+  Read more about all message sending functions in the Reference:
+  * [`send(){:tact}`](/ref/core-common#send)
+  * [`emit(){:tact}`](/ref/core-common#emit)
+  * [`self.notify(){:tact}`](/ref/core-base#self-notify)
+  * [`self.reply(){:tact}`](/ref/core-base#self-reply)
+  * [`self.forward(){:tact}`](/ref/core-base#self-forward)
+  * [`nativeSendMessage(){:tact}`](/ref/core-advanced#nativesendmessage)
+
+</Callout>
 
 [p]: /book/types#primitive-types
 [int]: /book/integers
