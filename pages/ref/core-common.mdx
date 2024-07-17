@@ -198,7 +198,7 @@ let hereBeDragons: Address = contractAddressExt(0, initPkg.code, initPkg.data);
 fun send(params: SendParameters);
 ```
 
-Sends a message using a [`SendParameters{:tact}`](/book/send) [Struct](/book/structs-and-messages#structs).
+[Queues the message](/book/send#outbound-message-processing) to be sent using a [`SendParameters{:tact}`](/book/send) [Struct](/book/structs-and-messages#structs).
 
 Usage example:
 
@@ -225,7 +225,7 @@ send(SendParameters{
 fun emit(body: Cell);
 ```
 
-Sends a message `body` to the outer world with the purpose of logging and analyzing it later off-chain. The message does not have a recipient and is gas-efficient compared to using any other message sending functions of Tact.
+[Queues the message](/book/send#outbound-message-processing) `body` to be sent to the outer world with the purpose of logging and analyzing it later off-chain. The message does not have a recipient and is gas-efficient compared to using any other message sending functions of Tact.
 
 Usage example:
 
