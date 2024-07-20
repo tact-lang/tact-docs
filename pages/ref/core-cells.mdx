@@ -2,17 +2,17 @@
 
 import { Callout } from 'nextra-theme-docs'
 
-[`Cell{:tact}`][cell] is a low-level primitive that represents data in TON Blockchain. Cells consist of 1023 bits of data with up to 4 references to another cells. They are read-only and immutable, and cannot have cyclic references.
+[`Cell{:tact}`][cell] is a low-level [primitive][p] that represents data in TON Blockchain. Cells consist of 1023 bits of data with up to 4 references to another cells. They are read-only and immutable, and cannot have cyclic references.
 
-[`Builder{:tact}`][builder] is a primitive to construct cells, and [`Slice{:tact}`][slice] is a primitive to parse them.
+[`Builder{:tact}`][builder] is an immutable [primitive][p] to construct cells, and [`Slice{:tact}`][slice] is a mutable [primitive][p] to parse them.
 
 <Callout>
 
   Be very careful when constructing and parsing cells manually, and always make sure to document their desired layout: a strict order of values and types for serialization and deserialization.
 
-  To do so, advanced users are recommended to use [Type Language - Binary (`TL-B`) schemas](https://docs.ton.org/develop/data-formats/tl-b-language).
+  To do so, advanced users are recommended to use [Type Language - Binary (TL-B) schemas][tlb].
 
-  And every user is recommended to use [Structs][struct] and their [extension functions](/book/functions#extension-function) like [`Struct.toCell(){:tact}`](structtocell) and [`Struct.fromCell(){:tact}`](structfromcell) instead of manually constructing and parsing cells.
+  And every user is recommended to use [Structs][struct] and their [methods](/book/functions#extension-function) like [`Struct.toCell(){:tact}`](structtocell) and [`Struct.fromCell(){:tact}`](structfromcell) instead of manually constructing and parsing cells, because [Structs][struct] and [Messages][message] are closest to being the [living TL-B schemas of your contracts](/book/cells#cnp-structs).
 
 </Callout>
 
@@ -28,6 +28,91 @@ Usage example:
 
 ```tact
 let fizz: Builder = beginCell();
+```
+
+## emptyCell
+
+```tact
+fun emptyCell(): Cell;
+```
+
+Creates and returns an empty [`Cell{:tact}`][cell] (without data and references). Alias to `beginCell().endCell(){:tact}`.
+
+Usage example:
+
+```tact
+let fizz: Cell = emptyCell();
+let buzz: Cell = beginCell().endCell();
+
+fizz == buzz; // true
+```
+
+## emptySlice
+
+```tact
+fun emptySlice(): Slice;
+```
+
+Creates and returns an empty [`Slice{:tact}`][slice] (without data and references). Alias to `emptyCell().asSlice(){:tact}`.
+
+Usage example:
+
+```tact
+let fizz: Slice = emptySlice();
+let buzz: Slice = emptyCell().asSlice();
+
+fizz == buzz; // true
+```
+
+## Cell.beginParse
+
+```tact
+extends fun beginParse(self: Cell): Slice;
+```
+
+Extension function for the [`Cell{:tact}`][cell].
+
+Opens the [`Cell{:tact}`][cell] for parsing and returns it as a [`Slice{:tact}`][slice].
+
+Usage example:
+
+```tact
+let c: Cell = emptyCell();
+let fizz: Slice = c.beginParse();
+```
+
+## Cell.hash
+
+```tact
+extends fun hash(self: Cell): Int;
+```
+
+Extension function for the [`Cell{:tact}`][cell].
+
+Calculates and returns a hash of the [`Cell{:tact}`][cell] as an [`Int{:tact}`][int].
+
+Usage example:
+
+```tact
+let c: Cell = emptyCell();
+let fizz: Int = c.hash();
+```
+
+## Cell.asSlice
+
+```tact
+extends fun asSlice(self: Cell): Slice;
+```
+
+Extension function for the [`Cell{:tact}`][cell].
+
+Converts the Cell to a [`Slice{:tact}`][slice] and returns it. Alias to `self.beginParse(){:tact}`.
+
+Usage example:
+
+```tact
+let c: Cell = emptyCell();
+let fizz: Slice = c.asSlice();
 ```
 
 ## Builder.endCell
@@ -251,57 +336,6 @@ Usage example:
 ```tact
 let b: Builder = beginCell();
 let fizz: Cell = b.asCell();
-```
-
-## Cell.beginParse
-
-```tact
-extends fun beginParse(self: Cell): Slice;
-```
-
-Extension function for the [`Cell{:tact}`][cell].
-
-Opens the [`Cell{:tact}`][cell] for parsing and returns it as a [`Slice{:tact}`][slice].
-
-Usage example:
-
-```tact
-let c: Cell = emptyCell();
-let fizz: Slice = c.beginParse();
-```
-
-## Cell.hash
-
-```tact
-extends fun hash(self: Cell): Int;
-```
-
-Extension function for the [`Cell{:tact}`][cell].
-
-Calculates and returns a hash of the [`Cell{:tact}`][cell] as an [`Int{:tact}`][int].
-
-Usage example:
-
-```tact
-let c: Cell = emptyCell();
-let fizz: Int = c.hash();
-```
-
-## Cell.asSlice
-
-```tact
-extends fun asSlice(self: Cell): Slice;
-```
-
-Extension function for the [`Cell{:tact}`][cell].
-
-Converts the Cell to a [`Slice{:tact}`][slice] and returns it. Alias to `self.beginParse(){:tact}`.
-
-Usage example:
-
-```tact
-let c: Cell = emptyCell();
-let fizz: Slice = c.asSlice();
 ```
 
 ## Slice.loadUint
@@ -916,40 +950,6 @@ fun cautiousParse(payload: Slice): TripleAxe? {
 }
 ```
 
-## emptyCell
-
-```tact
-fun emptyCell(): Cell;
-```
-
-Creates and returns an empty [`Cell{:tact}`][cell] (without data and references). Alias to `beginCell().endCell(){:tact}`.
-
-Usage example:
-
-```tact
-let fizz: Cell = emptyCell();
-let buzz: Cell = beginCell().endCell();
-
-fizz == buzz; // true
-```
-
-## emptySlice
-
-```tact
-fun emptySlice(): Slice;
-```
-
-Creates and returns an empty [`Slice{:tact}`][slice] (without data and references). Alias to `emptyCell().asSlice(){:tact}`.
-
-Usage example:
-
-```tact
-let fizz: Slice = emptySlice();
-let buzz: Slice = emptyCell().asSlice();
-
-fizz == buzz; // true
-```
-
 [p]: /book/types#primitive-types
 [bool]: /book/types#booleans
 [int]: /book/integers
@@ -959,3 +959,5 @@ fizz == buzz; // true
 [map]: /book/maps
 [struct]: /book/structs-and-messages#structs
 [message]: /book/structs-and-messages#messages
+
+[tlb]: https://docs.ton.org/develop/data-formats/tl-b-language

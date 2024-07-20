@@ -2,15 +2,28 @@
 
 import { Callout } from 'nextra/components'
 
-{/*
-TODO:
-* Refine drafts (quickly!) and remove all TODOs from this page
-* (Optional?) How to parse emitted messages (in TS and/or other languages with bindings)
-*/}
+[Cells](#cells), [Builders](#builders) and [Slices](#slices) are low-level [primitives][p] of TON Blockchain. The virtual machine of TON Blockchain, [TVM][tvm], uses Cells to represent all data structures in memory and persistent storage.
 
-[Cells](#cells), [Builders](#builders) and [Slices](#slices) are low-level [primitives](/book/types#primitive-types) of TON Blockchain. The virtual machine of TON Blockchain, [TVM][tvm], uses cells to represent all data structures in memory and persistent storage.
+TODO:
+* (Optional?) How to parse emitted messages (in TS and/or other languages with bindings)
 
 ## Cells
+
+`Cell{:tact}` is a [primitive][p] and a data structure, which consists of up to 1023 continuously laid out bits and up to 4 references to other Cells. Circular references are forbidden and cannot be created by the means of [TVM][tvm], which means Cells can be viewed as [quadtrees](https://en.wikipedia.org/wiki/Quadtree) or [directed acyclic graphs (DAGs)](https://en.wikipedia.org/wiki/Directed_acyclic_graph) of themselves.
+
+### Types [#cells-types]
+
+### Levels [#cells-levels]
+
+### Standard representation [#cells-representation]
+
+<Callout>
+
+  To be resolved by [#280](https://github.com/tact-lang/tact-docs/issues/280).
+
+</Callout>
+
+### Immutability [#cells-immutability]
 
 {/*
 TODO: (move from drafts)
@@ -37,16 +50,24 @@ TODO: (move from drafts)
 
 ## Serialization
 
-{/*
-  TODO: (move drafts over)
-  Similar to [`Int{:tact}`](/book/integers), some serialization options of `Cell{:tact}`, `Builder{:tact}` and `Slice{:tact}` types ..........
-*/}
+Similar to serialization options of [`Int{:tact}`](/book/integers) type, `Cell{:tact}`, `Builder{:tact}` and `Slice{:tact}` also have various representations for encoding their values in the following cases:
+
+* as fields of [contracts](/book/contracts) and [traits](/book/types#traits),
+* as fields of [Structs](/book/structs-and-messages#structs) and [Messages](/book/structs-and-messages#messages),
+* and as key/value types of [maps](/book/maps).
+
+```tact
+contract SerializationExample {
+    someCell: Cell as remaining;
+    someSlice: Slice as bytes32;
+}
+```
 
 ### `remaining` [#serialization-bytes64]
 
 <Callout>
 
-  To be written as per [#26](https://github.com/tact-lang/tact-docs/issues/26).
+  To be resolved by [#26](https://github.com/tact-lang/tact-docs/issues/26).
 
 </Callout>
 
@@ -54,7 +75,7 @@ TODO: (move from drafts)
 
 <Callout>
 
-  To be written as per [#94](https://github.com/tact-lang/tact-docs/issues/94).
+  To be resolved by [#94](https://github.com/tact-lang/tact-docs/issues/94).
 
 </Callout>
 
@@ -62,9 +83,15 @@ TODO: (move from drafts)
 
 <Callout>
 
-  To be written as per [#94](https://github.com/tact-lang/tact-docs/issues/94).
+  To be resolved by [#94](https://github.com/tact-lang/tact-docs/issues/94).
 
 </Callout>
+
+### Bag of Cells [#cells-boc]
+
+Bag of Cells, or BoC_ for short, is a format for serializing and de-serializing Cells into byte arrays as described in [boc.tlb](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25) [TL-B schema][tlb].
+
+Read more about BoC in TON Docs: [Bag of Cells](https://docs.ton.org/develop/data-formats/cell-boc#bag-of-cells).
 
 <Callout>
 
@@ -74,30 +101,219 @@ TODO: (move from drafts)
 
 ## Operations
 
-### Manual construction and parsing [#operations-manual]
 
-{<table>
-  <thead>
-    <tr>
-      <th>Construction</th>
-      <th>Construction</th>
-    </tr>
-  </thead>
-  <tbody>
-  </tbody>
-</table>}
+### Construct and parse [#operations-cnp]
 
-{/*
-TODO: (move over from drafts)
-* showcase the construction and parsing side by side, using the Builder and a Slice
-Pick one (2nd?):
-marshalling/demarshalling
-composition(or construction)/parsing
-store/load
-*/}
+In Tact, there are at least two ways to construct and parse Cells:
 
-### Using Structs for automatic construction and parsing [#operations-structs]
+* [Manually](#cnp-manually), which involves active use of [`Builder{:tact}`](#builders), [`Slice{:tact}`](#slices) and [relevant methods](/ref/core-cells).
+* [Using Structs](#cnp-structs), which is a recommended and much more convenient approach.
 
-{/* TODO: add a simplified parsing version via .toCell() and .fromCell() references */}
+#### Manually [#cnp-manually]
+
+Construction via `Builder{:tact}`      | Parsing via `Slice{:tact}`
+:------------------------------------- | :-------------------------
+[`beginCell(){:tact}`][b-1]            | [`Cell.beginParse(){:tact}`][s-1]
+[`.storeUint(42, 7){:tact}`][b-2]      | [`Slice.loadUint(7){:tact}`][s-2]
+[`.storeInt(42, 7){:tact}`][b-3]       | [`Slice.loadInt(7){:tact}`][s-3]
+[`.storeBool(true){:tact}`][b-4]       | [`Slice.loadBool(true){:tact}`][s-4]
+[`.storeSlice(slice){:tact}`][b-5]     | [`Slice.loadSlice(slice){:tact}`][s-5]
+[`.storeCoins(42){:tact}`][b-6]        | [`Slice.loadCoins(42){:tact}`][s-6]
+[`.storeAddress(address){:tact}`][b-7] | [`Slice.loadAddress(){:tact}`][s-7]
+[`.storeRef(cell){:tact}`][b-8]        | [`Slice.loadRef(){:tact}`][s-8]
+[`.endCell(){:tact}`][b-9]             | [`Slice.endParse(){:tact}`][s-9]
+
+[b-1]: /ref/core-cells#begincell
+[b-2]: /ref/core-cells#builderstoreuint
+[b-3]: /ref/core-cells#builderstoreint
+[b-4]: /ref/core-cells#builderstorebool
+[b-5]: /ref/core-cells#builderstoreslice
+[b-6]: /ref/core-cells#builderstorecoins
+[b-7]: /ref/core-cells#builderstoreaddress
+[b-8]: /ref/core-cells#builderstoreref
+[b-9]: /ref/core-cells#builderendcell
+[s-1]: /ref/core-cells#cellbeginparse
+[s-2]: /ref/core-cells#sliceloaduint
+[s-3]: /ref/core-cells#sliceloadint
+[s-4]: /ref/core-cells#sliceloadbool
+[s-5]: /ref/core-cells#sliceloadslice
+[s-6]: /ref/core-cells#sliceloadcoins
+[s-7]: /ref/core-cells#sliceloadaddress
+[s-8]: /ref/core-cells#sliceloadref
+[s-9]: /ref/core-cells#sliceendparse
+
+#### Using Structs (recommended) [#cnp-structs]
+
+[Structs][struct] and [Messages][message] are almost like living [TL-B schemas][tlb]. Which means that they're, essentially, [TL-B schemas][tlb] expressed in maintainable, verifiable and user-friendly Tact code.
+
+It is strongly recommended to use them and their [methods](/book/functions#extension-function) like [`Struct.toCell(){:tact}`][st-tc] and [`Struct.fromCell(){:tact}`][st-fc] instead of manually constructing and parsing Cells, as this allows for much more declarative and self-explanatory contracts.
+
+The examples of manual parsing [above](#cnp-manually) could be re-written using [Structs][struct], with descriptive names of fields if one so desires:
+
+```tact /fromCell/ /toCell/
+// First Struct
+struct Showcase {
+    id: Int as uint8;
+    someImportantNumber: Int as int8;
+    isntThatCool: Bool;
+    payload: Slice;
+    nanoToncoins: Int as coins;
+    wackyTacky: Address;
+    jojoRef: Adventure; // another Struct
+}
+
+// Here it is
+struct Adventure {
+    bizarre: Bool = true;
+    time: Bool = false;
+}
+
+fun example() {
+    let s = Showcase.fromCell(
+        Showcase{
+            id: 7,
+            someImportantNumber: 42,
+            isntThatCool: true,
+            payload: emptySlice(),
+            nanoToncoins: 1330 + 7,
+            wackyTacky: myAddress(),
+            jojoRef: Adventure{ bizarre: true, time: false },
+        }.toCell());
+    s.isntThatCool; // true
+}
+```
+
+Note, that Tact's auto-layout algorithm is greedy. For example, `struct Adventure{:tact}` occupies very little space, and it won't be stored as a reference [`Cell{:tact}`](#cells), but will be provided directly as a [`Slice{:tact}`](#slices).
+
+By using [Structs][struct] and [Messages][message] over manual [`Cell{:tact}`](#cells) composition and parsing, those details would be simplified away and won't cause any hassle when the optimized layout changes.
+
+<Callout>
+
+  **Useful links:**\
+  [Convert serialization](/book/func#convert-serialization)\
+  [`Struct.toCell(){:tact}` in Core library][st-tc]\
+  [`Struct.fromCell(){:tact}` in Core library][st-fc]\
+  [`Struct.fromSlice(){:tact}` in Core library][st-fs]\
+  [`Message.toCell(){:tact}` in Core library][msg-tc]\
+  [`Message.fromCell(){:tact}` in Core library][msg-fc]\
+  [`Message.fromSlice(){:tact}` in Core library][msg-fs]
+
+</Callout>
+
+[st-tc]: /ref/core-cells#structtocell
+[st-fc]: /ref/core-cells#structfromcell
+[st-fs]: /ref/core-cells#structfromslice
+[msg-tc]: /ref/core-cells#messagetocell
+[msg-fc]: /ref/core-cells#messagefromcell
+[msg-fs]: /ref/core-cells#messagefromslice
+
+### Check if empty [#operations-empty]
+
+Neither [`Cell{:tact}`](#cells) nor [`Builder{:tact}`](#builders) can be checked for emptiness directly — one needs to convert them to [`Slice{:tact}`](#slices) first.
+
+To check if there are any bits, use [`Slice.dataEmpty(){:tact}`][s-de]. To check if there are any references, use [`Slice.refsEmpty(){:tact}`][s-re]. And to check both at the same time, use [`Slice.empty(){:tact}`][s-e].
+
+To also throw an [exit code 9](/book/exit-codes#9) whenever the [`Slice{:tact}`](#slices) isn't completely empty, use [`Slice.endParse(){:tact}`][s-ep].
+
+```tact
+// Preparations
+let someCell = beginCell().storeUint(42, 7).endCell();
+let someBuilder = beginCell().storeRef(someCell);
+
+// Obtaining our Slices
+let slice1 = someCell.asSlice();
+let slice2 = someBuilder.asSlice();
+
+// .dataEmpty()
+slice1.dataEmpty(); // false
+slice2.dataEmpty(); // true
+
+// .refsEmpty()
+slice1.refsEmpty(); // true
+slice2.refsEmpty(); // false
+
+// .empty()
+slice1.empty(); // false
+slice2.empty(); // false
+
+// .endParse()
+try {
+    slice1.endParse();
+    slice2.endParse();
+} catch (e) {
+    e; // 9
+}
+```
+
+<Callout>
+
+  **Useful links:**\
+  [`Cell.asSlice(){:tact}` in Core library](/ref/core-cells#cellasslice)\
+  [`Builder.asSlice(){:tact}` in Core library](/ref/core-cells#builderasslice)\
+  [`Slice.dataEmpty(){:tact}` in Core library][s-de]\
+  [`Slice.refsEmpty(){:tact}` in Core library][s-re]\
+  [`Slice.empty(){:tact}` in Core library][s-e]\
+  [`Slice.endParse(){:tact}` in Core library][s-ep]
+
+</Callout>
+
+[s-de]: /ref/core-cells#slicedataempty
+[s-re]: /ref/core-cells#slicerefsempty
+[s-e]: /ref/core-cells#sliceempty
+[s-ep]: /ref/core-cells#sliceendparse
+
+### Check if equal [#operations-equal]
+
+Values of type [`Builder{:tact}`](#builders) cannot be compared directly using binary equality [`=={:tact}`][bin-eq] or inequality [`!={:tact}`][bin-eq] operators. However, values of type [`Cell{:tact}`](#cells) and [`Slice{:tact}`](#slices) can.
+
+Direct comparisons:
+
+```tact
+let a = beginCell().storeUint(123, 8).endCell();
+let aSlice = a.asSlice();
+
+let b = beginCell().storeUint(123, 8).endCell();
+let bSlice = b.asSlice();
+
+let areCellsEqual = a == b; // true
+let areCellsNotEqual = a != b; // false
+
+let areSlicesEqual = aSlice == bSlice; // true
+let areSlicesNotEqual = aSlice != bSlice; // false
+```
+
+Note, that direct comparison via `=={:tact}` or `!={:tact}` operators implicitly uses [SHA-256](https://en.wikipedia.org/wiki/SHA-2#Hash_standard) hashes of [standard `Cell{:tact}` representation](#cells-representation) under the hood.
+
+Explicit comparisons using `.hash(){:tact}` are also available:
+
+```tact
+let a = beginCell().storeUint(123, 8).endCell();
+let aSlice = a.asSlice();
+
+let b = beginCell().storeUint(123, 8).endCell();
+let bSlice = b.asSlice();
+
+let areCellsEqual = a.hash() == b.hash(); // true
+let areCellsNotEqual = a.hash() != b.hash(); // false
+
+let areSlicesEqual = aSlice.hash() == bSlice.hash(); // true
+let areSlicesNotEqual = aSlice.hash() != bSlice.hash(); // false
+```
+
+<Callout>
+
+  **Useful links:**\
+  [`Cell.hash(){:tact}` in Core library](/ref/core-cells#cellhash)\
+  [`Builder.hash(){:tact}` in Core library](/ref/core-cells#builderhash)\
+  [`=={:tact}` and `!={:tact}`][bin-eq]
+
+</Callout>
+
+[bin-eq]: /book/operators#binary-equality
 
 [tvm]: https://docs.ton.org/learn/tvm-instructions/tvm-overview
+[tlb]: https://docs.ton.org/develop/data-formats/tl-b-language
+
+[p]: /book/types#primitive-types
+[struct]: /book/structs-and-messages#structs
+[message]: /book/structs-and-messages#messages
