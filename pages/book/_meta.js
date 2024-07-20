@@ -12,6 +12,7 @@ export default {
   'structs-and-messages': 'Structs and Messages',
   optionals: 'Optionals',
   contracts: 'Contracts',
+  'exit-codes': 'Exit codes',
   '-- 2': {
     type: 'separator',
     title: 'Expressiveness',
@@ -45,7 +46,6 @@ export default {
   config: 'Configuration',
   masterchain: 'Masterchain',
   func: 'Compatibility with FunC',
-  'exit-codes': 'Exit codes',
   programmatic: 'Programmatic API',
   '-- Community': {
     type: 'separator',
