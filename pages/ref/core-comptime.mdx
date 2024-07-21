@@ -28,7 +28,7 @@ contract Example {
 fun cell(bocBase64: String): Cell;
 ```
 
-A compile-time function that embeds a base64-encoded [BoC](https://docs.ton.org/develop/data-formats/cell-boc#bag-of-cells) `bocBase64` as a [`Cell{:tact}`][p] into the contract.
+A compile-time function that embeds a base64-encoded [BoC](https://docs.ton.org/develop/data-formats/cell-boc#bag-of-cells) `bocBase64` as a [`Cell{:tact}`][cell] into the contract.
 
 Usage example:
 
@@ -71,3 +71,4 @@ contract Example {
 [p]: /book/types#primitive-types
 [bool]: /book/types#booleans
 [int]: /book/integers
+[cell]: /book/cells#cells

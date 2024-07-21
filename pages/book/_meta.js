@@ -8,6 +8,7 @@ export default {
   },
   types: 'Type system overview',
   integers: 'Integers',
+  cells: 'Cells, Builders and Slices',
   maps: 'Maps',
   'structs-and-messages': 'Structs and Messages',
   optionals: 'Optionals',

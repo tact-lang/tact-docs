@@ -34,7 +34,7 @@ Here are a few questions to ask yourself to challenge your assumptions:
 
 * Did you make a change to your code and assume it's unrelated to the issue you're facing? A common pitfall here is to modify the code and try to run the tests right away, without compiling the changes first.
 
-* Did you expect variable or a [`Cell{:tact}`](/book/types#primitive-types) to contain a certain value (or a certain type of value) that is different from what was really there? Pay attention to your types and data layouts, especially their representation in [TL-B schemas](https://docs.ton.org/develop/data-formats/tl-b-language).
+* Did you expect variable or a [`Cell{:tact}`](/book/cells#cells) to contain a certain value (or a certain type of value) that is different from what was really there? Pay attention to your types and data layouts, especially their representation in [TL-B schemas](https://docs.ton.org/develop/data-formats/tl-b-language).
 
 * Do you know the intent of the code? It's often more difficult to debug someone else's code. If it's not your code, it's possible you might need to spend time learning exactly what the code does before you can debug it effectively.
 
@@ -273,7 +273,7 @@ To know the full list of such properties, look at auto-completion options provid
 
 #### toEqualCell
 
-The method `expect(…).toEqualCell(){:typescript}` checks equality of two [cells](/book/types#primitive-types):
+The method `expect(…).toEqualCell(){:typescript}` checks equality of two [cells](/book/cells#cells):
 
 ```typescript {3}
 expect(oneCell).toEqualCell(anotherCell);
@@ -281,7 +281,7 @@ expect(oneCell).toEqualCell(anotherCell);
 
 #### toEqualSlice
 
-The method `expect(…).toEqualSlice(){:typescript}` checks equality of two [slices](/book/types#primitive-types):
+The method `expect(…).toEqualSlice(){:typescript}` checks equality of two [slices](/book/cells#slices):
 
 ```typescript {3}
 expect(oneSlice).toEqualSlice(anotherSlice);
