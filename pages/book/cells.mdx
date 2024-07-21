@@ -2,11 +2,11 @@
 
 import { Callout } from 'nextra/components'
 
-[Cells](#cells), [Builders](#builders) and [Slices](#slices) are low-level [primitives][p] of TON Blockchain. The virtual machine of TON Blockchain, [TVM][tvm], uses cells to represent all data structures in memory and persistent storage.
+[Cells](#cells), [Builders](#builders) and [Slices](#slices) are low-level [primitives][p] of TON Blockchain. The virtual machine of TON Blockchain, [TVM][tvm], uses cells to represent all data structures in persistent storage, and most in memory.
 
 ## Cells
 
-`Cell{:tact}` is a [primitive][p] and a data structure, which [ordinarly](#cells-kinds) consists of up to $1023$ continuously laid out bits and up to $4$ references to other cells. Circular references are forbidden and cannot be created by the means of [TVM][tvm], which means cells can be viewed as [quadtrees][quadtree] or [directed acyclic graphs (DAGs)](https://en.wikipedia.org/wiki/Directed_acyclic_graph) of themselves. [TVM][tvm] code itself is represented by a tree of cells.
+`Cell{:tact}` is a [primitive][p] and a data structure, which [ordinarly](#cells-kinds) consists of up to $1023$ continuously laid out bits and up to $4$ references to other cells. Circular references are forbidden and cannot be created by the means of [TVM][tvm], which means cells can be viewed as [quadtrees][quadtree] or [directed acyclic graphs (DAGs)](https://en.wikipedia.org/wiki/Directed_acyclic_graph) of themselves. Contract code itself is represented by a tree of cells.
 
 Cells and [cell primitives](#cells-immutability) are bit-oriented, not byte-oriented: [TVM][tvm] regards data kept in cells as sequences (strings or streams) of up to $1023$ bits, not bytes. If necessary, contracts are free to use, say, $21$-bit integer fields serialized into [TVM][tvm] cells, thus using fewer persistent storage bytes to represent the same data.
 

@@ -89,7 +89,7 @@ extends fun hash(self: Cell): Int;
 
 Extension function for the [`Cell{:tact}`][cell].
 
-Calculates and returns a hash of the [`Cell{:tact}`][cell] as an [`Int{:tact}`][int].
+Calculates and returns an [`Int{:tact}`][int] value of the [SHA-256][sha-2] hash of the [standard `Cell{:tact}` representation][std-repr] of the given [`Cell{:tact}`][cell].
 
 Usage example:
 
@@ -214,7 +214,7 @@ extends fun storeCoins(self: Builder, value: Int): Builder;
 
 Extension function for the [`Builder{:tact}`][builder].
 
-Stores (serializes) an unsigned [`Int{:tact}`][int] `value` in the range $0 .. 2^{120} − 1$ into the copy of the [`Builder{:tact}`][builder]. The serialization of `value` consists of a $4$-bit unsigned big-endian integer $l$, which is the smallest integer $l ≥ 0$, such that `value` $< 2^{8 * l}$, followed by an $8 * l$-bit unsigned big-endian representation of `value`. If `value` does not belong to the supported range, a range check exception is thrown. Returns that copy of the [`Builder{:tact}`][builder].
+Stores (serializes) an unsigned [`Int{:tact}`][int] `value` in the range $0 .. 2^{120} − 1$ into the copy of the [`Builder{:tact}`][builder]. The serialization of `value` consists of a $4$-bit unsigned big-endian integer $l$, which is the smallest integer $l ≥ 0$, such that `value` $< 2^{8 * l}$, followed by an $8 * l$-bit unsigned big-endian representation of `value`. Returns that copy of the [`Builder{:tact}`][builder].
 
 Attempts to store an out-of-bounds `value` throw an exception with [exit code 5](/book/exit-codes#5): `Integer out of expected range`.
 
@@ -710,7 +710,7 @@ extends fun hash(self: Slice): Int;
 
 Extension function for the [`Slice{:tact}`][slice].
 
-Calculates and returns a hash of the [`Slice{:tact}`][slice] as an [`Int{:tact}`][int].
+Calculates and returns an [`Int{:tact}`][int] value of the [SHA-256][sha-2] hash of the [standard `Cell{:tact}` representation][std-repr] of the given [`Slice{:tact}`][slice].
 
 Usage example:
 
@@ -960,4 +960,7 @@ fun cautiousParse(payload: Slice): TripleAxe? {
 [struct]: /book/structs-and-messages#structs
 [message]: /book/structs-and-messages#messages
 
+[std-repr]: /book/cells#cells-representation
+
 [tlb]: https://docs.ton.org/develop/data-formats/tl-b-language
+[sha-2]: https://en.wikipedia.org/wiki/SHA-2#Hash_standard
