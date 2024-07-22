@@ -23,6 +23,7 @@ export default {
   statements: 'Statements',
   constants: 'Constants',
   functions: 'Functions',
+  eval: 'Evaluation strategies',
   '-- 3': {
     type: 'separator',
     title: 'Communication',

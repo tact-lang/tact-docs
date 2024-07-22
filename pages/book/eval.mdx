@@ -1,0 +1,89 @@
+# Evaluation strategies
+
+import { Callout } from 'nextra/components'
+
+An [evaluation strategy](https://en.wikipedia.org/wiki/Evaluation_strategy) is a set of rules for evaluating expressions. In Tact, it matters whether a given expression is known at [run-time](#runtime) or [compile-time](#comptime), as different approaches are applied.
+
+## Run time [#runtime]
+
+As Tact compiles to FunC, which in turn is compiled first to Fift, then to [TVM][tvm] assembly in [BoC](https://docs.ton.org/develop/data-formats/cell-boc#bag-of-cells) format, the following descriptions do not apply to the general [TVM][tvm] assembly in the wild, but specifically to the one produced by this series of transformations starting with Tact code. On this page, "Tact" would refer not only to the Tact code and its semantics, but also to the semantics of the resulting [TVM][tvm] assembly it produces.
+
+### Evaluation order [#runtime-order]
+
+Logical OR [`||{:tact}`][l-or] and logical AND [`&&{:tact}`][l-and] operators are [short-circuited](https://en.wikipedia.org/wiki/Short-circuit_evaluation), meaning that their second operand is evaluated only if the first one doesn't suffice to determine the value of the expression:
+
+* When the first operand of the logical OR [`||{:tact}`][l-or] operator evaluates to `true{:tact}`, the overall value must be `true{:tact}`
+* When the first operand of the logical AND [`&&{:tact}`][l-and] operator evaluates to `false{:tact}`, the overall value must be `false{:tact}`
+
+Those are the only two cases of [non-strict evaluation order](https://en.wikipedia.org/wiki/Evaluation_strategy#Non-strict_evaluation) in Tact. Everything else is evaluated in applicative order ([strict evaluation](https://en.wikipedia.org/wiki/Evaluation_strategy#Strict_evaluation)).
+
+Furthermore, a function call is performed as soon as it is encountered ([eager evaluation](https://en.wikipedia.org/wiki/Evaluation_strategy#Strict_evaluation)), and function arguments are evaluated left-to-right.
+
+### Evaluation and TVM phases [#runtime-phases]
+
+Each transaction on TON Blockchain consists of [multiple phases](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases). All computations described in [evaluation order chapter](#runtime-order) happen in the [compute phase](https://docs.ton.org/learn/tvm-instructions/tvm-overview#compute-phase).
+
+However, some actions such as [message sends](/book/send), smart contract code upgrades and updates of the [libraries](https://docs.ton.org/develop/data-formats/library-cells) are only queued for further execution in the [action phase](https://docs.ton.org/learn/tvm-instructions/tvm-overview#transactions-and-phases). That is, all variables and state are computed in the compute phase according to the [evaluation order](#runtime-order) described above. The action phase cannot reference, perform delayed computations, or mutate the computed state — it only executes the queued actions like [message sends](/book/send): eagerly and in order.
+
+### Binding strategy [#runtime-binding]
+
+Tact uses the [call by value (CBV)](https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_value) parameter-passing and binding strategy. That is, the evaluated value of any variable passed in a function call (except for [receivers](/book/contracts#receiver-functions) and [getters](/book/contracts#getter-functions)) or assigned in the [`let{:tact}`](/book/statements#let) or [assignment](/book/statements#assignment) statement is copied. This prevents mutations of the original values in different scopes, but increases the gas usage.
+
+#### Primitive types [#runtime-binding-primitives]
+
+TODO: bring examples over from playground
+
+{/* ### Assignments [#runtime-eq] */}
+{/* ### Function calls [#runtime-assign] */}
+
+### Composite types [#runtime-composites]
+
+TODO: bring examples over from playground
+
+{/* optionals, maps, bounced wrapper, structs and messages */}
+{/* ### Assignments [#runtime-eq] */}
+{/* ### Function calls [#runtime-assign] */}
+
+In short: THERE ARE NO REFERENCES! EVER!
+
+{/*
+  ### TODO: more info about calling conventions of FunC / on TVM?
+  - https://docs.ton.org/develop/func/statements#function-application
+  - https://en.wikipedia.org/wiki/Calling_convention
+
+  Tuples are being passed around, and there's some support of carrying, but not for every case.
+  But that's in FunC. TVM is a bit more low-level, as it works with a stack, continuations and 7 control registers.
+*/}
+
+## Compilation time [#comptime]
+
+<Callout>
+
+  To be written as per [#152](https://github.com/tact-lang/tact-docs/issues/152).
+
+  {/*
+    TODO:
+    - Tact evaluates constant expressions at the time of building the project, which is commonly referred to as compilation time or "compile-time" for short.
+    - Describe what "constant expression" means?
+    - https://en.wikipedia.org/wiki/Compile-time_function_execution
+  */}
+
+  {/*
+    ### Partial evaluation [#partial]
+    - https://en.wikipedia.org/wiki/Partial_evaluation
+    - https://github.com/tact-lang/tact/pull/528
+  */}
+
+</Callout>
+
+[int]: /book/integers
+[bool]: /book/types#booleans
+[map]: /book/maps
+[p]: /book/types#primitive-types
+[s]: /book/structs-and-messages#structs
+[m]: /book/structs-and-messages#messages
+
+[tvm]: https://docs.ton.org/develop/func/statements#function-application
+
+[l-and]: /book/operators#binary-logical-and
+[l-or]: /book/operators#binary-logical-or
