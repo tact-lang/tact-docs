@@ -12,7 +12,7 @@ Cells and [cell primitives](#cells-immutability) are bit-oriented, not byte-orie
 
 ### Kinds [#cells-kinds]
 
-While the [TVM][tvm] type [`Cell{:tact}`](#cells) refers to all cells, there are different cell kinds with various memory layouts. The one described [earlier](#cells) is commonly referred to as an _ordinary_ (or cell — that's the most simple and most commonly used flavor of cells, which can only contain data. The grand majority of descriptions, guides and [references](/ref/core-cells) to cells and their usage assumes ordinary ones.
+While the [TVM][tvm] type [`Cell{:tact}`](#cells) refers to all cells, there are different cell kinds with various memory layouts. The one described [earlier](#cells) is commonly referred to as an _ordinary_ (or simple) cell — that's the most simple and most commonly used flavor of cells, which can only contain data. The grand majority of descriptions, guides and [references](/ref/core-cells) to cells and their usage assumes ordinary ones.
 
 Other kinds of cells are collectively called _exotic_ (or special) cells. They sometimes appear in actual representations of blocks and other data structures on TON Blockchain. Their memory layouts and purposes significantly differ from ordinary cells.
 
@@ -139,7 +139,7 @@ contract SerializationExample {
 
 ### Bag of Cells [#cells-boc]
 
-Bag of Cells, or _BoC_ for short, is a format for serializing and de-serializing cells into byte arrays as described in [boc.tlb](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25) [TL-B schema][tlb].
+Bag of Cells, or _BoC_ for short, is a format for serializing and deserializing cells into byte arrays as described in [boc.tlb](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25) [TL-B schema][tlb].
 
 Read more about BoC in TON Docs: [Bag of Cells](https://docs.ton.org/develop/data-formats/cell-boc#bag-of-cells).
 
