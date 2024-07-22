@@ -53,7 +53,7 @@ Before a cell can be transferred over the network or stored on disk, it must be 
 
 #### Standard representation [#cells-representation]
 
-Standard [`Cell{:tact}`](#cells) representation is a common serialization format for cells, representing them in octet (byte) sequences. Its algorithm begins with serializing the first $2$ bytes called descriptors:
+Standard [`Cell{:tact}`](#cells) representation is a common serialization format for cells first described in the [tvm.pdf](https://docs.ton.org/tvm.pdf). Its algorithm representing cells in octet (byte) sequences begins with serializing the first $2$ bytes called descriptors:
 
 * _Refs descriptor_ is calculated according to this formula: $r + 8 * k + 32 * l$, where $r$ is the number of references contained in the cell (between $0$ and $4$), $k$ is a flag for the cell kind ($0$ for [ordinary](#cells-kinds) and $1$ for [exotic](#cells-kinds)), and $l$ is the [level](#cells-levels) of the cell (between $0$ and $3$).
 * _Bits descriptor_ is calculated according to this formula $\lfloor\frac{b}{8}\rfloor + \lceil\frac{b}{8}\rceil$, where $b$ is the number of bits in the cell (between $0$ and $1023$).
