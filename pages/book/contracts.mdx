@@ -23,6 +23,7 @@ contract Example {
 
 Each contract can contain:
 
+* [Inherited traits](#traits)
 * [Supported interfaces](#interfaces)
 * [Persistent state variables](#variables)
 * [Constructor function `init(){:tact}`](#init-function)
@@ -31,7 +32,39 @@ Each contract can contain:
 * [Receiver functions](#receiver-functions)
 * [Internal functions](#internal-functions)
 
-Furthermore, contracts can inherit all the declarations and definitions from [traits][trait] and override some of their default behaviours. If declared or defined in a trait, internal functions and constants can be marked as [virtual or abstract](/book/functions#virtual-and-abstract-functions) and overridden in contracts inheriting from the trait.
+### Inherited traits, `with{:tact}` [#traits]
+
+Contracts can inherit all the declarations and definitions from [traits][trait] and override some of their default behaviours. In addition to that, every contract and trait implicitly inherits the special [`BaseTrait{:tact}` trait](/ref/core-base).
+
+To inherit a [trait][trait], specify its name after the keyword `with{:tact}` in contract's declaration. To inherit multiple traits at once, specify their names in a comma-separated list with an optional trailing comma.
+
+```tact /with/
+trait InheritMe {}
+trait InheritMeToo {}
+
+// A contract inheriting a single trait
+contract Single with InheritMe {}
+
+// A contract inheriting multiple traits
+contract Plural with
+    InheritMe,
+    InheritMeToo, // trailing comma is allowed
+{}
+```
+
+As [traits][trait] are not allowed to have [`init(){:tact}` function](#init-function), a contract inheriting a trait with any [persistent state variables](#variables) declared must initialize them by providing its own [`init(){:tact}` function](#init-function).
+
+```tact
+trait Supe { omelander: Bool }
+
+contract Vot with Supe {
+    init() {
+        self.omelander = true;
+    }
+}
+```
+
+If declared or defined in a trait, internal functions and constants can be marked as [virtual or abstract](/book/functions#virtual-and-abstract-functions) and overridden in contracts inheriting from the trait.
 
 ### Supported interfaces, `@interface(…)` [#interfaces]
 
