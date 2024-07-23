@@ -1,12 +1,40 @@
-# Deploy
+# Deployment of Tact contracts
+
+import { Callout } from 'nextra-theme-docs'
+
+In Tact, it's a common practice to make contracts inherit the [`Deployable{:tact}`][deployable] trait and deploy them via a sending special [`Deploy{:tact}`][deploy] message alongside the [initial state](/book/expressions#initof).
+
+Note, that contracts inheriting such trait return excessive funds upon deployment. That is, if you try to deploy a contract with any sufficient amount of Toncoins, the most of it (excluding fees) will be immediately returned to you after the deployment.
+
+<Callout>
+
+  As a result, those contracts would have an empty Toncoin balance after the deployment. It's a good practice to introduce an empty `"topup"{:tact}` [receiver](/book/contracts#receiver-functions) function that can be used to top up the contract's balance at any given moment:
+
+  ```tact
+  receive("topup") {}
+  ```
+
+</Callout>
+
+## Deploying with `@ton/blueprint` [#blueprint]
+
+<Callout>
+
+  To be written as per [#290](https://github.com/tact-lang/tact-docs/issues/290).
+
+</Callout>
+
+## Deploying with `@tact-lang/deployer` [#deployer]
+
+{/* To be enhanced in: https://github.com/tact-lang/tact-docs/issues/290 */}
 
 Tact Deployer is a small library that integrates with [TON Verifier](https://verifier.ton.org) that allows you to deploy your contracts safely using your favorite wallet without needing to manage keys or deploy contracts manually. Tact Deployer also automatically verifies your contract's source code and you can be sure that your compiler is not compromised.
 
-## Requirements
+### Requirements [#deployer-requirements]
 
 Your contract MUST have the `Deployer` trait from the `@stdlib/deploy` package to be able to use Tact Deployer.
 
-## Installation
+### Installation [#deployer-installation]
 
 To add Tact Deployer to your project, just use `yarn`:
 
@@ -14,7 +42,7 @@ To add Tact Deployer to your project, just use `yarn`:
 yarn add @tact-lang/deployer
 ```
 
-## How to use
+### Usage [#deployer-usage]
 
 When you build your smart contracts using Tact, it produces a package (*.pkg) file that has all the required information about the built smart contract. To deploy your smart contract, you need to create a deployer instance, pass your package file to it and provide initial data for your contract.
 
@@ -48,3 +76,6 @@ console.log('Deploy link: ' + link);
 ```
 
 After following this link you will be able to deploy and verify your smart contract.
+
+[deployable]: /ref/stdlib-deploy#deployable
+[deploy]: /ref/stdlib-deploy#deploy
