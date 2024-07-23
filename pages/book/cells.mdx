@@ -137,43 +137,38 @@ contract SerializationExample {
 
 ### `remaining` [#serialization-remaining]
 
-By default, when it comes to storing values of [`Cell{:tact}`](#cells), [`Builder{:tact}`](#builders) and [`Slice{:tact}`](#slices) types in persistent storage of loading them from the received messages or assigned values, Tact's auto-layout algorithm uses references (refs):
+To illustrate what `remaining{:tact}` serialization type does, let's take a look at [cell manipulation primitives](#cells-immutability) and their [TL-B][tlb] representation produced by Tact:
 
 ```tact
-contract ReReReF {
-    c: Cell;    // ^cell in TL-B notation
-    b: Builder; // ^builder in TL-B notation
-    s: Slice;   // ^slice in TL-B notation
+contract SerializationExample {
+    // By default
+    cRef: Cell;    // ^cell in TL-B
+    bRef: Builder; // ^builder in TL-B
+    sRef: Slice;   // ^slice in TL-B
+
+    // With `remaining`
+    cRem: Cell as remaining;    // remainder<cell> in TL-B
+    bRem: Builder as remaining; // remainder<builder> in TL-B
+    sRem: Slice as remaining;   // remainder<slice> in TL-B
 }
 ```
 
-However, using `remaining{:tact}` makes values assigned to those fields to be stored directly as a [`Slice{:tact}`](#slices):
+There, `^cell`, `^builder` and `^slice` in [TL-B][tlb] syntax mean the reference to [`Cell{:tact}`](#cells), [`Builder{:tact}`](#builders) and [`Slice{:tact}`](#slices) values respectively, while the `remainder<…>` of `cell`, `builder` or `slice` tells that the given value would be stored as a `Slice{:tact}` directly and not as a reference.
 
-```tact
-contract RemRemRem {
-    c: Cell as remaining; // remainder<cell> in TL-B notation,
-                          // storing and loading Slices directly in this Cell
+To draw parallels with [cell manipulation instructions](#cells-immutability), specifying `remaining{:tact}` is like using [`Builder.storeSlice(){:tact}`][b-5] and [`Slice.loadSlice(){:tact}`][s-5] instead of [`Builder.storeRef(){:tact}`][b-8] and [`Slice.loadRef(){:tact}`][s-8], which are to be used by default.
 
-    b: Builder as remaining; // remainder<builder> in TL-B notation,
-                             // storing and loading Slices directly in this Builder
-
-    s: Slice as remaining; // remainder<slice> in TL-B notation,
-                           // storing and loading Slices directly
-}
-```
-
-That's like using [`Builder.storeSlice(){:tact}`][b-5] and [`Slice.loadSlice(){:tact}`][s-5] over [`Builder.storeRef(){:tact}`][b-8] and [`Slice.loadRef(){:tact}`][s-8], which are to be used by default. In practice, this makes using `Slice as remaining{:tact}` the most [gas](https://docs.ton.org/develop/smart-contracts/fees#gas)-efficient option for working with [`Slice{:tact}`](#slices) values, since it uses the least amount of operations and bits.
+That's why you often see something like `forwardPayload: Slice as remaining{:tact}` in the context of [Jettons](https://docs.ton.org/develop/dapps/asset-processing/jettons) — to store the forwarded payload `Slice{:tact}` directly at the end of the message body cell, rather than as a reference.
 
 <Callout>
 
   Note, that the field serialized `as remaining{:tact}` cannot be [optional](/book/optional). That is, specifying something like `Cell? as remaining{:tact}` would cause a compilation error.
 
-  Also note, that as of now, specifying `remaining{:tact}` for `Cell{:tact}` as the [map](/book/maps) value type doesn't do anything — the cell would still be stored as a reference:
+  Also note, that as of now, specifying `remaining{:tact}` for the `Cell{:tact}` as the [map](/book/maps) value type does nothing — the cell would still be stored as a reference:
 
   ```tact
   struct Nope {
       m: map<Int, Cell as remaining>; // dict<uint8, ^cell> in TL-B notation,
-                                      // despite the `remaining`
+                                      // despite the `remaining` specified
   }
   ```
 
