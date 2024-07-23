@@ -52,7 +52,7 @@ contract Plural with
 {}
 ```
 
-As [traits][trait] are not allowed to have [`init(){:tact}` function](#init-function), a contract inheriting a trait with any [persistent state variables](#variables) declared must initialize them by providing it's own [`init(){:tact}` function](#init-function).
+As [traits][trait] are not allowed to have [`init(){:tact}` function](#init-function), a contract inheriting a trait with any [persistent state variables](#variables) declared must initialize them by providing its own [`init(){:tact}` function](#init-function).
 
 ```tact
 trait Supe { omelander: Bool }
