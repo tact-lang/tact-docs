@@ -74,7 +74,7 @@ const config = {
       locale: "HelpTranslate",
       text: (
         <a
-          href="https://ton-docs-git-mandarinlocalization-townsquarexyz.vercel.app/contribute/localization-program/overview"
+          href="https://docs.ton.org/contribute/localization-program/overview"
           onClick={(e) => {
             e.stopPropagation();
           }}

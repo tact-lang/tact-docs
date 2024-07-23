@@ -95,7 +95,7 @@ Field     | Type                  | Description
 `bounced` | [`Bool{:tact}`][bool] | [Bounced](https://ton.org/docs/learn/overviews/addresses#bounceable-vs-non-bounceable-addresses) flag of the incoming message.
 `sender`  | [`Address{:tact}`][p] | Internal address of the sender on the TON blockchain.
 `value`   | [`Int{:tact}`][int]   | Amount of [nanoToncoins](/book/integers#nanotoncoin) in a message.
-`raw`     | [`Slice{:tact}`][p]   | The remainder of the message as a [`Slice{:tact}`][p]. It follows [internal message layout](https://docs.ton.org/develop/smart-contracts/messages#message-layout) of TON starting from the destination [`Address{:tact}`][p] (`dest:MsgAddressInt ` in [TL-B notation](https://docs.ton.org/develop/data-formats/tl-b-language)).
+`raw`     | [`Slice{:tact}`][slice]   | The remainder of the message as a [`Slice{:tact}`][slice]. It follows [internal message layout](https://docs.ton.org/develop/smart-contracts/messages#message-layout) of TON starting from the destination [`Address{:tact}`][p] (`dest:MsgAddressInt ` in [TL-B notation](https://docs.ton.org/develop/data-formats/tl-b-language)).
 
 Usage example:
 
@@ -198,7 +198,7 @@ let hereBeDragons: Address = contractAddressExt(0, initPkg.code, initPkg.data);
 fun send(params: SendParameters);
 ```
 
-Sends a message using a [`SendParameters{:tact}`](/book/send) [Struct](/book/structs-and-messages#structs).
+[Queues the message](/book/send#outbound-message-processing) to be sent using a [`SendParameters{:tact}`](/book/send) [Struct](/book/structs-and-messages#structs).
 
 Usage example:
 
@@ -225,7 +225,7 @@ send(SendParameters{
 fun emit(body: Cell);
 ```
 
-Sends a message `body` to the outer world with the purpose of logging and analyzing it later off-chain. The message does not have a recipient and is gas-efficient compared to using any other message sending functions of Tact.
+[Queues the message](/book/send#outbound-message-processing) `body` to be sent to the outer world with the purpose of logging and analyzing it later off-chain. The message does not have a recipient and is gas-efficient compared to using any other message sending functions of Tact.
 
 Usage example:
 
@@ -238,9 +238,10 @@ emit("Catch me if you can, Mr. Holmes".asComment()); // asComment() converts a S
   To analyze `emit(){:tact}` calls, one has to look at [external messages](/book/external) produced by the contract.
 
   Read more: [Logging via `emit(){:tact}`](/book/debug#logging).
-  
+
 </Callout>
 
 [p]: /book/types#primitive-types
 [bool]: /book/types#booleans
 [int]: /book/integers
+[slice]: /book/cells#slices

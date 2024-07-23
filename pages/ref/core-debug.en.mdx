@@ -16,13 +16,15 @@ List of functions commonly used for debugging smart contracts in Tact.
 fun require(condition: Bool, error: String);
 ```
 
-Checks the `condition` and throws an exception with `error` message if the `condition` is `false{:tact}`. Does nothing otherwise.
+Checks the `condition` and throws an error with an [exit code](/book/exit-codes) generated from the `error` message if the `condition` is `false{:tact}`. Does nothing otherwise.
 
-<Callout>
+The algorithm for generating the exit code works as follows:
 
-  Note, that as of this moment, `require(){:tact}` generates its own non-standard exit codes. However, they're all outside of the common range $0 - 255$ reserved for TVM and Tact contract errors, which makes it possible to distinguish exit codes from `require(){:tact}` and any other [standard exit codes](/book/exit-codes).
+* First, the [SHA-256](https://en.wikipedia.org/wiki/SHA-2#Hash_standard) hash of `error` message [`String{:tact}`][p] is obtained.
+* Then, its value is read as a 32-bit [big-endian](https://en.wikipedia.org/wiki/Endianness) number modulo $63000$ plus $1000$, in that order.
+* Finally, it's put into the `.md` compilation report file, which resides with the other compilation artifacts in your project's `outputs/` or `build/` directories.
 
-</Callout>
+The generated exit code is guaranteed to be outside the common $0 - 255$ range reserved for TVM and Tact contract errors, which makes it possible to distinguish exit codes from `require(){:tact}` and any other [standard exit codes](/book/exit-codes).
 
 Usage examples:
 
@@ -52,7 +54,7 @@ Can be applied to the following list of types and values:
 * [`Int{:tact}`][int]
 * [`Bool{:tact}`][bool]
 * [`Address{:tact}`][p]
-* [`Builder{:tact}`][p], [`Cell{:tact}`][p] or [`Slice{:tact}`][p]
+* [`Cell{:tact}`][cell], [`Builder{:tact}`][builder] or [`Slice{:tact}`][slice]
 * [`String{:tact}`][p] or [`StringBuilder{:tact}`][p]
 * [`map<K, V>{:tact}`](/book/maps)
 * [Optionals and `null{:tact}` value](/book/optionals)
@@ -71,10 +73,10 @@ dump(false);
 // Address
 dump(myAddress());
 
-// Builder, Cell or Slice
-dump(beginCell());           // Builder
-dump(emptyCell());           // Cell
-dump(emptyCell().asSlice()); // Slice
+// Cell, Builder or Slice
+dump(emptyCell());  // Cell
+dump(beginCell());  // Builder
+dump(emptySlice()); // Slice
 
 // String or StringBuilder
 dump("Hello, my name is..."); // String
@@ -192,3 +194,6 @@ fun butThisDoesNot() {
 [p]: /book/types#primitive-types
 [bool]: /book/types#booleans
 [int]: /book/integers
+[cell]: /book/cells#cells
+[builder]: /book/cells#builders
+[slice]: /book/cells#slices

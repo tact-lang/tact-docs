@@ -189,7 +189,7 @@ fun example() {
 
 ### Convert to a `Cell`, `.toCell()` [#tocell]
 
-It's possible to convert an arbitrary [Struct](#structs) or [Message](#messages) to the [`Cell{:tact}`][p] type by using the `.toCell(){:tact}` [extension function](/book/functions#extension-function):
+It's possible to convert an arbitrary [Struct](#structs) or [Message](#messages) to the [`Cell{:tact}`][cell] type by using the `.toCell(){:tact}` [extension function](/book/functions#extension-function):
 
 ```tact
 struct Big {
@@ -219,9 +219,9 @@ fun conversionFun() {
 
 ### Obtain from a `Cell` or `Slice`, `.fromCell()` and `.fromSlice()` [#fromcellslice]
 
-Instead of manually parsing a [`Cell{:tact}`][p] or [`Slice{:tact}`][p] via a series of relevant `.loadSomething(){:tact}` function calls, one can use `.fromCell(){:tact}` and `.fromSlice(){:tact}` [extension functions](/book/functions#extension-function) for converting the provided [`Cell{:tact}`][p] or [`Slice{:tact}`][p] into the needed [Struct](#structs) or [Message](#messages).
+Instead of manually parsing a [`Cell{:tact}`][cell] or [`Slice{:tact}`][slice] via a series of relevant `.loadSomething(){:tact}` function calls, one can use `.fromCell(){:tact}` and `.fromSlice(){:tact}` [extension functions](/book/functions#extension-function) for converting the provided [`Cell{:tact}`][cell] or [`Slice{:tact}`][slice] into the needed [Struct](#structs) or [Message](#messages).
 
-Those extension functions only attempt to parse a [`Cell{:tact}`][p] or [`Slice{:tact}`][p] according to the structure of your [Struct](#structs) or [Message](#messages). In case layouts don't match, various exceptions may be thrown — make sure to wrap your code in [`try...catch{:tact}`](/book/statements#try-catch) blocks to prevent unexpected results.
+Those extension functions only attempt to parse a [`Cell{:tact}`][cell] or [`Slice{:tact}`][slice] according to the structure of your [Struct](#structs) or [Message](#messages). In case layouts don't match, various exceptions may be thrown — make sure to wrap your code in [`try...catch{:tact}`](/book/statements#try-catch) blocks to prevent unexpected results.
 
 ```tact
 struct Fizz { foo: Int }
@@ -248,7 +248,7 @@ fun constructThenParse() {
 
 ### Conversion laws
 
-Whenever one converts between [`Cell{:tact}`][p]/[`Slice{:tact}`][p] and [Struct](#structs)/[Message](#messages) via `.toCell(){:tact}` and `.fromCell(){:tact}` functions, the following laws hold:
+Whenever one converts between [`Cell{:tact}`][cell]/[`Slice{:tact}`][slice] and [Struct](#structs)/[Message](#messages) via `.toCell(){:tact}` and `.fromCell(){:tact}` functions, the following laws hold:
 
 * For any instance of type [Struct](#structs)/[Message](#messages), calling `.toCell(){:tact}` on it, then applying `Struct.fromCell(){:tact}` (or `Message.fromCell(){:tact}`) to the result gives back the copy of the original instance:
 
@@ -270,7 +270,7 @@ fun lawOne() {
 }
 ```
 
-* For any [`Cell{:tact}`][p] with the same [TL-B](https://docs.ton.org/develop/data-formats/tl-b-language) layout as a given [Struct](#structs)/[Message](#messages), calling `Struct.fromCell(){:tact}` (or `Message.fromCell(){:tact}`) on it, and then converting the result to a [`Cell{:tact}`][p] via `.toCell(){:tact}` would give the copy of the original [`Cell{:tact}`][p]:
+* For any [`Cell{:tact}`][cell] with the same [TL-B](https://docs.ton.org/develop/data-formats/tl-b-language) layout as a given [Struct](#structs)/[Message](#messages), calling `Struct.fromCell(){:tact}` (or `Message.fromCell(){:tact}`) on it, and then converting the result to a [`Cell{:tact}`][cell] via `.toCell(){:tact}` would give the copy of the original [`Cell{:tact}`][cell]:
 
 ```tact {9-10,15-16}
 struct ArbitraryStruct { val: Int as uint32 }
@@ -298,3 +298,5 @@ fun lawTwo() {
 [msg-fs]: /ref/core-cells#messagefromslice
 
 [p]: /book/types#primitive-types
+[cell]: /book/cells#cells
+[slice]: /book/cells#slices
