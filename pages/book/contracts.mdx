@@ -128,7 +128,7 @@ Constant initializations must be relatively simple and only rely on values known
 
 You can read constants both in [receivers](#receiver-functions) and in [getters](#getter-functions).
 
-Unlike [contract variables](#variables), **contract constants don't consume space in persistent state**. Their values are stored directly in the code [`Cell{:tact}`](/book/types#primitive-types) of the contract.
+Unlike [contract variables](#variables), **contract constants don't consume space in persistent state**. Their values are stored directly in the code [`Cell{:tact}`](/book/cells#cells) of the contract.
 
 ```tact
 // global constants are calculated in compile-time and cannot change
@@ -304,3 +304,5 @@ contract Functions {
 
 [p]: /book/types#primitive-types
 [trait]: /book/types#traits
+
+[bp]: https://github.com/ton-org/blueprint

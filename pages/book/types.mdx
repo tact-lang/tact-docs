@@ -13,14 +13,14 @@ Additionally, many of those types [can be made nullable](#optionals).
 
 Tact supports a number of primitive data types that are tailored for smart contract use:
 
-* [`Int{:tact}`][ints] — all numbers in Tact are $257$-bit signed integers, but [smaller representations](/book/integers#serialization) can be used to reduce storage costs.
+* [`Int{:tact}`](/book/integers) — all numbers in Tact are $257$-bit signed integers, but [smaller representations](/book/integers#serialization) can be used to reduce storage costs.
 * [`Bool{:tact}`](#booleans) — classical boolean with `true{:tact}` and `false{:tact}` values.
 * `Address{:tact}` — standard [smart contract address](https://docs.ton.org/learn/overviews/addresses#address-of-smart-contract) in TON Blockchain.
-* `Slice{:tact}`, `Cell{:tact}`, `Builder{:tact}` — low-level primitives of TON VM.
-* `String{:tact}` — represents text strings in TON VM.
+* [`Cell{:tact}`](/book/cells#cells), [`Builder{:tact}`](/book/cells#builders), [`Slice{:tact}`](/book/cells#slices) — low-level primitives of [TVM][tvm].
+* `String{:tact}` — immutable text strings.
 * `StringBuilder{:tact}` — helper type that allows you to concatenate strings in a gas-efficient way.
 
-[ints]: /book/integers
+[tvm]: https://docs.ton.org/learn/tvm-instructions/tvm-overview
 
 ### Booleans [#booleans]
 

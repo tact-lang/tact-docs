@@ -23,7 +23,7 @@ Allowed value types:
 
 * [`Int{:tact}`][int]
 * [`Bool{:tact}`](/book/types#booleans)
-* [`Cell{:tact}`][p]
+* [`Cell{:tact}`][cell]
 * [`Address{:tact}`][p]
 * [Struct](/book/structs-and-messages#structs)
 * [Message](/book/structs-and-messages#messages)
@@ -152,7 +152,7 @@ if (fizz == null) {
 
 ### Convert to a `Cell`, `.asCell()` [#ascell]
 
-Use `.asCell(){:tact}` [method](/book/functions#extension-function) on maps to convert all their values to a [`Cell{:tact}`][p] type. Be mindful, that [`Cell{:tact}`][p] type is able to store up to 1023 bits, so converting larger maps to the Cell will result in error.
+Use `.asCell(){:tact}` [method](/book/functions#extension-function) on maps to convert all their values to a [`Cell{:tact}`][cell] type. Be mindful, that [`Cell{:tact}`][cell] type is able to store up to 1023 bits, so converting larger maps to the Cell will result in error.
 
 As an example, this method is useful for sending small maps directly in the body of the reply:
 
@@ -290,7 +290,7 @@ struct SerializedMapInside {
 
 While maps can be convenient to work with on a small scale, they cause a number of issues if the number of items is unbounded and map can significantly grow in size:
 
-* As the upper bound of the smart contract state size is around $65\,000$ items of type [`Cell{:tact}`][p], it constrains the storage limit of maps to be about $30\,000$ key-value pairs for the whole contract.
+* As the upper bound of the smart contract state size is around $65\,000$ items of type [`Cell{:tact}`][cell], it constrains the storage limit of maps to be about $30\,000$ key-value pairs for the whole contract.
 
 * The more entries you have in a map, the bigger [compute fees](https://docs.ton.org/develop/howto/fees-low-level#computation-fees) you'll get. Thus, working with large maps makes compute fees tough to predict and manage.
 
@@ -326,5 +326,6 @@ If you still need a large map or an unbound (infinitely large) map, it's better 
   TODO: Add reference to sharding page as per: https://github.com/tact-lang/tact-docs/issues/155
 */}
 
-[int]: /book/integers
 [p]: /book/types#primitive-types
+[int]: /book/integers
+[cell]: /book/cells#cells
