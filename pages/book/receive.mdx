@@ -37,3 +37,15 @@ contract MyContract {
     }
 }
 ```
+
+Naming a parameter of the receiver function with an underscore `_{:tact}` makes its value considered unused and discarded. This is useful when you don't need to inspect the message received and you only want it to convey a specific opcode:
+
+```tact
+message(42) UniverseCalls {}
+
+contract Example {
+    receive(_: UniverseCalls) {
+        // Got a Message with opcode 42
+    }
+}
+```
