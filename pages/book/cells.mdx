@@ -128,10 +128,17 @@ Similar to serialization options of [`Int{:tact}`](/book/integers) type, `Cell{:
 * as fields of [contracts](/book/contracts) and [traits](/book/types#traits),
 * and as fields of [Structs](/book/structs-and-messages#structs) and [Messages](/book/structs-and-messages#messages).
 
-```tact
+```tact {2-3}
 contract SerializationExample {
     someCell: Cell as remaining;
     someSlice: Slice as bytes32;
+
+    // Constructor function,
+    // necessary for this example contract to compile
+    init() {
+        self.someCell = emptyCell();
+        self.someSlice = emptySlice();
+    }
 }
 ```
 
@@ -139,7 +146,7 @@ contract SerializationExample {
 
 To illustrate what `remaining{:tact}` serialization type does, let's take a look at [cell manipulation primitives](#cells-immutability) and their [TL-B][tlb] representation produced by Tact:
 
-```tact
+```tact {3-5, 8-10}
 contract SerializationExample {
     // By default
     cRef: Cell;    // ^cell in TL-B
@@ -150,6 +157,17 @@ contract SerializationExample {
     cRem: Cell as remaining;    // remainder<cell> in TL-B
     bRem: Builder as remaining; // remainder<builder> in TL-B
     sRem: Slice as remaining;   // remainder<slice> in TL-B
+
+    // Constructor function,
+    // necessary for this example contract to compile
+    init() {
+        self.cRef = emptyCell();
+        self.bRef = beginCell();
+        self.sRef = emptySlice();
+        self.cRem = emptyCell();
+        self.bRem = beginCell();
+        self.sRem = emptySlice();
+    }
 }
 ```
 
