@@ -158,7 +158,7 @@ To see results of [`dump(){:tact}`][dump] function calls and use ["printf debugg
 
 Assuming you've created a [new counter contract project](/#start), let's see how it works in practice.
 
-First, let's place a call to [`dump(){:tact}`][dump] in `contracts/simple_counter.tact`, which would output the `amount` passed in `msg{:tact}` [Struct](/book/structs-and-messages#structs) to contract's debug console:
+First, let's place a call to [`dump(){:tact}`][dump] in `contracts/simple_counter.tact`, which would output the `amount` passed in `msg{:tact}` [Struct][struct] to contract's debug console:
 
 ```tact filename="contracts/simple_counter.tact" {3}
 // ...
@@ -489,7 +489,95 @@ Every transaction on TON Blockchain [contains `out_msgs`](https://docs.ton.org/d
 
 To see logs from [`emit(){:tact}`](/ref/core-common#emit) in that dictionary, look for external messages without a recipient. In various TON Blockchain explorers, such transactions will be marked as `external-out` with destination specified as `-` or `empty`.
 
-Note, that some explorers deserialize the message body sent for you, while others don't.
+Note, that some explorers deserialize the message body sent for you, while others don't. However, you can always [parse it yourself](#logging-parsing) locally.
+
+### Parsing body of the emitted message [#logging-parsing]
+
+Consider the following example:
+
+```tact
+// We have a Struct
+struct Ballroom {
+    meme: Bool;
+    in: Int;
+    theory: String;
+}
+
+// And a simple contract,
+contract Bonanza {
+    // which can receive a String message,
+    receive("time to emit") {
+        // emit a String
+        emit("But to the Supes? Absolutely diabolical.".asComment());
+
+        // and a Struct
+        emit(Ballroom{meme: true, in: 42, theory: "Duh"}.toCell());
+    }
+}
+```
+
+Now, let's make a simple [test clause](#tests-structure) for the `Bonanza` contract:
+
+```typescript /bonanza/
+it('emits', async () => {
+  const res = await bonanza.send(
+    deployer.getSender(),
+    { value: toNano('0.05') },
+    'time to emit',
+  );
+});
+```
+
+There, the `res` object would contain the list of sent [external messages](/book/external) as its `externals` field. Let's access it to parse the first message sent via a call to [`emit(){:tact}`](/ref/core-common#emit) in Tact code (or _emitted_ for short):
+
+```typescript /body/
+it('emits', async () => {
+  // ... prior code ...
+
+  // We'll need only the body of the observed message:
+  const firstMsgBody = res.externals[0].body;
+
+  // Now, let's parse it, knowing that it's a text message.
+  // NOTE: In a real-world scenario,
+  //       you'd want to check that first or wrap this in a try...catch
+  const firstMsgText = firstMsgBody.asSlice().loadStringTail();
+
+  // "But to the Supes? Absolutely diabolical."
+  console.log(firstMsgText);
+});
+```
+
+To parse the second emitted message, we could manually use a bunch of `.loadSomething(){:typescript}` functions, but that's way too brittle — if the fields of the `Ballroom{:tact}` [Struct][struct] even change, you'd need to start all over. That could really backfire when you have a lot of tests written in that manner.
+
+Fortunately, Tact compiler auto-generates TypeScript bindings (or wrappers) for the contracts, and it's really easy to re-use them in your test suite. Not only they have a wrapper of the contract you're testing, but they also export a bunch of helper functions to store or load [Structs][struct] and [Messages][message] defined in the contract. The latter will be named just like the [Structs][struct] and [Messages][message] are, but with the `load` prefix in front.
+
+For example, in our case we'll need a function called `loadBallroom(){:typescript}`, for parsing a [`Slice{:tact}`][slice] into the `Ballroom{:tact}` [Struct][struct] in TypeScript. To import it, either type the name and let your IDE suggest auto-importing it for you, or take a look at the top of your test suite file — there should be a similar line:
+
+```typescript
+import { Bonanza } from '../wrappers/Bonanza';
+//              ^ here you could import loadBallroom
+```
+
+With that, let's parse the second emitted message:
+
+```typescript
+it('emits', async () => {
+  // ... prior code ...
+
+  // We'll need only the body of the observed message:
+  const secondMsgBody = res.externals[1].body;
+
+  // Now, let's parse it, knowing that it's the Ballroom Struct.
+  // NOTE: In a real-world scenario,
+  //       you'd want to check that first or wrap this in a try...catch
+  const secondMsgStruct = loadBallroom(secondMsgBody.asSlice());
+
+  // { '$$type': 'Ballroom', meme: true, in: 42n, theory: 'Duh' }
+  console.log(secondMsgStruct);
+});
+```
+
+Mind you, that it's also possible to parse emitted messages of deployed contracts even outside of our test suite. You would just need to obtain the emitted message bodies and then use the auto-generated TypeScript bindings of Tact alongside the `@ton/core` library just like we did in those examples above.
 
 ## Handling bounced messages [#bounced]
 
@@ -617,6 +705,11 @@ yarn lab
 </Steps>
 
 [dump]: /ref/core-debug#dump
+[struct]: /book/structs-and-messages#structs
+[message]: /book/structs-and-messages#messages
+[cell]: /book/cells#cells
+[slice]: /book/cells#slices
+
 [tg]: https://t.me/tactlang
 [bp]: https://github.com/ton-org/blueprint
 [sb]: https://github.com/ton-org/sandbox
