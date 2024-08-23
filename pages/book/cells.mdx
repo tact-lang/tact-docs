@@ -196,24 +196,15 @@ receive(msg: JettonTransferNotification) {
 }
 ```
 
-Upon receiving a [jetton][jetton] transfer notification message, its cell body is converted into a `Slice{tact}` and then parsed as a `JettonTransferNotification{:tact}` [Message][message]. At the end of this process, the `forwardPayload` will have all the remaining data of the original message cell.
+Upon receiving a [jetton][jetton] transfer notification message, its cell body is converted into a [`Slice{:tact}`](#slices) and then parsed as a `JettonTransferNotification{:tact}` [Message][message]. At the end of this process, the `forwardPayload` will have all the remaining data of the original message cell.
 
-If we were to violate the [jetton][jetton] standard and place the `forwardPayload: Slice as remaining` field in any other position in the `JettonTransferNotification{:tact}` [Message][message], the `forwardPayload` would have the remaining data of the message cell at the moment of parsing it, which would include all the subsequent fields of the [Message][message].
-
-Therefore, to prevent misuse of the contract storage and reduce gas consumption, make sure to specify `remaining{:tact}` serialization option only on the last field of the given [Message][message], as it will store all the remaining data of the [`Slice{:tact}`](#slices) at the moment it was parsed into said [Message][message] in [receiver functions][recv].
+Here, it's not possible to violate the [jetton][jetton] standard by placing the `forwardPayload: Slice as remaining` field in any other position in the `JettonTransferNotification{:tact}` [Message][message]. That's because Tact prohibits usage of `as remaining{:tact}` for any but the last field of the [Structs][struct] and [Messages][message] to prevent misuse of the contract storage and reduce gas consumption.
 
 <Callout>
 
-  Note, that the cell serialized via `as remaining{:tact}` cannot be [optional](/book/optional). That is, specifying something like `Cell? as remaining{:tact}`, `Builder{:tact}` or `Slice? as remaining{:tact}` would cause a compilation error.
+  Note, that the cell serialized via `as remaining{:tact}` cannot be [optional](/book/optional). That is, specifying something like `Cell? as remaining{:tact}`, `Builder? as remaining{:tact}` or `Slice? as remaining{:tact}` would cause a compilation error.
 
-  Also note, that as of now, specifying `remaining{:tact}` for the `Cell{:tact}` as the [map](/book/maps) value type does nothing — the cell would still be stored as a reference:
-
-  ```tact
-  struct Nope {
-      m: map<Int, Cell as remaining>; // dict<uint8, ^cell> in TL-B notation,
-                                      // despite the `remaining` specified
-  }
-  ```
+  Also note, that specifying `remaining{:tact}` for the `Cell{:tact}` as the [map](/book/maps) value type is considered an error and it won't compile.
 
 </Callout>
 
