@@ -125,22 +125,86 @@ While you may use them for [manual parsing](#cnp-manually) of the cells, it's st
 
 Similar to serialization options of [`Int{:tact}`](/book/integers) type, `Cell{:tact}`, `Builder{:tact}` and `Slice{:tact}` also have various representations for encoding their values in the following cases:
 
-* as fields of [contracts](/book/contracts) and [traits](/book/types#traits),
-* as fields of [Structs](/book/structs-and-messages#structs) and [Messages](/book/structs-and-messages#messages),
-* and as key/value types of [maps](/book/maps).
+* as [storage variables](/book/contracts#variables) of [contracts](/book/contracts) and [traits](/book/types#traits),
+* and as fields of [Structs](/book/structs-and-messages#structs) and [Messages](/book/structs-and-messages#messages).
 
-```tact
+```tact {2-3}
 contract SerializationExample {
     someCell: Cell as remaining;
     someSlice: Slice as bytes32;
+
+    // Constructor function,
+    // necessary for this example contract to compile
+    init() {
+        self.someCell = emptyCell();
+        self.someSlice = beginCell().storeUint(42, 256).asSlice();
+    }
 }
 ```
 
-### `remaining` [#serialization-bytes64]
+### `remaining` [#serialization-remaining]
+
+The `remaining{:tact}` serialization option can be applied to values of [`Cell{:tact}`](#cells), [`Builder{:tact}`](#builders) and [`Slice{:tact}`](#slices) types.
+
+It affects the process of constructing and parsing cell values by causing them to be stored and loaded directly rather than as a reference. To draw parallels with [cell manipulation instructions](#cells-immutability), specifying `remaining{:tact}` is like using [`Builder.storeSlice(){:tact}`][b-5] and [`Slice.loadSlice(){:tact}`][s-5] instead of [`Builder.storeRef(){:tact}`][b-8] and [`Slice.loadRef(){:tact}`][s-8], which are to be used by default.
+
+In addition, the [TL-B][tlb] representation produced by Tact changes too:
+
+```tact {3-5, 8-10}
+contract SerializationExample {
+    // By default
+    cRef: Cell;    // ^cell in TL-B
+    bRef: Builder; // ^builder in TL-B
+    sRef: Slice;   // ^slice in TL-B
+
+    // With `remaining`
+    cRem: Cell as remaining;    // remainder<cell> in TL-B
+    bRem: Builder as remaining; // remainder<builder> in TL-B
+    sRem: Slice as remaining;   // remainder<slice> in TL-B
+
+    // Constructor function,
+    // necessary for this example contract to compile
+    init() {
+        self.cRef = emptyCell();
+        self.bRef = beginCell();
+        self.sRef = emptySlice();
+        self.cRem = emptyCell();
+        self.bRem = beginCell();
+        self.sRem = emptySlice();
+    }
+}
+```
+
+There, `^cell`, `^builder` and `^slice` in [TL-B][tlb] syntax mean the reference to [`Cell{:tact}`](#cells), [`Builder{:tact}`](#builders) and [`Slice{:tact}`](#slices) values respectively, while the `remainder<…>` of `cell`, `builder` or `slice` tells that the given value would be stored as a `Slice{:tact}` directly and not as a reference.
+
+Now, to give a real-world example, imagine that you need to notice and react to inbound [jetton][jetton] transfers in your smart contract. The appropriate [Message][message] structure for doing so would look something like this:
+
+```tact /remaining/
+message(0x7362d09c) JettonTransferNotification {
+    queryId: Int as uint64;             // arbitrary request number to prevent replay attacks
+    amount: Int as coins;               // amount of jettons transferred
+    sender: Address;                    // address of the sender of the jettons
+    forwardPayload: Slice as remaining; // optional custom payload
+}
+```
+
+And the [receiver][recv] in the contract would look like this:
+
+```tact
+receive(msg: JettonTransferNotification) {
+    // ... you do you ...
+}
+```
+
+Upon receiving a [jetton][jetton] transfer notification message, its cell body is converted into a [`Slice{:tact}`](#slices) and then parsed as a `JettonTransferNotification{:tact}` [Message][message]. At the end of this process, the `forwardPayload` will have all the remaining data of the original message cell.
+
+Here, it's not possible to violate the [jetton][jetton] standard by placing the `forwardPayload: Slice as remaining` field in any other position in the `JettonTransferNotification{:tact}` [Message][message]. That's because Tact prohibits usage of `as remaining{:tact}` for any but the last field of the [Structs][struct] and [Messages][message] to prevent misuse of the contract storage and reduce gas consumption.
 
 <Callout>
 
-  To be resolved by [#26](https://github.com/tact-lang/tact-docs/issues/26).
+  Note, that the cell serialized via `as remaining{:tact}` cannot be [optional](/book/optional). That is, specifying something like `Cell? as remaining{:tact}`, `Builder? as remaining{:tact}` or `Slice? as remaining{:tact}` would cause a compilation error.
+
+  Also note, that specifying `remaining{:tact}` for the `Cell{:tact}` as the [map](/book/maps) value type is considered an error and it won't compile.
 
 </Callout>
 
@@ -373,9 +437,11 @@ let areSlicesNotEqual = aSlice.hash() != bSlice.hash(); // false
 [p]: /book/types#primitive-types
 [struct]: /book/structs-and-messages#structs
 [message]: /book/structs-and-messages#messages
+[recv]: /book/contracts#receiver-functions
 
 [tvm]: https://docs.ton.org/learn/tvm-instructions/tvm-overview
 [tlb]: https://docs.ton.org/develop/data-formats/tl-b-language
+[jetton]: https://docs.ton.org/develop/dapps/asset-processing/jettons
 [sha-2]: https://en.wikipedia.org/wiki/SHA-2#Hash_standard
 
 [quadtree]: https://en.wikipedia.org/wiki/Quadtree

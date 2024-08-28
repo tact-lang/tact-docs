@@ -80,14 +80,14 @@ let fizz: map<Int, Int> = emptyMap();
 fizz.set(68, 0);
 
 // Getting the value by its key
-let gotButUnsure: String? = fizz.get(68);          // returns String or null, therefore the type is String?
-let mustHaveGotOrErrored: String = fizz.get(68)!!; // explicitly asserting that the value must not be null,
-                                                   // which may crush at runtime if the value is, in fact, null
+let gotButUnsure: Int? = fizz.get(68);          // returns Int or null, therefore the type is Int?
+let mustHaveGotOrErrored: Int = fizz.get(68)!!; // explicitly asserting that the value must not be null,
+                                                // which may crush at runtime if the value is, in fact, null
 
 // Alternatively, we can check for the key in the if statement
 if (gotButUnsure != null) {
-    // Hooray, let's use !! without fear now and cast String? to String
-    let definitelyGotIt: String = fizz.get(68)!!;
+    // Hooray, let's use !! without fear now and cast Int? to Int
+    let definitelyGotIt: Int = fizz.get(68)!!;
 } else {
     // Do something else...
 }
@@ -304,11 +304,11 @@ contract Example {
     const MaxMapSize: Int = 42;
 
     // Persistent state variables
-    arr: map<Int, Int>; // "array" of String values as a map
-    arrLength: Int = 0;    // length of the "array", defaults to 0
+    arr: map<Int, Int>; // "array" of Int values as a map
+    arrLength: Int = 0; // length of the "array", defaults to 0
 
     // Internal function for pushing an item to the end of the "array"
-    fun arrPush(item: String) {
+    fun arrPush(item: Int) {
         if (self.arrLength >= self.MaxMapSize) {
             // Do something, stop the operation, for example
         } else {
