@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 
 import LangPath from "./LangPath.json";
 
-type langKeys = "en" | "zh-CN" | "ru" | "ko" | "pl" | "uk";
+type langKeys = "en" | "zh-CN";
 
 type LegacyMiddlewareCookies = Record<string, string>;
 type StableMiddlewareCookies = Map<string, string>;

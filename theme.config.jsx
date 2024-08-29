@@ -2,9 +2,7 @@ import { useRouter } from 'next/router'
 import { DocsThemeConfig, LocaleSwitch } from 'nextra-theme-docs'
 
 const PLACEHOLDER_LOCALES = {
-  "en-US": "Search documentation",
-  fr: "Rechercher documents",
-  ru: "Поиск документации",
+  en: "Search documentation",
   "zh-CN": "搜索文档",
 };
 

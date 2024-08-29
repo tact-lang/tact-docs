@@ -59,7 +59,7 @@ export default withNextra({
     unoptimized: true
   },
   i18n: {
-    locales: ["en", "zh-CN", "ru", "ko", "pl", "uk"],
+    locales: ["en", "zh-CN"],
     defaultLocale: "en",
     localeDetection: false,
   },

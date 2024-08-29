@@ -2,7 +2,7 @@ import { dirname, join } from "path";
 
 import * as fs from "fs";
 
-const transferLangs = ["en", "zh-CN", "ru", "ko", "pl", "uk"];
+const transferLangs = ["en", "zh-CN"];
 
 const getDirFiles = (path = "") => {
   const basePath = "/pages";
