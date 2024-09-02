@@ -131,7 +131,7 @@ There, the second message won't actually be sent:
 
 * After finishing the [compute phase][compute], the remaining value $\mathrm{R}$ of the contract is computed.
 
-* During the outbound message processing and assuming that there was enough value provided in the inbound message, the first message leaves $\mathrm{R} - (0.042 + \mathrm{forward-fees})$ [nanoToncoins](/book/integers#nanotoncoin) on the balance.
+* During the outbound message processing and assuming that there was enough value provided in the inbound message, the first message leaves $\mathrm{R} - (0.042 + \mathrm{forward\_fees})$ [nanoToncoins](/book/integers#nanotoncoin) on the balance.
 
 * When the second message is processed, contract tries to send $\mathrm{R}$ [nanoToncoins](/book/integers#nanotoncoin), but fails to do so because there is already a smaller amount left.
 
