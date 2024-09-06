@@ -70,6 +70,16 @@ To send jetton transfer use `send` or similar [function](/book/send).
 Note that `myJettonWalletAddress` may also be stored in contract storage to use less gas in every transaction.
 
 ```tact
+message(0xf8a7ea5) TokenTransfer {
+    queryId: Int as uint64;
+    amount: Int as coins;
+    destination: Address;
+    excessesDestination: Address;
+    customPayload: Cell? = null;
+    forwardTonAmount: Int as coins;
+    forwardPayload: Slice as remaining;
+}
+
 receive("send") {
     let myJettonWalletAddress = calculateJettonWalletAddress(myAddress(), self.jettonMasterAddress, self.jettonWalletCode);
     send(SendParameters{
@@ -79,9 +89,9 @@ receive("send") {
             queryId: 42,
             amount: jettonAmount, // jetton amount you want to transfer
             destination: msg.userAddress, // address you want to transfer jettons. Note that this is address of jetton wallet owner, not jetton wallet itself
-            exceesesDestination: msg.userAddress, // address were left toncoins will go
-            customPayload: null, // in most cases will be null and can be ommited. Needed for custom logic on jettons itself
-            forwardTonAmount: 1, // amount that will be transfered with TransferNotification. Needed for custom logic execution like in example below
+            excessesDestination: msg.userAddress, // address were left toncoins will go
+            customPayload: null, // in most cases will be null and can be omited. Needed for custom logic on jettons itself
+            forwardTonAmount: 1, // amount that will be transferred with TransferNotification. Needed for custom logic execution like in example below
             forwardPayload: beginCell().storeBool(false).endCell().beginParse(), // TODO: this is so gas consuming, maybe there is another way? Or use generic (TBD)? Or there is better way to just left it
         }.toCell(),
     });
@@ -94,7 +104,7 @@ receive("send") {
 message(0x595f07bc) TokenBurn {
     queryId: Int as uint64;
     amount: Int as coins;
-    exceesesDestination: Address;
+    excessesDestination: Address;
     customPayload: Cell? = null;
 }
 
@@ -105,8 +115,8 @@ receive("burn") {
         body: TokenBurn{
             queryId: 42,
             amount: jettonAmount, // jetton amount you want to burn
-            exceesesDestination: someAddress, // address were left toncoins will go
-            customPayload: null, // in most cases will be null and can be ommited. Needed for custom logic on jettons itself
+            excessesDestination: someAddress, // address were left toncoins will go
+            customPayload: null, // in most cases will be null and can be omited. Needed for custom logic on jettons itself
         }.toCell(),
     });
 }
