@@ -440,7 +440,7 @@ it('throws specific exit code', async () => {
 });
 ```
 
-Note, that to track down transactions with a certain exit code, you only need to specify `exitCode` field in `toHaveTransaction(){:typescript}` method of `expect(){:typescript}`.
+Note, that to track down transactions with a certain exit code, you only need to specify `exitCode` field in object argument to the `toHaveTransaction(){:typescript}` method of `expect(){:typescript}`.
 
 However, it's useful to narrow the scope by specifying the recipient address `to`, such that Jest would look only at the transaction caused by our message to the contract.
 

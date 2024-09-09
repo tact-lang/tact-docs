@@ -105,7 +105,7 @@ Unary operators can be one of the two types:
 
 ### Non-null assert, `!!` [#unary-non-null-assert]
 
-Unary double-exclamation mark (_non-null assertion_) operator `!!{:tact}` is a postfix operator, which enforces non-null values and allows direct access to the value of the optional variable if it's not `null{:tact}`. Raises a compilation error otherwise. Can be applied to any optional variable regardless of its non-null type.
+Unary double-exclamation mark (_non-null assertion_) operator `!!{:tact}` is a postfix operator, which enforces non-`null{:tact}` values and allows direct access to the value of the optional variable if it's not `null{:tact}`. Otherwise, raises a compilation error if the compiler can track it, and if not — throws an exception with [exit code 128](/book/exit-codes#128): `Null reference exception`. Can be applied to any optional variable regardless of its non-`null{:tact}` type.
 
 <Callout>
 

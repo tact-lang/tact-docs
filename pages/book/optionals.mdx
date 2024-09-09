@@ -10,7 +10,7 @@ You can make any variable or a field an optional by adding a question mark (`?{:
 
 Optional variables or optional fields that are not defined hold the `null{:tact}` value by default. You cannot access them without checking for `null{:tact}` first. But if you're certain they are not `null{:tact}` at a given moment, use the [non-null assertion operator `!!{:tact}`](/book/operators#unary-non-null-assert) to access their value.
 
-Trying to access the value of an optional variable or an optional field without using [`!!{:tact}`](/book/operators#unary-non-null-assert) or without checking for `null{:tact}` beforehand will result in a compilation error.
+Trying to access the value of an optional variable or an optional field without using [`!!{:tact}`](/book/operators#unary-non-null-assert) or without checking for `null{:tact}` beforehand will result in a compilation error if the compiler can track it, and if not — in an exception with [exit code 128](/book/exit-codes#128): `Null reference exception`.
 
 Example of optionals:
 

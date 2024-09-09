@@ -219,6 +219,8 @@ Returns a [`Slice{:tact}`][slice] out of the decoded [Base64](https://en.wikiped
 
 Note, that this function is limited and only takes the first $1023$ bits of data from the given [`String{:tact}`][p], without throwing an exception when the [`String{:tact}`][p] is larger (i.e. contains more than $1023$ bits of data).
 
+If the given [`String{:tact}`][p] contains characters not from the Base64 set, an exception with [exit code 134](/book/exit-codes#134) will be thrown: `Invalid argument`.
+
 Usage example:
 
 ```tact
@@ -263,6 +265,8 @@ Returns a new [`Slice{:tact}`][slice] out of the decoded [Base64](https://en.wik
 
 Note, that this function is limited and only takes the first $1023$ bits of data from the given [`Slice{:tact}`][slice], without throwing an exception if the [`Slice{:tact}`][slice] has more data (i.e., when it has any references).
 
+If the given [`Slice{:tact}`][slice] contains characters not from the Base64 set, an exception with [exit code 134](/book/exit-codes#134) will be thrown: `Invalid argument`.
+
 Usage example:
 
 ```tact
@@ -296,7 +300,7 @@ Extension function for the [`Int{:tact}`][int].
 
 Returns a [`String{:tact}`][p] from an [`Int{:tact}`][int] value using a [fixed-point representation](https://en.wikipedia.org/wiki/Fixed-point_arithmetic) of a fractional number, where `self` is a significant part of the number and `digits` is a number of digits in the fractional part.
 
-More precisely, `digits` is an exponentiation parameter of $10^{-\mathrm{digits}}$ expression, which gives the represented fractional number when multiplied by the actual [`Int{:tact}`][int] value. Parameter `digits` is required to be in the semi-closed interval: $0 <=$ `digits` $< 78$, otherwise an exception with [exit code 134](/book/exit-codes#134) will be thrown: `Invalid argument`.
+More precisely, `digits` is an exponentiation parameter of $10^{-\mathrm{digits}}$ expression, which gives the represented fractional number when multiplied by the actual [`Int{:tact}`][int] value. Parameter `digits` is required to be in the closed interval: $0 <$ `digits` $< 78$, otherwise an exception with [exit code 134](/book/exit-codes#134) will be thrown: `Invalid argument`.
 
 Usage example:
 
