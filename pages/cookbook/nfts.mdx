@@ -2,8 +2,95 @@
 
 import { Callout } from 'nextra/components'
 
-<Callout emoji="🚨">
+This page lists common examples of working with [nft](https://docs.ton.org/develop/dapps/asset-processing/nfts).
 
-  This page is a stub. [Contributions are welcome!](https://github.com/tact-lang/tact-docs/issues)
+NFT ownership assigned notification message have the following structure.
+
+## Accepting nft ownership assign
+
+```tact
+message(0x05138d91) NFTOwnershipAssigned {
+    previousOwner: Address;
+    forwardPayload: Slice as remaining;
+}
+```
+
+Use [receiver](/book/receive) function to accept notification message.
+
+<Callout type="warning" emoji="⚠️">
+
+  Sender of notification must be validated!
 
 </Callout>
+
+Validation can be done using nft item state init and calculating nft item address.
+NFT Item initial data layout is shown below, but sometimes it may differ.
+
+```tact
+struct NFTItemInitData {
+    index: Int as uint64;
+    collectionAddress: Address;
+}
+
+inline fun calculateNFTAddress(index: Int, collectionAddress: Address, nftCode: Cell): Address {
+    let initData = NFTItemInitData{
+        index,
+        collectionAddress,
+    };
+
+    return contractAddress(StateInit{code: nftCode, data: initData.toCell()});
+}
+
+contract Example with Deployable {
+    nftCollectionAddress: Address;
+    nftItemIndex: Int as uint64;
+    nftCode: Cell;
+
+    init(nftCollectionAddress: Address, nftItemIndex: Int, nftCode: Cell) {
+        self.nftCollectionAddress = nftCollectionAddress;
+        self.nftItemIndex = nftItemIndex;
+        self.nftCode = nftCode;
+    }
+
+    receive(msg: NFTOwnershipAssigned) {
+        let expectedNftAddress = calculateNFTAddress(self.nftItemIndex, self.nftCollectionAddress, self.nftCode); // or you can even store expectedNftAddress
+        require(expectedNftAddress == sender(), "Sender is not expected NFT");
+
+        // your logic of processing nft ownership assign notification
+    }
+}
+```
+
+## Transferring NFT item
+
+To transfer NFT item use `send` or similar [function](/book/send).
+
+```tact
+message(0x5fcc3d14) NFTTransfer {
+    queryId: Int as uint64;
+    newOwner: Address; // address of the new owner of the NFT item.
+    responseDestination: Address; // address where to send a response with confirmation of a successful transfer and the rest of the incoming message coins.
+    customPayload: Cell? = null; //  optional custom data. In most cases should be null
+    forwardAmount: Int as coins; // the amount of nanotons to be sent to the new owner.
+    forwardPayload: Slice as remaining; // optional custom data that should be sent to the new owner.
+}
+
+receive("transfer") {
+    let nftAddress = calculateNFTAddress(self.nftItemIndex, self.nftCollectionAddress, self.nftCode);
+
+    send(SendParameters{
+        to: nftAddress,
+        value: ton("0.1"),
+        body: NFTTransfer{
+            queryId: 42,
+            newOwner: address("[NEW_OWNER_ADDRESS]"),
+            responseDestination: myAddress(),
+            customPayload: null,
+            forwardAmount: 1,
+            forwardPayload: beginCell().storeBool(false).endCell().beginParse(), // TODO: this is so gas consuming, maybe there is another way? Or use generic (TBD)? Or there is better way to just left it
+        }.toCell(),
+    });
+}
+```
+
+## Get nft info
