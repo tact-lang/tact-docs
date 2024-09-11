@@ -1,58 +1,77 @@
 # Debugging Tact contracts
 
-import { Callout, Steps, Tabs } from 'nextra/components'
+import { Callout, Steps, Tabs, Cards } from 'nextra/components'
 
 Without fail, the code we write as smart contract developers doesn’t always do what we expected it to do. Sometimes it does something completely different! When the unexpected happens, the next task is to figure out why. To do so, there are various ways to reveal problems or "bugs" in the code. Let's get to *debugging*!
 
+<Cards>
+  <Cards.Card
+    arrow
+    title="General approach"
+    href="#approach"
+  />
+  <Cards.Card
+    arrow
+    title="Debug mode"
+    href="#debug-mode"
+  />
+  <Cards.Card
+    arrow
+    title="Structure of tests"
+    href="#tests-structure"
+  />
+  <Cards.Card
+    arrow
+    title="Dump values"
+    href="#tests-dump"
+  />
+  <Cards.Card
+    arrow
+    title="Expect certain states"
+    href="#tests-errors"
+  />
+  <Cards.Card
+    arrow
+    title="Send messages"
+    href="#tests-send"
+  />
+  <Cards.Card
+    arrow
+    title="Observe fees"
+    href="#tests-fees"
+  />
+  <Cards.Card
+    arrow
+    title="Expect exit codes"
+    href="#tests-errors"
+  />
+  <Cards.Card
+    arrow
+    title="Simulate time"
+    href="#tests-time"
+  />
+  <Cards.Card
+    arrow
+    title="Emit and log messages"
+    href="#logging"
+  />
+  <Cards.Card
+    arrow
+    title="Handle bounced messages"
+    href="#bounced"
+  />
+  <Cards.Card
+    arrow
+    title="Experimental lab setup"
+    href="#lab"
+  />
+</Cards>
+
 ## General approach [#approach]
-
-<Steps>
-
-### Clarify the problem by asking yourself the right questions [#approach-1]
-
-It helps to clarify the problem that you ran into before you try to fix it. Furthermore, clearly stated problems are much more easier to understand for someone else — this is very handy if you want to get meaningful help when asking in Tact's [Telegram chat][tg] or filling an issue on Tact's [GitHub](https://github.com/tact-lang).
-
-So, before you start debugging, make sure you've identified the problem you're trying to solve:
-
-1. What did you expect your code to do?
-
-2. What happened instead?
-
-    If you've run into a syntax error (breaking the rules of the language), reference error (using the wrong names), type error (confusing one type for another) or some other exception during compilation, that's great! This means that compiler has already found the issue for you, and now all that's left is to fix it.
-
-    If something else happened, it's most likely a logic error in your code, when your expectations didn't match the actual state the contract got in. To resolve that, try stepping through your code and checking state of variables in it via [`dump(){:tact}`][dump] function or alike.
-
-### Examine your assumptions [#approach-2]
-
-Before you investigate a bug or an error, think of the assumptions that made you expect a certain result. Unknown or unclear expectations can get in the way of identifying a problem, even when you're looking right at the cause of the problem.
-
-Here are a few questions to ask yourself to challenge your assumptions:
-
-* Are you using the right API (that is, the right [global static function](/book/functions#global-static-functions) or [extension function](/book/functions#extension-function))? An API that you're using might not do what you think it does, so make sure to consult with the [Reference](/ref) section or ask in the Tact [Telegram chat][tg].
-
-* Are you using an API correctly? Maybe, you used the right API but didn't use it in the right way.
-
-* Did you make a change to your code and assume it's unrelated to the issue you're facing? A common pitfall here is to modify the code and try to run the tests right away, without compiling the changes first.
-
-* Did you expect variable or a [`Cell{:tact}`](/book/cells#cells) to contain a certain value (or a certain type of value) that is different from what was really there? Pay attention to your types and data layouts, especially their representation in [TL-B schemas](https://docs.ton.org/develop/data-formats/tl-b-language).
-
-* Do you know the intent of the code? It's often more difficult to debug someone else's code. If it's not your code, it's possible you might need to spend time learning exactly what the code does before you can debug it effectively.
-
-<Callout>
-
-  When writing contracts, start small and start with code that works! Sometimes, it is easier to fix a large or complicated set of code by starting with a small piece of code that demonstrates the core task you are trying to achieve. Then, you can modify or add code incrementally, testing at each point for errors.
-
-  Here, it may be helpful to test your assumptions in a small [experimental playground](#lab) before rolling out a complete implementation.
-
-</Callout>
-
-### Go over your code and observe the values [#approach-3]
 
 At the moment, Tact doesn't have a step-through debugger. Despite that, it's still possible to use the ["printf debugging"](https://en.wikipedia.org/wiki/Debugging#printf_debugging) approach.
 
 It involves actively placing [`dump(){:tact}`][dump] and [`dumpStack(){:tact}`](/ref/core-debug#dumpstack) function calls throughout your code and observing states of variables at a given point of time. Note, that those functions work only in a [debug mode](#debug-mode) and won't be executed otherwise.
-
-Once you found that some value isn't equal to what you've expected it to be, don't rush to fixing the issue on the spot. That's because what you're seeing may not be the root cause of it and merely a symptom, effect. Be very careful with cause-and-effect relationships and figure out which's which to resolve the cause and not introduce new mess for your future self.
 
 <Callout>
 
@@ -63,8 +82,6 @@ Once you found that some value isn't equal to what you've expected it to be, don
 In addition to dumping values, it's often helpful to use assertive functions like [`require(){:tact}`](/ref/core-debug#require), [`nativeThrowIf(){:tact}`](/ref/core-debug#nativethrowif) and [`nativeThrowUnless(){:tact}`](/ref/core-debug#nativethrowunless). They help stating your assumptions clear, and are handy for setting up "trip wires" for catching issues in the future.
 
 And if you didn't find or cannot resolve the cause of your issues, try asking the community in Tact's [Telegram chat][tg] or, if your issue or question is generally related to TON more than it's related to Tact, hop into [TON Dev Telegram chat](https://t.me/tondev_eng).
-
-</Steps>
 
 ## Common debugging functions [#debug-functions]
 
