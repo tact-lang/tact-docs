@@ -2,11 +2,11 @@
 
 import { Callout } from 'nextra/components'
 
-This page lists common examples of working with [nft](https://docs.ton.org/develop/dapps/asset-processing/nfts).
-
-NFT ownership assigned notification message have the following structure.
+This page lists common examples of working with [NFTs](https://docs.ton.org/develop/dapps/asset-processing/nfts).
 
 ## Accepting nft ownership assign
+
+NFT ownership assigned notification message have the following structure.
 
 ```tact
 message(0x05138d91) NFTOwnershipAssigned {
@@ -63,7 +63,9 @@ contract Example with Deployable {
 
 ## Transferring NFT item
 
-To transfer NFT item use `send` or similar [function](/book/send).
+To send jetton transfer use [`send(){:tact}`](/book/send) function.
+If you want to have full control over the sending process and require some complex logic for it,
+use [`nativeSendMessage(){:tact}`](/ref/core-advanced#nativesendmessage) function.
 
 ```tact
 message(0x5fcc3d14) NFTTransfer {
@@ -93,4 +95,112 @@ receive("transfer") {
 }
 ```
 
-## Get nft info
+## Get NFT static info
+
+Note, that TON Blockchain does not support getter's in a native way, as Ethereum does.
+In order to receive data from another contract, you must exchange messages
+
+```tact
+message(0x2fcb26a2) NFTGetStaticData {
+    queryId: Int as uint64;
+}
+
+message(0x8b771735) NFTReportStaticData {
+    queryId: Int as uint64;
+    index: Int as uint256;
+    collection: Address;
+}
+
+receive("get static data") {
+    let nftAddress = address("[NFT_ADDRESS]");
+    send(SendParameters{
+        to: nftAddress,
+        value: ton("0.1"),
+        body: NFTGetStaticData{
+            queryId: 42,
+        }.toCell(),
+    });
+}
+
+receive(msg: NFTReportStaticData) {
+    let expectedNftAddress = calculateNFTAddress(msg.index, msg.collection, self.nftCode);
+    require(expectedNftAddress == sender(), "Sender is not expected NFT");
+
+    // Save nft static data or do something
+}
+```
+
+## Get NFT royalty params
+
+NFT royalty params described [here](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md).
+
+```tact
+receive("get royalty params") {
+    send(SendParameters{
+        to: self.nftCollectionAddress,
+        value: ton("0.1"),
+        body: NFTGetRoyaltyParams{
+            queryId: 42,
+        }.toCell(),
+    });
+}
+
+receive(msg: NFTReportRoyaltyParams) {
+    require(self.nftCollectionAddress == sender(), "Sender is not expected NFT collection");
+
+    // Do something with msg
+}
+```
+
+## NFT Collection methods
+
+These methods are not described in any standard but commonly used across nft [contracts](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-collection.fc).
+Note that they can be used by nft owner only.
+
+### Deploy nft
+
+```tact
+message(0x1) NFTDeploy {
+    queryId: Int as uint64;
+    itemIndex: Int as uint64;
+    amount: Int as coins; // amount to sent when deploying nft
+    nftContent: Cell;
+}
+
+receive("deploy") {
+    send(SendParameters{
+        to: self.nftCollectionAddress,
+        value: ton("0.14"),
+        body: NFTDeploy{
+            queryId: 42,
+            itemIndex: 42,
+            amount: ton("0.1"),
+            content: beginCell().endCell() // Should be yout content, mostly generated offchain
+        }.toCell(),
+    });
+}
+```
+
+### Change owner
+
+```tact
+message(0x3) NFTChangeOwner {
+    queryId: Int as uint64;
+    newOwner: Address;
+}
+
+receive("change owner") {
+    send(SendParameters{
+        to: self.nftCollectionAddress,
+        value: ton("0.05"),
+        body: NFTChangeOwner{
+            queryId: 42,
+            newOwner: address("NEW_OWNER_ADDRESS"),
+        }.toCell(),
+    });
+}
+```
+
+<Callout type="info" emoji="🤔">
+  Didn't find your favorite example of a jettons communication? Have cool implementations in mind? [Contributions are welcome!](https://github.com/tact-lang/tact-docs/issues)
+</Callout>
