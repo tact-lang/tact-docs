@@ -1,6 +1,5 @@
 export default {
   index: 'Overview',
-  guides: 'Guides',
   cs: 'Cheatsheets',
   '-- 1': {
     type: 'separator',
