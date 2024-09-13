@@ -1,3 +1,5 @@
+# Fungible Tokens (Jettons)
+
 import { Callout } from 'nextra-theme-docs';
 
 This page lists common examples of working with [jettons](https://docs.ton.org/develop/dapps/asset-processing/jettons).
@@ -66,7 +68,9 @@ contract Sample {
 
 ## Sending jetton transfer
 
-To send jetton transfer use `send` or similar [function](/book/send).
+To send jetton transfer use [`send(){:tact}`](/book/send) function.
+If you want to have full control over the sending process and require some complex logic for it,
+use [`nativeSendMessage(){:tact}`](/ref/core-advanced#nativesendmessage) function.
 Note that `myJettonWalletAddress` may also be stored in contract storage to use less gas in every transaction.
 
 ```tact
@@ -92,7 +96,7 @@ receive("send") {
             excessesDestination: msg.userAddress, // address were left toncoins will go
             customPayload: null, // in most cases will be null and can be omited. Needed for custom logic on jettons itself
             forwardTonAmount: 1, // amount that will be transferred with TransferNotification. Needed for custom logic execution like in example below
-            forwardPayload: beginCell().storeBool(false).endCell().beginParse(), // TODO: this is so gas consuming, maybe there is another way? Or use generic (TBD)? Or there is better way to just left it
+            forwardPayload: cell("te6cckEBAQEAAwAAAUD20kA0").beginParse(), // precomputed beginCell().storeBool(false).endCell()
         }.toCell(),
     });
 }
@@ -124,7 +128,8 @@ receive("burn") {
 
 ## USDT jetton operations
 
-USDT operations remains the same except one difference - `JettonWalletData` will have the following structure:
+Operations with USDT (on TON) remain the same, except that the  `JettonWalletData` will have the following structure:
+
 ```tact
 struct JettonWalletData {
     status: Ins as uint4;
