@@ -104,7 +104,7 @@
           "patterns": [
             {
               "comment": "FunC identifier",
-              "match": "((?:[a-zA-Z_\\'\\?!&]|::)(?:[a-zA-Z0-9_\\'\\?!&]|::)*)",
+              "match": "(.*?)",
               "name": "entity.name.function.func.tact"
             }
           ],
@@ -139,8 +139,39 @@
           }
         },
         {
+          "comment": "Asm arrangements",
+          "begin": "(?<!\\.)(asm)\\s*(\\()",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.other.attribute-name.tact"
+            },
+            "2": {
+              "name": "punctuation.brackets.round.tact"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#variable"
+            },
+            {
+              "match": "->",
+              "name": "keyword.operator.mapsto.tact"
+            },
+            {
+              "match": "\\b([0-9]*)\\b",
+              "name": "constant.numeric.decimal.tact"
+            }
+          ],
+          "end": "\\)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.brackets.round.tact"
+            }
+          }
+        },
+        {
           "comment": "Fallback match",
-          "match": "(?<!\\.)\\b(@name|@interface)\\b",
+          "match": "(?<!\\.)\\b(@name|@interface|asm)\\b",
           "name": "entity.other.attribute-name.tact"
         }
       ]
@@ -256,7 +287,7 @@
           },
           {
             "comment": "Other constants from the core library",
-            "match": "(?<!\\.)\\b(SendRemainingValue|SendRemainingBalance|SendPayGasSeparately|SendIgnoreErrors|SendBounceIfActionFail|SendDestroyIfZero|ReserveExact|ReserveAllExcept|ReserveAtMost|ReserveAddOriginalBalance|ReserveInvertSign|ReserveBounceIfActionFail)\\b",
+            "match": "(?<!\\.)\\b(SendRemainingValue|SendRemainingBalance|SendPayGasSeparately|SendIgnoreErrors|SendBounceIfActionFail|SendDestroyIfZero|SendOnlyEstimateFee|ReserveExact|ReserveAllExcept|ReserveAtMost|ReserveAddOriginalBalance|ReserveInvertSign|ReserveBounceIfActionFail)\\b",
             "name": "constant.other.builtin.tact"
           },
           {
@@ -365,7 +396,7 @@
         "comment": "Serialization",
         "patterns": [
           {
-            "match": "(?<!\\.)\\b(as)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+            "match": "(?<!\\.)\\b(as)\\s+(coins|remaining|bytes32|bytes64|int257|u?int(?:2[0-5][0-6]|1[0-9][0-9]|[1-9][0-9]?))\\b",
             "captures": {
               "1": {
                 "name": "keyword.other.as.tact storage.modifier.tact"
