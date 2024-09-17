@@ -135,6 +135,17 @@ receive(msg: NFTReportStaticData) {
 NFT royalty params are described [here](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md).
 
 ```tact
+message(0x693d3950) NFTGetRoyaltyParams {
+    queryId: Int as uint64;
+}
+
+message(0xa8cb00ad) NFTReportRoyaltyParams {
+    queryId: Int as uint64;
+    numerator: Int as uint16;
+    denominator: Int as uint16;
+    destination: Address;
+}
+
 receive("get royalty params") {
     send(SendParameters{
         to: self.nftCollectionAddress,
