@@ -89,7 +89,7 @@ receive("transfer") {
             responseDestination: myAddress(),
             customPayload: null,
             forwardAmount: 1,
-            forwardPayload: beginCell().storeBool(false).endCell().beginParse(), // TODO: this is so gas consuming, maybe there is another way? Or use generic (TBD)? Or there is better way to just left it
+            forwardPayload: rawSlice("F"), // precomputed beginCell().storeUint(0xF, 4).endCell().beginParse()
         }.toCell(),
     });
 }
