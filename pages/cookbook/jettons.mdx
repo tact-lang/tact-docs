@@ -9,10 +9,10 @@ This page lists common examples of working with [jettons](https://docs.ton.org/d
 Transfer notification message have the following structure.
 
 ```tact
-message(0x7362d09c) TransferNotification {
+message(0x7362d09c) JettonTransferNotification {
     queryId: Int as uint64;
-    jettonAmount: Int as coins;
-    fromAddress: Address;
+    amount: Int as coins;
+    sender: Address;
     forwardPayload: Slice as remaining;
 }
 ```
@@ -28,6 +28,7 @@ Use [receiver](/book/receive) function to accept token notification message.
 Validation can be done using jetton wallet state init and calculating jetton address.
 Note, that notifications are coming from YOUR contract's jetton wallet, so [`myAddress()`](/ref/core-common#myaddress) should be used in owner address field.
 Wallet initial data layout is shown below, but sometimes it can differ.
+Note that `myJettonWalletAddress` may also be stored in contract storage to use less gas in every transaction.
 
 ```tact
 struct JettonWalletData {
@@ -57,7 +58,7 @@ contract Sample {
         self.jettonMasterAddress = jettonMasterAddress;
     }
 
-    receive(msg: TransferNotification) {
+    receive(msg: JettonTransferNotification) {
         let myJettonWalletAddress = calculateJettonWalletAddress(myAddress(), self.jettonMasterAddress, self.jettonWalletCode);
         require(sender() == myJettonWalletAddress, "Notification not from your jetton wallet!");
 
@@ -69,16 +70,14 @@ contract Sample {
 ## Sending jetton transfer
 
 To send jetton transfer use [`send(){:tact}`](/book/send) function.
-If you want to have full control over the sending process and require some complex logic for it,
-use [`nativeSendMessage(){:tact}`](/ref/core-advanced#nativesendmessage) function.
 Note that `myJettonWalletAddress` may also be stored in contract storage to use less gas in every transaction.
 
 ```tact
-message(0xf8a7ea5) TokenTransfer {
+message(0xf8a7ea5) JettonTransfer {
     queryId: Int as uint64;
     amount: Int as coins;
     destination: Address;
-    excessesDestination: Address;
+    responseDestination: Address?;
     customPayload: Cell? = null;
     forwardTonAmount: Int as coins;
     forwardPayload: Slice as remaining;
@@ -89,14 +88,14 @@ receive("send") {
     send(SendParameters{
         to: myJettonWalletAddress,
         value: ton("0.05"),
-        body: TokenTransfer{
+        body: JettonTransfer{
             queryId: 42,
             amount: jettonAmount, // jetton amount you want to transfer
             destination: msg.userAddress, // address you want to transfer jettons. Note that this is address of jetton wallet owner, not jetton wallet itself
-            excessesDestination: msg.userAddress, // address were left toncoins will go
-            customPayload: null, // in most cases will be null and can be omited. Needed for custom logic on jettons itself
-            forwardTonAmount: 1, // amount that will be transferred with TransferNotification. Needed for custom logic execution like in example below
-            forwardPayload: cell("te6cckEBAQEAAwAAAUD20kA0").beginParse(), // precomputed beginCell().storeBool(false).endCell()
+            responseDestination: msg.userAddress, //  address where to send a response with confirmation of a successful transfer and the rest of the incoming message Toncoins
+            customPayload: null, // in most cases will be null and can be omited. Needed for custom logic on Jetton Wallets itself
+            forwardTonAmount: 1, // amount that will be transferred with JettonTransferNotification. Needed for custom logic execution like in example below. If the amount is 0 notification won't be sennt
+            forwardPayload: cell("te6cckEBAQEAAwAAAUD20kA0").beginParse() // precomputed beginCell().storeBool(false).endCell()
         }.toCell(),
     });
 }
@@ -105,10 +104,10 @@ receive("send") {
 ## Burning jetton
 
 ```tact
-message(0x595f07bc) TokenBurn {
+message(0x595f07bc) JettonBurn {
     queryId: Int as uint64;
     amount: Int as coins;
-    excessesDestination: Address;
+    responseDestination: Address?;
     customPayload: Cell? = null;
 }
 
@@ -116,10 +115,10 @@ receive("burn") {
     let myJettonWalletAddress = calculateJettonWalletAddress(myAddress(), self.jettonMasterAddress, self.jettonWalletCode);
     send(SendParameters{
         to: myJettonWalletAddress,
-        body: TokenBurn{
+        body: JettonBurn{
             queryId: 42,
             amount: jettonAmount, // jetton amount you want to burn
-            excessesDestination: someAddress, // address were left toncoins will go
+            responseDestination: someAddress, // address where to send a response with confirmation of a successful burn and the rest of the incoming message coins
             customPayload: null, // in most cases will be null and can be omited. Needed for custom logic on jettons itself
         }.toCell(),
     });
