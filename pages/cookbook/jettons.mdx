@@ -93,9 +93,9 @@ receive("send") {
             amount: jettonAmount, // jetton amount you want to transfer
             destination: msg.userAddress, // address you want to transfer jettons. Note that this is address of jetton wallet owner, not jetton wallet itself
             responseDestination: msg.userAddress, //  address where to send a response with confirmation of a successful transfer and the rest of the incoming message Toncoins
-            customPayload: null, // in most cases will be null and can be omited. Needed for custom logic on Jetton Wallets itself
-            forwardTonAmount: 1, // amount that will be transferred with JettonTransferNotification. Needed for custom logic execution like in example below. If the amount is 0 notification won't be sennt
-            forwardPayload: cell("te6cckEBAQEAAwAAAUD20kA0").beginParse() // precomputed beginCell().storeBool(false).endCell()
+            customPayload: null, // in most cases will be null and can be omitted. Needed for custom logic on Jetton Wallets itself
+            forwardTonAmount: 1, // amount that will be transferred with JettonTransferNotification. Needed for custom logic execution like in example below. If the amount is 0 notification won't be sent
+            forwardPayload: rawSlice("F") // precomputed beginCell().storeUint(0xF, 4).endCell().beginParse(). This works for simple transfer, if needed any struct can be used as `forwardPayload`
         }.toCell(),
     });
 }
@@ -119,7 +119,7 @@ receive("burn") {
             queryId: 42,
             amount: jettonAmount, // jetton amount you want to burn
             responseDestination: someAddress, // address where to send a response with confirmation of a successful burn and the rest of the incoming message coins
-            customPayload: null, // in most cases will be null and can be omited. Needed for custom logic on jettons itself
+            customPayload: null, // in most cases will be null and can be omitted. Needed for custom logic on jettons itself
         }.toCell(),
     });
 }
