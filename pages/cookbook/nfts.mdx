@@ -4,9 +4,9 @@ import { Callout } from 'nextra/components'
 
 This page lists common examples of working with [NFTs](https://docs.ton.org/develop/dapps/asset-processing/nfts).
 
-## Accepting nft ownership assign
+## Accepting NFT ownership assignment
 
-NFT ownership assigned notification message have the following structure.
+Notification message of assigned NFT ownership has the following structure:
 
 ```tact
 message(0x05138d91) NFTOwnershipAssigned {
@@ -23,8 +23,8 @@ Use [receiver](/book/receive) function to accept notification message.
 
 </Callout>
 
-Validation can be done using nft item state init and calculating nft item address.
-NFT Item initial data layout is shown below, but sometimes it may differ.
+Validation can be done using [`StateInit{:tact}`](/book/expressions#initof) and derived address of the NFT item.
+Initial data layout of the NFT item is shown below, but sometimes it may differ.
 
 ```tact
 struct NFTItemInitData {
@@ -54,7 +54,7 @@ contract Example with Deployable {
 
     receive(msg: NFTOwnershipAssigned) {
         let expectedNftAddress = calculateNFTAddress(self.nftItemIndex, self.nftCollectionAddress, self.nftCode); // or you can even store expectedNftAddress
-        require(expectedNftAddress == sender(), "Sender is not expected NFT");
+        require(expectedNftAddress == sender(), "NFT contract is not the sender");
 
         // your logic of processing nft ownership assign notification
     }
@@ -85,7 +85,7 @@ receive("transfer") {
         value: ton("0.1"),
         body: NFTTransfer{
             queryId: 42,
-            newOwner: address("[NEW_OWNER_ADDRESS]"),
+            newOwner: address("NEW_OWNER_ADDRESS"), // NOTE: Modify it to your liking
             responseDestination: myAddress(),
             customPayload: null,
             forwardAmount: 1,
@@ -97,8 +97,8 @@ receive("transfer") {
 
 ## Get NFT static info
 
-Note, that TON Blockchain does not support getter's in a native way, as Ethereum does.
-In order to receive data from another contract, you must exchange messages
+Note, that TON Blockchain does not allow contracts to call each other [getters](https://docs.tact-lang.org/book/contracts#getter-functions) like Ethereum does.
+In order to receive data from another contract, you must exchange messages.
 
 ```tact
 message(0x2fcb26a2) NFTGetStaticData {
@@ -124,7 +124,7 @@ receive("get static data") {
 
 receive(msg: NFTReportStaticData) {
     let expectedNftAddress = calculateNFTAddress(msg.index, msg.collection, self.nftCode);
-    require(expectedNftAddress == sender(), "Sender is not expected NFT");
+    require(expectedNftAddress == sender(), "NFT contract is not the sender");
 
     // Save nft static data or do something
 }
@@ -132,7 +132,7 @@ receive(msg: NFTReportStaticData) {
 
 ## Get NFT royalty params
 
-NFT royalty params described [here](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md).
+NFT royalty params are described [here](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md).
 
 ```tact
 receive("get royalty params") {
@@ -146,7 +146,7 @@ receive("get royalty params") {
 }
 
 receive(msg: NFTReportRoyaltyParams) {
-    require(self.nftCollectionAddress == sender(), "Sender is not expected NFT collection");
+    require(self.nftCollectionAddress == sender(), "NFT collection contract is not the sender");
 
     // Do something with msg
 }
@@ -154,10 +154,9 @@ receive(msg: NFTReportRoyaltyParams) {
 
 ## NFT Collection methods
 
-These methods are not described in any standard but commonly used across nft [contracts](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-collection.fc).
-Note that they can be used by nft owner only.
+These methods are not described in any standard, but are commonly used in NFT [contracts](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-collection.fc). Note that they can only be used by NFT owners.
 
-### Deploy nft
+### Deploy NFT
 
 ```tact
 message(0x1) NFTDeploy {
@@ -195,7 +194,7 @@ receive("change owner") {
         value: ton("0.05"),
         body: NFTChangeOwner{
             queryId: 42,
-            newOwner: address("NEW_OWNER_ADDRESS"),
+            newOwner: address("NEW_OWNER_ADDRESS"), // NOTE: Modify it to your liking
         }.toCell(),
     });
 }
