@@ -10,18 +10,18 @@ Tact is a new programming language for TON Blockchain that is focused on efficie
 
 <Steps>
 
-### Ensure that Node.js LTS is installed and available [#start-1]
+### Ensure that the supported version of Node.js is installed and available [#start-1]
 
-To check it, run `node --version{:shell}` — it should show you the version 18.0.0 or later.
+To check it, run `node --version{:shell}` — it should show you the version 22.0.0 or later.
 
 ### Run the following command [#start-2]
 
 It will create a new project with the simple counter contract:
 
-<Tabs items={['npm', 'yarn', 'pnpm']} defaultIndex="1">
+<Tabs items={['npm', 'yarn', 'pnpm', 'bun']} defaultIndex="1">
   <Tabs.Tab>
     ```shell
-    npm create ton -- simple-counter --type tact-counter --contractName SimpleCounter
+    npm create ton@latest -- simple-counter --type tact-counter --contractName SimpleCounter
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -32,12 +32,12 @@ It will create a new project with the simple counter contract:
   </Tabs.Tab>
   <Tabs.Tab>
     ```shell
-    pnpm create ton simple-counter --type tact-counter --contractName SimpleCounter
+    pnpm create ton@latest simple-counter --type tact-counter --contractName SimpleCounter
     ```
   </Tabs.Tab>
   <Tabs.Tab>
     ```shell
-    bun x create-ton bun-simple-counter --type tact-counter --contractName SimpleCounter
+    bun create ton@latest simple-counter --type tact-counter --contractName SimpleCounter
     ```
   </Tabs.Tab>
 </Tabs>
