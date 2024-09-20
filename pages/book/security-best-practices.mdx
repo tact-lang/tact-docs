@@ -1,0 +1,144 @@
+# Security Best Practices
+
+In Tact smart contracts there are various anti-patterns and potential attacks developers need to be cautious of. These can impact the security, efficiency, and correctness of the contracts. Below, are covered both common anti-patterns and attacks specific to Tact smart contracts.
+
+## Send private data on chain
+
+Everything is stored on the blockchain. Remember that even if no private data is saved in the transaction, anyone can still get this data.
+
+## Incorrect use of signed/unsigned integer
+
+The following is an example of incorrect use of a signed integer. In the `Vote` message, the `votes` type is `int32`. This can lead to fraud when the attacker sends the negative number of votes instead of positive one.
+
+Invalid example:
+
+```tact
+message Vote {
+    votes: Int as int32;
+}
+
+contract Sample {
+    votes: Int as uint32 = 0;
+
+    receive(msg: Vote) {
+        self.votes += msg.votes;
+    }
+}
+```
+
+Unsigned integers are safer because they will error out if an overflow occurs, and signed integers are only used when they are really needed.
+
+
+## Invalid throw values
+
+Each time the TVM execution stops normally, it stops with exit codes `0` or `1`.
+Although it is done automatically, TVM execution can be interrupted directly in an unexpected way if exit codes `0` and `1` are thrown directly by either `throw(0)` or `throw(1)` command.
+
+Invalid example:
+
+```tact
+throw(0);
+throw(1);
+```
+
+## Insecure random numbers
+
+Note that [`random()`](/ref/core-random#random) function is pseudo-random and depends on [logical time](https://docs.ton.org/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-logical-time). A hacker can predict random by brute-forcing the logical time in the current block.
+
+Invalid example:
+
+```tact
+if (random(1, 10) == 7) {
+  ... send reward ...
+}
+```
+
+## Optimized message handling
+
+The frontend should handle string parsing from human-friendly formats into machine-readable binary structures.
+This ensures that only optimized, compact messages are sent to the blockchain, reducing computational and storage costs.
+By doing this, you avoid overloading the blockchain with unnecessary processing, thereby improving efficiency.
+All interactions between the frontend and smart contracts should be through pre-processed binary messages.
+
+Invalid example:
+
+```tact
+message Sample {
+    field: String;
+}
+
+receive(msg: Sample) {
+    let parsed = field.fromBase64();
+}
+```
+
+## Gas limitation
+
+Be careful with the `Out of gas error`. It cannot be handled, so try to precalculate the gas consumption for each receiver using tests, if possible.
+This will help not to waste extra gas, because the transaction will fail anyway.
+
+Recommendation:
+
+```tact
+message Vote {
+    votes: Int as int32;
+}
+
+contract Sample2 {
+    const voteGasUsage = 10000; // precompute with tests
+
+    receive(msg: Vote) {
+        require(context().value > getStorageFee(self.voteGasUsage, false), "Not enough gas!");
+    }
+}
+```
+
+## Identity validation
+
+Always validate identity of the sender if needed. This may be achieved through [`Ownable`](/ref/stdlib-ownable) trait or using state init validation for jettons and NFTs.
+```ts
+// TODO add links after jetton and nft pages merged
+```
+
+## Replay protection
+
+Replay protection is a security mechanism to prevent an attacker from reusing a previous message. More about replay protection may be found [here](https://docs.ton.org/develop/smart-contracts/guidelines/external-messages).
+
+Recommendation:
+
+```tact
+message Msg {
+    seqno: Int as uint64;
+}
+
+contract Sample {
+    seqno: Int as uint64;
+
+    receive(msg: Msg) {
+        require(self.seqno == msg.seqno, "Invalid seqno");
+        self.seqno += 1;
+    }
+}
+```
+
+## Race condition of messages
+
+A message cascade can be processed over many blocks. Assume that while one message flow is running, an attacker can initiate a second one in parallel.
+That is, if a property was checked at the beginning (e.g. whether the user has enough tokens), do not assume that at the third stage in the same contract they will still satisfy this property.
+
+## Handle/Send bounced messages
+
+Send messages with bounce flag. Bounced messages means that other contract execution failed. You may want to deal with it by rolling back contract's state.
+
+Recommendation:
+
+```tact
+contract JettonWallet {
+    balance: Int as coins;
+
+    bounced(src: bounced<TokenTransferInternal>) {
+        self.balance += src.amount;
+    }
+}
+
+```
