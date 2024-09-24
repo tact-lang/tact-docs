@@ -7,10 +7,16 @@ import { Callout, Steps, Tabs } from 'nextra/components'
 [STON.fi](https://ston.fi) is a decentralized automated market maker (AMM) built on [TON blockchain](https://ton.org) providing virtually zero fees, low slippage, an extremely easy interface, and direct integration with TON wallets.
 
 <Callout type="warning">
-  This api is about v2 of STON.fi. Make sure not to use it with v1 contracts
+  This api is about STON.fi version 2, which is under development. Use it at your own risk.
 </Callout>
 
-## Swap jetton to jetton
+## Swaps
+
+More about swaps [here](https://docs.ston.fi/docs/developer-section/api-reference-v2/example_swap).
+
+Some variables like `offerAmount` are hardcoded for demonstration purposes. Don't forget to change them in real case scenarios.
+
+Swaps have several common structures and messages. Don't forget to use them with the code examples below!
 
 ```tact
 message(0x6664de2a) StonfiSwap {
@@ -41,34 +47,46 @@ message(0xf8a7ea5) JettonTransfer {
     forwardTonAmount: Int as coins;
     forwardPayload: Cell?; // hack for now, equivalent to Slice as remaining with first bit set to 1
 }
+```
 
-// precalculated gas amounts to swap
+Below are shown gas constants. All of them are taken from the sdk [STON.fi sdk](https://github.com/ston-fi/sdk). They are slightly differ from reality, but it is ok for now.
+
+```tact
 const GasSwapJettonToJetton: Int = ton("0.3");
 const GasSwapJettonToJettonFwd: Int = ton("0.24");
 
-const RouterAddress: Address = address("kQALh-JBBIKK7gr0o4AVf9JZnEsFndqO0qTCyT-D-yBsWk0v"); // CPI Router v2.1.0
-const RouterJettonWallet: Address = address("kQAtX3x2s-wMtYTz8CfmAyloHAB73vONzJM5S2idqXl-_5xK"); // Router Lupa Address. Should be calculated onchain in real scenarios
+const GasSwapJettonToTon: Int = ton("0.3");
+const GasSwapJettonToTonFwd: Int = ton("0.24");
 
-message SwapJetton {
+const GasSwapTonToJettonFwd: Int = ton("0.3");
+const GasSwapTonToJetton: Int = ton("0.01");
+```
+
+### Jetton to jetton
+
+```tact
+const RouterAddress: Address = address("kQALh-JBBIKK7gr0o4AVf9JZnEsFndqO0qTCyT-D-yBsWk0v"); // CPI Router v2.1.0
+const RouterJettonWallet: Address = address("kQAtX3x2s-wMtYTz8CfmAyloHAB73vONzJM5S2idqXl-_5xK"); // Router Jetton Wallet Address
+
+message SwapJettonJetton {
     myJettonWalletAddress: Address; // calculated offchain for ease of example, in real case scenarios should be calculated onchain
 }
 
 contract JettonToJetton {
     receive() {}
-    receive(msg: SwapJetton) {
+    receive(msg: SwapJettonJetton) {
         let myJettonWalletAddress: Address = msg.myJettonWalletAddress;
 
-        let receiver = address("0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-"); // replace with your reciver address
-        let offerAmount: Int = 100000; // replace with your offer amount
+        let offerAmount: Int = 100000;
 
         let forwardPayload = StonfiSwap{
             otherTokenWallet: RouterJettonWallet,
-            refundAddress: myAddress(), // replace with your refund address
-            excessesAddress: myAddress(), // replace with your exceesses address
+            refundAddress: myAddress(),
+            excessesAddress: myAddress(),
             deadline: now() + 10000,
             additionalData: SwapAdditionalData{
                 minOut: 1, // swap will fail if a receiver should receive less than minOut of tokens as a result
-                receiver,
+                receiver: myAddress(),
             }
         };
 
@@ -88,66 +106,33 @@ contract JettonToJetton {
 }
 ```
 
-## Swap jetton to TON
+### Jetton to TON
 
 Swapping jetton to TON is similar to jetton/jetton swap. The only one difference is that `RouterJettonWallet` address should be replaced with `RouterProxyTonWallet`.
 
 ```tact
-message(0x6664de2a) StonfiSwap {
-    otherTokenWallet: Address; // Address of the other Router token wallet
-    refundAddress: Address; // Address where refund will be sent if swap fails
-    excessesAddress: Address; // Address where TON excesses will be sent
-    deadline: Int as uint64; // Timestamp of execution deadline for this tx
-    additionalData: SwapAdditionalData;
-}
-
-struct SwapAdditionalData {
-    minOut: Int as coins; // Minimum required amount of tokens to receive
-    receiver: Address; // Address where tokens will be sent after swap
-    fwdGas: Int as coins = 0; // Gas used to forward a message in transfer_notification after swap if custom_payload is present
-    customPayload: Cell? = null; // Payload sent in transfer_notification after swap
-    refundFwdGas: Int as coins = 0; // Gas used to forward a message in transfer_notification if swap fails if refund_payload is present
-    refundPayload: Cell? = null; // Payload sent in transfer_notification if swap fails
-    refFee: Int as uint16 = 10; // Referral fee. Max amount is 100 (1%)
-    referralAddress: Address? = null; // Referral address
-}
-
-message(0xf8a7ea5) JettonTransfer {
-    queryId: Int as uint64;
-    amount: Int as coins;
-    destination: Address;
-    responseDestination: Address?;
-    customPayload: Cell? = null;
-    forwardTonAmount: Int as coins;
-    forwardPayload: Cell?; // hack for now, equivalent to Slice as remaining with first bit set to 1
-}
-
-const GasSwapJettonToTon: Int = ton("0.3");
-const GasSwapJettonToTonFwd: Int = ton("0.24");
-
 const RouterAddress: Address = address("kQALh-JBBIKK7gr0o4AVf9JZnEsFndqO0qTCyT-D-yBsWk0v"); // CPI Router v2.1.0
-const RouterProxyTonWallet: Address = address("kQBbJjnahBMGbMUJwhAXLn8BiigcGXMJhSC0l7DBhdYABhG7"); // Router pTON Address
+const RouterProxyTonWallet: Address = address("kQBbJjnahBMGbMUJwhAXLn8BiigcGXMJhSC0l7DBhdYABhG7"); // Router's pTON Address
 
-message SwapJetton {
+message SwapJettonTon {
     myJettonWalletAddress: Address; // calculated offchain for ease of example, in real case scenarios should be calculated onchain
 }
 
-contract Sample {
+contract JettonToTon {
     receive() {}
-    receive(msg: SwapJetton) {
+    receive(msg: SwapJettonTon) {
         let myJettonWalletAddress: Address = msg.myJettonWalletAddress;
 
-        let receiver = address("0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-"); // replace with your reciever address
         let offerAmount: Int = 100000;
 
         let forwardPayload = StonfiSwap{
             otherTokenWallet: RouterProxyTonWallet,
-            refundAddress: myAddress(), // replace with your refund address
-            excessesAddress: myAddress(), // replace with your excesses address
+            refundAddress: myAddress(),
+            excessesAddress: myAddress(),
             deadline: now() + 10000,
             additionalData: SwapAdditionalData{
                 minOut: 1, // swap will fail if a receiver should receive less than minOut of tokens as a result
-                receiver,
+                receiver: myAddress(),
             }
         };
 
@@ -160,6 +145,51 @@ contract Sample {
                 destination: RouterAddress,
                 responseDestination: myAddress(),
                 forwardTonAmount: GasSwapJettonToTonFwd,
+                forwardPayload: forwardPayload.toCell(),
+            }.toCell()
+        });
+    }
+}
+```
+
+### TON to jetton
+
+TON to jetton swap introduces `ProxyTonTransfer` cause all interaction is done with pTON contract.
+
+```tact
+message(0x01f3835d) ProxyTonTransfer {
+    queryId: Int as uint64 = 0;
+    tonAmount: Int as coins;
+    refundAddress: Address;
+    forwardPayload: Cell?;
+}
+
+const RouterProxyTonWallet: Address = address("kQBbJjnahBMGbMUJwhAXLn8BiigcGXMJhSC0l7DBhdYABhG7"); // Router's pTON wallet Address
+const RouterJettonWallet: Address = address("kQAtX3x2s-wMtYTz8CfmAyloHAB73vONzJM5S2idqXl-_5xK"); // Router's Jetton Wallet Address
+
+contract TonToJetton {
+    receive() {}
+    receive("ton-jetton") {
+        let offerAmount: Int = 100000;
+
+        let forwardPayload = StonfiSwap{
+            otherTokenWallet: RouterJettonWallet,
+            refundAddress: myAddress(),
+            excessesAddress: myAddress(),
+            deadline: now() + 10000,
+            additionalData: SwapAdditionalData{
+                minOut: 1, // swap will fail if a receiver should receive less than minOut of tokens as a result
+                receiver: myAddress(),
+            }
+        };
+
+        send(SendParameters{
+            to: RouterProxyTonWallet,
+            value: GasSwapTonToJetton + GasSwapTonToJettonFwd + offerAmount,
+            body: ProxyTonTransfer{
+                queryId: 42,
+                tonAmount: offerAmount,
+                refundAddress: myAddress(),
                 forwardPayload: forwardPayload.toCell(),
             }.toCell()
         });
