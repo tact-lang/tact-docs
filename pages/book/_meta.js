@@ -47,6 +47,7 @@ export default {
   masterchain: 'Masterchain',
   func: 'Compatibility with FunC',
   programmatic: 'Programmatic API',
+  'security-best-practices': 'Security best practices',
   '-- Community': {
     type: 'separator',
   },
