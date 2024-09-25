@@ -224,10 +224,10 @@ struct ProvideLPAdditionalData {
 Below are shown gas constants. All of them are taken from the sdk [STON.fi sdk](https://github.com/ston-fi/sdk). They are slightly differ from reality, but it is ok for now.
 
 ```tact
-const SignleSideProvideLpJettonGas: Int = ton("1");
-const SignleSideProvideLpJettonGasFwd: Int = ton("0.8");
-const SignleSideProvideLpTonGas: Int = ton("0.8");
-const TonTansferGas: Int = ton("0.01");
+const SingleSideProvideLpJettonGas: Int = ton("1");
+const SingleSideProvideLpJettonGasFwd: Int = ton("0.8");
+const SingleSideProvideLpTonGas: Int = ton("0.8");
+const TonTransferGas: Int = ton("0.01");
 ```
 
 ### Jetton deposit
@@ -272,13 +272,13 @@ contract Sample {
 
         send(SendParameters{
             to: myJettonWalletAddress,
-            value: SignleSideProvideLpJettonGas,
+            value: SingleSideProvideLpJettonGas,
             body: JettonTransfer{
                 queryId: 42,
                 amount: offerAmount,
                 destination: RouterAddress,
                 responseDestination: myAddress(),
-                forwardTonAmount: SignleSideProvideLpJettonGasFwd,
+                forwardTonAmount: SingleSideProvideLpJettonGasFwd,
                 forwardPayload: forwardPayload.toCell(),
             }.toCell(),
         });
@@ -318,7 +318,7 @@ contract Sample {
 
         send(SendParameters{
             to: RouterProxyTonWallet,
-            value: SignleSideProvideLpTonGas + TonTansferGas + offerAmount,
+            value: SingleSideProvideLpTonGas + TonTransferGas + offerAmount,
             body: ProxyTonTransfer{
                 queryId: 42,
                 tonAmount: offerAmount,
