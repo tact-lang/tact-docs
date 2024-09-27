@@ -1,6 +1,7 @@
 # Non-Fungible Tokens (NFTs)
 
-import { Callout } from 'nextra/components'
+
+import { Callout, Tabs } from 'nextra/components';
 
 This page lists common examples of working with [NFTs](https://docs.ton.org/develop/dapps/asset-processing/nfts).
 
@@ -23,8 +24,27 @@ Use [receiver](/book/receive) function to accept notification message.
 
 </Callout>
 
-Validation can be done using [`StateInit{:tact}`](/book/expressions#initof) and derived address of the NFT item.
-Initial data layout of the NFT item is shown below, but sometimes it may differ.
+Validation can be done in two ways:
+
+1. Directly store the NFT item address and validate against it.
+
+```tact
+contract Example with Deployable {
+    nftItemAddress: Address;
+
+    init(nftItemAddress: Address) {
+        self.nftItemAddress = nftItemAddress;
+    }
+
+    receive(msg: NFTOwnershipAssigned) {
+        require(nftItemAddress == sender(), "NFT contract is not the sender");
+
+        // your logic of processing nft ownership assign notification
+    }
+}
+```
+
+2. Use [`StateInit{:tact}`](/book/expressions#initof) and derived address of the NFT item.
 
 ```tact
 struct NFTItemInitData {
@@ -61,11 +81,11 @@ contract Example with Deployable {
 }
 ```
 
+Since the initial data layout of the NFT item can vary, the first approach is often more suitable.
+
 ## Transferring NFT item
 
-To send jetton transfer use [`send(){:tact}`](/book/send) function.
-If you want to have full control over the sending process and require some complex logic for it,
-use [`nativeSendMessage(){:tact}`](/ref/core-advanced#nativesendmessage) function.
+To send NFT item transfer use [`send(){:tact}`](/book/send) function.
 
 ```tact
 message(0x5fcc3d14) NFTTransfer {
@@ -78,10 +98,8 @@ message(0x5fcc3d14) NFTTransfer {
 }
 
 receive("transfer") {
-    let nftAddress = calculateNFTAddress(self.nftItemIndex, self.nftCollectionAddress, self.nftCode);
-
     send(SendParameters{
-        to: nftAddress,
+        to: self.nftItemAddress,
         value: ton("0.1"),
         body: NFTTransfer{
             queryId: 42,
@@ -97,7 +115,7 @@ receive("transfer") {
 
 ## Get NFT static info
 
-Note, that TON Blockchain does not allow contracts to call each other [getters](https://docs.tact-lang.org/book/contracts#getter-functions) like Ethereum does.
+Note, that TON Blockchain does not allow contracts to call each other [getters](https://docs.tact-lang.org/book/contracts#getter-functions).
 In order to receive data from another contract, you must exchange messages.
 
 ```tact
@@ -124,7 +142,7 @@ receive("get static data") {
 
 receive(msg: NFTReportStaticData) {
     let expectedNftAddress = calculateNFTAddress(msg.index, msg.collection, self.nftCode);
-    require(expectedNftAddress == sender(), "NFT contract is not the sender");
+    require(self.nftItemAddress == sender(), "NFT contract is not the sender");
 
     // Save nft static data or do something
 }
@@ -165,7 +183,9 @@ receive(msg: NFTReportRoyaltyParams) {
 
 ## NFT Collection methods
 
-These methods are not described in any standard, but are commonly used in NFT [contracts](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-collection.fc). Note that they can only be used by NFT owners.
+These methods are not part of any standard, and they will only work with [this specific implementation](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-collection.fc). Please keep this in mind before using them.
+
+Additionally, note that only NFT owners are allowed to use these methods.
 
 ### Deploy NFT
 
@@ -212,5 +232,6 @@ receive("change owner") {
 ```
 
 <Callout type="info" emoji="🤔">
-  Didn't find your favorite example of a jettons communication? Have cool implementations in mind? [Contributions are welcome!](https://github.com/tact-lang/tact-docs/issues)
+  Didn't find your favorite example of a NFT communication? Have cool implementations in mind? [Contributions are
+  welcome!](https://github.com/tact-lang/tact-docs/issues)
 </Callout>
