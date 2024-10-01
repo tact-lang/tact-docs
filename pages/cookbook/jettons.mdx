@@ -120,7 +120,7 @@ contract Example with Deployable {
 
         self.myJettonAmount += msg.amount;
 
-        // return exceeses
+        // return excesses
         self.forward(msg.sender, null, false, null);
     }
 }
