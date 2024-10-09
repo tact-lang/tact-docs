@@ -15,10 +15,9 @@ These contracts interact with each other to manage token supply, distribution, t
 
 ### Jetton Master Contract
 
-The Jetton Master Contract serves as the central entity for a specific token. It maintains critical information about the jetton itself and facilitates the creation of individual wallets for token holders. Key responsibilities and data stored in the Jetton Master Contract include:
+The Jetton Master Contract serves as the central entity for a specific token. It maintains critical information about the jetton itself. Key responsibilities and data stored in the Jetton Master Contract include:
 
 * Jetton Metadata: Information such as the token's name, symbol, total supply, and decimals.
-* Jetton Wallet Creation: The Jetton Master can generate individual Jetton Wallet contracts for token holders.
 * Minting and Burning: When new jettons are minted (created), the Jetton Master handles the creation process and distributes them to the relevant wallets. Similarly, it manages burning (destruction) of tokens when required.
 * Supply Management: The Jetton Master keeps track of the total supply of the token, ensuring proper accounting for all issued jettons.
 
@@ -26,8 +25,8 @@ The Jetton Master Contract serves as the central entity for a specific token. It
 
 The Jetton Wallet Contract represents an individual holder's token wallet and is responsible for managing the balance and token-related operations for a specific user. Each user or entity holding jettons will have their own unique Jetton Wallet Contract. Key features of the Jetton Wallet Contract include:
 
-* Balance Tracking: The wallet contract stores the token balance of the user, recorded in a TON cell.
-* Token Transfers: The wallet is responsible for handling token transfers between users. When a user sends jettons, the Jetton Wallet Contract ensures the proper transfer and communication with the recipient's wallet.
+* Balance Tracking: The wallet contract stores the token balance of the user.
+* Token Transfers: The wallet is responsible for handling token transfers between users. When a user sends jettons, the Jetton Wallet Contract ensures the proper transfer and communication with the recipient's wallet. Jetton Master not included in this activity and does not create a bottleneck. Wallets can use TON sharding ability in a great way
 * Token Burning: The Jetton Wallet interacts with the Jetton Master to burn tokens.
 * Owner Control: The wallet contract is owned and controlled by a specific user, meaning only the owner of the wallet can initiate transfers or other token operations.
 
