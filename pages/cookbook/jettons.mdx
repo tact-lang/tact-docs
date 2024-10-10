@@ -74,9 +74,11 @@ To obtain the jetton wallet's state init, you need the wallet's data and code. W
 
 Since notifications originate from your contract's jetton wallet, as illustrated in the diagram, the function [`myAddress(){:tact}`](/ref/core-common#myaddress) should be used in `ownerAddress{:tact}` field.
 
-Calculation of contract's jetton wallet is done via  function.
-To obtain jetton wallet state init we need jetton wallets data and code. Common initial data layout is shown below but in may differ in some case, like in .
-Since notifications come from your contract's jetton wallet as shown in diagram, the function  should be used in state init the owner address field.
+<Callout type="warning" emoji="⚠️">
+
+  Sender of transfer notification must be validated!
+
+</Callout>
 
 ```tact
 import "@stdlib/deploy";
