@@ -1,8 +1,9 @@
+# ARCHIVED! The actual docs are moved to the compiler repo, see: https://github.com/tact-lang/tact/tree/main/docs
 
 <img src="public/banner.jpeg">
 
 
-# Welcome to Tact Documentation 🌈
+## Welcome to Tact Documentation 🌈
 
 Hello there! This is the community-driven repository for Tact Language Documentation.
 
